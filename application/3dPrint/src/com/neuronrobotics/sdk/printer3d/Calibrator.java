@@ -8,22 +8,29 @@ import com.neuronrobotics.sdk.dyio.peripherals.DigitalInputChannel;
 public class Calibrator {
 	
 	// limit switches
+	// hardware/counter controlled
 	// X direction zero indication limit switch
-	DyIOChannel X_limitZero =null;// 1
+	LimitSwitch X_limitZero =null;// 1
 	// Y direction zero indication limit switch
-	DyIOChannel  Y_limitZero =null;// 0
+	LimitSwitch  Y_limitZero =null;// 0
 	// Z direction zero indication limit switch
-	DyIOChannel  Z_limitZero =null; // port 2
+	LimitSwitch  Z_limitZero =null; // port 2
+	
+	// software controlled limits for maxes
 	// X direction maximum indication limit switch
-	DigitalInputChannel X_limitMax = null;
+	LimitSwitch X_limitMax = null;
 	// Y direction maximum indication limit switch
-	DigitalInputChannel Y_limitMax = null;
+	LimitSwitch Y_limitMax = null;
 	// Z direction maximum indication limit switch
+	LimitSwitch Z_limitMax = null;
 	
 	
 	// constructor
 	public Calibrator(){
-		
+		// sets the x, y , z axes to their zero positions
+		Printer3d.X_stepper.setValue(-15000);
+		Printer3d.Y_stepper.setValue(-15000);
+		Printer3d.Z_stepper.setValue(-15000);
 	}
 
 

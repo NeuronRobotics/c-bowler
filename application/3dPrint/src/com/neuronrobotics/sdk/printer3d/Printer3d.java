@@ -1,21 +1,18 @@
 package com.neuronrobotics.sdk.printer3d;
 
 import com.neuronrobotics.sdk.dyio.DyIO;
-import com.neuronrobotics.sdk.dyio.DyIOChannel;
 import com.neuronrobotics.sdk.dyio.peripherals.CounterOutputChannel;
-import com.neuronrobotics.sdk.dyio.peripherals.DigitalInputChannel;
-import com.neuronrobotics.sdk.dyio.peripherals.IDigitalInputListener;
 
 public class Printer3d extends DyIO {
 	// stepper motor control port/motor assigments
 	// x direction stepper motor
-	CounterOutputChannel X_stepper=null;
+	static CounterOutputChannel X_stepper=null;
 	// y direction stepper motor
-	CounterOutputChannel Y_stepper=null;
+	static CounterOutputChannel Y_stepper=null;
 	// z direction stepper motor
-	CounterOutputChannel Z_stepper=null;
+	static CounterOutputChannel Z_stepper=null;
 	// printhead extrusion stepper
-	CounterOutputChannel EXT_stepper=null;
+	static CounterOutputChannel EXT_stepper=null;
 	
 	// constructor
 	private Printer3d(){
