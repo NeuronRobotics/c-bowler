@@ -16,6 +16,17 @@ public class TestPrinter {
 		}
 		
 	}
+	public static void main (String args){
+		
+		// instantiates DyIO object and generates DyIO moduale connection dialog
+		project_dyio = new DyIO(new SerialConnection("/dev/tty.usbmodemfd131"));
+		if (!ConnectionDialog.getBowlerDevice(project_dyio)) {
+			System.exit(1);
+		}
+		
+		
+		Calibrator cb = new Calibrator(mode.ZERO);
+	}
 	
 	public static DyIO getdyio(){
 		return project_dyio;
