@@ -1,23 +1,23 @@
 package com.neuronrobotics.sdk.printer3d;
-
 import com.neuronrobotics.sdk.dyio.DyIO;
 import com.neuronrobotics.sdk.dyio.peripherals.CounterOutputChannel;
 
-public class Printer3d extends DyIO {
+public class Printer3d{
 
+	// DyIO object available to the whole class
+	DyIO cls_dyio = null;
+	
 	// constructor
-	private Printer3d() {
+	Printer3d(DyIO d) {
+		
+		cls_dyio=d;
 		// ports assigned to motors
 		// assigns X_stepper to channel 21
-		Print3D_Statics.X_stepper = new CounterOutputChannel(getChannel(21));
+		Print3D_Statics.X_stepper = new CounterOutputChannel(cls_dyio.getChannel(21));
 		// assigns Y_stepper to channel 23
-		Print3D_Statics.Y_stepper = new CounterOutputChannel(getChannel(23));
+		Print3D_Statics.Y_stepper = new CounterOutputChannel(cls_dyio.getChannel(23));
 		// assigns Z_stepper to channel 19
-		Print3D_Statics.Z_stepper = new CounterOutputChannel(getChannel(19));
-		
-		// a new calibrator created and instatiated
-		// using mode ZERO
-		Calibrator cb = new Calibrator(mode.ZERO);
+		Print3D_Statics.Z_stepper = new CounterOutputChannel(cls_dyio.getChannel(19));
 	}
 
 	// passed an amount of steps in both X and Y directions to travel
