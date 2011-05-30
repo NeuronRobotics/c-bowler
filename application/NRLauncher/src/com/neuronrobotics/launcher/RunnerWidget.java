@@ -93,6 +93,28 @@ public class RunnerWidget extends JPanel {
 				refreshJars();
 			}
 		});
+		
+		new Thread(){
+			private ArrayList<String> jarList = new  ArrayList<String> ();
+			public void run(){
+				while (true){
+					try {Thread.sleep(1000);} catch (InterruptedException e) {}
+					ArrayList<String> tmp = getJarNames();
+					if(tmp.size() != jarList.size()){
+						refreshJars();
+						jarList = tmp;
+					}else{
+						for(int i=0;i<jarList.size();i++){
+							if(!jarList.get(i).contains(tmp.get(i))){
+								refreshJars();
+								jarList = tmp;
+							}
+						}
+					}
+				}
+			}
+		}.start();
+		
 		add(jarPanel,"wrap");
 		add(fileLabel,"wrap");
 		JPanel control = new JPanel();
@@ -145,15 +167,9 @@ public class RunnerWidget extends JPanel {
 		});
 		refreshJars();
 	}
-	public void refreshJars(){
-		clearFile();
-		jars.clear();
-		jarPanel.removeAll();
-		JPanel control = new JPanel(new MigLayout());
-		control.add(refresh,"wrap");
-		
-		jars.add(new JarWidget(this, "/usr/local/NeuronRobotics/RDK/bin/nr-console.jar"));
-		
+	
+	private ArrayList<String> getJarNames(){
+		ArrayList<String> tmp = new  ArrayList<String> ();
 		File dir = new File(launchDir);
 
 		String[] children = dir.list();
@@ -162,10 +178,26 @@ public class RunnerWidget extends JPanel {
 		} else {
 		    for (int i=0; i<children.length; i++) {
 		        if(children[i].contains(".jar") && !children[i].contains("nr-console.jar")){
-		        	jars.add(new JarWidget(this, launchDir+"/"+children[i]));
+		        	//jars.add(new JarWidget(this, launchDir+"/"+children[i]));
+		        	tmp.add(launchDir+"/"+children[i]);
 		        }
 
 		    }
+		}
+		return tmp;
+	}
+	public void refreshJars(){
+		clearFile();
+		jars.clear();
+		jarPanel.removeAll();
+		JPanel control = new JPanel(new MigLayout());
+		//control.add(refresh,"wrap");
+		jars.add(new JarWidget(this, "/usr/local/NeuronRobotics/RDK/bin/nr-console.jar"));
+		
+		
+		ArrayList<String> tmp = getJarNames();
+		for(String s: tmp){
+			jars.add(new JarWidget(this, s));
 		}
 		
 		for (JarWidget jw:jars){
