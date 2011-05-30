@@ -191,7 +191,7 @@ public class RunnerWidget extends JPanel {
 		jars.clear();
 		jarPanel.removeAll();
 		JPanel control = new JPanel(new MigLayout());
-		control.add(refresh,"wrap");
+		//control.add(refresh,"wrap");
 		jars.add(new JarWidget(this, "/usr/local/NeuronRobotics/RDK/bin/nr-console.jar"));
 		
 		
