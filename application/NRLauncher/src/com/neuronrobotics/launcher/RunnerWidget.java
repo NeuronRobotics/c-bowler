@@ -84,7 +84,7 @@ public class RunnerWidget extends JPanel {
 	private JFrame frame;
 	public RunnerWidget(JFrame f,String dir){
 		setFrame(f);
-		launchDir = new File(dir).getAbsolutePath();
+		setLaunchDir(new File(dir).getAbsolutePath());
 		setLayout(new MigLayout());
 		
 		
@@ -170,7 +170,7 @@ public class RunnerWidget extends JPanel {
 	
 	private ArrayList<String> getJarNames(){
 		ArrayList<String> tmp = new  ArrayList<String> ();
-		File dir = new File(launchDir);
+		File dir = new File(getLaunchDir());
 
 		String[] children = dir.list();
 		if (children == null) {
@@ -178,8 +178,7 @@ public class RunnerWidget extends JPanel {
 		} else {
 		    for (int i=0; i<children.length; i++) {
 		        if(children[i].contains(".jar") && !children[i].contains("nr-console.jar")){
-		        	//jars.add(new JarWidget(this, launchDir+"/"+children[i]));
-		        	tmp.add(launchDir+"/"+children[i]);
+		        	tmp.add(getLaunchDir()+"/"+children[i]);
 		        }
 
 		    }
@@ -187,6 +186,7 @@ public class RunnerWidget extends JPanel {
 		return tmp;
 	}
 	public void refreshJars(){
+		System.out.println("Refreshing...");
 		clearFile();
 		jars.clear();
 		jarPanel.removeAll();
@@ -246,7 +246,7 @@ public class RunnerWidget extends JPanel {
 		fileLabel.setVisible(true);
 		String date = new SimpleDateFormat("yyyy-MM-dd-HH:mm").format(new Date());
 
-		String logFileName = launchDir+"/"+file.getName().substring(0, file.getName().indexOf(".jar"))+".log."+date+".txt";
+		String logFileName = getLaunchDir()+"/"+file.getName().substring(0, file.getName().indexOf(".jar"))+".log."+date+".txt";
 		try{
 			
 			log = new File(logFileName);
@@ -257,7 +257,7 @@ public class RunnerWidget extends JPanel {
 				System.out.println("Exists: "+logFileName);
 			}
 	        
-    	    text="\n\nStarting new run: "+new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date())+"\n\n";
+    	    setText("\n\nStarting new run: "+new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date())+"\n\n");
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
@@ -283,7 +283,7 @@ public class RunnerWidget extends JPanel {
 	}
 	private synchronized void addText(String s){
 		//System.out.print(s);
-		text+=s;
+		setText(getText() + s);
 	}
 	private String getText(){
 		return text;
@@ -406,5 +406,13 @@ public class RunnerWidget extends JPanel {
 	}
 	public JFrame getFrame() {
 		return frame;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public String getLaunchDir() {
+		return launchDir;
 	}
 }
