@@ -97,7 +97,7 @@ public class RunnerWidget extends JPanel {
 		new Thread(){
 			private ArrayList<String> jarList = new  ArrayList<String> ();
 			public void run(){
-				refreshJars();
+				
 				while (true){
 					try {Thread.sleep(1000);} catch (InterruptedException e) {}
 					ArrayList<String> tmp = getJarNames();
@@ -398,9 +398,9 @@ public class RunnerWidget extends JPanel {
 	    }
 	    return 0;
 	}
-	public void setLaunchDir(String launchDir) {
+	public void setLaunchDir(String dir) {
 		// TODO Auto-generated method stub
-		
+		launchDir=dir;
 	}
 	public void setFrame(JFrame frame) {
 		this.frame = frame;
