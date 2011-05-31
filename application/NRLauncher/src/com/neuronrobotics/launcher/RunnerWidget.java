@@ -97,6 +97,7 @@ public class RunnerWidget extends JPanel {
 		new Thread(){
 			private ArrayList<String> jarList = new  ArrayList<String> ();
 			public void run(){
+				refreshJars();
 				while (true){
 					try {Thread.sleep(1000);} catch (InterruptedException e) {}
 					ArrayList<String> tmp = getJarNames();
