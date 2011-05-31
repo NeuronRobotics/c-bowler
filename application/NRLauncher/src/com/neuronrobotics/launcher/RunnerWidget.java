@@ -245,7 +245,7 @@ public class RunnerWidget extends JPanel {
 		file =file2;
 		fileLabel.setText("Using File: "+file.getName());
 		fileLabel.setVisible(true);
-		String date = new SimpleDateFormat("yyyy-MM-dd-HH:mm").format(new Date());
+		String date = new SimpleDateFormat("yyyy-MM-dd-HH_mm").format(new Date());
 
 		String logFileName = getLaunchDir()+"/"+file.getName().substring(0, file.getName().indexOf(".jar"))+".log."+date+".txt";
 		try{
