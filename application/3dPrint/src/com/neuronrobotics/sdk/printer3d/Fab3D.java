@@ -1,55 +1,17 @@
 package com.neuronrobotics.sdk.printer3d;
 
 import com.neuronrobotics.sdk.addons.kinematics.AbstractCartesianPositionDevice;
+import com.neuronrobotics.sdk.addons.kinematics.AbstractLink;
 import com.neuronrobotics.sdk.addons.kinematics.StepperPrismaticLink;
 import com.neuronrobotics.sdk.dyio.DyIORegestry;
 
 public class Fab3D extends AbstractCartesianPositionDevice {
-	StepperPrismaticLink X = null;
-	StepperPrismaticLink Y = null;
-	StepperPrismaticLink Z = null;
 
-	public Fab3D(StepperPrismaticLink x2, StepperPrismaticLink y2,
-			StepperPrismaticLink z2) {
-		// class available objects loaded with constructor arguments
-		X = x2;
-		Y = y2;
-		Z = z2;
+	
 
+	public Fab3D(AbstractLink X, AbstractLink Y, AbstractLink Z) {
+		super(X, Y, Z);
 	}
-
-	// Setters and Getters for Links in Fab3D AbstractCartesianDevice
-	// setter for x link
-	public void setX(StepperPrismaticLink X) {
-		this.X = X;
-	}
-
-	// getter for x link
-	public StepperPrismaticLink getX() {
-		return X;
-	}
-
-	// setter for Y link
-	public void setY(StepperPrismaticLink Y) {
-		this.Y = Y;
-	}
-
-	// getter for Y link
-	public StepperPrismaticLink getY() {
-		return Y;
-	}
-
-	// setter for Z link
-	public void setZ(StepperPrismaticLink Z) {
-		this.Z = Z;
-	}
-
-	// getter for Z link
-	public StepperPrismaticLink getZ() {
-		return Z;
-	}
-
-	// end Setters and Getters
 
 	// done
 	// initialize functions as the calibration routine of the printer
@@ -60,9 +22,9 @@ public class Fab3D extends AbstractCartesianPositionDevice {
 
 		// Printer calibration
 		// sets all axes to home positions
-		SetXAxisPosition(X.getHome());
-		SetYAxisPosition(Y.getHome());
-		SetZAxisPosition(Z.getHome());
+		SetXAxisPosition(getX().getHome());
+		SetYAxisPosition(getY().getHome());
+		SetZAxisPosition(getZ().getHome());
 		// execute calibration with DyIO flush *********** Kevin what should we
 		// have for the time/feedrate?
 		flush(100);
@@ -86,20 +48,20 @@ public class Fab3D extends AbstractCartesianPositionDevice {
 	// done
 	@Override
 	public void SetXAxisPosition(int steps) {
-		X.getChannel().setValue(steps);
+		getX().getChannel().setValue(steps);
 	}
 
 	// done
 	@Override
 	public void SetYAxisPosition(int steps) {
-		Y.getChannel().setValue(steps);
+		getY().getChannel().setValue(steps);
 
 	}
 
 	// done
 	@Override
 	public void SetZAxisPosition(int steps) {
-		Z.getChannel().setValue(steps);
+		getZ().getChannel().setValue(steps);
 
 	}
 
@@ -107,10 +69,9 @@ public class Fab3D extends AbstractCartesianPositionDevice {
 	@Override
 	public void ReCalibrateAbstractCartesianDevice() {
 		/** sets all axes to home positions */
-		SetXAxisPosition(X.getHome());
-		SetYAxisPosition(Y.getHome());
-		SetZAxisPosition(Z.getHome());
-
+		SetXAxisPosition(getX().getHome());
+		SetYAxisPosition(getY().getHome());
+		SetZAxisPosition(getZ().getHome());
 	}
 
 }
