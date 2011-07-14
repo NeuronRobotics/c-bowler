@@ -1,33 +1,26 @@
 package com.neuronrobotics.sdk.printer3d;
 
 import com.neuronrobotics.sdk.addons.kinematics.AbstractCartesianPositionDevice;
-import com.neuronrobotics.sdk.addons.kinematics.AbstractLink;
-import com.neuronrobotics.sdk.addons.kinematics.StepperPrismaticLink;
+import com.neuronrobotics.sdk.addons.kinematics.AbstractPrismaticLink;
 import com.neuronrobotics.sdk.dyio.DyIORegestry;
 
 public class Fab3D extends AbstractCartesianPositionDevice {
 
-	
+	// links that belong to the AbstractCartesianPositionDevice
+	AbstractPrismaticLink X = null;
+	AbstractPrismaticLink Y = null;
+	AbstractPrismaticLink Z = null;
 
-	public Fab3D(AbstractLink X, AbstractLink Y, AbstractLink Z) {
-		super(X, Y, Z);
+	public Fab3D(AbstractPrismaticLink X, AbstractPrismaticLink Y,
+			AbstractPrismaticLink Z) {
+		this.X = X;
+		this.Y = Y;
+		this.Z = Z;
 	}
 
-	// done
-	// initialize functions as the calibration routine of the printer
 	@Override
 	public void initialize() {
-		// configure DyIO for cache mode
-		DyIORegestry.get().setCachedMode(true);
 
-		// Printer calibration
-		// sets all axes to home positions
-		SetXAxisPosition(getX().getHome());
-		SetYAxisPosition(getY().getHome());
-		SetZAxisPosition(getZ().getHome());
-		// execute calibration with DyIO flush *********** Kevin what should we
-		// have for the time/feedrate?
-		flush(100);
 	}
 
 	// done
@@ -39,39 +32,90 @@ public class Fab3D extends AbstractCartesianPositionDevice {
 	}
 
 	@Override
-	public int ConvertUnitsToSteps(double units) {
-		// converts the units for the project into
-		// motor steps, returns steps as type int
-		return 0;
+	public void SetXAxisPosition(double unit, double time) {
+		X.setTargetEngineeringUnits(unit);
+		flush(time);
 	}
 
-	// done
 	@Override
-	public void SetXAxisPosition(int steps) {
-		getX().getChannel().setValue(steps);
+	public void SetYAxisPosition(double unit, double time) {
+		Y.setTargetEngineeringUnits(unit);
+		flush(time);
 	}
 
-	// done
 	@Override
-	public void SetYAxisPosition(int steps) {
-		getY().getChannel().setValue(steps);
+	public void SetZAxisPosition(double unit, double time) {
+		Z.setTargetEngineeringUnits(unit);
+		flush(time);
+	}
+
+	@Override
+	public void SetAllAxisPosition(double xUnit, double yUnit, double zUnit,
+			double time) {
+		X.setTargetEngineeringUnits(xUnit);
+		Y.setTargetEngineeringUnits(yUnit);
+		Z.setTargetEngineeringUnits(zUnit);
+		flush(time);
+	}
+
+	// Setters and Getters for Links in Fab3D AbstractCartesianDevice
+	// setter for x link
+	public void setX(AbstractPrismaticLink X) {
+		this.X = X;
+	}
+
+	// getter for x link
+	public AbstractPrismaticLink getX() {
+		return X;
+	}
+
+	// setter for Y link
+	public void setY(AbstractPrismaticLink Y) {
+		this.Y = Y;
+	}
+
+	// getter for Y link
+	public AbstractPrismaticLink getY() {
+		return Y;
+	}
+
+	// setter for Z link
+	public void setZ(AbstractPrismaticLink Z) {
+		this.Z = Z;
+	}
+
+	// getter for Z link
+	public AbstractPrismaticLink getZ() {
+		return Z;
+	}
+
+	// end Setters and Getters
+
+	@Override
+	public void SetAllAxisToHome(double time) {
+		X.setHome(X.getHome());
+		Y.setHome(Y.getHome());
+		Z.setHome(Z.getHome());
+		flush(time);
 
 	}
 
-	// done
 	@Override
-	public void SetZAxisPosition(int steps) {
-		getZ().getChannel().setValue(steps);
-
+	public void SetXToHome(double time) {
+		X.setHome(X.getHome());
+		flush(time);
 	}
 
-	// done
 	@Override
-	public void ReCalibrateAbstractCartesianDevice() {
-		/** sets all axes to home positions */
-		SetXAxisPosition(getX().getHome());
-		SetYAxisPosition(getY().getHome());
-		SetZAxisPosition(getZ().getHome());
+	public void SetYToHome(double time) {
+		Y.setHome(Y.getHome());
+		flush(time);
+	}
+
+	@Override
+	public void SetZToHome(double time) {
+		Z.setHome(Z.getHome());
+		flush(time);
 	}
 
 }
