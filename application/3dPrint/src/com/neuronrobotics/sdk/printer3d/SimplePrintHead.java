@@ -26,4 +26,16 @@ public class SimplePrintHead extends AbstractPrintHead {
 		
 	}
 
+	@Override
+	public int GetCurrentTemperatureOfHead() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void StartHeatingElement() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

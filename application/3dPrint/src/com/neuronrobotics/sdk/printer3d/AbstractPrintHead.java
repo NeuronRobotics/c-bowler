@@ -13,6 +13,10 @@ public abstract class AbstractPrintHead {
 	
 	public abstract void SetTemperatureofHead(int temp);
 	
+	public abstract int GetCurrentTemperatureOfHead();
+	
+	public abstract void StartHeatingElement();
+	
 	/**ExtrudeMaterial is for extruding the material from the printehead
 	 * @param time accoutns for feedrate */
 	public abstract void ExtrudeMaterial(double time);
