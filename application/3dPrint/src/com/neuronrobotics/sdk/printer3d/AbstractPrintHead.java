@@ -11,10 +11,17 @@ public abstract class AbstractPrintHead {
 	 * @param time the feedrate for the printer task*/
 	public abstract void flush(double time);
 	
-	public abstract void SetTemperatureofHead(int temp);
+	/**SetTemperatureOfHead is for setting the temperature of the
+	 * heating element in the printhead
+	 * @param temp accounts  for the desired temoperature to be set.*/
+	public abstract void SetTemperatureOfHead(int temp);
 	
+	/**GetCurrentTemperatureOfHead returns the temperature of heating element in
+	 * the printhead as an int*/
 	public abstract int GetCurrentTemperatureOfHead();
 	
+	/**StartHeatingElement is for starting the heating element for extrusion
+	 *  this will most likely controlled by a relay/digital out */
 	public abstract void StartHeatingElement();
 	
 	/**ExtrudeMaterial is for extruding the material from the printehead

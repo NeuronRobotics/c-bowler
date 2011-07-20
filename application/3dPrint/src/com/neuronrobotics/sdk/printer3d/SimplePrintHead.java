@@ -21,7 +21,7 @@ public class SimplePrintHead extends AbstractPrintHead {
 	}
 
 	@Override
-	public void SetTemperatureofHead(int temp) {
+	public void SetTemperatureOfHead(int temp) {
 		// TODO Auto-generated method stub
 		
 	}
