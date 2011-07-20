@@ -1,10 +1,22 @@
 package com.neuronrobotics.sdk.printer3d;
 
-public class SimplePrintHead extends AbstractPrintHead {
+import com.neuronrobotics.sdk.addons.kinematics.AbstractPrismaticLink;
+import com.neuronrobotics.sdk.dyio.DyIORegestry;
 
+
+public class SimplePrintHead extends AbstractPrintHead {
+	
+	AbstractPrismaticLink Ext = null;
+
+	// constructor for simple printhead, takes argument of AbstractPrismaticLink
+	public SimplePrintHead(AbstractPrismaticLink ext){
+		this.Ext=ext;
+	}
+	
 	@Override
-	public void ExtrudeMaterial(double time) {
-		// TODO Auto-generated method stub
+	public void ExtrudeMaterial(double unit,double time) {
+		Ext.setTargetEngineeringUnits(unit);
+		flush(time);
 		
 	}
 
@@ -16,7 +28,8 @@ public class SimplePrintHead extends AbstractPrintHead {
 
 	@Override
 	public void flush(double time) {
-		// TODO Auto-generated method stub
+		// executes DyIO flush
+		DyIORegestry.get().flushCache((float) time);
 		
 	}
 

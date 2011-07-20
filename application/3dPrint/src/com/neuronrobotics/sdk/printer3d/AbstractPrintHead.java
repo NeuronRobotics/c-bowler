@@ -18,8 +18,9 @@ public abstract class AbstractPrintHead {
 	public abstract void StartHeatingElement();
 	
 	/**ExtrudeMaterial is for extruding the material from the printehead
-	 * @param time accoutns for feedrate */
-	public abstract void ExtrudeMaterial(double time);
+	 * @param time accoutns for feedrate 
+	 * @param unit accounts for the lengh of material to feed into the extruder*/
+	public abstract void ExtrudeMaterial(double unit,double time);
 	
 	
 
