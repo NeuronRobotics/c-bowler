@@ -186,6 +186,6 @@ Native:
 	
 	$(CCNAT) arch/native/Bowler_HAL_Native.c 			-o Release/native/Bowler_HAL_Native.o
 	
-	find Release/native/|grep ".o"|xargs ar rcs $(LIBDIR)/native/libNRLIB.a
+	find Release/native/|grep ".o"|xargs ar rcs $(LIBDIR)/native/linux/libNRLIB.a
 
 
