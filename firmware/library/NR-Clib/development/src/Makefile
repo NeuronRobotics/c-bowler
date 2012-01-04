@@ -28,7 +28,6 @@ clean:DIRS
 	echo Cleaned!
 DIRS:
 	rm -rf Release
-	#rm ../lib/*/*/*
 	mkdir Release
 	mkdir Release/pic32MX440F128H
 	mkdir Release/pic32MX460F512L
