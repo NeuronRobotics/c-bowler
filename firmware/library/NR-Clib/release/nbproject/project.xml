@@ -3,8 +3,8 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>NR-ClibRelease</name>
-            <creation-uuid>c023ad59-7b8a-4e8f-9db7-974a207c3cf0</creation-uuid>
+            <name>NRClibRelease</name>
+            <creation-uuid>ebd663cd-3aed-4e8c-b6c1-40c123c32af1</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions/>
             <cpp-extensions/>

@@ -24,12 +24,12 @@ ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 IMAGE_TYPE=debug
 OUTPUT_SUFFIX=a
 DEBUGGABLE_SUFFIX=
-FINAL_IMAGE=dist/${CND_CONF}/nr-clibrelease.x.${OUTPUT_SUFFIX}
+FINAL_IMAGE=dist/${CND_CONF}/nrclibrelease.x.${OUTPUT_SUFFIX}
 else
 IMAGE_TYPE=production
 OUTPUT_SUFFIX=a
 DEBUGGABLE_SUFFIX=
-FINAL_IMAGE=dist/${CND_CONF}/nr-clibrelease.x.${OUTPUT_SUFFIX}
+FINAL_IMAGE=dist/${CND_CONF}/nrclibrelease.x.${OUTPUT_SUFFIX}
 endif
 
 # Object Directory
@@ -75,7 +75,7 @@ MP_AR_DIR="/home/opt/microchip/mplabc32/v2.02/bin"
 # MP_BC_DIR is not defined
 
 .build-conf:  ${BUILD_SUBPROJECTS}
-	${MAKE}  -f nbproject/Makefile-default.mk dist/${CND_CONF}/nr-clibrelease.x.${OUTPUT_SUFFIX}
+	${MAKE}  -f nbproject/Makefile-default.mk dist/${CND_CONF}/nrclibrelease.x.${OUTPUT_SUFFIX}
 
 MP_PROCESSOR_OPTION=32MX795F512L
 MP_LINKER_FILE_OPTION=
@@ -100,13 +100,13 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: archive
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-dist/${CND_CONF}/nr-clibrelease.x.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk
+dist/${CND_CONF}/nrclibrelease.x.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} dist/${CND_CONF} 
-	${MP_AR} $(MP_EXTRA_AR_PRE) r dist/${CND_CONF}/nr-clibrelease.x.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}     
+	${MP_AR} $(MP_EXTRA_AR_PRE) r dist/${CND_CONF}/nrclibrelease.x.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}     
 else
-dist/${CND_CONF}/nr-clibrelease.x.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk
+dist/${CND_CONF}/nrclibrelease.x.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} dist/${CND_CONF} 
-	${MP_AR} $(MP_EXTRA_AR_PRE) r dist/${CND_CONF}/nr-clibrelease.x.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}     
+	${MP_AR} $(MP_EXTRA_AR_PRE) r dist/${CND_CONF}/nrclibrelease.x.${OUTPUT_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}     
 endif
 
 

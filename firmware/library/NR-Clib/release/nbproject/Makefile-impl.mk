@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=NR-ClibRelease.X
+PROJECTNAME=NRClibRelease.X
 
 # Active Configuration
 DEFAULTCONF=default
