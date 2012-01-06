@@ -4,6 +4,7 @@ SHELL := /bin/bash -e
 
 INCLUDES	    = -I../include/
 -include ../toolchain/pic32/toolchain.mk
+-include ../toolchain/avr/toolchain.mk
 
 CCP_pic32MX440F128H    		= $(GCCP) -mprocessor=32MX440F128H $(INCLUDES) -I../include/arch/pic32/  -c
 CCP_pic32MX460F512L   		= $(GCCP) -mprocessor=32MX460F512L $(INCLUDES) -I../include/arch/pic32/  -c
@@ -11,15 +12,15 @@ CCP_pic32MX795F512L   		= $(GCCP) -mprocessor=32MX795F512L $(INCLUDES) -I../incl
 
 
 CPU_SPD       	= 18432000UL
-GCCA            = avr-gcc -Wall -Os -fpack-struct -fshort-enums -funsigned-char -funsigned-bitfields -DF_CPU=$(CPU_SPD) -MMD -MP $(INCLUDES) -I/usr/lib/avr/include/  -c
-CCA_avratmega324p  = $(GCCA) -mmcu=atmega324p 
-CCA_avratmega644p  = $(GCCA) -mmcu=atmega644p
+GCCA_full       = $(GCCA) -DF_CPU=$(CPU_SPD)  $(INCLUDES) -I/usr/lib/avr/include/  -c
+CCA_avratmega324p  = $(GCCA_full) -mmcu=atmega324p 
+CCA_avratmega644p  = $(GCCA_full) -mmcu=atmega644p
 
 CCNAT    		= gcc -Os -g3 -Wall -c -fmessage-length=0 -MMD -MP $(INCLUDES) -c
 
 LIBDIR  		= ../lib
 RLIB     		= libRBELib.a
-ARA      		= |grep "o"|grep "."|xargs avr-ar rcs
+ARA      		= |grep "o"|grep "."|xargs $(ARAVR) rcs
 ARPIC      		= |grep "o"|grep "."|xargs $(ARP) rcs
 
 all: COMPILE
