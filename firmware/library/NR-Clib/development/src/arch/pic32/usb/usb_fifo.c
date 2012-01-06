@@ -41,7 +41,7 @@ static WORD     txSize;
 static BYTE_FIFO_STORAGE store;
 static BYTE_FIFO_STORAGE * my_store;
 
-static BOOL usbActive = FALSE;
+static BOOL usbActive = TRUE;
 
 BOOL GotUSBData(void){
 	return gotData>0;
