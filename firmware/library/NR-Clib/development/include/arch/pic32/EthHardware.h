@@ -50,9 +50,7 @@
  * Ken Hesky            01/xx/10    Added MRF24WB0M-specific features
  ********************************************************************/
 #ifndef __HARDWARE_PROFILE_H
-
 #define PIC32_ENET_SK_DM320004		// PIC32MX795F512L Ethernet Starter Kit board with embedded Ethernet controller
-
 
 // PIC32 Ethernet Starter Kit (04-02146) with PIC32MX795F512L processor and National DP83848 10/100 PHY
 	// External SMSC PHY configuration
@@ -74,8 +72,10 @@
 	#define SET_RED(a)			(a==0?mPORTASetBits(BIT_0):mPORTAClearBits(BIT_0))
 	#define SET_GREEN(a)		(a==0?mPORTASetBits(BIT_2):mPORTAClearBits(BIT_2))
 	#define SET_BLUE(a)			(a==0?mPORTASetBits(BIT_1):mPORTAClearBits(BIT_1))
+        #define initLed()               startLED()
+        #define setLed(a,b,c)           SET_RED(a);SET_GREEN(b);SET_BLUE(c)
 
-    #define LED0_TRIS			(TRISDbits.TRISD0)	// Ref LED1
+        #define LED0_TRIS			(TRISDbits.TRISD0)	// Ref LED1
 	#define LED0_IO				(LATDbits.LATD0)
 	#define LED1_TRIS			(TRISDbits.TRISD1)	// Ref LED2
 	#define LED1_IO				(LATDbits.LATD1)
@@ -96,7 +96,7 @@
 	#define LED_GET()			((BYTE)LATD & 0x07)
 	#define LED_PUT(a)			do{LATD = (LATD & 0xFFF8) | ((a)&0x07);}while(0)
 
-    #define BUTTON0_TRIS		(TRISDbits.TRISD6)	// Ref SW1
+        #define BUTTON0_TRIS		(TRISDbits.TRISD6)	// Ref SW1
 	#define	BUTTON0_IO			(PORTDbits.RD6)
 	#define BUTTON1_TRIS		(TRISDbits.TRISD7)	// Ref SW2
 	#define	BUTTON1_IO			(PORTDbits.RD7)
@@ -109,7 +109,8 @@
 #endif
 	//Set buttons to be inputs and enable the weak pull-ups
 	#define initButtons()       BUTTON0_TRIS=INPUT;BUTTON1_TRIS=INPUT;BUTTON2_TRIS=INPUT;CNPUESET=0x00098000;
-
+        #define initButton()        initButtons()
+        #define isPressed()         ( _RD6==0 || _RD7==0 || _RD13==0)
 	// Select which UART the STACK_USE_UART and STACK_USE_UART2TCP_BRIDGE
 	// options will use.  You can change these to U1BRG, U1MODE, etc. if you
 	// want to use the UART1 module instead of UART2.
