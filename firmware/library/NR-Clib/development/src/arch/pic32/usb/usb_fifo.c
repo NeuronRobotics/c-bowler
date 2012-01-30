@@ -60,7 +60,7 @@ void SetPICUSBFifo(BYTE_FIFO_STORAGE  * s){
 
 void usb_CDC_Serial_Init(char * DevStr,char * SerialStr,UINT16 vid,UINT16 pid){
 
-	unsigned char i;
+	//unsigned char i;
 	DelayMs(100);
 	SetUSB_VID_PID(vid,pid);
 	WriteUSBSerialNumber(SerialStr);
