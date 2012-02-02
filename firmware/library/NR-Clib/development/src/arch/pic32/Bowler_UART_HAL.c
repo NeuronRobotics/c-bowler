@@ -38,12 +38,9 @@ void SetPICUARTFifo(BYTE_FIFO_STORAGE * s){
 void newByteUartHal(){
 	int timeout =0;
 	BYTE err;
-	while(DataRdyUART1()!=0){
-		FifoAddByte(my_store,UARTGetDataByte(UART1),&err);
-		timeout++;
-		if(timeout>100)
-			return;
-	}
+
+	FifoAddByte(my_store,UARTGetDataByte(UART1),&err);
+	
 }
 
 void __ISR(_UART_1_VECTOR, ipl5) U1_ISR(void){
