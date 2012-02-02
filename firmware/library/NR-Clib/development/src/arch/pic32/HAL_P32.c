@@ -70,6 +70,9 @@ BOOL Send_HAL_Packet(BYTE * packet,WORD size){
 	return TRUE;
 }
 WORD Get_HAL_Byte_Count(){
+#if defined(USB_POLLING)
+        USBDeviceTasks();
+#endif
 	if( init==FALSE){
 		//println("***Initializing the PIC hal***");
 		Pic32_Bowler_HAL_Init();
@@ -89,6 +92,7 @@ WORD Get_HAL_Byte_Count(){
 }
 
 BOOL GetBowlerPacket_arch(BowlerPacket * Packet){
+
 	Get_HAL_Byte_Count();//This runs other update tasks for the HAL
 	switch (HalSwitch){
 	case UART_WASP_PACKET:

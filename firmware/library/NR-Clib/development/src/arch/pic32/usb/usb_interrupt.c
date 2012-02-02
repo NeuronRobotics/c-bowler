@@ -5,7 +5,7 @@
  *      Author: hephaestus
  */
 
-#include "USB/usb_fifo.h"
+#include "arch/pic32/USB/usb_fifo.h"
 
 ////DOM-IGNORE-END
 //#if !defined(__PIC32MX__)

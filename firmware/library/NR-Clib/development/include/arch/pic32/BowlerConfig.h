@@ -29,7 +29,7 @@
 	#define EndCritical()    INTEnableSystemMultiVectoredInt();INTEnableInterrupts();
 
 	#define WriteUART_COM 			Write32UART1
-	#define WriteUART_DEBUG 		Write32UART1
+	#define WriteUART_DEBUG 		Write32UART2
 
 	#define USE_UART
 	#define USE_USB

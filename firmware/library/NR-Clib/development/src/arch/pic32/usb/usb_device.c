@@ -111,7 +111,7 @@
 ********************************************************************/
 
 /** INCLUDES *******************************************************/
-#include "USB/usb_fifo.h"
+#include "arch/pic32/USB/usb_fifo.h"
 
 
 #if defined(USB_USE_MSD)
@@ -773,6 +773,7 @@ void USBDeviceInit(void)
   Remarks:
     None
   ***************************************************************************/
+void USBDeviceTasksLocal(void);
 //DOM-IGNORE-END
 #if !defined(__PIC32MX__)
 //#define __PIC32MX__
@@ -784,6 +785,7 @@ void USBDeviceInit(void)
     //void __attribute__((interrupt,auto_psv,address(0xA800))) _USB1Interrupt()
     void __attribute__((interrupt,auto_psv,nomips16)) _USB1Interrupt()
   #elif defined(__PIC32MX__)
+#error compiling interupt
     #pragma interrupt _USB1Interrupt ipl4 vector 45
     void __attribute__((nomips16)) _USB1Interrupt( void )
    //void __ISR(_USB_1_VECTOR, ipl5) USB1_ISR(void)
@@ -793,10 +795,10 @@ void USBDeviceTasks(void)
 #endif
 {
     //StartCritical();
-    USBDeviceTasks();
+    USBDeviceTasksLocal();
     //EndCritical();
 }
-void USBDeviceTasks(void){
+void USBDeviceTasksLocal(void){
     //INTDisableInterrupts();
     unsigned char i;
 

@@ -23,7 +23,7 @@
  *
  */
 
-#include "USB/usb_fifo.h"
+#include "arch/pic32/USB/usb_fifo.h"
 #include "Bowler/Bowler.h"
 
 #define USBNotOk	(USBDeviceState < CONFIGURED_STATE)||(USBSuspendControl==1)
