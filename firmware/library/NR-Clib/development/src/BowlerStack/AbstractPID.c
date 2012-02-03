@@ -667,7 +667,9 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 	//do the PID calculation
 	Correction = (state->K.P)*(error) + (state->K.D)*derivative +(state->K.I)*(state->integralTotal/IntegralSize);
 	// Scale for time and set the output
-	state->Output = (Correction)*(state->Polarity)?1:-1;
+	state->Output = (Correction);
+        if(!state->Polarity)
+            state->Output *=-1;
 	//Store the current time for next iterations previous time
 	state->PreviousTime=CurrentTime;
 	println("Setpoint is: ");p_fl(state->SetPoint);print(" current state is: ");p_fl(state->CurrentState);print(" error is: ");p_fl(error);print(", Control set is: ");p_fl(state->Output );
