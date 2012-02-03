@@ -785,13 +785,15 @@ void USBDeviceTasksLocal(void);
     //void __attribute__((interrupt,auto_psv,address(0xA800))) _USB1Interrupt()
     void __attribute__((interrupt,auto_psv,nomips16)) _USB1Interrupt()
   #elif defined(__PIC32MX__)
-#error compiling interupt
+
     #pragma interrupt _USB1Interrupt ipl4 vector 45
     void __attribute__((nomips16)) _USB1Interrupt( void )
    //void __ISR(_USB_1_VECTOR, ipl5) USB1_ISR(void)
   #endif
 #else
+#warning compiling USB Polling
 void USBDeviceTasks(void)
+
 #endif
 {
     //StartCritical();
