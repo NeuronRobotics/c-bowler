@@ -7,9 +7,9 @@
 #include "Bowler/Bowler.h"
 
 static BYTE_FIFO_STORAGE storeUSB;
-static BYTE privateRXUSB[BOWLER_PacketSize];
+static BYTE privateRXUSB[BOWLER_PacketSize*3];
 static BYTE_FIFO_STORAGE storeUART;
-static BYTE privateRXUART[BOWLER_PacketSize];
+static BYTE privateRXUART[BOWLER_PacketSize*3];
 typedef enum _hal_state
 {
 	NO_WASP_PACKET=0,

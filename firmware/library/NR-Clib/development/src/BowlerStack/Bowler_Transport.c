@@ -45,7 +45,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 
 	if (getNumBytes(fifo) < ((BowlerHeaderSize)+4)) {
 		if(debug){
-			println("Current num bytes: ");p_ul(getNumBytes(fifo));
+			//println("Current num bytes: ");p_ul(getNumBytes(fifo));
 		}
 		return FALSE;//Not enough bytes to even be a header, try back later
 	}
@@ -89,7 +89,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 	// See if all the data has arived for this packet
 	if (getNumBytes(fifo)>=(totalLen) ){
 		if(debug){
-			println("**Found packet, ");p_ul(totalLen);//print(" Bytes, pulling out of buffer");
+			//println("**Found packet, ");p_ul(totalLen);//print(" Bytes, pulling out of buffer");
 		}
 		StartCritical();
 		getStream(Packet->stream,totalLen,fifo);

@@ -39,7 +39,6 @@ UINT16 putStream(BYTE *packet,UINT16 size){
 	UINT16 i;
 	for (i=0;i<size;i++){
 		WriteAVRUART0(packet[i]);
-		_delay_us(UARTDELAY);
 	}
 	return i;
 }
@@ -109,9 +108,8 @@ void AVR_Bowler_HAL_Init(void){
 }
 void WriteAVRUART0(BYTE val){
 	while ((UCSR0A & (1<<UDRE0)) == 0 );
-	while(FlagAsync==0);
 	UDR0 = val;
-	//_delay_us(UARTDELAY);
+	_delay_us(UARTDELAY);
 }
 
 void WriteAVRUART1(BYTE val){
