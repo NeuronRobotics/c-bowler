@@ -96,9 +96,9 @@ BOOL GetBowlerPacket_arch(BowlerPacket * Packet){
 	Get_HAL_Byte_Count();//This runs other update tasks for the HAL
 	switch (HalSwitch){
 	case UART_WASP_PACKET:
-		return GetBowlerPacket(Packet,&storeUART);
+		return GetBowlerPacketDebug(Packet,&storeUART);
 	case USB_WASP_PACKET:
-		return GetBowlerPacket(Packet,&storeUSB);
+		return GetBowlerPacketDebug(Packet,&storeUSB);
 	case NO_WASP_PACKET:
 		break;
 	}

@@ -104,12 +104,14 @@ void AVR_Bowler_HAL_Init(void){
 #endif
 	//print("com:");
 	InitByteFifo(&store,privateRXCom,comBuffSize);
+	InitFlagPins();
 	EndCritical();
 }
 void WriteAVRUART0(BYTE val){
 	while ((UCSR0A & (1<<UDRE0)) == 0 );
+	while(FlagAsync==0);
 	UDR0 = val;
-	_delay_us(UARTDELAY);
+	//_delay_us(UARTDELAY);
 }
 
 void WriteAVRUART1(BYTE val){

@@ -9,28 +9,35 @@
 #define minSize 1
 
 void allign(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
+
+	int first = 0;
 	do
 	{
 		FifoReadByteStream(Packet->stream,1,fifo);
 		if((Packet->use.head.ProtocolRevision != BOWLER_VERSION)){
-			//Junk out any bad bytes in one go
+			if(first==0){
+				println("##Junking bad first byte. Fifo Size=");p_ul(getNumBytes(fifo));print(" [");
+			}
+			first++;
+			print(" ");p_ul(Packet->use.head.ProtocolRevision);
 			BYTE b;
 			StartCritical();
 			getStream(& b,1,fifo);
 			EndCritical();
-			println("##Junking bad first byte ");p_ul(Packet->use.head.ProtocolRevision);
+
 		}
 	}while(getNumBytes(fifo)>0 && (Packet->use.head.ProtocolRevision != BOWLER_VERSION));
+	if(first>0){
+		println("##Junked total:");p_ul(first);
+	}
 }
 
 BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug){
-	//enableDebug();
+	if(debug)
+		enableDebug();
 	BOOL PacketCheck=FALSE;
 	UINT16 PacketLegnth=0;
 	if (getNumBytes(fifo) == 0 ) {
-		if(debug){
-			//println("Num bytes at start: ");p_ul(getNumBytes(fifo));
-		}
 		return FALSE;//Not enough bytes to even be a header, try back later
 	}
 
@@ -38,7 +45,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 
 	if (getNumBytes(fifo) < ((BowlerHeaderSize)+4)) {
 		if(debug){
-			//println("Current num bytes: ");p_ul(getNumBytes(fifo));
+			println("Current num bytes: ");p_ul(getNumBytes(fifo));
 		}
 		return FALSE;//Not enough bytes to even be a header, try back later
 	}
@@ -75,14 +82,14 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 	PacketLegnth  = Packet->use.head.DataLegnth;
 	if(PacketLegnth<4){
 		if(debug){
-			//println("#*#*Warning, packet has no RPC");
+			println("#*#*Warning, packet has no RPC");
 		}
 	}
 	UINT16 totalLen = PacketLegnth+BowlerHeaderSize;
 	// See if all the data has arived for this packet
 	if (getNumBytes(fifo)>=(totalLen) ){
 		if(debug){
-			//println("**Found packet, ");p_ul(totalLen);//print(" Bytes, pulling out of buffer");
+			println("**Found packet, ");p_ul(totalLen);//print(" Bytes, pulling out of buffer");
 		}
 		StartCritical();
 		getStream(Packet->stream,totalLen,fifo);
@@ -105,6 +112,7 @@ BOOL GetBowlerPacketDebug(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
  * @return returns the number of bytes in the fifo
  */
 UINT16 getNumBytes(BYTE_FIFO_STORAGE * fifo){
+	calcByteCount(fifo);
 	return FifoGetByteCount(fifo);
 }
 /**
