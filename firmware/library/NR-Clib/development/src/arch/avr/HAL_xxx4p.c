@@ -107,6 +107,7 @@ void AVR_Bowler_HAL_Init(void){
 	EndCritical();
 }
 void WriteAVRUART0(BYTE val){
+	while(FlagAsync  == 0 ); // Wait for controller to be ready
 	while ((UCSR0A & (1<<UDRE0)) == 0 );
 	UDR0 = val;
 	_delay_us(UARTDELAY);

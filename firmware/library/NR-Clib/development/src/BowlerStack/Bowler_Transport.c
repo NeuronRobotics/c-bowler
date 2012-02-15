@@ -16,11 +16,13 @@ void allign(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 		FifoReadByteStream(Packet->stream,1,fifo);
 		if((Packet->use.head.ProtocolRevision != BOWLER_VERSION)){
 			if(first==0){
-				println("##Junking bad first byte. Fifo Size=");p_ul(getNumBytes(fifo));print(" [");
+				println("##Junking bad first byte. Fifo Size=");p_ul(calcByteCount(fifo));print(" [");
 			}
 			first++;
-			print(" ");p_ul(Packet->use.head.ProtocolRevision);
+			print(" 0x");prHEX8(Packet->use.head.ProtocolRevision);
 			BYTE b;
+			if(getNumBytes(fifo)==0)
+				return;
 			StartCritical();
 			getStream(& b,1,fifo);
 			EndCritical();
@@ -61,8 +63,10 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 			}else if(CheckCRC(Packet)==FALSE){
 				println("###Bad crc check=");
 			}
-			p_ul(Packet->use.head.ProtocolRevision);
+			prHEX8(Packet->use.head.ProtocolRevision);print(" Fifo Size=");p_ul(calcByteCount(fifo));
 			BYTE b;
+			if(getNumBytes(fifo)==0)
+				return FALSE;
 			StartCritical();
 			getStream(& b,1,fifo);//junk out one
 			EndCritical();
@@ -112,8 +116,7 @@ BOOL GetBowlerPacketDebug(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
  * @return returns the number of bytes in the fifo
  */
 UINT16 getNumBytes(BYTE_FIFO_STORAGE * fifo){
-	calcByteCount(fifo);
-	return FifoGetByteCount(fifo);
+	return (UINT16)calcByteCount(fifo);
 }
 /**
  * get a stream of this length from the connection

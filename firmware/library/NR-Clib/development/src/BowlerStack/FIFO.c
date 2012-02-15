@@ -13,11 +13,11 @@ static UINT32 i;
 
 void printFiFoState(BYTE_FIFO_STORAGE * fifo, BYTE * buffer){
 	int i;
-	print("\nFifo state: \n\tBytes:");p_ul(FifoGetByteCount(fifo));print("\n\tData [ ");
+	print("\nFifo state: \n\tBytes:");p_ul(calcByteCount(fifo));print("\n\tData [ ");
 	FifoReadByteStream(	buffer,
-						FifoGetByteCount(fifo)+1,
+						calcByteCount(fifo)+1,
 						fifo);
-	for(i=0;i<FifoGetByteCount(fifo);i++){
+	for(i=0;i<calcByteCount(fifo);i++){
 		p_ul(buffer[i]);print(" ");
 	}
 	print(" ]\n");
@@ -83,7 +83,7 @@ UINT32 FifoGetByteCount(BYTE_FIFO_STORAGE * fifo){
 }
 
 UINT32 FifoAddByte(BYTE_FIFO_STORAGE * fifo,BYTE b, BYTE * errorCode){
-	if(FifoGetByteCount(fifo) >= (fifo->bufferSize-2)){
+	if(calcByteCount(fifo) >= (fifo->bufferSize-2)){
 		//println(error);p_ul(fifo->bufferSize);print(",");p_ul(fifo->byteCount);
 		errorCode[0]=FIFO_OVERFLOW;
 		return 0;
@@ -101,7 +101,7 @@ UINT32 FifoAddByte(BYTE_FIFO_STORAGE * fifo,BYTE b, BYTE * errorCode){
 	calcByteCount(fifo);
 	errorCode[0]=FIFO_OK;
 	unLockFifo(fifo);
-	return (FifoGetByteCount(fifo)<=fifo->bufferSize);
+	return (calcByteCount(fifo)<=fifo->bufferSize);
 }
 
 BYTE getByte(BYTE_FIFO_STORAGE * fifo, BYTE * errorCode){
@@ -122,7 +122,9 @@ BYTE getByte(BYTE_FIFO_STORAGE * fifo, BYTE * errorCode){
 
 UINT32 FifoGetByteStream(BYTE_FIFO_STORAGE * fifo,BYTE *packet,UINT32 size){
 	BYTE err;
-	int count = FifoGetByteCount(fifo);
+	int count = calcByteCount(fifo);
+	if(size>count)
+		size = count;
 	for (i=0;i<size;i++){
 		if(count > 0){
 			BYTE b;
@@ -139,7 +141,9 @@ UINT32 FifoGetByteStream(BYTE_FIFO_STORAGE * fifo,BYTE *packet,UINT32 size){
 
 UINT32 FifoReadByteStream(BYTE *packet,UINT32 size,BYTE_FIFO_STORAGE * fifo){
 	UINT32 read=fifo->readPointer;
-	int count = FifoGetByteCount(fifo);
+	int count = calcByteCount(fifo);
+	if(size>count)
+		size = count;
 	for (i=0;i<size;i++){
 		if(count > 0){
 			packet[i] = fifo->buffer[read];

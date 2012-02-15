@@ -75,18 +75,7 @@ void printfDEBUG_NNL(const char *str)
 
 }
 void printfDEBUG_UL(UINT32 val){
-
-	if (!DebugFlag){
-		return;
-	}
-	BYTE byteStr[11];
-	int x=0;
-	ultoaMINE(val,byteStr);
-	// putCharDebug(',');
-	while(byteStr[x] != '\0'){
-		 putCharDebug(byteStr[x++]);
-	}
-
+	printfDEBUG_SL(val);
 }
 
 void printfDEBUG_SL(INT32 val){
