@@ -138,6 +138,7 @@ static const char rpc []="\tRPC code = \t";
 static const char nodata[] = " no data";
 
 void printBowlerPacketDEBUG(BowlerPacket * Packet){
+    
 		if (!DebugFlag){
 			return;
 		}
