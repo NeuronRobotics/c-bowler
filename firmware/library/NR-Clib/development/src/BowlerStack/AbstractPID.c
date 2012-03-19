@@ -183,7 +183,7 @@ void pushPIDLimitEvent(PidLimitEvent * event){
 	packetTemp.use.head.DataLegnth = 4+1+1+(4*3);
 
 	event->type = NO_LIMIT;
-
+	FixPacket(&packetTemp);
 	pidAsyncCallback(& packetTemp);
 }
 
@@ -214,9 +214,12 @@ void pushPID(BYTE chan, INT32 value, float time){
 	packetTemp.use.data[11]=tmp.byte.SB;
 	packetTemp.use.data[12]=tmp.byte.LB;
 
-	pidGroups[chan].lastPushedValue =value;
-	pidGroups[chan].lastPushedTime=time;
-	pidAsyncCallback(& packetTemp);
+	
+        FixPacket(&packetTemp);
+	if(pidAsyncCallback(& packetTemp)){
+            pidGroups[chan].lastPushedValue =value;
+            pidGroups[chan].lastPushedTime=time;
+        }
 }
 
 
