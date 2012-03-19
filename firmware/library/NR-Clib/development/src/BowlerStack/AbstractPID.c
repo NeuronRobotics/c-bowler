@@ -157,6 +157,7 @@ void pushPIDLimitEvent(PidLimitEvent * event){
 
 	prep(& packetTemp);
 	packetTemp.use.head.MessageID = 4;
+	packetTemp.use.head.Method = BOWLER_CRIT;
 	packetTemp.use.head.RPC = GetRPCValue("pidl");
 
 	packetTemp.use.data[0]=event->group;
