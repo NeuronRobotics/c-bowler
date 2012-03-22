@@ -632,6 +632,7 @@ void InitAbsPIDWithPosition(AbsPID * state,float KP,float KI,float KD,float time
 		state->IntegralCircularBuffer[loop]=0;
 	}
 	state->SetPoint = currentPosition;
+        state->interpolate.set=state->SetPoint;
 	state->CurrentState=currentPosition;
 	state->PreviousError=0;
 	state->Output=0;
