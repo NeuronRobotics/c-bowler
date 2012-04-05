@@ -113,7 +113,7 @@ void pushAllPIDPositions(){
 	float time = getMs();
 	int i;
 	for(i=0;i<number_of_pid_groups;i++){
-		pushPID(i,pidGroups[i].lastPushedValue, time);
+		pushPID(i,pidGroups[i].CurrentState, time);
 	}
 }
 
