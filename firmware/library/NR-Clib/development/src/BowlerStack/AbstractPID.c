@@ -77,15 +77,16 @@ void RunPID(void){
 	//enableDebug();
 	int i;
 	for (i=0;i<number_of_pid_groups;i++){
-		if(pidGroups[i].Enabled){
-			pidGroups[i].SetPoint = interpolate(&pidGroups[i].interpolate,getMs());
-			//getPosition(& local_groups[i]);
-			pidGroups[i].CurrentState = getPosition(i);
-			RunAbstractPIDCalc(& pidGroups[i],getMs());
-			//setVelocity(& local_groups[i]);
-			setOutput(i,pidGroups[i].Output);
-		}
-		pushPIDLimitEvent(checkPIDLimitEvents(i));
+            pushPIDLimitEvent(checkPIDLimitEvents(i));
+            if(pidGroups[i].Enabled){
+                    pidGroups[i].SetPoint = interpolate(&pidGroups[i].interpolate,getMs());
+                    //getPosition(& local_groups[i]);
+                    pidGroups[i].CurrentState = getPosition(i);
+                    RunAbstractPIDCalc(& pidGroups[i],getMs());
+                    //setVelocity(& local_groups[i]);
+                    setOutput(i,pidGroups[i].Output);
+            }
+		
 	}
 	updatePidAsync();
 }
@@ -100,7 +101,6 @@ void updatePidAsync(){
 						)){
 			if(pidGroups[i].CurrentState != pidGroups[i].lastPushedValue){
 				update = TRUE;
-				pidGroups[i].lastPushedValue=pidGroups[i].CurrentState;
 			}
 		}
 	}
