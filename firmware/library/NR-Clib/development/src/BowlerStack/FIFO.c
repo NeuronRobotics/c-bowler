@@ -64,9 +64,6 @@ BYTE ReadFirstByte(BYTE_FIFO_STORAGE * fifo){
 UINT32 calcByteCount(BYTE_FIFO_STORAGE * fifo){
 	int w =fifo->writePointer;
 	int r = fifo->readPointer;
-	if(w==r){
-		fifo->byteCount= 0;
-	}
 	if(w>r){
 		fifo->byteCount= w-r;
 	}else if(w==r){
@@ -78,7 +75,7 @@ UINT32 calcByteCount(BYTE_FIFO_STORAGE * fifo){
 }
 
 UINT32 FifoGetByteCount(BYTE_FIFO_STORAGE * fifo){
-	return fifo->byteCount;
+	return calcByteCount(fifo);
 
 }
 

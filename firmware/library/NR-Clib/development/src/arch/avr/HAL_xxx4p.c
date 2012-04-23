@@ -142,8 +142,11 @@ void serial_init(unsigned int bittimer)
 	//UBRR0H = 0;
 	//UBRR0L = 64;
 
-	/* set the framing to 8E1 */
-	UCSR0C = (_BV(UCSZ00)|_BV(UCSZ01)| _BV(UPM01));
+//	/* set the framing to 8E1 */
+//	UCSR0C = (_BV(UCSZ00)|_BV(UCSZ01)| _BV(UPM01));
+	/* set the framing to 8N1 */
+	UCSR0C = (_BV(UCSZ00)|_BV(UCSZ01));
+
     /* rx interrupts enabled, rx and tx enabled, 8-bit data */
     UCSR0B =( _BV(RXCIE0) | _BV(RXEN0) | _BV(TXEN0)  ) ;
     UCSR0A = 0x00;
@@ -160,7 +163,7 @@ void EnableDebugTerminal(void){
 
 	/* set the framing to 8N1 */
 	UCSR1C = ((1<< UCSZ10)|(1<< UCSZ11));
-	/* rx interrupts enabled, rx and tx enabled, 8-bit data */
+	/* tx enabled, 8-bit data */
 	UCSR1B =( _BV(TXEN1));
 	UCSR1A = 0x00;
 }

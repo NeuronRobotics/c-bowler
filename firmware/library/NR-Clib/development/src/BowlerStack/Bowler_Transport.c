@@ -23,9 +23,9 @@ void allign(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 			BYTE b;
 			if(getNumBytes(fifo)==0)
 				return;
-			StartCritical();
+			//StartCritical();
 			getStream(& b,1,fifo);
-			EndCritical();
+			//EndCritical();
 
 		}
 	}while(getNumBytes(fifo)>0 && (Packet->use.head.ProtocolRevision != BOWLER_VERSION));
@@ -47,7 +47,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 
 	if (getNumBytes(fifo) < ((BowlerHeaderSize)+4)) {
 		if(debug){
-			//println("Current num bytes: ");p_ul(getNumBytes(fifo));
+			println("Current num bytes: ");p_ul(getNumBytes(fifo));
 		}
 		return FALSE;//Not enough bytes to even be a header, try back later
 	}
@@ -67,9 +67,9 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 			BYTE b;
 			if(getNumBytes(fifo)==0)
 				return FALSE;
-			StartCritical();
+			//StartCritical();
 			getStream(& b,1,fifo);//junk out one
-			EndCritical();
+			//EndCritical();
 			FifoReadByteStream(Packet->stream,BowlerHeaderSize,fifo);
 		}else{
 			if(debug){
@@ -78,7 +78,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 			PacketCheck=TRUE;
 		}
 		if (getNumBytes(fifo) < minSize) {
-			//println("##Failed to allign apacket");
+			println("##Failed to allign apacket");
 			allign(Packet,fifo);
 			return FALSE;//Not enough bytes to even be a header, try back later
 		}
@@ -95,13 +95,13 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 		if(debug){
 			//println("**Found packet, ");p_ul(totalLen);//print(" Bytes, pulling out of buffer");
 		}
-		StartCritical();
+		//StartCritical();
 		getStream(Packet->stream,totalLen,fifo);
-		EndCritical();
+		//EndCritical();
 		return  TRUE;
 	}
 	if(debug){
-		//println("Header ready, but data is not yet. Need: ");p_ul(totalLen);//print(" have: ");p_ul(getNumBytes(fifo));
+		println("Header ready, but data is not yet. Need: ");p_ul(totalLen);print(" have: ");p_ul(getNumBytes(fifo));
 	}
 	return FALSE;
 }

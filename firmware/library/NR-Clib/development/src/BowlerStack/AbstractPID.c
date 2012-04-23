@@ -405,7 +405,7 @@ BYTE ClearPID(BYTE chan){
 }
 
 BYTE SetPIDTimed(BYTE chan,INT32 val,float ms){
-	println("Setting PID channel=");p_ul(chan);print(" setpoint=");p_sl(val);print(" time=");p_fl(ms);
+	//println("Setting PID channel=");p_ul(chan);print(" setpoint=");p_sl(val);print(" time=");p_fl(ms);
 	if (chan>=number_of_pid_groups)
 		return FALSE;
 	if(ms<0)
