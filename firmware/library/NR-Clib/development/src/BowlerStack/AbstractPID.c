@@ -48,7 +48,8 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 		pidAsyncCallbackPtr==0||
 		checkPIDLimitEventsPtr==0||
 		onPidConfigurePtr==0){
-		enableDebug();
+		if(getPrintLevel()==NO_PRINT)
+			setPrintLevel(ERROR_PRINT);
 		println("Null pointer exception in PID Configure",ERROR_PRINT);
 		while(1);
 	}

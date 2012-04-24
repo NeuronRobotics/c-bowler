@@ -36,18 +36,18 @@ Print_Level setPrintLevel(Print_Level l){
 }
 
 BOOL okToPrint(Print_Level l){
-	if(l>=getPrintLevel()){
+	if(getPrintLevel()>=l){
 		return TRUE;
 	}
 	return FALSE;
 }
-
-void enableDebug(void){
-	setPrintLevel(INFO_PRINT);
-}
-void disableDebug(void){
-	setPrintLevel(NO_PRINT);
-}
+//
+//void enableDebug(void){
+//	setPrintLevel(INFO_PRINT);
+//}
+//void disableDebug(void){
+//	setPrintLevel(NO_PRINT);
+//}
 
 const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 

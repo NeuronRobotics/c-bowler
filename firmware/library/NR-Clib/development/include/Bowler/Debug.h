@@ -36,14 +36,14 @@ Print_Level setPrintLevel(Print_Level l);
 Print_Level getPrintLevel();
 
 void EnableDebugTerminal(void);
-/**
- * enable printing (Defaults to enabled)
- */
-void enableDebug(void);
-/**
- * disable printing (Defaults to enabled)
- */
-void disableDebug(void);
+///**
+// * enable printing (Defaults to enabled)
+// */
+//void enableDebug(void);
+///**
+// * disable printing (Defaults to enabled)
+// */
+//void disableDebug(void);
 /**
  * print a given value as a 16 bit hex value
  */
