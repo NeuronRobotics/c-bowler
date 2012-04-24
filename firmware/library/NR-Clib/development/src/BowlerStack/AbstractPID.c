@@ -9,7 +9,7 @@
 #include "Bowler/AbstractPID.h"
 #include "Bowler/Debug.h"
 #include "Bowler/Defines.h"
-
+void FixPacket(BowlerPacket * Packet);
 //float lastPacketTime[16];
 //INT32 lastPacketVal[16];
 
@@ -49,7 +49,7 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 		checkPIDLimitEventsPtr==0||
 		onPidConfigurePtr==0){
 		enableDebug();
-		println("Null pointer exception in PID Configure");
+		println("Null pointer exception in PID Configure",ERROR_PRINT);
 		while(1);
 	}
 	pidGroups = groups;
@@ -242,13 +242,13 @@ void RunPDVel(BYTE chan){
 		if(velData[chan].currentOutputVel<-100)
 			velData[chan].currentOutputVel=-100;
 
-		println("Velocity set=");p_fl(velData[chan].unitsPerSeCond);print(" ticks/seCond");
-		println("Velocity position diff=");p_sl(posDiff);print(" ticks");
-		println("Velocity time diff=");p_fl(timeDiff);print(" seConds");
-		println("Velocity time diff=");p_fl(timeMsDiff);print(" ms");
-		println("Velocity current=");p_fl(currentVelocity);print(" ticks/seCond");
-		println("Velocity offset=");p_fl(set);print("\n");
-		println("Velocity set=");p_fl(velData[chan].currentOutputVel);print("\n");
+		println("Velocity set=",INFO_PRINT);p_fl(velData[chan].unitsPerSeCond,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
+		println("Velocity position diff=",INFO_PRINT);p_sl(posDiff,INFO_PRINT);print(" ticks",INFO_PRINT);
+		println("Velocity time diff=",INFO_PRINT);p_fl(timeDiff,INFO_PRINT);print(" seConds",INFO_PRINT);
+		println("Velocity time diff=",INFO_PRINT);p_fl(timeMsDiff,INFO_PRINT);print(" ms",INFO_PRINT);
+		println("Velocity current=",INFO_PRINT);p_fl(currentVelocity,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
+		println("Velocity offset=",INFO_PRINT);p_fl(set,INFO_PRINT);print("\n",INFO_PRINT);
+		println("Velocity set=",INFO_PRINT);p_fl(velData[chan].currentOutputVel,INFO_PRINT);print("\n",INFO_PRINT);
 
 		pidGroups[chan].Output=velData[chan].currentOutputVel;
 
@@ -373,8 +373,8 @@ BYTE ConfigPID(BowlerPacket * Packet){
 	pidGroups[chan].K.P=KP/100;
 	pidGroups[chan].K.I=KI/100;
 	pidGroups[chan].K.D=KD/100;
-	println("Resetting PID channel from Config:");printBowlerPacketDEBUG(Packet);
-	println("From Config Current setpoint:");p_fl(pidGroups[chan].SetPoint);
+	println("Resetting PID channel from Config:",INFO_PRINT);printBowlerPacketDEBUG(Packet,INFO_PRINT);
+	println("From Config Current setpoint:",INFO_PRINT);p_fl(pidGroups[chan].SetPoint,INFO_PRINT);
 	pidReset(chan, pidGroups[chan].SetPoint);
 
 	pidGroups[chan].Enabled=TRUE;//Ensures output enabled to stop motors
@@ -392,7 +392,7 @@ BYTE ConfigPID(BowlerPacket * Packet){
 	return TRUE;
 }
 BYTE ZeroPID(BYTE chan){
-	println("Resetting PID channel from zeroPID:");
+	println("Resetting PID channel from zeroPID:",INFO_PRINT);
 	pidReset(chan,0);
 	return TRUE;
 }
@@ -533,7 +533,7 @@ BOOL processPIDPost(BowlerPacket * Packet){
 		PID_Temp.byte.TB=Packet->use.data[2];
 		PID_Temp.byte.SB=Packet->use.data[3];
 		PID_Temp.byte.LB=Packet->use.data[4];
-		println("Resetting PID channel from packet:");printBowlerPacketDEBUG(Packet);
+		println("Resetting PID channel from packet:",INFO_PRINT);printBowlerPacketDEBUG(Packet,INFO_PRINT);
 		pidReset(chan, PID_Temp.Val);
 		READY(Packet,zone,6);
 		break;
@@ -677,23 +677,30 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
             state->Output *=-1;
 	//Store the current time for next iterations previous time
 	state->PreviousTime=CurrentTime;
-	println("Setpoint is: ");p_fl(state->SetPoint);print(" current state is: ");p_fl(state->CurrentState);print(" error is: ");p_fl(error);print(", Control set is: ");p_fl(state->Output );
+	println("Setpoint is: ",INFO_PRINT);
+	p_fl(state->SetPoint,INFO_PRINT);
+	print(" current state is: ",INFO_PRINT);
+	p_fl(state->CurrentState,INFO_PRINT);
+	print(" error is: ",INFO_PRINT);
+	p_fl(error,INFO_PRINT);
+	print(", Control set is: ",INFO_PRINT);
+	p_fl(state->Output ,INFO_PRINT);
 }
 
 
 void printPIDvals(AbsPID * pid){
-	printfDEBUG_NNL("\nStarting values of PID: chan=");
-	printfDEBUG_UL(pid->channel);
-	printfDEBUG_NNL("\t,EN=");
-	printfDEBUG_UL(pid->Enabled);
-	printfDEBUG_NNL("\t,Pol=");
-	printfDEBUG_UL(pid->Polarity);
-	printfDEBUG_NNL("\t,SET=");
-	printfDEBUG_UL(pid->SetPoint);
-	printfDEBUG_NNL("\t, Kp=");
-	p_fl(pid->K.P);
-	printfDEBUG_NNL("\t, Ki=");
-	p_fl(pid->K.I);
-	printfDEBUG_NNL("\t, Kd=");
-	p_fl(pid->K.D);
+	printfDEBUG_NNL("\nStarting values of PID: chan=",INFO_PRINT);
+	printfDEBUG_UL(pid->channel,INFO_PRINT);
+	printfDEBUG_NNL("\t,EN=",INFO_PRINT);
+	printfDEBUG_UL(pid->Enabled,INFO_PRINT);
+	printfDEBUG_NNL("\t,Pol=",INFO_PRINT);
+	printfDEBUG_UL(pid->Polarity,INFO_PRINT);
+	printfDEBUG_NNL("\t,SET=",INFO_PRINT);
+	printfDEBUG_UL(pid->SetPoint,INFO_PRINT);
+	printfDEBUG_NNL("\t, Kp=",INFO_PRINT);
+	p_fl(pid->K.P,INFO_PRINT);
+	printfDEBUG_NNL("\t, Ki=",INFO_PRINT);
+	p_fl(pid->K.I,INFO_PRINT);
+	printfDEBUG_NNL("\t, Kd=",INFO_PRINT);
+	p_fl(pid->K.D,INFO_PRINT);
 }

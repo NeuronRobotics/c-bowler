@@ -17,13 +17,36 @@
  */
 #include "Bowler/Bowler.h"
 
-static BOOL DebugFlag=TRUE;
+Print_Level level=NO_PRINT;
+
+//static BOOL DebugFlag=TRUE;
 static BOOL DebugINIT = FALSE;
+
+Print_Level getPrintLevel(){
+	return level;
+}
+
+Print_Level setPrintLevel(Print_Level l){
+#if defined(NO_PRINTING)
+	level=NO_PRINT;
+#else
+	level=l;
+#endif
+	return getPrintLevel();
+}
+
+BOOL okToPrint(Print_Level l){
+	if(l>=getPrintLevel()){
+		return TRUE;
+	}
+	return FALSE;
+}
+
 void enableDebug(void){
-	DebugFlag=TRUE;
+	setPrintLevel(INFO_PRINT);
 }
 void disableDebug(void){
-	DebugFlag=FALSE;
+	setPrintLevel(NO_PRINT);
 }
 
 const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
@@ -35,12 +58,12 @@ char GetHighNib(BYTE b){
 	return AsciiHex[((b&0xF0)>>4)];
 }
 
-void printfDEBUG(const char *str){
+void printfDEBUG(const char *str,Print_Level l){
 	if(DebugINIT == FALSE){
 		DebugINIT = TRUE;
 		EnableDebugTerminal();
 	}
-	if (!DebugFlag){
+	if(!okToPrint(l)){
 		return;
 	}
 	int x;
@@ -52,18 +75,16 @@ void printfDEBUG(const char *str){
 	}
 
 }
-void printfDEBUG_BYTE(char b){
-
-	if (!DebugFlag){
-			return;
+void printfDEBUG_BYTE(char b,Print_Level l){
+	if(!okToPrint(l)){
+		return;
 	}
 	 putCharDebug(b);
 
 }
-void printfDEBUG_NNL(const char *str)
+void printfDEBUG_NNL(const char *str,Print_Level l)
 {
-
-	if (!DebugFlag){
+	if(!okToPrint(l)){
 		return;
 	}
 	int x;
@@ -74,13 +95,12 @@ void printfDEBUG_NNL(const char *str)
 
 
 }
-void printfDEBUG_UL(UINT32 val){
-	printfDEBUG_SL(val);
+void printfDEBUG_UL(UINT32 val,Print_Level l){
+	printfDEBUG_SL(val,l);
 }
 
-void printfDEBUG_SL(INT32 val){
-
-	if (!DebugFlag){
+void printfDEBUG_SL(INT32 val,Print_Level l){
+	if(!okToPrint(l)){
 		return;
 	}
 	BYTE byteStr[11];
@@ -97,14 +117,14 @@ void printfDEBUG_SL(INT32 val){
 
 }
 
-void printfDEBUG_FL(float f){
-	if (!DebugFlag){
+void printfDEBUG_FL(float f,Print_Level l){
+	if(!okToPrint(l)){
 		return;
 	}
 	INT32 upper = (INT32)f;
 	INT32 shift =(INT32)(f*1000);
 	INT32 clip  = upper*1000;
-	printfDEBUG_SL(upper);
+	printfDEBUG_SL(upper,l);
 	putCharDebug('.');
 	INT32 dec =shift-clip;
 	if (dec<0)
@@ -113,7 +133,7 @@ void printfDEBUG_FL(float f){
 		putCharDebug('0');
 	if(dec<10)
 		putCharDebug('0');
-	printfDEBUG_UL(dec);
+	printfDEBUG_UL(dec,l);
 }
 
 #if defined(BOWLERSTRUCTDEF_H_)
@@ -137,98 +157,98 @@ static const char dval[] = "\tData = \t\t";
 static const char rpc []="\tRPC code = \t";
 static const char nodata[] = " no data";
 
-void printBowlerPacketDEBUG(BowlerPacket * Packet){
+void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
     
-		if (!DebugFlag){
-			return;
-		}
+	if(!okToPrint(l)){
+		return;
+	}
 		int i;
 		BYTE s;
-		printfDEBUG(packet);
+		printfDEBUG(packet,l);
 		s = BowlerHeaderSize+Packet->stream[DataSizeIndex];
-		printfDEBUG_BYTE('[');
+		printfDEBUG_BYTE('[',l);
 		for (i=0;i<s;i++){
-			printfDEBUG_UL(Packet->stream[i]);
+			printfDEBUG_UL(Packet->stream[i],l);
 			if (i<s-1)
-				printfDEBUG_BYTE(',');
+				printfDEBUG_BYTE(',',l);
 		}
-		printfDEBUG_BYTE(']');
-		printfDEBUG(ver);
-		printfDEBUG_UL(Packet->stream[0]);
-		printfDEBUG(mac);
+		printfDEBUG_BYTE(']',l);
+		printfDEBUG(ver,l);
+		printfDEBUG_UL(Packet->stream[0],l);
+		printfDEBUG(mac,l);
 		for (i=0;i<6;i++){
-			printfDEBUG_UL(Packet->stream[1+i]);
+			printfDEBUG_UL(Packet->stream[1+i],l);
 			if (i<5)
-				printfDEBUG_BYTE(':');
+				printfDEBUG_BYTE(':',l);
 		}
-		printfDEBUG(meth);
+		printfDEBUG(meth,l);
 		switch (Packet->stream[MethodIndex]){
 		case BOWLER_STATUS:
-			printfDEBUG_NNL(stat);
+			printfDEBUG_NNL(stat,l);
 			break;
 		case BOWLER_GET:
-			printfDEBUG_NNL(get);
+			printfDEBUG_NNL(get,l);
 			break;
 		case BOWLER_POST:
-			printfDEBUG_NNL(post);
+			printfDEBUG_NNL(post,l);
 			break;
 		case BOWLER_CRIT:
-			printfDEBUG_NNL(crit);
+			printfDEBUG_NNL(crit,l);
 			break;
 		default:
-			printfDEBUG(unknown);
-			printfDEBUG_UL(Packet->stream[MethodIndex]);
+			printfDEBUG(unknown,l);
+			printfDEBUG_UL(Packet->stream[MethodIndex],l);
 		}
-		printfDEBUG(id);
-		printfDEBUG_UL((Packet->stream[SessionIDIndex]&0x7f));
+		printfDEBUG(id,l);
+		printfDEBUG_UL((Packet->stream[SessionIDIndex]&0x7f),l);
 		if(!(Packet->stream[SessionIDIndex]&0x7f)){
-			printfDEBUG_NNL(sync);
+			printfDEBUG_NNL(sync,l);
 		}else{
-			printfDEBUG_NNL(async);
+			printfDEBUG_NNL(async,l);
 		}
-		printfDEBUG(dataSise);
-		printfDEBUG_UL((Packet->stream[DataSizeIndex]));
-		printfDEBUG(crcval);
-		printfDEBUG_UL((Packet->stream[CRCIndex]));
+		printfDEBUG(dataSise,l);
+		printfDEBUG_UL((Packet->stream[DataSizeIndex]),l);
+		printfDEBUG(crcval,l);
+		printfDEBUG_UL((Packet->stream[CRCIndex]),l);
 		if(Packet->use.head.DataLegnth>=4){
-			printfDEBUG(rpc);
+			printfDEBUG(rpc,l);
 			for (i=0;i<4;i++){
-				printfDEBUG_BYTE(Packet->stream[RPCCodeStart+i]);
+				printfDEBUG_BYTE(Packet->stream[RPCCodeStart+i],l);
 			}
 		}
 		if(Packet->use.head.DataLegnth>4){
 			s= (Packet->use.head.DataLegnth-4);
-			printfDEBUG(dval);
+			printfDEBUG(dval,l);
 			for (i=0;i<s;i++){
-				printfDEBUG_UL(Packet->use.data[i]);
+				printfDEBUG_UL(Packet->use.data[i],l);
 				if (i<(s-1))
-					printfDEBUG_BYTE(',');
+					printfDEBUG_BYTE(',',l);
 			}
 		}else{
-			printfDEBUG(nodata);
+			printfDEBUG(nodata,l);
 		}
-		printfDEBUG("\n");
+		printfDEBUG("\n",l);
 }
 #endif
 static const char streamsize[] = " Stream: size=";
-void printByteArray(BYTE * stream,UINT16 len){
-	UINT16 i;
-	printfDEBUG_NNL(streamsize);
-	printfDEBUG_UL(len);
-	printfDEBUG_NNL(" [");
-	for (i=0;i<len;i++){
-		printfDEBUG_UL(stream[i]);
-		if (i<(len-1))
-			printfDEBUG_BYTE(',');
+void printByteArray(BYTE * stream,UINT16 len,Print_Level l){
+	if(!okToPrint(l)){
+		return;
 	}
-	printfDEBUG_NNL("]");
+	UINT16 i;
+	printfDEBUG_NNL(streamsize,l);
+	printfDEBUG_UL(len,l);
+	printfDEBUG_NNL(" [",l);
+	for (i=0;i<len;i++){
+		printfDEBUG_UL(stream[i],l);
+		if (i<(len-1))
+			printfDEBUG_BYTE(',',l);
+	}
+	printfDEBUG_NNL("]",l);
 }
 
 void ultoaMINE(UINT32 Value, BYTE* Buffer)
 {
-	if (!DebugFlag){
-		return;
-	}
 	BYTE i;
 	UINT32 Digit;
 	UINT32 Divisor;

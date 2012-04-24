@@ -13,14 +13,16 @@ static UINT32 i;
 
 void printFiFoState(BYTE_FIFO_STORAGE * fifo, BYTE * buffer){
 	int i;
-	print("\nFifo state: \n\tBytes:");p_ul(calcByteCount(fifo));print("\n\tData [ ");
+	print("\nFifo state: \n\tBytes:",ERROR_PRINT);
+	p_ul(calcByteCount(fifo),ERROR_PRINT);
+	print("\n\tData [ ",ERROR_PRINT);
 	FifoReadByteStream(	buffer,
 						calcByteCount(fifo)+1,
 						fifo);
 	for(i=0;i<calcByteCount(fifo);i++){
-		p_ul(buffer[i]);print(" ");
+		p_ul(buffer[i],ERROR_PRINT);print(" ",ERROR_PRINT);
 	}
-	print(" ]\n");
+	print(" ]\n",ERROR_PRINT);
 }
 
 BOOL lockFifo(BYTE_FIFO_STORAGE * fifo){
@@ -38,7 +40,7 @@ BOOL unLockFifo(BYTE_FIFO_STORAGE * fifo){
 }
 void InitByteFifo(BYTE_FIFO_STORAGE * fifo,BYTE * buff,UINT32 size){
 	if(fifo == 0 ||  buff == 0){
-		println("@#@#FIFO FAILED TO INITIALIZE");p_ul(size);
+		println("@#@#FIFO FAILED TO INITIALIZE",ERROR_PRINT);p_ul(size,ERROR_PRINT);
 	}
 	fifo->buffer=buff;
 	fifo->bufferSize=size;

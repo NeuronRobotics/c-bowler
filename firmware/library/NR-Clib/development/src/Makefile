@@ -48,7 +48,7 @@ pic32MX440F128H:
 	$(CCP_pic32MX440F128H) BowlerStack/Bowler_RPC_Process.c 		-o Release/pic32MX440F128H/Bowler_RPC_Process.o
 	$(CCP_pic32MX440F128H) BowlerStack/Scheduler.c 					-o Release/pic32MX440F128H/Scheduler.o	
 	$(CCP_pic32MX440F128H) BowlerStack/Debug.c 						-o Release/pic32MX440F128H/Debug_en.o
-	$(CCP_pic32MX440F128H) BowlerStack/Debug_stub.c 				-o Release/pic32MX440F128H/Debug.o
+	$(CCP_pic32MX440F128H) BowlerStack/Debug.c -D NO_PRINTING				-o Release/pic32MX440F128H/Debug.o
 	$(CCP_pic32MX440F128H) BowlerStack/AbstractPID.c 				-o Release/pic32MX440F128H/AbstractPID.o
 	$(CCP_pic32MX440F128H) BowlerStack/Bowler_Transport.c 			-o Release/pic32MX440F128H/Bowler_Transport.o
 	$(CCP_pic32MX440F128H) BowlerStack/Bowler_Stack_Callback.c 		-o Release/pic32MX440F128H/Bowler_Stack_Callback.o
@@ -82,7 +82,7 @@ pic32MX460F512L:
 	$(CCP_pic32MX460F512L) BowlerStack/Bowler_RPC_Process.c 		-o Release/pic32MX460F512L/Bowler_RPC_Process.o
 	$(CCP_pic32MX460F512L) BowlerStack/Scheduler.c 					-o Release/pic32MX460F512L/Scheduler.o	
 	$(CCP_pic32MX460F512L) BowlerStack/Debug.c 						-o Release/pic32MX460F512L/Debug_en.o
-	$(CCP_pic32MX460F512L) BowlerStack/Debug_stub.c 				-o Release/pic32MX460F512L/Debug.o
+	$(CCP_pic32MX460F512L) BowlerStack/Debug.c -D NO_PRINTING				-o Release/pic32MX460F512L/Debug.o
 	$(CCP_pic32MX460F512L) BowlerStack/AbstractPID.c 				-o Release/pic32MX460F512L/AbstractPID.o
 	$(CCP_pic32MX460F512L) BowlerStack/Bowler_Transport.c 			-o Release/pic32MX460F512L/Bowler_Transport.o
 	$(CCP_pic32MX460F512L) BowlerStack/Bowler_Stack_Callback.c 		-o Release/pic32MX460F512L/Bowler_Stack_Callback.o
@@ -115,7 +115,7 @@ pic32MX795F512L:
 	$(CCP_pic32MX795F512L) BowlerStack/Bowler_RPC_Process.c 		-o Release/pic32MX795F512L/Bowler_RPC_Process.o
 	$(CCP_pic32MX795F512L) BowlerStack/Scheduler.c 					-o Release/pic32MX795F512L/Scheduler.o	
 	$(CCP_pic32MX795F512L) BowlerStack/Debug.c 						-o Release/pic32MX795F512L/Debug_en.o
-	$(CCP_pic32MX795F512L) BowlerStack/Debug_stub.c 				-o Release/pic32MX795F512L/Debug.o
+	$(CCP_pic32MX795F512L) BowlerStack/Debug.c -D NO_PRINTING				-o Release/pic32MX795F512L/Debug.o
 	$(CCP_pic32MX795F512L) BowlerStack/AbstractPID.c 				-o Release/pic32MX795F512L/AbstractPID.o
 	$(CCP_pic32MX795F512L) BowlerStack/Bowler_Transport.c 			-o Release/pic32MX795F512L/Bowler_Transport.o
 	$(CCP_pic32MX795F512L) BowlerStack/Bowler_Stack_Callback.c 		-o Release/pic32MX795F512L/Bowler_Stack_Callback.o
@@ -146,7 +146,7 @@ AVR644p:
 	$(CCA_avratmega644p) BowlerStack/Bowler_Server.c 				-o Release/avratmega644p/Bowler_Server.o
 	$(CCA_avratmega644p) BowlerStack/Bowler_RPC_Process.c 			-o Release/avratmega644p/Bowler_RPC_Process.o
 	$(CCA_avratmega644p) BowlerStack/Debug.c 						-o Release/avratmega644p/Debug_en.o
-	$(CCA_avratmega644p) BowlerStack/Debug_stub.c 					-o Release/avratmega644p/Debug.o
+	$(CCA_avratmega644p) BowlerStack/Debug.c -D NO_PRINTING					-o Release/avratmega644p/Debug.o
 	$(CCA_avratmega644p) BowlerStack/Scheduler.c 					-o Release/avratmega644p/Scheduler.o
 	$(CCA_avratmega644p) BowlerStack/AbstractPID.c 					-o Release/avratmega644p/AbstractPID.o
 	$(CCA_avratmega644p) BowlerStack/Bowler_Transport.c 			-o Release/avratmega644p/Bowler_Transport.o
@@ -163,7 +163,7 @@ AVR324p:
 	$(CCA_avratmega324p) BowlerStack/Bowler_Server.c 				-o Release/avratmega324p/Bowler_Server.o
 	$(CCA_avratmega324p) BowlerStack/Bowler_RPC_Process.c 			-o Release/avratmega324p/Bowler_RPC_Process.o
 	$(CCA_avratmega324p) BowlerStack/Debug.c 						-o Release/avratmega324p/Debug_en.o
-	$(CCA_avratmega324p) BowlerStack/Debug_stub.c 					-o Release/avratmega324p/Debug.o
+	$(CCA_avratmega324p) BowlerStack/Debug.c -D NO_PRINTING					-o Release/avratmega324p/Debug.o
 	$(CCA_avratmega324p) BowlerStack/Scheduler.c 					-o Release/avratmega324p/Scheduler.o
 	$(CCA_avratmega324p) BowlerStack/AbstractPID.c 					-o Release/avratmega324p/AbstractPID.o
 	$(CCA_avratmega324p) BowlerStack/Bowler_Transport.c 			-o Release/avratmega324p/Bowler_Transport.o

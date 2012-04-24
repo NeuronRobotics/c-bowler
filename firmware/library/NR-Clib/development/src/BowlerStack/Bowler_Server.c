@@ -36,11 +36,11 @@ BYTE Bowler_Server(BowlerPacket * Packet, BOOL debug){
 	//EndCritical();
 	if (back){
 		SetColor(0,1,0);
-		if(debug){
+		//if(debug){
 			if(Packet->use.head.RPC != 0x7277705f){//Ignore Power Packet
-				println("Got:");printPacket(Packet);
+				println("Got:",INFO_PRINT);printPacket(Packet,INFO_PRINT);
 			}
-		}
+		//}
 		if ( (CheckAddress(MyMAC.v,Packet->use.head.MAC.v) == TRUE) || ((CheckAddress((BYTE *)Broadcast.v,(BYTE *)Packet->use.head.MAC.v) == TRUE) )) {
 			Process_Self_Packet(Packet);
 			for (i=0;i<6;i++){
@@ -50,13 +50,16 @@ BYTE Bowler_Server(BowlerPacket * Packet, BOOL debug){
 			PutBowlerPacket(Packet);
 			if(debug){
 				if(Packet->use.head.RPC != 0x7277705f){//Ignore Power Packet
-					println("Response:");printPacket(Packet);
+					println("Response:",INFO_PRINT);printPacket(Packet,INFO_PRINT);
 				}
 			}
 		}else{
-			if(debug){
-				println("Packet not addressed to me: ");printByteArray(Packet->use.head.MAC.v,6); print(" is not mine: ");printByteArray(MyMAC.v,6);
-			}
+			//if(debug){
+				println("Packet not addressed to me: ",ERROR_PRINT);
+				printByteArray(Packet->use.head.MAC.v,6,ERROR_PRINT);
+				print(" is not mine: ",ERROR_PRINT);
+				printByteArray(MyMAC.v,6,ERROR_PRINT);
+			//}
 		}
 		SetColor(0,0,1);
 		return TRUE;

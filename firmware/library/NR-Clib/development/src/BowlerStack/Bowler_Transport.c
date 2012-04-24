@@ -16,10 +16,13 @@ void allign(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 		FifoReadByteStream(Packet->stream,1,fifo);
 		if((Packet->use.head.ProtocolRevision != BOWLER_VERSION)){
 			if(first==0){
-				println("##Junking bad first byte. Fifo Size=");p_ul(calcByteCount(fifo));print(" [");
+				println("##Junking bad first byte. Fifo Size=",ERROR_PRINT);
+				p_ul(calcByteCount(fifo),ERROR_PRINT);
+				print(" [",ERROR_PRINT);
 			}
 			first++;
-			print(" 0x");prHEX8(Packet->use.head.ProtocolRevision);
+			print(" 0x",ERROR_PRINT);
+			prHEX8(Packet->use.head.ProtocolRevision,ERROR_PRINT);
 			BYTE b;
 			if(getNumBytes(fifo)==0)
 				return;
@@ -30,7 +33,7 @@ void allign(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 		}
 	}while(getNumBytes(fifo)>0 && (Packet->use.head.ProtocolRevision != BOWLER_VERSION));
 	if(first>0){
-		println("##Junked total:");p_ul(first);
+		println("##Junked total:",ERROR_PRINT);p_ul(first,ERROR_PRINT);
 	}
 }
 
@@ -47,7 +50,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 
 	if (getNumBytes(fifo) < ((BowlerHeaderSize)+4)) {
 		if(debug){
-			println("Current num bytes: ");p_ul(getNumBytes(fifo));
+			println("Current num bytes: ",INFO_PRINT);p_ul(getNumBytes(fifo),INFO_PRINT);
 		}
 		return FALSE;//Not enough bytes to even be a header, try back later
 	}
@@ -59,11 +62,11 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 
 		  ){
 			if(Packet->use.head.ProtocolRevision != BOWLER_VERSION){
-				println("###Bad first byte=");
+				println("###Bad first byte=",ERROR_PRINT);
 			}else if(CheckCRC(Packet)==FALSE){
-				println("###Bad crc check=");
+				println("###Bad crc check=",ERROR_PRINT);
 			}
-			prHEX8(Packet->use.head.ProtocolRevision);print(" Fifo Size=");p_ul(calcByteCount(fifo));
+			prHEX8(Packet->use.head.ProtocolRevision,ERROR_PRINT);print(" Fifo Size=",ERROR_PRINT);p_ul(calcByteCount(fifo),ERROR_PRINT);
 			BYTE b;
 			if(getNumBytes(fifo)==0)
 				return FALSE;
@@ -78,7 +81,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 			PacketCheck=TRUE;
 		}
 		if (getNumBytes(fifo) < minSize) {
-			println("##Failed to allign apacket");
+			println("##Failed to allign apacket",ERROR_PRINT);
 			allign(Packet,fifo);
 			return FALSE;//Not enough bytes to even be a header, try back later
 		}
@@ -86,7 +89,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 	PacketLegnth  = Packet->use.head.DataLegnth;
 	if(PacketLegnth<4){
 		if(debug){
-			println("#*#*Warning, packet has no RPC");
+			println("#*#*Warning, packet has no RPC",WARN_PRINT);
 		}
 	}
 	UINT16 totalLen = PacketLegnth+BowlerHeaderSize;
@@ -101,7 +104,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 		return  TRUE;
 	}
 	if(debug){
-		println("Header ready, but data is not yet. Need: ");p_ul(totalLen);print(" have: ");p_ul(getNumBytes(fifo));
+		println("Header ready, but data is not yet. Need: ",INFO_PRINT);p_ul(totalLen,INFO_PRINT);print(" have: ",INFO_PRINT);p_ul(getNumBytes(fifo),INFO_PRINT);
 	}
 	return FALSE;
 }

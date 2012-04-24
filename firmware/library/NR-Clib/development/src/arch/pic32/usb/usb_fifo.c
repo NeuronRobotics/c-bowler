@@ -98,12 +98,12 @@ void flush(){
 	CDCTxService();
 	while((cdc_trf_state != CDC_TX_READY)){
 		if(RunEvery(&timeout)>0){
-			println("#*#*USB timeout before transmit");
+			println("#*#*USB timeout before transmit",ERROR_PRINT);
 			usbActive=FALSE;
 			return;
 		}
 		if(USBNotOk){
-			println("#*#*USB Not ok");
+			println("#*#*USB Not ok",ERROR_PRINT);
 			return;
 		}
 		CDCTxService();
@@ -115,12 +115,12 @@ void flush(){
 	CDCTxService();
 	while((cdc_trf_state != CDC_TX_READY)){
 		if(RunEvery(&timeout)>0){
-			println("#*#*USB timeout before transmit");
+			println("#*#*USB timeout before transmit",ERROR_PRINT);
 			usbActive=FALSE;
 			return;
 		}
 		if(USBNotOk){
-			println("#*#*USB Not ok");
+			println("#*#*USB Not ok",ERROR_PRINT);
 			return;
 		}
 		CDCTxService();

@@ -98,7 +98,7 @@ void TickInit(void)
     OpenTimer1(T1_ON | T1_SOURCE_INT | T1_PS_1_256, T1_TICK);
     ConfigIntTimer1(T1_INT_ON | TICKPRI);
     INTEnableSystemMultiVectoredInt();
-    println("Initializing the PIC timer");
+    println("Initializing the PIC timer",INFO_PRINT);
 //    dwInternalTicks = 0;
 //    dwInternalTicksUpper = 0;
 }
