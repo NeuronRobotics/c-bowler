@@ -128,8 +128,10 @@ void WriteAVRUART1(BYTE val){
 ISR(USART0_RX_vect){
 	StartCritical();
 	BYTE err;
-	FifoAddByte(&store, UDR0, &err);
+	BYTE b= UDR0;
+	FifoAddByte(&store, b, &err);
 	EndCritical();
+	//print("Got [0x");prHEX8(b);print("]\n");
 }
 
 
@@ -142,10 +144,10 @@ void serial_init(unsigned int bittimer)
 	//UBRR0H = 0;
 	//UBRR0L = 64;
 
-//	/* set the framing to 8E1 */
-//	UCSR0C = (_BV(UCSZ00)|_BV(UCSZ01)| _BV(UPM01));
-	/* set the framing to 8N1 */
-	UCSR0C = (_BV(UCSZ00)|_BV(UCSZ01));
+	/* set the framing to 8E1 */
+	UCSR0C = (_BV(UCSZ00)|_BV(UCSZ01)| _BV(UPM01));
+//	/* set the framing to 8N1 */
+//	UCSR0C = (_BV(UCSZ00)|_BV(UCSZ01));
 
     /* rx interrupts enabled, rx and tx enabled, 8-bit data */
     UCSR0B =( _BV(RXCIE0) | _BV(RXEN0) | _BV(TXEN0)  ) ;
