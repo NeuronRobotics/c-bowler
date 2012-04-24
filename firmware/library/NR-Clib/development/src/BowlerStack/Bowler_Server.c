@@ -48,11 +48,11 @@ BYTE Bowler_Server(BowlerPacket * Packet, BOOL debug){
 			}
 			SetCRC(Packet);
 			PutBowlerPacket(Packet);
-			if(debug){
+			//if(debug){
 				if(Packet->use.head.RPC != 0x7277705f){//Ignore Power Packet
 					println("Response:",INFO_PRINT);printPacket(Packet,INFO_PRINT);
 				}
-			}
+			//}
 		}else{
 			//if(debug){
 				println("Packet not addressed to me: ",ERROR_PRINT);
