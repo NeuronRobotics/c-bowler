@@ -80,6 +80,93 @@ void EnableDebugTerminal(void);
 
 #define printStream(A,B,C) printByteArray(A,B,C);
 
+/*Errors*/
+
+/**
+ * print the ascii of a float. No new line
+ */
+#define p_fl_E(A) printfDEBUG_FL(A,ERROR_PRINT)
+
+/**
+ * print the ascii of an unsigned long/int. No new line
+ */
+#define p_ul_E(A)  p_sl(A,ERROR_PRINT)
+
+/**
+ * print the ascii of a signed long/int. No new line
+ */
+#define p_sl_E(A) printfDEBUG_SL(A,ERROR_PRINT)
+
+/**
+ * print the null terminated string with no new lines
+ */
+#define print_E(A) printfDEBUG_NNL(A,ERROR_PRINT)
+
+/**
+ * print the null terminated string with a newline inserted at the begining of the string
+ */
+#define println_E(A) printfDEBUG(A,ERROR_PRINT)
+
+#define printStream_E(A,B) printByteArray(A,B,ERROR_PRINT);
+
+/*Warning*/
+
+/**
+ * print the ascii of a float. No new line
+ */
+#define p_fl_W(A) printfDEBUG_FL(A,WARN_PRINT)
+
+/**
+ * print the ascii of an unsigned long/int. No new line
+ */
+#define p_ul_W(A)  p_sl(A,WARN_PRINT)
+
+/**
+ * print the ascii of a signed long/int. No new line
+ */
+#define p_sl_W(A) printfDEBUG_SL(A,WARN_PRINT)
+
+/**
+ * print the null terminated string with no new lines
+ */
+#define print_W(A) printfDEBUG_NNL(A,WARN_PRINT)
+
+/**
+ * print the null terminated string with a newline inserted at the begining of the string
+ */
+#define println_W(A) printfDEBUG(A,WARN_PRINT)
+
+#define printStream_W(A,B) printByteArray(A,B,WARN_PRINT);
+
+/*Info*/
+
+/**
+ * print the ascii of a float. No new line
+ */
+#define p_fl_I(A) printfDEBUG_FL(A,INFO_PRINT)
+
+/**
+ * print the ascii of an unsigned long/int. No new line
+ */
+#define p_ul_I(A)  p_sl(A,INFO_PRINT)
+
+/**
+ * print the ascii of a signed long/int. No new line
+ */
+#define p_sl_I(A) printfDEBUG_SL(A,INFO_PRINT)
+
+/**
+ * print the null terminated string with no new lines
+ */
+#define print_I(A) printfDEBUG_NNL(A,INFO_PRINT)
+
+/**
+ * print the null terminated string with a newline inserted at the begining of the string
+ */
+#define println_I(A) printfDEBUG(A,INFO_PRINT)
+
+#define printStream_I(A,B) printByteArray(A,B,INFO_PRINT);
+
 /**
  * sends the charrector to the serial port if it is ascii, if it is not ascii, it is converted to a number then sent
  */
