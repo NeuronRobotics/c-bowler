@@ -11,18 +11,18 @@ static UINT32 i;
 //const char * fifoinit = "Initializing FIFO, Buffer Size: ";
 //const char * error = "@##ERROR fifo is overflown! Size, buffer: ";
 
-void printFiFoState(BYTE_FIFO_STORAGE * fifo, BYTE * buffer){
+void printFiFoState(BYTE_FIFO_STORAGE * fifo, BYTE * buffer,Print_Level l){
 	int i;
-	print("\nFifo state: \n\tBytes:",ERROR_PRINT);
-	p_ul(calcByteCount(fifo),ERROR_PRINT);
-	print("\n\tData [ ",ERROR_PRINT);
+	print("\nFifo state: \n\tBytes:",l);
+	p_ul(calcByteCount(fifo),l);
+	print("\n\tData [ ",l);
 	FifoReadByteStream(	buffer,
 						calcByteCount(fifo)+1,
 						fifo);
 	for(i=0;i<calcByteCount(fifo);i++){
-		p_ul(buffer[i],ERROR_PRINT);print(" ",ERROR_PRINT);
+		p_ul(buffer[i],l);print(" ",l);
 	}
-	print(" ]\n",ERROR_PRINT);
+	print(" ]\n",l);
 }
 
 BOOL lockFifo(BYTE_FIFO_STORAGE * fifo){

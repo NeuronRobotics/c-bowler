@@ -98,12 +98,12 @@ void flush(){
 	CDCTxService();
 	while((cdc_trf_state != CDC_TX_READY)){
 		if(RunEvery(&timeout)>0){
-			println("#*#*USB timeout before transmit",ERROR_PRINT);
+			println_E("#*#*USB timeout before transmit");
 			usbActive=FALSE;
 			return;
 		}
 		if(USBNotOk){
-			println("#*#*USB Not ok",ERROR_PRINT);
+			println_E("#*#*USB Not ok");
 			return;
 		}
 		CDCTxService();
@@ -115,12 +115,12 @@ void flush(){
 	CDCTxService();
 	while((cdc_trf_state != CDC_TX_READY)){
 		if(RunEvery(&timeout)>0){
-			println("#*#*USB timeout before transmit",ERROR_PRINT);
+			println_E("#*#*USB timeout before transmit");
 			usbActive=FALSE;
 			return;
 		}
 		if(USBNotOk){
-			println("#*#*USB Not ok",ERROR_PRINT);
+			println_E("#*#*USB Not ok");
 			return;
 		}
 		CDCTxService();
@@ -129,6 +129,7 @@ void flush(){
 }
 WORD USBPutArray(BYTE* stream, WORD num){
 	if(usbActive==FALSE){
+		println_I("USB inactive, bailing out");
 		return 0;
 	}
 	//UINT16 i;
@@ -141,13 +142,14 @@ WORD USBPutArray(BYTE* stream, WORD num){
 		int packetIndex = 0;
 		int i;
 		if(num>TxPrivateSize) {
+			println_I("Packet too large for USB buffer");
 			while(packetLen>TxPrivateSize) {
 				for(i=0;i<TxPrivateSize;i++) {
 					TxBuffer[i]=stream[packetIndex++];
 					packetLen--;
 				}
 				num=i;
-				//println("Sending chunk ");printByteArray(TxBuffer,num);
+				println_I("Sending chunk ");printStream_I(TxBuffer,num);
 				flush();
 
 			}
@@ -155,14 +157,15 @@ WORD USBPutArray(BYTE* stream, WORD num){
 				TxBuffer[i]=stream[packetIndex++];
 			}
 			num=i;
-			//println("Sending chunk ");printByteArray(TxBuffer,num);
+			println_I("Sending chunk ");printStream_I(TxBuffer,num);
 			flush();
 		}else {
+			println_I("Packet small enough for USB buffer");
 			for (i=0;i<num;i++){
 				TxBuffer[i]=stream[i];
 			}
 			txSize=num;
-			//println("Sending all ");printByteArray(TxBuffer,num);
+			println_I("Sending all ");printStream_I(TxBuffer,num);
 			flush();
 		}
 	}
@@ -191,7 +194,6 @@ void usb_Buffer_Update(void){
 			gotData++;
 			usbActive = TRUE;
 		}
-		//p_ul(my_store->byteCount);
 	}
 
 }

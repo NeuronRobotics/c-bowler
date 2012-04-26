@@ -56,15 +56,15 @@ BOOL Send_HAL_Packet(BYTE * packet,WORD size){
 	//SetColor(1,0,0);
 	switch (HalSwitch){
 	case UART_WASP_PACKET:
-		////println("Sending to UART");
+		println_I("Sending to UART");
 		Pic32UARTPutArray(packet,size);
 		break;
 	case USB_WASP_PACKET:
-		////println("Sending to USB");
+		println_I("Sending to USB");
 		SendPacketUSB(packet,size);
 		break;
 	default:
-		//println("Not sending upstream");
+		println_I("Not sending upstream");
 		break;
 	}
 	return TRUE;
