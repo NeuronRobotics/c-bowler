@@ -38,9 +38,6 @@ void allign(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 }
 
 BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug){
-	if(debug){
-		setPrintLevel(INFO_PRINT);
-	}
 	BOOL PacketCheck=FALSE;
 	UINT16 PacketLegnth=0;
 	if (getNumBytes(fifo) == 0 ) {
