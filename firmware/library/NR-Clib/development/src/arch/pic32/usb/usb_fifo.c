@@ -146,37 +146,37 @@ WORD USBPutArray(BYTE* stream, WORD num){
 
 	usb_Buffer_Update();
 	if(USBNotOk){
+		usbActive=FALSE;
 		return  0;
 	}else{
 		int packetLen = num;
 		int packetIndex = 0;
 		int i;
-		if(num>TxPrivateSize) {
+		//if(num>(TxPrivateSize)) {
+		if(0) {
 			println_I("Packet too large for USB buffer");
 			while(packetLen>TxPrivateSize) {
 				for(i=0;i<TxPrivateSize;i++) {
 					TxBuffer[i]=stream[packetIndex++];
 					packetLen--;
 				}
-				txSize=num;
-				num=i;
-				println_I("Sending chunk ");printStream_I(TxBuffer,num);
+				println_I("Sending chunk ");printStream_I(TxBuffer,i);
+				txSize=i;
 				flush();
 			}
 			for(i=0;i<packetLen;i++) {
 				TxBuffer[i]=stream[packetIndex++];
 			}
-			txSize=num;
-			num=i;
-			println_I("Sending chunk ");printStream_I(TxBuffer,num);
+			println_I("Sending chunk ");printStream_I(TxBuffer,i);
+			txSize=i;
 			flush();
 		}else {
 			println_I("Packet small enough for USB buffer");
 			for (i=0;i<num;i++){
 				TxBuffer[i]=stream[i];
 			}
-			txSize=num;
 			println_I("Sending all ");printStream_I(TxBuffer,num);
+			txSize=i;
 			flush();
 		}
 	}
@@ -192,6 +192,7 @@ WORD GetNumUSBBytes(void){
 
 void usb_Buffer_Update(void){
 	if(USBNotOk){
+		usbActive=FALSE;
 		return ;
 	}
 	WORD i;
