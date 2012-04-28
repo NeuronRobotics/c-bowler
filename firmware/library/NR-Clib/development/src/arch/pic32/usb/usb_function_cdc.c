@@ -465,6 +465,8 @@ void putUSBUSART(char *data, WORD  length)
     if(cdc_trf_state == CDC_TX_READY)
     {
         mUSBUSARTTxRam((BYTE*)data, length);     // See cdc.h
+    }else{
+    	println_E("#*#*#cdc_trf_state is not CDC_TX_READY, buffer dumped and ignored!!");
     }
     USBUnmaskInterrupts();
 }//end putUSBUSART
@@ -712,12 +714,14 @@ void putrsUSBUSART(const ROM char *data)
  
 void CDCTxService(void)
 {
+	USBDeviceTasksLocal();
     UINT16 byte_to_send;
     BYTE i;
     
     USBMaskInterrupts();
     if(USBHandleBusy(CDCDataInHandle)) 
     {
+    	//println_I("USBHandleBusy(CDCDataInHandle)");
         USBUnmaskInterrupts();
         return;
     }
@@ -727,8 +731,10 @@ void CDCTxService(void)
      * By having this stage, user can always check cdc_trf_state,
      * and not having to call mCDCUsartTxIsBusy() directly.
      */
-    if(cdc_trf_state == CDC_TX_COMPLETING)
+    if(cdc_trf_state == CDC_TX_COMPLETING){
         cdc_trf_state = CDC_TX_READY;
+        println_I("CDC_TX_COMPLETING -> CDC_TX_READY");
+    }
     
     /*
      * If CDC_TX_READY state, nothing to do, just return.
@@ -736,6 +742,7 @@ void CDCTxService(void)
     if(cdc_trf_state == CDC_TX_READY)
     {
         USBUnmaskInterrupts();
+        println_I("CDC_TX_READY Ok");
         return;
     }
     
@@ -744,12 +751,14 @@ void CDCTxService(void)
      */
     if(cdc_trf_state == CDC_TX_BUSY_ZLP)
     {
+    	println_I("cdc_trf_state == CDC_TX_BUSY_ZLP");
         CDCDataInHandle = USBTxOnePacket(CDC_DATA_EP,NULL,0);
         //CDC_DATA_BD_IN.CNT = 0;
         cdc_trf_state = CDC_TX_COMPLETING;
     }
     else if(cdc_trf_state == CDC_TX_BUSY)
     {
+    	println_I("cdc_trf_state == CDC_TX_BUSY");
         /*
          * First, have to figure out how many byte of data to send.
          */

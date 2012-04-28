@@ -29,9 +29,9 @@
 #define USBNotOk	(USBDeviceState < CONFIGURED_STATE)||(USBSuspendControl==1)
 
 #define TxPrivateSize 64
-static BYTE RxTmpBuffer[BOWLER_PacketSize];
-static BYTE privateRX[BOWLER_PacketSize];
-static BYTE TxBuffer[TxPrivateSize];
+static BYTE RxTmpBuffer[BOWLER_PacketSize*2];
+static BYTE privateRX[BOWLER_PacketSize*2];
+static BYTE TxBuffer[TxPrivateSize+1 ];
 static UINT16 gotData = 0;
 static BOOL bufferSet=FALSE;
 
@@ -93,10 +93,13 @@ WORD USBGetArray(BYTE* stream, WORD num){
 }
 //static BYTE tmp [64];
 extern BYTE cdc_trf_state;
-void flush(){
+extern USB_HANDLE CDCDataInHandle;
+
+#define isUSBTxBlocked() ((cdc_trf_state != CDC_TX_READY)  || (USBHandleBusy(CDCDataInHandle)!=0))
+
+void waitForTxToBeFree(){
 	RunEveryData timeout={getMs(),200};
-	CDCTxService();
-	while((cdc_trf_state != CDC_TX_READY)){
+	while(isUSBTxBlocked()){
 		if(RunEvery(&timeout)>0){
 			println_E("#*#*USB timeout before transmit");
 			usbActive=FALSE;
@@ -108,24 +111,31 @@ void flush(){
 		}
 		CDCTxService();
 	}
+}
+
+void flush(){
+
+	float start = getMs();
+
+	waitForTxToBeFree();
+
+	float end = getMs()-start;
+	println_I("USB Buffer ready, took:");p_fl_I(end);
+	start = getMs();
+
+
 	if(txSize>0){
 		putUSBUSART((char *)TxBuffer, txSize);
+		//DelayMs(2);
 		txSize=0;
-	}
-	CDCTxService();
-	while((cdc_trf_state != CDC_TX_READY)){
-		if(RunEvery(&timeout)>0){
-			println_E("#*#*USB timeout before transmit");
-			usbActive=FALSE;
-			return;
-		}
-		if(USBNotOk){
-			println_E("#*#*USB Not ok");
-			return;
-		}
-		CDCTxService();
+	}else{
+		println_I("Zero length packet to send, ignoring");
 	}
 
+	waitForTxToBeFree();
+
+	end = getMs()-start;
+	println_I("USB Flushed OK, took:");p_fl_I(end);
 }
 WORD USBPutArray(BYTE* stream, WORD num){
 	if(usbActive==FALSE){
@@ -148,14 +158,15 @@ WORD USBPutArray(BYTE* stream, WORD num){
 					TxBuffer[i]=stream[packetIndex++];
 					packetLen--;
 				}
+				txSize=num;
 				num=i;
 				println_I("Sending chunk ");printStream_I(TxBuffer,num);
 				flush();
-
 			}
 			for(i=0;i<packetLen;i++) {
 				TxBuffer[i]=stream[packetIndex++];
 			}
+			txSize=num;
 			num=i;
 			println_I("Sending chunk ");printStream_I(TxBuffer,num);
 			flush();
