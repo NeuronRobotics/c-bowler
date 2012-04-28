@@ -153,7 +153,7 @@ WORD USBPutArray(BYTE* stream, WORD num){
 		int packetIndex = 0;
 		int i;
 		//if(num>(TxPrivateSize)) {
-		if(0) {
+		if(num>255) {
 			println_I("Packet too large for USB buffer");
 			while(packetLen>TxPrivateSize) {
 				for(i=0;i<TxPrivateSize;i++) {
