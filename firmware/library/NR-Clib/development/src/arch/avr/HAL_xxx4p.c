@@ -115,7 +115,7 @@ void WriteAVRUART0(BYTE val){
 
 void WriteAVRUART1(BYTE val){
 	if (UCSR1B == 0)
-		EnableDebugTerminal();
+		return;
 	while ((UCSR1A & (1<<UDRE1)) == 0 );
 		UDR1 = val;
 	_delay_us(UARTDELAY);

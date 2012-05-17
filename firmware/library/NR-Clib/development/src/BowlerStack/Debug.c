@@ -37,6 +37,10 @@ Print_Level setPrintLevel(Print_Level l){
 
 BOOL okToPrint(Print_Level l){
 	if(getPrintLevel()>=l){
+		if(DebugINIT == FALSE){
+			DebugINIT = TRUE;
+			EnableDebugTerminal();
+		}
 		return TRUE;
 	}
 	return FALSE;
@@ -59,13 +63,10 @@ char GetHighNib(BYTE b){
 }
 
 void printfDEBUG(const char *str,Print_Level l){
-	if(DebugINIT == FALSE){
-		DebugINIT = TRUE;
-		EnableDebugTerminal();
-	}
 	if(!okToPrint(l)){
 		return;
 	}
+
 	int x;
 	x=0;
 	putCharDebug('\n');
