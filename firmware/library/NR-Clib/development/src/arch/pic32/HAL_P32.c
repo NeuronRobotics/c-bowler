@@ -24,7 +24,7 @@ static BOOL init=FALSE;
 void Pic32_Bowler_HAL_Init(void){
 	init=TRUE;
 	//println("Init UART hal");
-	Pic32UART_HAL_INIT();
+	Pic32UART_HAL_INIT(PRINT_BAUD);
 	//println("Init USB fifo");
 	InitByteFifo(&storeUSB,privateRXUSB,sizeof(privateRXUSB));
 	//println("Init UART fifo");
@@ -134,6 +134,6 @@ void startScheduler(void){
 
 
 void EnableDebugTerminal(void){
-	Pic32UART_HAL_INIT();
+	Pic32UART_HAL_INIT(PRINT_BAUD);
 }
 

@@ -97,7 +97,7 @@ DWORD CalcBaud(DWORD Baud){
 	return closest;
 }
 
-void Pic32UART_HAL_INIT(void){
+void Pic32UART_HAL_INIT(int BAUDRATE){
 	ConfigUARTOpenCollector();
 	ConfigUARTRXTristate();
 //	OpenUART1(UART_EN|UART_NO_PAR_8BIT|UART_1STOPBIT|UART_DIS_BCLK_CTS_RTS,UART_TX_ENABLE|UART_RX_ENABLE,CalcBaud(PRINT_BAUD ));
@@ -105,7 +105,7 @@ void Pic32UART_HAL_INIT(void){
 //	INTEnableSystemMultiVectoredInt();
 	UARTSetFifoMode(UART1, UART_INTERRUPT_ON_RX_NOT_EMPTY|UART_INTERRUPT_ON_TX_DONE);
 	UARTSetLineControl(UART1, UART_DATA_SIZE_8_BITS | UART_PARITY_NONE | UART_STOP_BITS_1);
-	UARTSetDataRate(UART1, GetPeripheralClock(), PRINT_BAUD );
+	UARTSetDataRate(UART1, GetPeripheralClock(), BAUDRATE );
 	UARTEnable(UART1, UART_ENABLE_FLAGS(UART_PERIPHERAL | UART_RX | UART_TX));
 
 //	// Configure UART1 RX Interrupt
