@@ -158,7 +158,7 @@ void serial_init(unsigned int bittimer)
 
 void EnableDebugTerminal(void){
 	unsigned int bittimer;
-	bittimer=(( F_CPU / PRINT_BAUD  / 16 ) - 1);
+	bittimer=(( F_CPU / 115200  / 16 ) - 1);
 	/* Set the baud rate */
 	UBRR1H = (unsigned char) (bittimer >> 8);
 	UBRR1L = (unsigned char) bittimer;

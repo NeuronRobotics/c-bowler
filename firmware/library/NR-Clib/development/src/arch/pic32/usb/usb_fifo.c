@@ -120,7 +120,7 @@ void flush(){
 	waitForTxToBeFree();
 
 	float end = getMs()-start;
-	println_I("USB Buffer ready, took:");p_fl_I(end);
+	//println_I("USB Buffer ready, took:");p_fl_I(end);
 	start = getMs();
 
 
@@ -129,17 +129,17 @@ void flush(){
 		//DelayMs(2);
 		txSize=0;
 	}else{
-		println_I("Zero length packet to send, ignoring");
+		//println_I("Zero length packet to send, ignoring");
 	}
 
 	waitForTxToBeFree();
 
 	end = getMs()-start;
-	println_I("USB Flushed OK, took:");p_fl_I(end);
+	//println_I("USB Flushed OK, took:");p_fl_I(end);
 }
-WORD USBPutArray(BYTE* stream, WORD num){
+int USBPutArray(BYTE* stream, int num){
 	if(usbActive==FALSE){
-		println_I("USB inactive, bailing out");
+		//println_I("USB inactive, bailing out");
 		return 0;
 	}
 	//UINT16 i;
@@ -154,28 +154,28 @@ WORD USBPutArray(BYTE* stream, WORD num){
 		int i;
 		//if(num>(TxPrivateSize)) {
 		if(num>255) {
-			println_I("Packet too large for USB buffer");
+			//println_I("Packet too large for USB buffer");
 			while(packetLen>TxPrivateSize) {
 				for(i=0;i<TxPrivateSize;i++) {
 					TxBuffer[i]=stream[packetIndex++];
 					packetLen--;
 				}
-				println_I("Sending chunk ");printStream_I(TxBuffer,i);
+				//println_I("Sending chunk ");printStream_I(TxBuffer,i);
 				txSize=i;
 				flush();
 			}
 			for(i=0;i<packetLen;i++) {
 				TxBuffer[i]=stream[packetIndex++];
 			}
-			println_I("Sending chunk ");printStream_I(TxBuffer,i);
+			//println_I("Sending chunk ");printStream_I(TxBuffer,i);
 			txSize=i;
 			flush();
 		}else {
-			println_I("Packet small enough for USB buffer");
+			//println_I("Packet small enough for USB buffer");
 			for (i=0;i<num;i++){
 				TxBuffer[i]=stream[i];
 			}
-			println_I("Sending all ");printStream_I(TxBuffer,num);
+			//println_I("Sending all ");printStream_I(TxBuffer,num);
 			txSize=i;
 			flush();
 		}

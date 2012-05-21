@@ -96,16 +96,16 @@ DWORD CalcBaud(DWORD Baud){
 	closest = ((GetPeripheralClock()+8ul*Baud)/16/Baud-1);
 	return closest;
 }
+void Pic32UARTSetBaud(int baud){
 
-void Pic32UART_HAL_INIT(int BAUDRATE){
-	ConfigUARTOpenCollector();
+	UARTEnable(UART1,UART_DISABLE);
+
+	//ConfigUARTOpenCollector();
 	ConfigUARTRXTristate();
-//	OpenUART1(UART_EN|UART_NO_PAR_8BIT|UART_1STOPBIT|UART_DIS_BCLK_CTS_RTS,UART_TX_ENABLE|UART_RX_ENABLE,CalcBaud(PRINT_BAUD ));
-//	ConfigIntUART1(UART_INT_PR5 | UART_RX_INT_EN);
-//	INTEnableSystemMultiVectoredInt();
+
 	UARTSetFifoMode(UART1, UART_INTERRUPT_ON_RX_NOT_EMPTY|UART_INTERRUPT_ON_TX_DONE);
 	UARTSetLineControl(UART1, UART_DATA_SIZE_8_BITS | UART_PARITY_NONE | UART_STOP_BITS_1);
-	UARTSetDataRate(UART1, GetPeripheralClock(), BAUDRATE );
+	UARTSetDataRate(UART1, GetPeripheralClock(), baud );
 	UARTEnable(UART1, UART_ENABLE_FLAGS(UART_PERIPHERAL | UART_RX | UART_TX));
 
 //	// Configure UART1 RX Interrupt
@@ -116,6 +116,9 @@ void Pic32UART_HAL_INIT(int BAUDRATE){
 
 	INTSetVectorPriority(INT_VECTOR_UART(UART1), INT_PRIORITY_LEVEL_5);
 	INTSetVectorSubPriority(INT_VECTOR_UART(UART1), INT_SUB_PRIORITY_LEVEL_0);
+}
+void Pic32UART_HAL_INIT(int BAUDRATE){
+	Pic32UARTSetBaud(BAUDRATE);
 	InitByteFifo(&store,privateRX,sizeof(privateRX));
 	my_store=&store;
 }

@@ -22,6 +22,30 @@ Print_Level level=NO_PRINT;
 //static BOOL DebugFlag=TRUE;
 static BOOL DebugINIT = FALSE;
 
+int (*sendToStream)(BYTE * ,int);
+
+int sendToStreamMine(BYTE * data ,int num){
+	int i=0;
+	for(i=0;i<num;i++){
+		putCharDebug(data[i]);
+	}
+	return i;
+}
+
+void setPrintStream(int (*sendToStreamPtr)(BYTE * ,int)){
+	if(sendToStreamPtr == 0){
+		sendToStreamPtr = &sendToStreamMine;
+	}
+	sendToStream = sendToStreamPtr;
+}
+
+void sendToStreamLocal(BYTE * data ,int num){
+	if(sendToStream == 0){
+		sendToStream = &sendToStreamMine;
+	}
+	sendToStream(data,num);
+}
+
 Print_Level getPrintLevel(){
 	return level;
 }
@@ -69,18 +93,20 @@ void printfDEBUG(const char *str,Print_Level l){
 
 	int x;
 	x=0;
-	putCharDebug('\n');
-	putCharDebug('\r');
+	int i=0;
+	BYTE data [20];
+	data[i++]=('\n');
+	data[i++]=('\r');
 	while(str[x]!='\0'){
-		putCharDebug(str[x++]);
+		data[i++]=(str[x++]);
 	}
-
+	sendToStreamLocal(data,i);
 }
 void printfDEBUG_BYTE(char b,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
-	 putCharDebug(b);
+	sendToStreamLocal((BYTE *)&b,1);
 
 }
 void printfDEBUG_NNL(const char *str,Print_Level l)
@@ -88,13 +114,13 @@ void printfDEBUG_NNL(const char *str,Print_Level l)
 	if(!okToPrint(l)){
 		return;
 	}
-	int x;
-	x=0;
+	int x=0;
+	int i=0;
+	BYTE data [20];
 	while(str[x]!='\0'){
-		 putCharDebug(str[x++]);
+		data[i++]=(str[x++]);
 	}
-
-
+	sendToStreamLocal(data,i);
 }
 void printfDEBUG_UL(UINT32 val,Print_Level l){
 	printfDEBUG_SL(val,l);
@@ -104,18 +130,20 @@ void printfDEBUG_SL(INT32 val,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
+	int i=0;
+	BYTE data [12];
+
 	BYTE byteStr[11];
 	int x=0;
 	if (val<0){
 		val *=-1;
-		putCharDebug('-');
+		data[i++]=('-');
 	}
 	ultoaMINE(val,byteStr);
-	// putCharDebug(',');
 	while(byteStr[x] != '\0'){
-		putCharDebug(byteStr[x++]);
+		data[i++]=(byteStr[x++]);
 	}
-
+	sendToStreamLocal(data,i);
 }
 
 void printfDEBUG_FL(float f,Print_Level l){
@@ -126,14 +154,14 @@ void printfDEBUG_FL(float f,Print_Level l){
 	INT32 shift =(INT32)(f*1000);
 	INT32 clip  = upper*1000;
 	printfDEBUG_SL(upper,l);
-	putCharDebug('.');
+	printfDEBUG_BYTE('.',l);
 	INT32 dec =shift-clip;
 	if (dec<0)
 		dec*=-1;
 	if(dec<100)
-		putCharDebug('0');
+		printfDEBUG_BYTE('0',l);
 	if(dec<10)
-		putCharDebug('0');
+		printfDEBUG_BYTE('0',l);
 	printfDEBUG_UL(dec,l);
 }
 
