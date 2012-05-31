@@ -156,7 +156,7 @@ void pushPIDLimitEvent(PidLimitEvent * event){
 
 	prep(& packetTemp);
 	packetTemp.use.head.MessageID = 4;
-	packetTemp.use.head.Method = BOWLER_CRIT;
+	packetTemp.use.head.Method=BOWLER_ASYN;
 	packetTemp.use.head.RPC = GetRPCValue("pidl");
 
 	packetTemp.use.data[0]=event->group;
@@ -188,6 +188,7 @@ void pushPIDLimitEvent(PidLimitEvent * event){
 
 void pushPID(BYTE chan, INT32 value, float time){
 	prep(& packetTemp);
+	packetTemp.use.head.Method=BOWLER_ASYN;
 	packetTemp.use.head.MessageID = 3;
 	packetTemp.use.head.RPC = GetRPCValue("_pid");
 	packetTemp.use.head.DataLegnth = 4+1+4+4+4;
