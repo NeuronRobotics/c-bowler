@@ -16,6 +16,7 @@
  *
  */
 #include "Bowler/Bowler.h"
+#include "arch/pic32/BowlerConfig.h"
 
 
 static BYTE privateRX[BOWLER_PacketSize];
@@ -43,17 +44,17 @@ void newByteUartHal(){
 	
 }
 
-void __ISR(_UART_1_VECTOR, ipl5) U1_ISR(void){
+void __ISR(_UART_1_VECTOR, ipl7) U1_ISR(void){
 	StartCritical();
 	int tick =8;
 	if (INTGetFlag(INT_SOURCE_UART_RX(UART1))){
 
 		newByteUartHal();
 		INTClearFlag(INT_SOURCE_UART_RX(UART1));
-		while(DataRdyUART1() && tick>0){
-			newByteUartHal();
-			tick--;
-		}
+//		while(DataRdyUART1() && tick>0){
+//			newByteUartHal();
+//			tick--;
+//		}
 	}
 	else if ( INTGetFlag(INT_SOURCE_UART_TX(UART1)) ) {
 
@@ -65,10 +66,10 @@ void __ISR(_UART_1_VECTOR, ipl5) U1_ISR(void){
 
 		newByteUartHal();
 		INTClearFlag(INT_SOURCE_UART_ERROR(UART1));
-		while(DataRdyUART1() && tick>0){
-			newByteUartHal();
-			tick--;
-		}
+//		while(DataRdyUART1() && tick>0){
+//			newByteUartHal();
+//			tick--;
+//		}
 		//println("&@&@&&@&@&@ uart ERROR");
 	}
 	else if(INTGetFlag(INT_SOURCE_UART(UART1))){
