@@ -44,25 +44,15 @@ void newByteUartHal(){
 }
 
 void __ISR(_UART_1_VECTOR, ipl5) U1_ISR(void){
-//	BYTE err;
-//	 if(mU1RXGetIntFlag()){
-//		//while(!DataRdyUART1()){}
-//		FifoAddByte(my_store,ReadUART1(),&err);
-//		if(err != FIFO_OK){
-//			//FIFO locked, keep the ISR flag high and try back later
-//			return;
-//		}
-//		gotData ++;
-//	 }
-//	 mU1TXClearIntFlag();
-//	 mU1RXClearIntFlag();
-//	 //EndCritical();
 	StartCritical();
 
 	if (INTGetFlag(INT_SOURCE_UART_RX(UART1))){
 
 		newByteUartHal();
 		INTClearFlag(INT_SOURCE_UART_RX(UART1));
+		while(DataRdyUART1()){
+			newByteUartHal();
+		}
 	}
 	else if ( INTGetFlag(INT_SOURCE_UART_TX(UART1)) ) {
 
@@ -74,6 +64,9 @@ void __ISR(_UART_1_VECTOR, ipl5) U1_ISR(void){
 
 		newByteUartHal();
 		INTClearFlag(INT_SOURCE_UART_ERROR(UART1));
+		while(DataRdyUART1()){
+			newByteUartHal();
+		}
 		//println("&@&@&&@&@&@ uart ERROR");
 	}
 	else if(INTGetFlag(INT_SOURCE_UART(UART1))){
@@ -82,12 +75,7 @@ void __ISR(_UART_1_VECTOR, ipl5) U1_ISR(void){
 		INTClearFlag(INT_SOURCE_UART(UART1));
 		//println("&@&@&&@&@&@ generic uart");
 	}
-//		else{
-//			enableDebug();
-//			println("WTF??? How did this happen...");
-//			while(1){
-//				buttonCheck(16);
-//			}
+
 	EndCritical();
 }
 
@@ -103,7 +91,7 @@ void Pic32UARTSetBaud(int baud){
 	//ConfigUARTOpenCollector();
 	ConfigUARTRXTristate();
 
-	UARTSetFifoMode(UART1, UART_INTERRUPT_ON_RX_NOT_EMPTY|UART_INTERRUPT_ON_TX_DONE);
+	UARTSetFifoMode(UART1, UART_INTERRUPT_ON_RX_NOT_EMPTY);
 	UARTSetLineControl(UART1, UART_DATA_SIZE_8_BITS | UART_PARITY_NONE | UART_STOP_BITS_1);
 	UARTSetDataRate(UART1, GetPeripheralClock(), baud );
 	UARTEnable(UART1, UART_ENABLE_FLAGS(UART_PERIPHERAL | UART_RX | UART_TX));
@@ -111,10 +99,10 @@ void Pic32UARTSetBaud(int baud){
 //	// Configure UART1 RX Interrupt
 	INTEnable(INT_SOURCE_UART(UART1)		, INT_DISABLED);
 	INTEnable(INT_SOURCE_UART_TX(UART1)		, INT_DISABLED);
-	INTEnable(INT_SOURCE_UART_ERROR(UART1)	, INT_DISABLED);
+	INTEnable(INT_SOURCE_UART_ERROR(UART1)	, INT_ENABLED);
 	INTEnable(INT_SOURCE_UART_RX(UART1)		, INT_ENABLED);
 
-	INTSetVectorPriority(INT_VECTOR_UART(UART1), INT_PRIORITY_LEVEL_5);
+	INTSetVectorPriority(INT_VECTOR_UART(UART1), INT_PRIORITY_LEVEL_7);
 	INTSetVectorSubPriority(INT_VECTOR_UART(UART1), INT_SUB_PRIORITY_LEVEL_0);
 }
 void Pic32UART_HAL_INIT(int BAUDRATE){
