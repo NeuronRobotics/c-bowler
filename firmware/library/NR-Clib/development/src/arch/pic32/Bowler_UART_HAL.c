@@ -45,13 +45,14 @@ void newByteUartHal(){
 
 void __ISR(_UART_1_VECTOR, ipl5) U1_ISR(void){
 	StartCritical();
-
+	int tick =8;
 	if (INTGetFlag(INT_SOURCE_UART_RX(UART1))){
 
 		newByteUartHal();
 		INTClearFlag(INT_SOURCE_UART_RX(UART1));
-		while(DataRdyUART1()){
+		while(DataRdyUART1() && tick>0){
 			newByteUartHal();
+			tick--;
 		}
 	}
 	else if ( INTGetFlag(INT_SOURCE_UART_TX(UART1)) ) {
@@ -64,8 +65,9 @@ void __ISR(_UART_1_VECTOR, ipl5) U1_ISR(void){
 
 		newByteUartHal();
 		INTClearFlag(INT_SOURCE_UART_ERROR(UART1));
-		while(DataRdyUART1()){
+		while(DataRdyUART1() && tick>0){
 			newByteUartHal();
+			tick--;
 		}
 		//println("&@&@&&@&@&@ uart ERROR");
 	}
