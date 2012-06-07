@@ -72,11 +72,9 @@ void RunVel(void){
 	updatePidAsync();
 }
 
-void RunPID(void){
-	//enableDebug();
-	int i;
+void RunPIDControl(){
+    	int i;
 	for (i=0;i<number_of_pid_groups;i++){
-            pushPIDLimitEvent(checkPIDLimitEvents(i));
             if(pidGroups[i].Enabled){
                     pidGroups[i].SetPoint = interpolate(&pidGroups[i].interpolate,getMs());
                     //getPosition(& local_groups[i]);
@@ -85,9 +83,20 @@ void RunPID(void){
                     //setVelocity(& local_groups[i]);
                     setOutput(i,pidGroups[i].Output);
             }
-		
+
+	}
+}
+void RunPIDComs(){
+    	int i;
+	for (i=0;i<number_of_pid_groups;i++){
+            pushPIDLimitEvent(checkPIDLimitEvents(i));
 	}
 	updatePidAsync();
+}
+
+void RunPID(void){
+    RunPIDControl();
+    RunPIDComs();
 }
 
 

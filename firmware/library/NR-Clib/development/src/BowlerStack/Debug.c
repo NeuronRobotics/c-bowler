@@ -93,7 +93,7 @@ void printfDEBUG(const char *str,Print_Level l){
 
 	int x;
 	x=0;
-	BYTE data [20];
+	BYTE data [1024];
 	int i=0;
     data[i++]=('\n');
     data[i++]=('\r');
@@ -116,7 +116,7 @@ void printfDEBUG_NNL(const char *str,Print_Level l)
 	}
 	int x=0;
 	int i=0;
-	BYTE data [20];
+	BYTE data [1024];
 	while(str[x]!='\0'){
 		data[i++]=(str[x++]);
 	}
