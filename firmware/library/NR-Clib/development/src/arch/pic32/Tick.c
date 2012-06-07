@@ -55,10 +55,6 @@
 ********************************************************************/
 #define __TICK_C
 
-#define TICKIPL ipl7
-#define TICKPRI T1_INT_PRIOR_7
-
-
 #include "Bowler/Bowler.h"
 #if defined(__PIC32MX__)
 	#define SYS_FREQ 			(80000000L)
@@ -96,11 +92,7 @@ static DWORD dwInternalTicksUpper = 0;
 void TickInit(void)
 {
     OpenTimer1(T1_ON | T1_SOURCE_INT | T1_PS_1_256, T1_TICK);
-    ConfigIntTimer1(T1_INT_ON | TICKPRI);
-    INTEnableSystemMultiVectoredInt();
-    println("Initializing the PIC timer",INFO_PRINT);
-//    dwInternalTicks = 0;
-//    dwInternalTicksUpper = 0;
+    ConfigIntTimer1(T1_INT_ON | T1_INT_PRIOR_2);
 }
 
 
@@ -206,7 +198,8 @@ float TickGetMS(void)
   ***************************************************************************/
 
 
-void __ISR(_TIMER_1_VECTOR, TICKIPL) Timer1Handler(void)
+//void __ISR(_TIMER_1_VECTOR, TICKIPL) Timer1Handler(void)
+void __ISR(_TIMER_1_VECTOR, IPL2SOFT) Timer1Handler(void)
 {
 	//StartCritical();
 	DWORD before = TickGetLower();
