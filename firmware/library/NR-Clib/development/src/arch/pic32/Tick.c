@@ -58,9 +58,9 @@
 #include "Bowler/Bowler.h"
 #if defined(__PIC32MX__)
 	#define SYS_FREQ 			(80000000L)
-	#define PB_DIV         		8
+	#define PB_DIV         		1
 	#define PRESCALE       		256
-	#define TOGGLES_PER_SEC		1
+	#define TOGGLES_PER_SEC		10000
 	#define T1_TICK       		(SYS_FREQ/PB_DIV/PRESCALE/TOGGLES_PER_SEC)
 #endif
 // Internal counter to store Ticks.
@@ -92,7 +92,7 @@ static DWORD dwInternalTicksUpper = 0;
 void TickInit(void)
 {
     OpenTimer1(T1_ON | T1_SOURCE_INT | T1_PS_1_256, T1_TICK);
-    ConfigIntTimer1(T1_INT_ON | T1_INT_PRIOR_2);
+    ConfigIntTimer1(T1_INT_ON | T1_INT_PRIOR_3);
 }
 
 
@@ -199,17 +199,17 @@ float TickGetMS(void)
 
 
 //void __ISR(_TIMER_1_VECTOR, TICKIPL) Timer1Handler(void)
-void __ISR(_TIMER_1_VECTOR, IPL2SOFT) Timer1Handler(void)
+void __ISR(_TIMER_1_VECTOR, ipl3) Timer1Handler(void)
 {
-	//StartCritical();
+        //mPORTDToggleBits(BIT_3);
+	StartCritical();
 	DWORD before = TickGetLower();
-	dwInternalTicks+=0x10000;
+	dwInternalTicks+=TICKS_PER_SECOND/TOGGLES_PER_SEC;
 	if(TickGetLower()<before){
 		dwInternalTicks=0;
 		dwInternalTicksUpper++;
 	}
-	mT1ClearIntFlag();
-	//EndCritical();
+	mT1ClearIntFlag();EndCritical();
 	//println("@%@%@%@%Tick");
 }
 
