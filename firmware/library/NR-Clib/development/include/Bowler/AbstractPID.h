@@ -144,6 +144,11 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 		BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),
 		void (*onPidConfigurePtr)(int),
 		PidLimitEvent * (*checkPIDLimitEventsPtr)(BYTE group));
+/**
+ * This sets a different set of control loop math.
+ * @param math a function pointer to the math calculation to be used in place of the PID math
+ */
+void SetControllerMath( void (*math)(AbsPID * ,float ));
 
 
 

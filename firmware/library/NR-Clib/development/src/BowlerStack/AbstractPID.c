@@ -20,6 +20,8 @@ void (*setOutput)(int, float);
 int (*resetPosition)(int,int);
 BOOL (*pidAsyncCallback)(BowlerPacket *Packet);
 void (*onPidConfigure)(int);
+void (*MathCalculationPosition)(AbsPID * ,float );
+void (*MathCalculationVelocity)(AbsPID * ,float );
 PidLimitEvent* (*checkPIDLimitEvents)(BYTE group);
 
 
@@ -32,6 +34,13 @@ void updatePidAsync();
 void pidReset(BYTE chan,INT32 val);
 float pidResetNoStop(BYTE chan,INT32 val);
 void pushAllPIDPositions();
+
+void SetControllerMath( void (*math)(AbsPID * ,float )){
+	if(math !=0)
+		MathCalculationPosition=math;
+	else
+		MathCalculationPosition=&RunAbstractPIDCalc;
+}
 
 void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 							float (*getPositionPtr)(int),
@@ -60,7 +69,10 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 	onPidConfigure=onPidConfigurePtr;
 	checkPIDLimitEvents=checkPIDLimitEventsPtr;
 	velData=vel;
+	SetControllerMath(&RunAbstractPIDCalc);
 }
+
+
 
 void RunVel(void){
 	BYTE i;
@@ -79,7 +91,7 @@ void RunPIDControl(){
                     pidGroups[i].SetPoint = interpolate(&pidGroups[i].interpolate,getMs());
                     //getPosition(& local_groups[i]);
                     pidGroups[i].CurrentState = getPosition(i);
-                    RunAbstractPIDCalc(& pidGroups[i],getMs());
+                    MathCalculationPosition(& pidGroups[i],getMs());
                     //setVelocity(& local_groups[i]);
                     setOutput(i,pidGroups[i].Output);
             }
