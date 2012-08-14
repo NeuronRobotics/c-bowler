@@ -144,7 +144,7 @@ void prep(BowlerPacket * Packet){
 	for (i=0;i<6;i++){
 		Packet->use.head.MAC.v[i]=0;
 	}
-	Packet->use.head.MessageID=1;
+	Packet->use.head.MessageID=0;
 	Packet->use.head.ResponseFlag=1;
 	Packet->use.head.Method=BOWLER_STATUS;
 	Packet->use.head.RPC=GetRPCValue("****");
@@ -177,7 +177,7 @@ void pushPIDLimitEvent(PidLimitEvent * event){
 	pidGroups[event->group].lastPushedValue=event->value;
 
 	prep(& packetTemp);
-	packetTemp.use.head.MessageID = 4;
+	packetTemp.use.head.MessageID = 0;
 	packetTemp.use.head.Method=BOWLER_ASYN;
 	packetTemp.use.head.RPC = GetRPCValue("pidl");
 
@@ -211,7 +211,7 @@ void pushPIDLimitEvent(PidLimitEvent * event){
 void pushPID(BYTE chan, INT32 value, float time){
 	prep(& packetTemp);
 	packetTemp.use.head.Method=BOWLER_ASYN;
-	packetTemp.use.head.MessageID = 3;
+	packetTemp.use.head.MessageID = 0;
 	packetTemp.use.head.RPC = GetRPCValue("_pid");
 	packetTemp.use.head.DataLegnth = 4+1+4+4+4;
 	packetTemp.use.data[0]=chan;

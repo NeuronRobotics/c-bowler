@@ -137,8 +137,17 @@ void flush(){
 	end = getMs()-start;
 	//println_I("USB Flushed OK, took:");p_fl_I(end);
 }
+
+BYTE isUSBActave(){
+    return usbActive;
+}
+
+void forceOpenUSB(){
+    usbActive=TRUE;
+}
+
 int USBPutArray(BYTE* stream, int num){
-	if(usbActive==FALSE){
+	if(isUSBActave()==FALSE){
 		//println_I("USB inactive, bailing out");
 		return 0;
 	}
