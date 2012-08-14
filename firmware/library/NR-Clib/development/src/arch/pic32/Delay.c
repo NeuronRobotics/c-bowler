@@ -92,7 +92,7 @@ void Delay10us(DWORD dwCount)
 {
 	volatile DWORD _dcnt;
 
-	_dcnt = dwCount*((DWORD)(0.00002/(3.0/GetInstructionClock())/10));
+	_dcnt = dwCount*((DWORD)(0.000036/(3.0/GetInstructionClock())/10));
 	while(_dcnt--);
 }
 

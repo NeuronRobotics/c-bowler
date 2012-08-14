@@ -711,18 +711,16 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 
 
 void printPIDvals(AbsPID * pid){
-	printfDEBUG_NNL("\nStarting values of PID: chan=",INFO_PRINT);
-	printfDEBUG_UL(pid->channel,INFO_PRINT);
-	printfDEBUG_NNL("\t,EN=",INFO_PRINT);
-	printfDEBUG_UL(pid->Enabled,INFO_PRINT);
-	printfDEBUG_NNL("\t,Pol=",INFO_PRINT);
-	printfDEBUG_UL(pid->Polarity,INFO_PRINT);
-	printfDEBUG_NNL("\t,SET=",INFO_PRINT);
-	printfDEBUG_UL(pid->SetPoint,INFO_PRINT);
-	printfDEBUG_NNL("\t, Kp=",INFO_PRINT);
-	p_fl(pid->K.P,INFO_PRINT);
-	printfDEBUG_NNL("\t, Ki=",INFO_PRINT);
-	p_fl(pid->K.I,INFO_PRINT);
-	printfDEBUG_NNL("\t, Kd=",INFO_PRINT);
-	p_fl(pid->K.D,INFO_PRINT);
+	println("Starting values of PID: chan=",INFO_PRINT);
+        int chan =      pid->channel;
+        int enabled=    pid->Enabled;
+        int polarity =  pid->Polarity;
+        int set =       pid->SetPoint;
+	p_sl(chan,INFO_PRINT);
+	print("\t,EN=",INFO_PRINT);     p_sl(enabled,INFO_PRINT);
+	print("\t,Pol=",INFO_PRINT);    p_sl(polarity,INFO_PRINT);
+	print("\t,SET=",INFO_PRINT);    p_sl(set,INFO_PRINT);
+	print("\t, Kp=",INFO_PRINT);    p_fl(pid->K.P,INFO_PRINT);
+	print("\t, Ki=",INFO_PRINT);    p_fl(pid->K.I,INFO_PRINT);
+	print("\t, Kd=",INFO_PRINT);    p_fl(pid->K.D,INFO_PRINT);
 }
