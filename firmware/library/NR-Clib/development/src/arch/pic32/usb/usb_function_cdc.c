@@ -733,7 +733,7 @@ void CDCTxService(void)
      */
     if(cdc_trf_state == CDC_TX_COMPLETING){
         cdc_trf_state = CDC_TX_READY;
-        println_I("CDC_TX_COMPLETING -> CDC_TX_READY");
+        //println_I("CDC_TX_COMPLETING -> CDC_TX_READY");
     }
     
     /*
@@ -742,7 +742,7 @@ void CDCTxService(void)
     if(cdc_trf_state == CDC_TX_READY)
     {
         USBUnmaskInterrupts();
-        println_I("CDC_TX_READY Ok");
+        //println_I("CDC_TX_READY Ok");
         return;
     }
     
@@ -751,14 +751,14 @@ void CDCTxService(void)
      */
     if(cdc_trf_state == CDC_TX_BUSY_ZLP)
     {
-    	println_I("cdc_trf_state == CDC_TX_BUSY_ZLP");
+    	//println_I("cdc_trf_state == CDC_TX_BUSY_ZLP");
         CDCDataInHandle = USBTxOnePacket(CDC_DATA_EP,NULL,0);
         //CDC_DATA_BD_IN.CNT = 0;
         cdc_trf_state = CDC_TX_COMPLETING;
     }
     else if(cdc_trf_state == CDC_TX_BUSY)
     {
-    	println_I("cdc_trf_state == CDC_TX_BUSY");
+    	//println_I("cdc_trf_state == CDC_TX_BUSY");
         /*
          * First, have to figure out how many byte of data to send.
          */

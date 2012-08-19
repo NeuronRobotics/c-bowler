@@ -96,16 +96,12 @@ void RunPIDControl(){
     	int i;
 	for (i=0;i<number_of_pid_groups;i++){
             if(pidGroups[i].Enabled){
-                if(i==4){
-                    //setPrintLevelInfoPrint();
-                }
                 pidGroups[i].SetPoint = interpolate((INTERPOLATE_DATA *)&pidGroups[i].interpolate,getMs());
                 //getPosition(& local_groups[i]);
                 pidGroups[i].CurrentState = getPosition(i);
                 MathCalculationPosition(& pidGroups[i],getMs());
                 //setVelocity(& local_groups[i]);
                 setOutput(i,pidGroups[i].Output);
-                setPrintLevelNoPrint();
             }
 
 	}
@@ -407,9 +403,11 @@ BYTE ConfigPID(BowlerPacket * Packet){
 	pidGroups[chan].K.P=KP/100;
 	pidGroups[chan].K.I=KI/100;
 	pidGroups[chan].K.D=KD/100;
-	println("Resetting PID channel from Config:",INFO_PRINT);printBowlerPacketDEBUG(Packet,INFO_PRINT);
-	println("From Config Current setpoint:",INFO_PRINT);p_fl(pidGroups[chan].SetPoint,INFO_PRINT);
+
+	println("Resetting PID channel From Config Current setpoint:",INFO_PRINT);p_fl(pidGroups[chan].SetPoint,INFO_PRINT);
+        printPIDvals(chan);
 	pidReset(chan, pidGroups[chan].SetPoint);
+        printPIDvals(chan);
 
 	pidGroups[chan].Enabled=TRUE;//Ensures output enabled to stop motors
 	pidGroups[chan].Output=0;
@@ -711,7 +709,9 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
             state->Output *=-1;
 	//Store the current time for next iterations previous time
 	state->PreviousTime=CurrentTime;
-	println("Setpoint is: ",INFO_PRINT);
+        println("PID group: ",INFO_PRINT);
+	p_sl(state->channel,INFO_PRINT);
+	print(" Setpoint is: ",INFO_PRINT);
 	p_fl(state->SetPoint,INFO_PRINT);
 	print(" current state is: ",INFO_PRINT);
 	p_fl(state->CurrentState,INFO_PRINT);
@@ -719,7 +719,7 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 	p_fl(error,INFO_PRINT);
 	print(", Control set is: ",INFO_PRINT);
 	p_fl(state->Output ,INFO_PRINT);
-        printPIDvals(state->channel);
+        //printPIDvals(state->channel);
 }
 
 

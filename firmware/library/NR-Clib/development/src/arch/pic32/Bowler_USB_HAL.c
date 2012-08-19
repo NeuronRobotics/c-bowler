@@ -27,7 +27,7 @@ BOOL GetPacketUSB(BYTE * packet,WORD size){
 }
 void SendPacketUSB(BYTE * packet,WORD size){
 	if (USBPutArray(packet, size)){
-		println_I("Sent to USB");
+		//println_I("Sent to USB");
 	}else{
 		println_E("Failed to send to USB");
 	}
