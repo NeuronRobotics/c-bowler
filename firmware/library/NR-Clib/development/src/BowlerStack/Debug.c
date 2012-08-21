@@ -173,13 +173,13 @@ static const char get[] = "Get";
 static const char post[]="Post ";
 static const char stat[]= "Status";
 static const char crit[]="Critical";
-static const char unknown[] = "Unknown";
+static const char unknown[] = "Unknown ";
 static const char sync[] = "(Synchronous)";
 static const char async[] = "(Asynchronous)";
 static const char ver[] ="\tVersion = \t";
 static const char mac[] = "\tMAC = \t\t";
 static const char meth[] = "\tMethod = \t";
-static const char id[] = "\tAsync ID = \t";
+static const char id[] = "\tNamespace Index = \t";
 static const char dataSise[] ="\tData Size = \t";
 static const char crcval []= "\tCRC Value = \t";
 static const char dval[] = "\tData = \t\t";
@@ -224,17 +224,15 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 		case BOWLER_CRIT:
 			printfDEBUG_NNL(crit,l);
 			break;
+                case BOWLER_ASYN:
+			printfDEBUG_NNL("ASYNCHRONUS",l);
+			break;
 		default:
-			printfDEBUG(unknown,l);
+			printfDEBUG_NNL(unknown,l);
 			printfDEBUG_UL(Packet->stream[MethodIndex],l);
 		}
 		printfDEBUG(id,l);
 		printfDEBUG_UL((Packet->stream[SessionIDIndex]&0x7f),l);
-		if(!(Packet->stream[SessionIDIndex]&0x7f)){
-			printfDEBUG_NNL(sync,l);
-		}else{
-			printfDEBUG_NNL(async,l);
-		}
 		printfDEBUG(dataSise,l);
 		printfDEBUG_UL((Packet->stream[DataSizeIndex]),l);
 		printfDEBUG(crcval,l);
