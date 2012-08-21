@@ -13,20 +13,19 @@ void FixPacket(BowlerPacket * Packet);
 //float lastPacketTime[16];
 //INT32 lastPacketVal[16];
 
-static int number_of_pid_groups = 0;
-static AbsPID * pidGroups;
-static PD_VEL * velData;
-static float (*getPosition)(int);
-static void (*setOutput)(int, float);
-static int (*resetPosition)(int,int);
-static BOOL (*pidAsyncCallback)(BowlerPacket *Packet);
-static void (*onPidConfigure)(int);
-static void (*MathCalculationPosition)(AbsPID * ,float );
-static void (*MathCalculationVelocity)(AbsPID * ,float );
-static PidLimitEvent* (*checkPIDLimitEvents)(BYTE group);
+int number_of_pid_groups = 0;
+AbsPID * pidGroups;
+float (*getPosition)(int);
+void (*setOutput)(int, float);
+int (*resetPosition)(int,int);
+BOOL (*pidAsyncCallback)(BowlerPacket *Packet);
+void (*onPidConfigure)(int);
+void (*MathCalculationPosition)(AbsPID * ,float );
+void (*MathCalculationVelocity)(AbsPID * ,float );
+PidLimitEvent* (*checkPIDLimitEvents)(BYTE group);
 
 
-
+PD_VEL * velData;
 static BowlerPacket packetTemp;
 
 float getMs();
@@ -36,10 +35,6 @@ void pidReset(BYTE chan,INT32 val);
 float pidResetNoStop(BYTE chan,INT32 val);
 void pushAllPIDPositions();
 
-void SetPIDEnabled(BYTE index, BOOL enabled){
-    pidGroups[index].Enabled=enabled;
-}
-
 void SetControllerMath( void (*math)(AbsPID * ,float )){
 	if(math !=0)
 		MathCalculationPosition=math;
@@ -47,23 +42,21 @@ void SetControllerMath( void (*math)(AbsPID * ,float )){
 		MathCalculationPosition=&RunAbstractPIDCalc;
 }
 
-void InitilizePidController(AbsPID  groups [],
-                            PD_VEL * vel,
-                            int numberOfGroups,
-                            float (*getPositionPtr)(int),
-                            void (*setOutputPtr)(int,float),
-                            int (*resetPositionPtr)(int,int),
-                            BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),
-                            void (*onPidConfigurePtr)(int),
-                            PidLimitEvent* (*checkPIDLimitEventsPtr)(BYTE group)){
-	if( groups ==0||
-            vel==0||
-            getPositionPtr==0||
-            setOutputPtr==0||
-            resetPositionPtr==0||
-            pidAsyncCallbackPtr==0||
-            checkPIDLimitEventsPtr==0||
-            onPidConfigurePtr==0){
+void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
+							float (*getPositionPtr)(int),
+							void (*setOutputPtr)(int,float),
+							int (*resetPositionPtr)(int,int),
+							BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),
+							void (*onPidConfigurePtr)(int),
+							PidLimitEvent* (*checkPIDLimitEventsPtr)(BYTE group)){
+	if(groups ==0||
+		vel==0||
+		getPositionPtr==0||
+		setOutputPtr==0||
+		resetPositionPtr==0||
+		pidAsyncCallbackPtr==0||
+		checkPIDLimitEventsPtr==0||
+		onPidConfigurePtr==0){
 		println("Null pointer exception in PID Configure",ERROR_PRINT);
 		while(1);
 	}
@@ -77,7 +70,6 @@ void InitilizePidController(AbsPID  groups [],
 	checkPIDLimitEvents=checkPIDLimitEventsPtr;
 	velData=vel;
 	SetControllerMath(&RunAbstractPIDCalc);
-
 }
 
 
@@ -96,12 +88,12 @@ void RunPIDControl(){
     	int i;
 	for (i=0;i<number_of_pid_groups;i++){
             if(pidGroups[i].Enabled){
-                pidGroups[i].SetPoint = interpolate((INTERPOLATE_DATA *)&pidGroups[i].interpolate,getMs());
-                //getPosition(& local_groups[i]);
-                pidGroups[i].CurrentState = getPosition(i);
-                MathCalculationPosition(& pidGroups[i],getMs());
-                //setVelocity(& local_groups[i]);
-                setOutput(i,pidGroups[i].Output);
+                    pidGroups[i].SetPoint = interpolate(&pidGroups[i].interpolate,getMs());
+                    //getPosition(& local_groups[i]);
+                    pidGroups[i].CurrentState = getPosition(i);
+                    MathCalculationPosition(& pidGroups[i],getMs());
+                    //setVelocity(& local_groups[i]);
+                    setOutput(i,pidGroups[i].Output);
             }
 
 	}
@@ -175,7 +167,7 @@ void pushPIDLimitEvent(PidLimitEvent * event){
 			}
 		}
 	}else{
-		//pidReset(event->group,getPosition(event->group));
+            println_I("ABSTRACTPID: End stop limit, setting new PID setpoint");
 		event->value=GetPIDPosition(event->group);
 		event->latchTickError=0;
 		event->time = getMs();
@@ -403,11 +395,9 @@ BYTE ConfigPID(BowlerPacket * Packet){
 	pidGroups[chan].K.P=KP/100;
 	pidGroups[chan].K.I=KI/100;
 	pidGroups[chan].K.D=KD/100;
-
-	println("Resetting PID channel From Config Current setpoint:",INFO_PRINT);p_fl(pidGroups[chan].SetPoint,INFO_PRINT);
-        printPIDvals(chan);
+	println("Resetting PID channel from Config:",INFO_PRINT);printBowlerPacketDEBUG(Packet,INFO_PRINT);
+	println("From Config Current setpoint:",INFO_PRINT);p_fl(pidGroups[chan].SetPoint,INFO_PRINT);
 	pidReset(chan, pidGroups[chan].SetPoint);
-        printPIDvals(chan);
 
 	pidGroups[chan].Enabled=TRUE;//Ensures output enabled to stop motors
 	pidGroups[chan].Output=0;
@@ -437,21 +427,21 @@ BYTE ClearPID(BYTE chan){
 }
 
 BYTE SetPIDTimed(BYTE chan,INT32 val,float ms){
-	println_I("\t\tSetting PID channel=");p_ul_I(chan);print_I(" setpoint=");p_sl_I(val);print_I(" time=");p_fl_I(ms);
+	//println("Setting PID channel=");p_ul(chan);print(" setpoint=");p_sl(val);print(" time=");p_fl(ms);
 	if (chan>=number_of_pid_groups)
 		return FALSE;
 	if(ms<0)
 		ms=0;
-	AbsPID * tmp = &pidGroups[chan];
-	tmp->interpolate.set=(float)val;
-	tmp->interpolate.setTime=ms;
-	tmp->interpolate.start=tmp->SetPoint;
-	tmp->interpolate.startTime=getMs();
+	//local_groups[chan].Enabled=TRUE;
+	pidGroups[chan].interpolate.set=(float)val;
+	pidGroups[chan].interpolate.setTime=ms;
+	pidGroups[chan].interpolate.start=pidGroups[chan].SetPoint;
+	pidGroups[chan].interpolate.startTime=getMs();
 	if(ms==0)
-		tmp->SetPoint=(float)val;
-	tmp->Enabled=TRUE;
+		pidGroups[chan].SetPoint=(float)val;
+	pidGroups[chan].Enabled=TRUE;
 	velData[chan].enabled=FALSE;
-	InitAbsPIDWithPosition(tmp,tmp->K.P,tmp->K.I,tmp->K.D, getMs(),val);
+	InitAbsPIDWithPosition(&pidGroups[chan],pidGroups[chan].K.P,pidGroups[chan].K.I,pidGroups[chan].K.D, getMs(),val);
 	return TRUE;
 }
 BYTE SetPID(BYTE chan,INT32 val){
@@ -702,16 +692,14 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 	 //add error to circular buffer
 	state->IntegralCircularBuffer[state->integralCircularBufferIndex]=error;
 	//do the PID calculation
-	Correction = (state->K.P)*(error) + (state->K.D)*derivative +(state->K.I)*(state->integralTotal/((float)IntegralSize));
+	Correction = (state->K.P)*(error) + (state->K.D)*derivative +(state->K.I)*(state->integralTotal/IntegralSize);
 	// Scale for time and set the output
 	state->Output = (Correction);
         if(!state->Polarity)
             state->Output *=-1;
 	//Store the current time for next iterations previous time
 	state->PreviousTime=CurrentTime;
-        println("PID group: ",INFO_PRINT);
-	p_sl(state->channel,INFO_PRINT);
-	print(" Setpoint is: ",INFO_PRINT);
+	println("Setpoint is: ",INFO_PRINT);
 	p_fl(state->SetPoint,INFO_PRINT);
 	print(" current state is: ",INFO_PRINT);
 	p_fl(state->CurrentState,INFO_PRINT);
@@ -719,21 +707,22 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 	p_fl(error,INFO_PRINT);
 	print(", Control set is: ",INFO_PRINT);
 	p_fl(state->Output ,INFO_PRINT);
-        //printPIDvals(state->channel);
 }
 
 
-void printPIDvals(int i){
-	println("Starting values of PID: chan=",INFO_PRINT);
-        int chan =      pidGroups[i].channel;
-        int enabled=    pidGroups[i].Enabled;
-        int polarity =  pidGroups[i].Polarity;
-        int set =       pidGroups[i].SetPoint;
-	p_sl(chan,INFO_PRINT);
-	print("\t\t,Enabled=",INFO_PRINT);     p_sl(enabled,INFO_PRINT);
-	print("\t,Polarity=",INFO_PRINT);    p_sl(polarity,INFO_PRINT);
-	print("\t,SET=",INFO_PRINT);    p_sl(set,INFO_PRINT);
-	print("\t, Kp=",INFO_PRINT);    p_fl(pidGroups[i].K.P,INFO_PRINT);
-	print("\t, Ki=",INFO_PRINT);    p_fl(pidGroups[i].K.I,INFO_PRINT);
-	print("\t, Kd=",INFO_PRINT);    p_fl(pidGroups[i].K.D,INFO_PRINT);
+void printPIDvals(AbsPID * pid){
+	printfDEBUG_NNL("\nStarting values of PID: chan=",INFO_PRINT);
+	printfDEBUG_UL(pid->channel,INFO_PRINT);
+	printfDEBUG_NNL("\t,EN=",INFO_PRINT);
+	printfDEBUG_UL(pid->Enabled,INFO_PRINT);
+	printfDEBUG_NNL("\t,Pol=",INFO_PRINT);
+	printfDEBUG_UL(pid->Polarity,INFO_PRINT);
+	printfDEBUG_NNL("\t,SET=",INFO_PRINT);
+	printfDEBUG_UL(pid->SetPoint,INFO_PRINT);
+	printfDEBUG_NNL("\t, Kp=",INFO_PRINT);
+	p_fl(pid->K.P,INFO_PRINT);
+	printfDEBUG_NNL("\t, Ki=",INFO_PRINT);
+	p_fl(pid->K.I,INFO_PRINT);
+	printfDEBUG_NNL("\t, Kd=",INFO_PRINT);
+	p_fl(pid->K.D,INFO_PRINT);
 }
