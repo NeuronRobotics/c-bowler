@@ -88,7 +88,7 @@ void RunPIDControl(){
     	int i;
 	for (i=0;i<number_of_pid_groups;i++){
             if(pidGroups[i].Enabled){
-                    pidGroups[i].SetPoint = interpolate(&pidGroups[i].interpolate,getMs());
+                    pidGroups[i].SetPoint = interpolate((INTERPOLATE_DATA *)&pidGroups[i].interpolate,getMs());
                     //getPosition(& local_groups[i]);
                     pidGroups[i].CurrentState = getPosition(i);
                     MathCalculationPosition(& pidGroups[i],getMs());
@@ -710,7 +710,8 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 }
 
 
-void printPIDvals(AbsPID * pid){
+void printPIDvals(int i){
+	AbsPID * pid = & pidGroups[i];
 	printfDEBUG_NNL("\nStarting values of PID: chan=",INFO_PRINT);
 	printfDEBUG_UL(pid->channel,INFO_PRINT);
 	printfDEBUG_NNL("\t,EN=",INFO_PRINT);
