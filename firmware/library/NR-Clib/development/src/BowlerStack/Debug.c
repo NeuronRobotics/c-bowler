@@ -138,7 +138,9 @@ void printfDEBUG_SL(INT32 val,Print_Level l){
 	if (val<0){
 		val *=-1;
 		data[i++]=('-');
-	}
+	}else{
+           data[i++]=(' ');
+        }
 	ultoaMINE(val,byteStr);
 	while(byteStr[x] != '\0'){
 		data[i++]=(byteStr[x++]);

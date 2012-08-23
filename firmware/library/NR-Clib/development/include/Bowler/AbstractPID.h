@@ -81,12 +81,7 @@ typedef struct __attribute__((__packed__)) _AbsPID
 		float 		I;
 		float		D;
 	} K;
-        struct{
-            float set;
-            float start;
-            float setTime;
-            float startTime;
-        } interpolate;
+        INTERPOLATE_DATA interpolate;
         float  			IntegralCircularBuffer[IntegralSize];
 } AbsPID;
 
@@ -154,7 +149,7 @@ void SetControllerMath( void (*math)(AbsPID * ,float ));
 
 void SetPIDEnabled(BYTE index, BOOL enabled);
 
-
+BOOL isPidEnabled(BYTE i);
 
 BYTE SetPIDTimed(BYTE chan,INT32 val,float ms);
 BYTE SetPID(BYTE chan,INT32 val);
