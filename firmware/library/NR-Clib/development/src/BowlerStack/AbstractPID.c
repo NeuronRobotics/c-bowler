@@ -741,12 +741,14 @@ void printPIDvals(int i){
         int polarity =  pidGroups[i].Polarity;
         int set =       pidGroups[i].SetPoint;
 	p_sl(chan,INFO_PRINT);
-	print("\t\t,Enabled=",INFO_PRINT);     p_sl(enabled,INFO_PRINT);
-	print("\t,Polarity=",INFO_PRINT);    p_sl(polarity,INFO_PRINT);
-	print("\t,SET=",INFO_PRINT);    p_sl(set,INFO_PRINT);
-	print("\t\t, Kp=",INFO_PRINT);    p_fl(pidGroups[i].K.P,INFO_PRINT);
-	print("\t, Ki=",INFO_PRINT);    p_fl(pidGroups[i].K.I,INFO_PRINT);
-	print("\t, Kd=",INFO_PRINT);    p_fl(pidGroups[i].K.D,INFO_PRINT);
-        print("\t, Setpoint=",INFO_PRINT);    p_fl(pidGroups[i].SetPoint,INFO_PRINT);
-        print("\t, Current State=",INFO_PRINT);    p_fl(pidGroups[i].CurrentState,INFO_PRINT);
+	print("\t\tEnabled=",INFO_PRINT);     p_sl(enabled,INFO_PRINT);
+	print("\tPolarity=",INFO_PRINT);    p_sl(polarity,INFO_PRINT);
+	print("\tSET=",INFO_PRINT);    p_sl(set,INFO_PRINT);
+	print("\t\t Kp=",INFO_PRINT);    p_fl(pidGroups[i].K.P,INFO_PRINT);
+	print("\t Ki=",INFO_PRINT);    p_fl(pidGroups[i].K.I,INFO_PRINT);
+	print("\t Kd=",INFO_PRINT);    p_fl(pidGroups[i].K.D,INFO_PRINT);
+        print("\t Setpoint=",INFO_PRINT);    p_fl(pidGroups[i].SetPoint,INFO_PRINT);
+        print("\t Current State=",INFO_PRINT);    p_fl(pidGroups[i].CurrentState,INFO_PRINT);
+        print("\t Control set is: ",INFO_PRINT);
+	p_fl(state->Output ,INFO_PRINT);
 }
