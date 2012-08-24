@@ -750,5 +750,5 @@ void printPIDvals(int i){
         print("\t Setpoint=",INFO_PRINT);    p_fl(pidGroups[i].SetPoint,INFO_PRINT);
         print("\t Current State=",INFO_PRINT);    p_fl(pidGroups[i].CurrentState,INFO_PRINT);
         print("\t Control set is: ",INFO_PRINT);
-	p_fl(state->Output ,INFO_PRINT);
+	p_fl(pidGroups[i].Output ,INFO_PRINT);
 }
