@@ -590,7 +590,6 @@ float pidResetNoStop(BYTE chan,INT32 val){
 
 void pidReset(BYTE chan,INT32 val){
 	float value = pidResetNoStop(chan,val);
-
 	pidGroups[chan].interpolate.set=value;
 	pidGroups[chan].interpolate.setTime=0;
 	pidGroups[chan].interpolate.start=value;
@@ -610,6 +609,13 @@ void pidReset(BYTE chan,INT32 val){
 void InitAbsPID(AbsPID * state,float KP,float KI,float KD,float time){
 	InitAbsPIDWithPosition(state,KP, KI, KD,time,0);
 }
+
+void setPIDConstants(int group,float p,float i,float d){
+    pidGroups[group].K.P=p;
+    pidGroups[group].K.I=i;
+    pidGroups[group].K.D=d;
+}
+
 /**
  * RunAbstractPIDCalc
  * @param state A pointer to the AbsPID struct to run the calculations on
@@ -723,6 +729,10 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
             state->Output *=-1;
 	//Store the current time for next iterations previous time
 	state->PreviousTime=CurrentTime;
+
+        Print_Level l = getPrintLevel();
+//        if(state->channel == 0)
+//            setPrintLevelInfoPrint();
 	println("Setpoint is: ",INFO_PRINT);
 	p_fl(state->SetPoint,INFO_PRINT);
 	print(" current state is: ",INFO_PRINT);
@@ -731,6 +741,7 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 	p_fl(error,INFO_PRINT);
 	print(", Control set is: ",INFO_PRINT);
 	p_fl(state->Output ,INFO_PRINT);
+        setPrintLevel(l);
 }
 
 
