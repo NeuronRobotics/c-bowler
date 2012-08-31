@@ -8,7 +8,7 @@
 #ifndef ABSTRACTPID_H_
 #define ABSTRACTPID_H_
 #include "Bowler_Helper.h"
-#define IntegralSize  100
+#define IntegralSize  500
 
 //bcs.pid
 #define _PID				0x6469705f // '_pid'  Get/Set the pid setpoint
@@ -109,6 +109,15 @@ typedef struct _PD_VEL
  * @param CurrentTime a float of the time it is called in MS for use by the PID calculation
  */
 void RunAbstractPIDCalc(AbsPID * state,float CurrentTime);
+
+/**
+ * Set the PID constants
+ * @param group which group to set
+ * @param p constant
+ * @param i constant
+ * @param d constant
+ */
+void setPIDConstants(int group,float p,float i,float d);
 /**
  * InitAbsPID
  * @param state A pointer to the AbsPID the initialize
