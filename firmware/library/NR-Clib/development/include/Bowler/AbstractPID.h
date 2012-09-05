@@ -8,7 +8,7 @@
 #ifndef ABSTRACTPID_H_
 #define ABSTRACTPID_H_
 #include "Bowler_Helper.h"
-#define IntegralSize  500
+#define IntegralSize  10
 
 //bcs.pid
 #define _PID				0x6469705f // '_pid'  Get/Set the pid setpoint

@@ -697,32 +697,32 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 	state->integralTotal -= state->IntegralCircularBuffer[state->integralCircularBufferIndex];
 	//add the latest value to the integral
 	state->integralTotal +=error;
-	//calculate the derivative
-	derivative = (error-state->PreviousError);// / ((CurrentTime-state->PreviousTime));
 	
+	//add error to circular buffer
+	state->IntegralCircularBuffer[state->integralCircularBufferIndex++]=error;
 	//increment the circular buffer index
-	state->integralCircularBufferIndex++;
 	if (state->integralCircularBufferIndex == (IntegralSize)){
 		state->integralCircularBufferIndex=0;
 	}
-
         //This section clears the integral buffer when the zero is crossed
         int i;
         if((state->PreviousError>=0 && error<0)||
             (state->PreviousError<0 && error>=0)    ){
             
-            state->integralCircularBufferIndex=0;
-            state->integralTotal = 0;
-            for (i=0;i<IntegralSize;i++){
-                    state->IntegralCircularBuffer[i]=0;
-            }
+//            state->integralCircularBufferIndex=0;
+//            state->integralTotal = 0;
+//            for (i=0;i<IntegralSize;i++){
+//                    state->IntegralCircularBuffer[i]=0;
+//            }
         }
 
+
+        //calculate the derivative
+        derivative = (error-state->PreviousError);// / ((CurrentTime-state->PreviousTime));
         state->PreviousError=error;
-	 //add error to circular buffer
-	state->IntegralCircularBuffer[state->integralCircularBufferIndex]=error;
+	 
 	//do the PID calculation
-	Correction = (state->K.P)*(error) + (state->K.D)*derivative +(state->K.I)*(state->integralTotal/IntegralSize);
+	Correction = (state->K.P)*(error) + (state->K.D)*derivative +(state->K.I)*(state->integralTotal/((float)IntegralSize));
 	// Scale for time and set the output
 	state->Output = (Correction);
         if(!state->Polarity)
