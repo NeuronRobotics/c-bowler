@@ -87,7 +87,7 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 
 void updatePidAsync(){
 	int i;
-	BOOL update = FALSE;
+	int update = FALSE;
 	for (i=0;i<number_of_pid_groups;i++){
 		if(pidGroups[i].Async && (pidGroups[i].Enabled
 						||velData[i].enabled
@@ -219,7 +219,7 @@ void pushPID(BYTE chan, INT32 value, float time){
 
 void RunPDVel(BYTE chan){
 	if(velData[chan].enabled==TRUE){
-		pidGroups[chan].CurrentState = GetPIDPosition(chan);
+		pidGroups[chan].CurrentState = getPosition(chan);
 		float currentTime = getMs();
 		float timeMsDiff =  (currentTime -velData[chan].lastTime);
 		float timeDiff =  timeMsDiff/1000;
