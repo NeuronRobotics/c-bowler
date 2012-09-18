@@ -163,7 +163,7 @@ AVR324p:
 	$(CCA_avratmega324p) BowlerStack/Bowler_Server.c 				-o Release/avratmega324p/Bowler_Server.o
 	$(CCA_avratmega324p) BowlerStack/Bowler_RPC_Process.c 			-o Release/avratmega324p/Bowler_RPC_Process.o
 	$(CCA_avratmega324p) BowlerStack/Debug.c 						-o Release/avratmega324p/Debug_en.o
-	$(CCA_avratmega324p) BowlerStack/Debug.c -D NO_PRINTING					-o Release/avratmega324p/Debug.o
+	$(CCA_avratmega324p) BowlerStack/Debug.c -D NO_PRINTING			-o Release/avratmega324p/Debug.o
 	$(CCA_avratmega324p) BowlerStack/Scheduler.c 					-o Release/avratmega324p/Scheduler.o
 	$(CCA_avratmega324p) BowlerStack/AbstractPID.c 					-o Release/avratmega324p/AbstractPID.o
 	$(CCA_avratmega324p) BowlerStack/Bowler_Transport.c 			-o Release/avratmega324p/Bowler_Transport.o
