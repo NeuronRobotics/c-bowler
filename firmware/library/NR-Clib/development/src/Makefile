@@ -63,6 +63,8 @@ pic32MX440F128H:
 	$(CCP_pic32MX440F128H) arch/pic32/Tick.c 						-o Release/pic32MX440F128H/Tick.o
 	$(CCP_pic32MX440F128H) arch/pic32/UART.c 						-o Release/pic32MX440F128H/UART.o
 	$(CCP_pic32MX440F128H) arch/pic32/FlashStorage.c 				-o Release/pic32MX440F128H/FlashStorage.o
+	$(CCP_pic32MX440F128H) arch/pic32/ADC.c 						-o Release/pic32MX440F128H/ADC.o
+	
 	
 	$(CCP_pic32MX440F128H) arch/pic32/usb/usb_callback.c 			-o Release/pic32MX440F128H/usb_callback.o
 	$(CCP_pic32MX440F128H) arch/pic32/usb/usb_descriptors.c 		-o Release/pic32MX440F128H/usb_descriptors.o
@@ -96,6 +98,7 @@ pic32MX460F512L:
 	$(CCP_pic32MX460F512L) arch/pic32/Tick.c 						-o Release/pic32MX460F512L/Tick.o
 	$(CCP_pic32MX460F512L) arch/pic32/UART.c 						-o Release/pic32MX460F512L/UART.o
 	$(CCP_pic32MX460F512L) arch/pic32/FlashStorage.c 				-o Release/pic32MX460F512L/FlashStorage.o
+	$(CCP_pic32MX460F512L) arch/pic32/ADC.c 						-o Release/pic32MX460F512L/ADC.o
 	
 	$(CCP_pic32MX460F512L) arch/pic32/usb/usb_callback.c 			-o Release/pic32MX460F512L/usb_callback.o
 	$(CCP_pic32MX460F512L) arch/pic32/usb/usb_descriptors.c 		-o Release/pic32MX460F512L/usb_descriptors.o
@@ -129,6 +132,7 @@ pic32MX795F512L:
 	$(CCP_pic32MX795F512L) arch/pic32/Tick.c 						-o Release/pic32MX795F512L/Tick.o
 	$(CCP_pic32MX795F512L) arch/pic32/UART.c 						-o Release/pic32MX795F512L/UART.o
 	$(CCP_pic32MX795F512L) arch/pic32/FlashStorage.c 				-o Release/pic32MX795F512L/FlashStorage.o
+	$(CCP_pic32MX795F512L) arch/pic32/ADC.c 						-o Release/pic32MX795F512L/ADC.o
 	
 	$(CCP_pic32MX795F512L) arch/pic32/usb/usb_callback.c 			-o Release/pic32MX795F512L/usb_callback.o
 	$(CCP_pic32MX795F512L) arch/pic32/usb/usb_descriptors.c 		-o Release/pic32MX795F512L/usb_descriptors.o

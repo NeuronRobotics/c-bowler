@@ -139,7 +139,7 @@ void printfDEBUG_SL(INT32 val,Print_Level l){
 		val *=-1;
 		data[i++]=('-');
 	}else{
-           data[i++]=(' ');
+           //data[i++]=(' ');
         }
 	ultoaMINE(val,byteStr);
 	while(byteStr[x] != '\0'){
