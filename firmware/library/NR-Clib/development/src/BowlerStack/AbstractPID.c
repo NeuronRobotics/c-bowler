@@ -709,11 +709,11 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
         if((state->PreviousError>=0 && error<0)||
             (state->PreviousError<0 && error>=0)    ){
             
-//            state->integralCircularBufferIndex=0;
-//            state->integralTotal = 0;
-//            for (i=0;i<IntegralSize;i++){
-//                    state->IntegralCircularBuffer[i]=0;
-//            }
+            state->integralCircularBufferIndex=0;
+            state->integralTotal = 0;
+            for (i=0;i<IntegralSize;i++){
+                    state->IntegralCircularBuffer[i]=0;
+            }
         }
 
 

@@ -103,14 +103,15 @@ void waitForTxToBeFree(){
 		if(RunEvery(&timeout)>0){
 			println_E("#*#*USB timeout before transmit");
 			usbActive=FALSE;
-			return;
+                        break;
 		}
 		if(USBNotOk){
 			println_E("#*#*USB Not ok");
-			return;
+                        break;
 		}
 		CDCTxService();
 	}
+
 }
 
 void flush(){

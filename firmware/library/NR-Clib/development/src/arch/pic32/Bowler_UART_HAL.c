@@ -45,7 +45,7 @@ void newByteUartHal(){
 }
 
 void __ISR(_UART_1_VECTOR, ipl7) U1_ISR(void){
-	StartCritical();
+	//StartCritical();
 	int tick =8;
 	if (INTGetFlag(INT_SOURCE_UART_RX(UART1))){
 
@@ -79,7 +79,7 @@ void __ISR(_UART_1_VECTOR, ipl7) U1_ISR(void){
 		//println("&@&@&&@&@&@ generic uart");
 	}
 
-	EndCritical();
+	//EndCritical();
 }
 
 DWORD CalcBaud(DWORD Baud){

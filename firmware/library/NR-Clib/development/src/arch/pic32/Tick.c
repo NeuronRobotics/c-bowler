@@ -92,7 +92,7 @@ static DWORD dwInternalTicksUpper = 0;
 void TickInit(void)
 {
     OpenTimer1(T1_ON | T1_SOURCE_INT | T1_PS_1_256, T1_TICK);
-    ConfigIntTimer1(T1_INT_ON | T1_INT_PRIOR_3);
+    ConfigIntTimer1(T1_INT_ON | T1_INT_PRIOR_7);
 }
 
 
@@ -199,17 +199,18 @@ float TickGetMS(void)
 
 
 //void __ISR(_TIMER_1_VECTOR, TICKIPL) Timer1Handler(void)
-void __ISR(_TIMER_1_VECTOR, ipl3) Timer1Handler(void)
+void __ISR(_TIMER_1_VECTOR, ipl7) Timer1Handler(void)
 {
         //mPORTDToggleBits(BIT_3);
-	StartCritical();
+	//StartCritical();
 	DWORD before = TickGetLower();
 	dwInternalTicks+=TICKS_PER_SECOND/TOGGLES_PER_SEC;
 	if(TickGetLower()<before){
 		dwInternalTicks=0;
 		dwInternalTicksUpper++;
 	}
-	mT1ClearIntFlag();EndCritical();
+	mT1ClearIntFlag();
+        //EndCritical();
 	//println("@%@%@%@%Tick");
 }
 
