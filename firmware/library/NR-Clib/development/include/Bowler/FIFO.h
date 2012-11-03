@@ -30,6 +30,17 @@ UINT32 calcByteCount(BYTE_FIFO_STORAGE * fifo);
 
 BYTE ReadFirstByte(BYTE_FIFO_STORAGE * fifo);
 
+/**
+ *
+ * This function extracts the number of bytes stored in the given FIFO.
+ *
+ * @param fifo This is a pointer to a data struct containing an initialized FIFO
+ * Prerequsites:
+ *  The fifo must be initialized by calling InitByteFifo with valid data.
+ *
+ * @return returns the number of bytes in the fifo
+ */
+
 UINT32 FifoGetByteCount(BYTE_FIFO_STORAGE * fifo);
 
 UINT32 FifoAddByte(BYTE_FIFO_STORAGE * fifo,BYTE b, BYTE * errorCode);
