@@ -104,10 +104,25 @@ void updatePidAsync(){
 
 void pushAllPIDPositions(){
 	float time = getMs();
-	int i;
-	for(i=0;i<number_of_pid_groups;i++){
-		pushPID(i,pidGroups[i].CurrentState, time);
-	}
+//	for(i=0;i<number_of_pid_groups;i++){
+//		pushPID(i,pidGroups[i].CurrentState, time);
+//	}
+        INT32_UNION PID_Temp;
+        prep(& packetTemp);
+        packetTemp.use.head.DataLegnth=4;
+        packetTemp.use.head.RPC = GetRPCValue("apid");
+        int i;
+        for(i=0;i<number_of_pid_groups;i++){
+                PID_Temp.Val=pidGroups[i].CurrentState;
+                packetTemp.use.data[0+(i*4)]=PID_Temp.byte.FB;
+                packetTemp.use.data[1+(i*4)]=PID_Temp.byte.TB;
+                packetTemp.use.data[2+(i*4)]=PID_Temp.byte.SB;
+                packetTemp.use.data[3+(i*4)]=PID_Temp.byte.LB;
+                packetTemp.use.head.DataLegnth+=4;
+        }
+        packetTemp.use.head.Method=BOWLER_ASYN;
+        FixPacket(&packetTemp);
+	pidAsyncCallback(& packetTemp);
 }
 
 void prep(BowlerPacket * Packet){
@@ -646,7 +661,6 @@ void RunVel(void){
 			RunPDVel(i);
 		}
 	}
-	updatePidAsync();
 }
 
 void RunPIDControl(){

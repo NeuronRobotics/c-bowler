@@ -107,6 +107,7 @@ void waitForTxToBeFree(){
 		}
 		if(USBNotOk){
 			println_E("#*#*USB Not ok");
+                        usbActive=FALSE;
                         break;
 		}
 		CDCTxService();
