@@ -34,6 +34,7 @@ void updatePidAsync();
 void pidReset(BYTE chan,INT32 val);
 float pidResetNoStop(BYTE chan,INT32 val);
 void pushAllPIDPositions();
+void prep(BowlerPacket * Packet);
 
 BOOL isPidEnabled(BYTE i){
     return pidGroups[i].Enabled;
@@ -417,7 +418,7 @@ BYTE SetPIDTimed(BYTE chan,INT32 val,float ms){
 	//println("Setting PID channel=");p_ul(chan);print(" setpoint=");p_sl(val);print(" time=");p_fl(ms);
 	if (chan>=number_of_pid_groups)
 		return FALSE;
-	if(ms<0)
+	if(ms<.01)
 		ms=0;
 	//local_groups[chan].Enabled=TRUE;
 	pidGroups[chan].interpolate.set=(float)val;
