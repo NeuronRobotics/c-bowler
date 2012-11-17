@@ -157,55 +157,69 @@ UINT32 FifoReadByteStream(BYTE *packet,UINT32 size,BYTE_FIFO_STORAGE * fifo){
 	return i;
 }
 
-//void clearUINT32Fifo(UINT32_FIFO_STORAGE * fifo);
-//
-//void InitUINT32Fifo(UINT32_FIFO_STORAGE * fifo,UINT32 * buff,UINT32 size){
-//	fifo->buffer=buff;
-//	fifo->bufferSize=size;
-//	fifo->readPointer=0;
-//	fifo->writePointer=0;
-//	fifo->count=0;
-//	clearUINT32Fifo(fifo);
-//}
-//void clearUINT32Fifo(UINT32_FIFO_STORAGE * fifo){
-//	//StartCritical();
-//	for (i=0;i < fifo->bufferSize;i++){
-//		fifo->buffer[i]=0;
-//	}
-//	//EndCritical();
-//}
-//
-//UINT32 FifoAddUINT32(UINT32_FIFO_STORAGE * fifo,UINT32 b){
-//	fifo->buffer[fifo->writePointer]=b;
-//	StartCritical();
-//	fifo->writePointer++;
-//	if (fifo->writePointer == fifo->bufferSize){
-//		fifo->writePointer=0;
-//	}
-//	fifo->count++;
-//	EndCritical();
-//	return (fifo->count<=fifo->bufferSize);
-//}
-//
-//UINT32 FifoGetUINT32Stream(UINT32_FIFO_STORAGE * fifo,UINT32 *packet,UINT32 size){
-//
-//	for (i=0;i<size;i++){
-//		if(fifo->count>0){
-//
-//			packet[i] = fifo->buffer[fifo->readPointer];
-//			StartCritical();
-//			fifo->readPointer++;
-//			if (fifo->readPointer==fifo->bufferSize){
-//				fifo->readPointer=0;
-//			}
-//			//StartCritical();
-//			fifo->count--;
-//			EndCritical();
-//			//EndCritical();
-//		}else{
-//			packet[i]=0x0;
-//		}
-//	}
-//
-//	return i;
-//}
+
+void InitPacketFifo(PACKET_FIFO_STORAGE * fifo,BowlerPacket * buff,UINT32 size){
+    	if(fifo == 0 ||  buff == 0){
+		println("@#@#FIFO FAILED TO INITIALIZE",ERROR_PRINT);p_ul(size,ERROR_PRINT);
+	}
+	fifo->buffer=buff;
+	fifo->bufferSize=size;
+	fifo->readPointer=0;
+	fifo->writePointer=0;
+	//fifo->byteCount=0;
+	fifo->mutex=FALSE;
+}
+
+UINT32 FifoAddPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * toBeAdded){
+    	if(FifoGetPacketCount(fifo) >= (fifo->bufferSize)){
+		println_E("Packet FIFO overflow");p_ul_E(fifo->bufferSize);print_E(",");p_ul_E(fifo->byteCount);
+		return 0;
+	}
+	StartCritical();
+
+        copyPacket(toBeAdded,&fifo->buffer[fifo->writePointer]);
+
+	fifo->writePointer++;
+	if (fifo->writePointer == fifo->bufferSize){
+		fifo->writePointer=0;
+	}
+	//fifo->byteCount++;
+	FifoGetPacketCount(fifo);
+        
+        EndCritical();
+	return (FifoGetPacketCount(fifo)<=fifo->bufferSize);
+}
+
+UINT32 FifoGetPacketCount(PACKET_FIFO_STORAGE * fifo){
+	int w =fifo->writePointer;
+	int r = fifo->readPointer;
+	if(w>r){
+		fifo->byteCount= w-r;
+	}else if(w==r){
+		fifo->byteCount= 0;
+	}else{
+		fifo->byteCount= (w+fifo->bufferSize)-r;
+	}
+	return fifo->byteCount;
+}
+
+UINT32 FifoGetPacketSpaceAvailible(PACKET_FIFO_STORAGE * fifo){
+        return fifo->bufferSize - FifoGetPacketCount(fifo);
+}
+
+UINT32 FifoGetPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * retrived){
+        StartCritical();
+
+        if(FifoGetPacketCount(fifo)>0)
+            copyPacket(&fifo->buffer[fifo->readPointer],retrived);
+        else
+            return FALSE;
+	fifo->readPointer++;
+	if (fifo->readPointer==fifo->bufferSize){
+		fifo->readPointer=0;
+	}
+
+	FifoGetPacketCount(fifo);
+	EndCritical();
+	return TRUE;
+}

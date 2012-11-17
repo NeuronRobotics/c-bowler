@@ -487,7 +487,6 @@ BOOL processPIDGet(BowlerPacket * Packet){
 
 BOOL processPIDPost(BowlerPacket * Packet){
 	switch (Packet->use.head.RPC){
-	default:
 	case APID:
 		PID_Temp.byte.FB=Packet->use.data[0];
 		PID_Temp.byte.TB=Packet->use.data[1];
