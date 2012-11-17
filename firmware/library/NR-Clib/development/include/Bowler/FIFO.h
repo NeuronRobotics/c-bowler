@@ -8,6 +8,9 @@
 #ifndef FIFO_H_
 #define FIFO_H_
 
+#include "Bowler_Struct_Def.h"
+
+
 #define FIFO_OK 			0
 #define FIFO_FAILED_TO_SET	1
 #define FIFO_FAILED_TO_GET	2
@@ -22,6 +25,8 @@ typedef struct _BYTE_FIFO_STORAGE{
 	UINT32 byteCount;
 	BOOL   mutex;
 }BYTE_FIFO_STORAGE;
+
+
 
 
 void InitByteFifo(BYTE_FIFO_STORAGE * fifo,BYTE * buff,UINT32 size);
@@ -63,10 +68,29 @@ typedef struct _UINT32_FIFO_STORAGE{
 	UINT32 count;
 }UINT32_FIFO_STORAGE;
 
-void InitUINT32Fifo(UINT32_FIFO_STORAGE * fifo,UINT32 * buff,UINT32 size);
+/**
+ * Packet FIFO
+ */
+typedef struct _PACKET_FIFO_STORAGE{
+	UINT32 bufferSize;
+	BowlerPacket * buffer;
+	UINT32 readPointer;
+	UINT32 writePointer;
+	UINT32 byteCount;
+	BOOL   mutex;
+}PACKET_FIFO_STORAGE;
 
-UINT32 FifoAddUINT32(UINT32_FIFO_STORAGE * fifo,UINT32 b);
+void InitPacketFifo(PACKET_FIFO_STORAGE * fifo,BowlerPacket * buff,UINT32 size);
 
-UINT32 FifoGetUINT32Stream(UINT32_FIFO_STORAGE * fifo,UINT32 *packet,UINT32 size);
+UINT32 FifoAddPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * toBeAdded);
+
+UINT32 FifoGetPacketCount(PACKET_FIFO_STORAGE * fifo);
+
+UINT32 FifoGetPacketSpaceAvailible(PACKET_FIFO_STORAGE * fifo);
+
+UINT32 FifoGetPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * retrived);
+
+
+
 
 #endif /* FIFO_H_ */
