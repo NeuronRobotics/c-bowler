@@ -546,6 +546,7 @@ BOOL processPIDPost(BowlerPacket * Packet){
 		pidReset(chan, PID_Temp.Val);
 		READY(Packet,zone,6);
 		break;
+        default:
 		return FALSE;
 	}
 	return TRUE;
