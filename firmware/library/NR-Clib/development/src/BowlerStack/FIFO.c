@@ -204,7 +204,7 @@ UINT32 FifoGetPacketCount(PACKET_FIFO_STORAGE * fifo){
 }
 
 UINT32 FifoGetPacketSpaceAvailible(PACKET_FIFO_STORAGE * fifo){
-        return fifo->bufferSize - FifoGetPacketCount(fifo);
+        return fifo->bufferSize - FifoGetPacketCount(fifo)-1;
 }
 
 UINT32 FifoGetPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * retrived){

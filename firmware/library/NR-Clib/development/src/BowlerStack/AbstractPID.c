@@ -664,6 +664,10 @@ void RunVel(void){
 	}
 }
 
+BOOL isPIDInterpolating(int index){
+    return pidGroups[index].interpolate.setTime != 0;
+}
+
 void RunPIDControl(){
     	int i;
 	for (i=0;i<number_of_pid_groups;i++){
