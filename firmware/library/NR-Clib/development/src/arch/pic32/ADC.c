@@ -92,18 +92,31 @@ void InitADCHardware(BYTE chan){
 	EnableADC10();
         //println_I("Initialized ADC chan ");p_sl_I(chan);
 }
+int getAdcRaw(BYTE chan, int samples){
+    InitADCHardware( chan);
 
-float getAdcVoltage(BYTE chan){
-        InitADCHardware( chan);
+        int i=0;
+        int back = 0;
+        do{
+            AD1CHSbits.CH0SA = chan;
+            AD1CON1bits.SAMP = 1;
+            Delay10us(5);
+            AD1CON1bits.SAMP = 0;
+            while (AD1CON1bits.DONE == 0){
+                    // Wait for ADC to finish
+            }
+            AD1CHS =0;
+            back= back + ADC1BUF0;
+        }while(i++<samples);
 
-	AD1CHSbits.CH0SA = chan;
-	AD1CON1bits.SAMP = 1;
-	Delay10us(5);
-	AD1CON1bits.SAMP = 0;
-	while (AD1CON1bits.DONE == 0){
-		// Wait for ADC to finish
-	}
-	AD1CHS =0;
-	WORD tmp = ADC1BUF0;
-	return ((float)tmp)*0.017283951/2.0;
+        back = back/(i);
+        return back;
+}
+
+#define ADC_TO_VOLTS 0.003145631
+
+float getAdcVoltage(BYTE chan, int samples){
+         int back = getAdcRaw( chan,  samples);
+         
+	return ((float)back)*ADC_TO_VOLTS;
 }
