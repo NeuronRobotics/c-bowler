@@ -292,6 +292,66 @@ void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms){
 
 }
 
+void GetConfigPDVelocity(BowlerPacket * Packet){
+	BYTE chan = Packet->use.data[0];
+	Packet->use.data[1]=pidGroups[chan].Enabled;//  = ((Packet->use.data[1]==0)?0:1);
+	Packet->use.data[2]=pidGroups[chan].Polarity;// = ((Packet->use.data[2]==0)?0:1);
+	Packet->use.data[3]=pidGroups[chan].Async;//= ((Packet->use.data[3]==0)?0:1);
+
+	INT32_UNION PID_K;
+	PID_K.Val=velData[chan].K.P*100;
+	Packet->use.data[4]=PID_K.byte.FB;//=Packet->use.data[4];
+	Packet->use.data[5]=PID_K.byte.TB;//Packet->use.data[5];
+	Packet->use.data[6]=PID_K.byte.SB;//Packet->use.data[6];
+	Packet->use.data[7]=PID_K.byte.LB;//Packet->use.data[7];
+
+	PID_K.Val=velData[chan].K.D*100;
+	Packet->use.data[8]=PID_K.byte.FB;//Packet->use.data[8];
+	Packet->use.data[9]=PID_K.byte.TB;//Packet->use.data[9];
+	Packet->use.data[10]=PID_K.byte.SB;//Packet->use.data[10];
+	Packet->use.data[11]=PID_K.byte.LB;//Packet->use.data[11];
+
+
+	Packet->use.head.DataLegnth=4+22;
+	Packet->use.head.Method=BOWLER_POST;
+
+}
+
+BYTE ConfigPDVelovity(BowlerPacket * Packet){
+	BYTE chan = Packet->use.data[0];
+
+	pidGroups[chan].Polarity = ((Packet->use.data[2]==0)?0:1);
+	pidGroups[chan].Async    = ((Packet->use.data[3]==0)?0:1);
+
+
+	float KP=0;
+	float KD=0;
+	INT32_UNION PID_K;
+
+	PID_K.byte.FB=Packet->use.data[4];
+	PID_K.byte.TB=Packet->use.data[5];
+	PID_K.byte.SB=Packet->use.data[6];
+	PID_K.byte.LB=Packet->use.data[7];
+	KP=(float)PID_K.Val;
+
+	PID_K.byte.FB=Packet->use.data[8];
+	PID_K.byte.TB=Packet->use.data[9];
+	PID_K.byte.SB=Packet->use.data[10];
+	PID_K.byte.LB=Packet->use.data[11];
+	KD=(float)PID_K.Val;
+
+
+
+	velData[chan].K.P=KP/100;
+	velData[chan].K.D=KD/100;
+
+
+	onPidConfigure(chan);
+
+	pidGroups[chan].Enabled  = ((Packet->use.data[1]==0)?0:1);
+
+	return TRUE;
+}
 
 
 void GetConfigPID(BowlerPacket * Packet){
@@ -383,16 +443,16 @@ BYTE ConfigPID(BowlerPacket * Packet){
 	pidGroups[chan].K.P=KP/100;
 	pidGroups[chan].K.I=KI/100;
 	pidGroups[chan].K.D=KD/100;
-	println("Resetting PID channel from Config:",INFO_PRINT);printBowlerPacketDEBUG(Packet,INFO_PRINT);
-	println("From Config Current setpoint:",INFO_PRINT);p_fl(pidGroups[chan].SetPoint,INFO_PRINT);
-	pidReset(chan, pidGroups[chan].SetPoint);
+	//println("Resetting PID channel from Config:",INFO_PRINT);printBowlerPacketDEBUG(Packet,INFO_PRINT);
+	//println("From Config Current setpoint:",INFO_PRINT);p_fl(pidGroups[chan].SetPoint,INFO_PRINT);
+	//pidReset(chan, pidGroups[chan].SetPoint);
 
-	pidGroups[chan].Enabled=TRUE;//Ensures output enabled to stop motors
-	pidGroups[chan].Output=0;
-	setOutput(chan,pidGroups[chan].Output);
+	//pidGroups[chan].Enabled=TRUE;//Ensures output enabled to stop motors
+	//pidGroups[chan].Output=0;
+	//setOutput(chan,pidGroups[chan].Output);
 
 
-	velData[chan].enabled=FALSE;
+	//velData[chan].enabled=FALSE;
 
 	onPidConfigure(chan);
 
@@ -401,6 +461,8 @@ BYTE ConfigPID(BowlerPacket * Packet){
 //		fail();
 	return TRUE;
 }
+
+
 BYTE ZeroPID(BYTE chan){
 	println("Resetting PID channel from zeroPID:",INFO_PRINT);
 	pidReset(chan,0);
@@ -478,6 +540,9 @@ BOOL processPIDGet(BowlerPacket * Packet){
 		break;
 	case CPID:
 		GetConfigPID(Packet);
+		break;
+	case CPDV:
+		GetConfigPDVelocity(Packet);
 		break;
 	default:
 		return FALSE;
@@ -566,6 +631,12 @@ BOOL processPIDCrit(BowlerPacket * Packet){
 		break;
 	case CPID:
 		if(ConfigPID(Packet)){
+			READY(Packet,zone,1);
+		}else
+			ERR(Packet,zone,1);
+		break;
+	case CPDV:
+		if(ConfigPDVelovity(Packet)){
 			READY(Packet,zone,1);
 		}else
 			ERR(Packet,zone,1);
