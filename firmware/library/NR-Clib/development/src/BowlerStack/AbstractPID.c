@@ -294,25 +294,21 @@ void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms){
 
 void GetConfigPDVelocity(BowlerPacket * Packet){
 	BYTE chan = Packet->use.data[0];
-	Packet->use.data[1]=pidGroups[chan].Enabled;//  = ((Packet->use.data[1]==0)?0:1);
-	Packet->use.data[2]=pidGroups[chan].Polarity;// = ((Packet->use.data[2]==0)?0:1);
-	Packet->use.data[3]=pidGroups[chan].Async;//= ((Packet->use.data[3]==0)?0:1);
-
 	INT32_UNION PID_K;
 	PID_K.Val=velData[chan].K.P*100;
-	Packet->use.data[4]=PID_K.byte.FB;//=Packet->use.data[4];
-	Packet->use.data[5]=PID_K.byte.TB;//Packet->use.data[5];
-	Packet->use.data[6]=PID_K.byte.SB;//Packet->use.data[6];
-	Packet->use.data[7]=PID_K.byte.LB;//Packet->use.data[7];
+	Packet->use.data[1]=PID_K.byte.FB;//=Packet->use.data[4];
+	Packet->use.data[2]=PID_K.byte.TB;//Packet->use.data[5];
+	Packet->use.data[3]=PID_K.byte.SB;//Packet->use.data[6];
+	Packet->use.data[4]=PID_K.byte.LB;//Packet->use.data[7];
 
 	PID_K.Val=velData[chan].K.D*100;
-	Packet->use.data[8]=PID_K.byte.FB;//Packet->use.data[8];
-	Packet->use.data[9]=PID_K.byte.TB;//Packet->use.data[9];
-	Packet->use.data[10]=PID_K.byte.SB;//Packet->use.data[10];
-	Packet->use.data[11]=PID_K.byte.LB;//Packet->use.data[11];
+	Packet->use.data[5]=PID_K.byte.FB;//Packet->use.data[8];
+	Packet->use.data[6]=PID_K.byte.TB;//Packet->use.data[9];
+	Packet->use.data[7]=PID_K.byte.SB;//Packet->use.data[10];
+	Packet->use.data[8]=PID_K.byte.LB;//Packet->use.data[11];
 
 
-	Packet->use.head.DataLegnth=4+22;
+	Packet->use.head.DataLegnth=4+9;
 	Packet->use.head.Method=BOWLER_POST;
 
 }
@@ -320,24 +316,20 @@ void GetConfigPDVelocity(BowlerPacket * Packet){
 BYTE ConfigPDVelovity(BowlerPacket * Packet){
 	BYTE chan = Packet->use.data[0];
 
-	pidGroups[chan].Polarity = ((Packet->use.data[2]==0)?0:1);
-	pidGroups[chan].Async    = ((Packet->use.data[3]==0)?0:1);
-
-
 	float KP=0;
 	float KD=0;
 	INT32_UNION PID_K;
 
-	PID_K.byte.FB=Packet->use.data[4];
-	PID_K.byte.TB=Packet->use.data[5];
-	PID_K.byte.SB=Packet->use.data[6];
-	PID_K.byte.LB=Packet->use.data[7];
+	PID_K.byte.FB=Packet->use.data[1];
+	PID_K.byte.TB=Packet->use.data[2];
+	PID_K.byte.SB=Packet->use.data[3];
+	PID_K.byte.LB=Packet->use.data[4];
 	KP=(float)PID_K.Val;
 
-	PID_K.byte.FB=Packet->use.data[8];
-	PID_K.byte.TB=Packet->use.data[9];
-	PID_K.byte.SB=Packet->use.data[10];
-	PID_K.byte.LB=Packet->use.data[11];
+	PID_K.byte.FB=Packet->use.data[5];
+	PID_K.byte.TB=Packet->use.data[6];
+	PID_K.byte.SB=Packet->use.data[7];
+	PID_K.byte.LB=Packet->use.data[8];
 	KD=(float)PID_K.Val;
 
 
@@ -347,8 +339,6 @@ BYTE ConfigPDVelovity(BowlerPacket * Packet){
 
 
 	onPidConfigure(chan);
-
-	pidGroups[chan].Enabled  = ((Packet->use.data[1]==0)?0:1);
 
 	return TRUE;
 }
