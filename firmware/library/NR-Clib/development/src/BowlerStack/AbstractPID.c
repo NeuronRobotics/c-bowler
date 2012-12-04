@@ -536,10 +536,10 @@ BOOL processPIDGet(BowlerPacket * Packet){
 		break;
 	case GPDC:
 		PID_Temp.Val=number_of_pid_groups;
-		Packet->use.data[1]=PID_Temp.byte.FB;
-		Packet->use.data[2]=PID_Temp.byte.TB;
-		Packet->use.data[3]=PID_Temp.byte.SB;
-		Packet->use.data[4]=PID_Temp.byte.LB;
+		Packet->use.data[0]=PID_Temp.byte.FB;
+		Packet->use.data[1]=PID_Temp.byte.TB;
+		Packet->use.data[2]=PID_Temp.byte.SB;
+		Packet->use.data[3]=PID_Temp.byte.LB;
 		Packet->use.head.DataLegnth=4+4;
 		Packet->use.head.Method=BOWLER_POST;
 		break;
