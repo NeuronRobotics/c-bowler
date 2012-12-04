@@ -535,7 +535,7 @@ BOOL processPIDGet(BowlerPacket * Packet){
 		Packet->use.data[2]=PID_Temp.byte.TB;
 		Packet->use.data[3]=PID_Temp.byte.SB;
 		Packet->use.data[4]=PID_Temp.byte.LB;
-		Packet->use.head.DataLegnth=9;
+		Packet->use.head.DataLegnth=4+4;
 		Packet->use.head.Method=BOWLER_POST;
 		break;
 	case CPID:
@@ -543,6 +543,15 @@ BOOL processPIDGet(BowlerPacket * Packet){
 		break;
 	case CPDV:
 		GetConfigPDVelocity(Packet);
+		break;
+	case GPDC:
+		PID_Temp.Val=number_of_pid_groups;
+		Packet->use.data[1]=PID_Temp.byte.FB;
+		Packet->use.data[2]=PID_Temp.byte.TB;
+		Packet->use.data[3]=PID_Temp.byte.SB;
+		Packet->use.data[4]=PID_Temp.byte.LB;
+		Packet->use.head.DataLegnth=4+4;
+		Packet->use.head.Method=BOWLER_POST;
 		break;
 	default:
 		return FALSE;
