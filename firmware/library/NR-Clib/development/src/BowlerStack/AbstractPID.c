@@ -244,7 +244,7 @@ void RunPDVel(BYTE chan){
 		//float velocityDiff = currentVelocity-velData[chan].lastVelocity;
 		float velocityDiff=0;
 		float proportional =  currentVelocity-velData[chan].unitsPerSeCond;
-		float set = (velData[chan].currentOutputVel+(proportional*pidGroups[chan].K.P)+(velocityDiff*pidGroups[chan].K.D))/-10;
+		float set = (velData[chan].currentOutputVel+(proportional*velData[chan].K.P)+(velocityDiff*velData[chan].K.D))/-10;
 		velData[chan].currentOutputVel+=set;
 
 		if (velData[chan].currentOutputVel>100)
