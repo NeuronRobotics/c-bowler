@@ -110,7 +110,7 @@ void pushAllPIDPositions(){
 //	}
         INT32_UNION PID_Temp;
         prep(& packetTemp);
-        packetTemp.use.head.DataLegnth=4;
+        packetTemp.use.head.DataLegnth=5;
         packetTemp.use.head.RPC = GetRPCValue("apid");
         int i;
         for(i=0;i<number_of_pid_groups;i++){
