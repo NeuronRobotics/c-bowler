@@ -185,6 +185,7 @@ static const char id[] = "\tNamespace Index = \t";
 static const char dataSise[] ="\tData Size = \t";
 static const char crcval []= "\tCRC Value = \t";
 static const char dval[] = "\tData = \t\t";
+static const char dhexval[] = "\tData Hex = \t";
 static const char rpc []="\tRPC code = \t";
 static const char nodata[] = " no data";
 
@@ -256,6 +257,18 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 		}else{
 			printfDEBUG(nodata,l);
 		}
+                if(Packet->use.head.DataLegnth>4){
+			s= (Packet->use.head.DataLegnth-4);
+			printfDEBUG(dhexval,l);
+			for (i=0;i<s;i++){
+                            prHEX8(Packet->use.data[i],l);
+                            if (i<(s-1))
+				printfDEBUG_BYTE(',',l);
+			}
+		}else{
+			printfDEBUG(nodata,l);
+		}
+
 		printfDEBUG("\n",l);
 }
 #endif
