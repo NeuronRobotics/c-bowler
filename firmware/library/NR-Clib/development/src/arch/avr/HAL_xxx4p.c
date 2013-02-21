@@ -80,6 +80,7 @@ UINT64 GetTimeTicks(void){
 }
 
 ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
+	//StartCritical();
 	UINT32 before = TimerOFcount;
 	TimerOFcount+=0x10000;
 	if(TimerOFcount<before){
@@ -87,6 +88,7 @@ ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
 		TCNT1=0;
 		TimerOFcountUpper++;
 	}
+	//EndCritical();
 }
 
 
