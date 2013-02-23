@@ -37,7 +37,7 @@ DIRS:
 	mkdir Release/avratmega644p
 	mkdir Release/native
 	cd BowlerStack
-COMPILE: DIRS pic32MX440F128H AVR324p AVR644p  pic32MX460F512L pic32MX795F512L  Native
+COMPILE: DIRS Native pic32MX440F128H AVR324p AVR644p  pic32MX460F512L pic32MX795F512L  
 	echo OK
 	
 pic32MX440F128H:
