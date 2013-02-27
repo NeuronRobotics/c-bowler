@@ -37,21 +37,21 @@
 
 #if defined(__PIC32MX__)
 	#if defined(__32MX795F512L__)
-		#include "arch/pic32/EthHardware.h"
+		#include "pic32/EthHardware.h"
 	#endif
 	#if defined(__32MX460F512L__)
-		#include "arch/pic32/Pizo.h"
+		#include "pic32/Pizo.h"
 	#endif
-	#include "arch/pic32/BowlerConfig.h"
+	#include "pic32/BowlerConfig.h"
 
 #elif defined(__AVR_ATmega644P__) || defined(__AVR_ATmega644PA__) || defined(__AVR_ATmega324P__)
-	#include "arch/AVR/BowlerConfig.h"
+	#include "AVR/BowlerConfig.h"
 #elif defined (__i386__) || defined (__ia64__) || defined (__amd64__)
-	#include "arch/native/BowlerConfig.h"
+	#include "native/BowlerConfig.h"
 #else
 	//#error Unknown archetecture!! See Bowler.h
 	#warning this is a hacky work around
-	#include "arch/NXP/BowlerConfig.h"
+	#include "NXP/BowlerConfig.h"
 #endif
 
 #include "BowlerServerHardwareAbstraction.h"

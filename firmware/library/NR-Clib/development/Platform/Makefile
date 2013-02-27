@@ -2,26 +2,29 @@
 #@ Author Kevin Harrington
 SHELL := /bin/bash -e
 
-INCLUDES	    = -I../include/
 -include ../toolchain/pic32/toolchain.mk
 -include ../toolchain/avr/toolchain.mk
+CC_Bowler_Arch = $(CC)
 
-CCP_pic32MX440F128H    		= $(GCCP) -mprocessor=32MX440F128H $(INCLUDES) -I../include/arch/pic32/  -c
-CCP_pic32MX460F512L   		= $(GCCP) -mprocessor=32MX460F512L $(INCLUDES) -I../include/arch/pic32/  -c
-CCP_pic32MX795F512L   		= $(GCCP) -mprocessor=32MX795F512L $(INCLUDES) -I../include/arch/pic32/  -c
+CCP_pic32MX440F128H    		= $(GCCP) -mprocessor=32MX440F128H  
+CCP_pic32MX460F512L   		= $(GCCP) -mprocessor=32MX460F512L 
+CCP_pic32MX795F512L   		= $(GCCP) -mprocessor=32MX795F512L
 
 
 CPU_SPD       	= 18432000UL
-GCCA_full       = $(GCCA) -DF_CPU=$(CPU_SPD)  $(INCLUDES) -I/usr/lib/avr/include/  -c
+GCCA_full       = $(GCCA) -DF_CPU=$(CPU_SPD) -I/usr/lib/avr/include/  
 CCA_avratmega324p  = $(GCCA_full) -mmcu=atmega324p 
 CCA_avratmega644p  = $(GCCA_full) -mmcu=atmega644p
 
-CCNAT    		= gcc -Os -g3 -Wall -c -fmessage-length=0 -MMD -MP $(INCLUDES) -c
+CCNAT    		= gcc -Os -g3 -Wall -c -fmessage-length=0 -MMD -MP
 
 LIBDIR  		= ../lib
 RLIB     		= libRBELib.a
 ARA      		= |grep "o"|grep "."|xargs $(ARAVR) rcs
 ARPIC      		= |grep "o"|grep "."|xargs $(ARP) rcs
+
+AVR_CFILES :=$(wildcard src/avr/*.c) $(wildcard ../BowlerStack/src/*.c)
+AVR_OFILES := $(AVR_CFILES:%.c=%.o)
 
 all: COMPILE
 	echo "Done!"
@@ -39,6 +42,19 @@ DIRS:
 	cd BowlerStack
 COMPILE: DIRS Native pic32MX440F128H AVR324p AVR644p  pic32MX460F512L pic32MX795F512L  
 	echo OK
+	
+AVR644p:
+	make -C src/avr/  CC_Bowler_Arch="$(CCA_avratmega644p)" 
+	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCA_avratmega644p) -I../Platform/include/" 
+	$(ARAVR) rcs  $(LIBDIR)/AVR/atmega644p/libNRLIB.a $(AVR_OFILES)
+	make -C ../BowlerStack/ clean
+	make -C src/avr/ clean
+AVR324p:
+	make -C src/avr/  CC_Bowler_Arch="$(CCA_avratmega324p)" 
+	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCA_avratmega324p) -I../Platform/include/" 
+	$(ARAVR) rcs  $(LIBDIR)/AVR/atmega324p/libNRLIB.a $(AVR_OFILES)
+	make -C ../BowlerStack/ clean
+	make -C src/avr/ clean
 	
 pic32MX440F128H:
 	
@@ -144,39 +160,8 @@ pic32MX795F512L:
 	find Release/pic32MX795F512L/|grep -v Debug_en.o$(ARPIC) 	$(LIBDIR)/PIC32/32MX795F512L/libNRLIB.a
 	find Release/pic32MX795F512L/|grep -v Debug.o$(ARPIC) 	$(LIBDIR)/PIC32/32MX795F512L/libNRLIB_debug.a
 	
-AVR644p:
-	$(CCA_avratmega644p) BowlerStack/FIFO.c 						-o Release/avratmega644p/FIFO.o
-	$(CCA_avratmega644p) BowlerStack/Bowler_Helper.c 				-o Release/avratmega644p/Bowler_Helper.o
-	$(CCA_avratmega644p) BowlerStack/Bowler_Server.c 				-o Release/avratmega644p/Bowler_Server.o
-	$(CCA_avratmega644p) BowlerStack/Bowler_RPC_Process.c 			-o Release/avratmega644p/Bowler_RPC_Process.o
-	$(CCA_avratmega644p) BowlerStack/Debug.c 						-o Release/avratmega644p/Debug_en.o
-	$(CCA_avratmega644p) BowlerStack/Debug.c -D NO_PRINTING					-o Release/avratmega644p/Debug.o
-	$(CCA_avratmega644p) BowlerStack/Scheduler.c 					-o Release/avratmega644p/Scheduler.o
-	$(CCA_avratmega644p) BowlerStack/AbstractPID.c 					-o Release/avratmega644p/AbstractPID.o
-	$(CCA_avratmega644p) BowlerStack/Bowler_Transport.c 			-o Release/avratmega644p/Bowler_Transport.o
-	$(CCA_avratmega644p) BowlerStack/Bowler_Stack_Callback.c 		-o Release/avratmega644p/Bowler_Stack_Callback.o
 	
-	$(CCA_avratmega644p) arch/avr/HAL_xxx4p.c 						-o Release/avratmega644p/HAL_xxx4p.o	
-	
-	find Release/avratmega644p/|grep -v Debug_en.o$(ARA) 	$(LIBDIR)/AVR/atmega644p/libNRLIB.a
-	find Release/avratmega644p/|grep -v Debug.o$(ARA) 		$(LIBDIR)/AVR/atmega644p/libNRLIB_debug.a
-	
-AVR324p:
-	$(CCA_avratmega324p) BowlerStack/FIFO.c 						-o Release/avratmega324p/FIFO.o
-	$(CCA_avratmega324p) BowlerStack/Bowler_Helper.c 				-o Release/avratmega324p/Bowler_Helper.o
-	$(CCA_avratmega324p) BowlerStack/Bowler_Server.c 				-o Release/avratmega324p/Bowler_Server.o
-	$(CCA_avratmega324p) BowlerStack/Bowler_RPC_Process.c 			-o Release/avratmega324p/Bowler_RPC_Process.o
-	$(CCA_avratmega324p) BowlerStack/Debug.c 						-o Release/avratmega324p/Debug_en.o
-	$(CCA_avratmega324p) BowlerStack/Debug.c -D NO_PRINTING			-o Release/avratmega324p/Debug.o
-	$(CCA_avratmega324p) BowlerStack/Scheduler.c 					-o Release/avratmega324p/Scheduler.o
-	$(CCA_avratmega324p) BowlerStack/AbstractPID.c 					-o Release/avratmega324p/AbstractPID.o
-	$(CCA_avratmega324p) BowlerStack/Bowler_Transport.c 			-o Release/avratmega324p/Bowler_Transport.o
-	$(CCA_avratmega324p) BowlerStack/Bowler_Stack_Callback.c 		-o Release/avratmega324p/Bowler_Stack_Callback.o
-	
-	$(CCA_avratmega324p) arch/avr/HAL_xxx4p.c 						-o Release/avratmega324p/HAL_xxx4p.o	
-	
-	find Release/avratmega324p/|grep -v Debug_en.o$(ARA) 	$(LIBDIR)/AVR/atmega324p/libNRLIB.a
-	find Release/avratmega324p/|grep -v Debug.o$(ARA) 		$(LIBDIR)/AVR/atmega324p/libNRLIB_debug.a
+
 	
 Native:
 	$(CCNAT) BowlerStack/FIFO.c 					-o Release/native/FIFO.o
