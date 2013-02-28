@@ -11,7 +11,7 @@ ifndef CC_Bowler_Arch
 endif
 
 all:clean $(OFILES)
-	$(CC_Bowler_Arch) -L../../lib/native/linux -lNRLIB $(OFILES) -o $(BIN)
+	$(CC_Bowler_Arch) $(OFILES) -L../../lib/native/linux -lNRLIB -o $(BIN)
 	chmod +x $(BIN)
 %.o: %.c
 	$(CC_Bowler_Arch) -I../../Platform/include/ -I../../BowlerStack/include/ -c $< -o $@
