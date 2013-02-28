@@ -4,7 +4,7 @@
  *  Created on: Nov 22, 2009
  *      Author: hephaestus
  */
-
+#include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 
 void InitLEDS(void){

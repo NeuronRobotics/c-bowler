@@ -15,8 +15,10 @@
  * limitations under the License.
  *
  */
-#include "Bowler/Bowler.h"
+
 #include "arch/pic32/BowlerConfig.h"
+#include "Bowler/Bowler.h"
+
 
 
 static BYTE privateRX[BOWLER_PacketSize];

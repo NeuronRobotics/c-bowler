@@ -54,7 +54,7 @@
  *									writing for perfect accuracy.
 ********************************************************************/
 #define __TICK_C
-
+#include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 #if defined(__PIC32MX__)
 	#define SYS_FREQ 			(80000000L)

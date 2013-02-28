@@ -4,9 +4,9 @@ SHELL := /bin/bash -e
 CFILES := $(wildcard *.c)
 OFILES := $(CFILES:%.c=%.o)
 
-ifndef CC_Bowler_Arch
-    $(error CC_Bowler_Arch is undefined)
-endif
+#ifndef CC_Bowler_Arch
+#    $(error CC_Bowler_Arch is undefined)
+#endif
 
 all:clean $(OFILES)
 	echo ok

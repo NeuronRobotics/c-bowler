@@ -16,6 +16,7 @@
  *
  */
 // USB values
+#include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 
 #define True TRUE

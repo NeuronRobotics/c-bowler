@@ -4,6 +4,7 @@
  *  Created on: Jan 4, 2010
  *      Author: hephaestus
  */
+#include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 
 static BYTE_FIFO_STORAGE storeUSB;

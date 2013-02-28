@@ -1,5 +1,6 @@
 #ifndef __UART_C
 #define __UART_C
+#include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 
 BOOL useUart2 = FALSE;

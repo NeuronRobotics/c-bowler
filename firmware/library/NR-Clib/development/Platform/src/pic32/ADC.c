@@ -4,6 +4,9 @@
  *  Created on: Feb 12, 2010
  *      Author: hephaestus
  */
+
+#include "arch/pic32/BowlerConfig.h"
+
 #include "Bowler/Bowler.h"
 
 float getVoltage(BYTE chan);

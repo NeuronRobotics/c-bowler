@@ -4,9 +4,8 @@
  *  Created on: Jul 15, 2010
  *      Author: hephaestus
  */
-
+#include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
-#include "arch/pic32/FlashStorage.h"
 FLASH_STORE flash;
 BYTE  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
 

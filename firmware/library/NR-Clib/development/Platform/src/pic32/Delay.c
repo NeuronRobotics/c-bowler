@@ -49,7 +49,7 @@
  * Nilesh Rajbharti     5/9/02  Original        (Rev 1.0)
  ********************************************************************/
 #define __DELAY_C
-
+#include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 
 
