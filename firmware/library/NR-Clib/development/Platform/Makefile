@@ -15,7 +15,7 @@ GCCA_full       = $(GCCA) -DF_CPU=$(CPU_SPD) -I/usr/lib/avr/include/
 CCA_avratmega324p  = $(GCCA_full) -mmcu=atmega324p 
 CCA_avratmega644p  = $(GCCA_full) -mmcu=atmega644p
 
-CCNAT    		= gcc -Os -g3 -Wall -c -fmessage-length=0 -MMD -MP
+CCNAT    		= gcc -Os -g3 -Wall -fmessage-length=0 -MMD -MP
 
 LIBDIR  		= ../lib
 
