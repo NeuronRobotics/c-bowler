@@ -1,6 +1,7 @@
 all:
 	make -C Platform/ all
-	
+	make -C Sample/native/ all
+	./Sample/native/BowlerImplimentationExample
 clean:
 	make -C Platform/ clean
 release: all

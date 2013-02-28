@@ -7,7 +7,7 @@ OFILES := $(CFILES:%.c=%.o)
 BIN :=BowlerImplimentationExample
 
 ifndef CC_Bowler_Arch
-    CC_Bowler_Arch :="gcc -Os -g3 -Wall -c -fmessage-length=0 -MMD -MP"
+    CC_Bowler_Arch :=gcc -Os -g3 -Wall -fmessage-length=0 -MMD -MP
 endif
 
 all:clean $(OFILES)
