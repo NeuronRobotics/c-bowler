@@ -10,21 +10,20 @@ int main(void){
 	 * User code must implement a few functions needed by the stack internally
 	 * This Platform specific code can be stored in the Platform directory if it is universal for all
 	 * implementations on the given Platform.
-	 * float getMs(void) Returns the current miliseconds since the application started
+	 * float getMs(void) Returns the current milliseconds since the application started
 	 * StartCritical()   Starts a critical protected section of code
- 	 * EndCritical()     Ends the critical section and returns to normal opperation
+ 	 * EndCritical()     Ends the critical section and returns to normal operation
 	 */
 	printf("\r\nStarting Sample Program\r\n");
 
 	/**
-	 * First we are going to put together dummy arrays of packet data. These are examples of a _png send and response.
+	 * First we are going to put together dummy array of packet data. These are examples of a _png receive and a custom response.
 	 * These would not exist in your implementation but would come in from the physical layer
 	 */
 	BYTE received[] = 	{0x03, 0x74 , 0xf7 , 0x26 , 0x80 , 0x00 , 0x79 , 0x10 , 0x00 , 0x04 , 0xa1 , 0x5f , 0x70 , 0x6e , 0x67 };
-	BYTE response[] = 	{0x03, 0x74 , 0xf7 , 0x26 , 0x80 , 0x00 , 0x79 , 0x20 , 0x80 , 0x04 , 0x31 , 0x5f , 0x70 , 0x6e , 0x67 };
 
 	/**
-	 * Now we begin to set up the stack features. The first step is to set up the FIFO to receive the data coming in asynchronusly
+	 * Now we begin to set up the stack features. The first step is to set up the FIFO to receive the data coming in asynchronously
 	 *
 	 */
 	BYTE privateRXCom[sizeof(BowlerPacket)];//make the buffer at least big enough to hold one full sized packet
@@ -45,14 +44,14 @@ int main(void){
 	for (i=0;i<sizeof(received);i++){
 		BYTE err;// this is a stack error storage byte. See Bowler/FIFO.h for response codes
 		BYTE b= received[i];// This would be a new byte from the physical layer
-		FifoAddByte(&store, b, &err);// This helper function adds the byte to the storage buffer and manages the read write pointrs.
+		FifoAddByte(&store, b, &err);// This helper function adds the byte to the storage buffer and manages the read write pointers.
 	}
 	printf("\r\nData loaded into packet\r\n");
 	/**
 	 * We have now loaded a packet into the storage struct 'store'
 	 * All the while we can be polling the storage struct for a new packet
 	 */
-	BowlerPacket myLocalPacket; // decalre a packet struct to catch the parsed packet from the asynchronus storage buffer
+	BowlerPacket myLocalPacket; // Declare a packet struct to catch the parsed packet from the asynchronous storage buffer
 	while(GetBowlerPacket(&myLocalPacket,// pointer to the local packet into which to store the parsed packet
 			&store// storage struct from which the packet will be checked and parsed.
 			) == FALSE){// Returns true when a packet is found and pulled out of the buffer
@@ -67,7 +66,7 @@ int main(void){
 	printPacket(&myLocalPacket, INFO_PRINT);
 
 	/**
-	 * Here is where you would read the packet data and perform some opperation based on that data
+	 * Here is where you would read the packet data and perform some operation based on that data
 	 */
 	if(myLocalPacket.use.head.RPC == _PNG){
 		printf("\r\nPacket is a _png packet.. OK!\r\n");
@@ -77,7 +76,7 @@ int main(void){
 	 * Now the packet has bee read, we re-use the memory for the response to the host
 	 */
 	myLocalPacket.use.head.RPC = GetRPCValue("myrp");//set the RPC
-	myLocalPacket.use.head.Method = BOWLER_POST;   // set the metond as a status
+	myLocalPacket.use.head.Method = BOWLER_POST;   // set the method as a status
 	INT32_UNION temp;//a 32 bit integer struct to allow for easy breaking up into bytes for transport
 	temp.Val=3742;//put some data into the packet
 	myLocalPacket.use.data[0]=temp.byte.FB;
