@@ -82,39 +82,6 @@ pic32MX795F512L:
 	
 	
 	
-#	$(CCP_pic32MX795F512L) BowlerStack/FIFO.c 						-o Release/pic32MX795F512L/FIFO.o
-#	$(CCP_pic32MX795F512L) BowlerStack/Bowler_Helper.c 				-o Release/pic32MX795F512L/Bowler_Helper.o
-#	$(CCP_pic32MX795F512L) BowlerStack/Bowler_Server.c 				-o Release/pic32MX795F512L/Bowler_Server.o
-#	$(CCP_pic32MX795F512L) BowlerStack/Bowler_RPC_Process.c 		-o Release/pic32MX795F512L/Bowler_RPC_Process.o
-#	$(CCP_pic32MX795F512L) BowlerStack/Scheduler.c 					-o Release/pic32MX795F512L/Scheduler.o	
-#	$(CCP_pic32MX795F512L) BowlerStack/Debug.c 						-o Release/pic32MX795F512L/Debug_en.o
-#	$(CCP_pic32MX795F512L) BowlerStack/Debug.c -D NO_PRINTING				-o Release/pic32MX795F512L/Debug.o
-#	$(CCP_pic32MX795F512L) BowlerStack/AbstractPID.c 				-o Release/pic32MX795F512L/AbstractPID.o
-#	$(CCP_pic32MX795F512L) BowlerStack/Bowler_Transport.c 			-o Release/pic32MX795F512L/Bowler_Transport.o
-#	$(CCP_pic32MX795F512L) BowlerStack/Bowler_Stack_Callback.c 		-o Release/pic32MX795F512L/Bowler_Stack_Callback.o
-#	
-#	$(CCP_pic32MX795F512L) arch/pic32/HAL_P32.c 					-o Release/pic32MX795F512L/HAL_P32.o
-#	$(CCP_pic32MX795F512L) arch/pic32/Bowler_HAL.c 					-o Release/pic32MX795F512L/Bowler_HAL.o
-#	$(CCP_pic32MX795F512L) arch/pic32/Bowler_UART_HAL.c 			-o Release/pic32MX795F512L/Bowler_UART_HAL.o
-#	$(CCP_pic32MX795F512L) arch/pic32/Bowler_USB_HAL.c 				-o Release/pic32MX795F512L/Bowler_USB_HAL.o
-#	$(CCP_pic32MX795F512L) arch/pic32/Delay.c 						-o Release/pic32MX795F512L/Delay.o
-#	$(CCP_pic32MX795F512L) arch/pic32/LED.c 						-o Release/pic32MX795F512L/LED.o
-#	$(CCP_pic32MX795F512L) arch/pic32/Tick.c 						-o Release/pic32MX795F512L/Tick.o
-#	$(CCP_pic32MX795F512L) arch/pic32/UART.c 						-o Release/pic32MX795F512L/UART.o
-#	$(CCP_pic32MX795F512L) arch/pic32/FlashStorage.c 				-o Release/pic32MX795F512L/FlashStorage.o
-#	$(CCP_pic32MX795F512L) arch/pic32/ADC.c 						-o Release/pic32MX795F512L/ADC.o
-#	
-#	$(CCP_pic32MX795F512L) arch/pic32/usb/usb_callback.c 			-o Release/pic32MX795F512L/usb_callback.o
-#	$(CCP_pic32MX795F512L) arch/pic32/usb/usb_descriptors.c 		-o Release/pic32MX795F512L/usb_descriptors.o
-#	$(CCP_pic32MX795F512L) arch/pic32/usb/usb_device.c 				-o Release/pic32MX795F512L/usb_device.o
-#	$(CCP_pic32MX795F512L) arch/pic32/usb/usb_fifo.c 				-o Release/pic32MX795F512L/usb_fifo.o
-#	$(CCP_pic32MX795F512L) arch/pic32/usb/usb_function_cdc.c 		-o Release/pic32MX795F512L/usb_function_cdc.o
-#	$(CCP_pic32MX795F512L) arch/pic32/usb/usb_interrupt.c 			-o Release/pic32MX795F512L/usb_interrupt.o
-#	
-#	find Release/pic32MX795F512L/|grep -v Debug_en.o$(ARPIC) 	$(LIBDIR)/PIC32/32MX795F512L/libNRLIB.a
-#	find Release/pic32MX795F512L/|grep -v Debug.o$(ARPIC) 	$(LIBDIR)/PIC32/32MX795F512L/libNRLIB_debug.a
-	
-	
 
 	
 
