@@ -62,10 +62,46 @@ int main(void){
 	/**
 	 * At this point the packet has been parsed and pulled out of the buffer
 	 */
+	setPrintLevelInfoPrint();// enable the stack specific printer. If you wish to use this feature putCharDebug(char c) needs to be defined
 	printf("\r\nGot new Packet:\r\n");
-	setPrintLevelNoPrint();// enable the stack specific printer. If you wish to use this feature putCharDebug(char c) needs to be defined
 	printPacket(&myLocalPacket, INFO_PRINT);
 
+	/**
+	 * Here is where you would read the packet data and perform some opperation based on that data
+	 */
+	if(myLocalPacket.use.head.RPC == _PNG){
+		printf("\r\nPacket is a _png packet.. OK!\r\n");
+	}
+
+	/**
+	 * Now the packet has bee read, we re-use the memory for the response to the host
+	 */
+	myLocalPacket.use.head.RPC = GetRPCValue("myrp");//set the RPC
+	myLocalPacket.use.head.Method = BOWLER_POST;   // set the metond as a status
+	INT32_UNION temp;//a 32 bit integer struct to allow for easy breaking up into bytes for transport
+	temp.Val=3742;//put some data into the packet
+	myLocalPacket.use.data[0]=temp.byte.FB;
+	myLocalPacket.use.data[1]=temp.byte.TB;
+	myLocalPacket.use.data[2]=temp.byte.SB;
+	myLocalPacket.use.data[3]=temp.byte.LB;
+	// load a single byte
+	myLocalPacket.use.data[4] = 128;
+	myLocalPacket.use.head.DataLegnth = 4+ // BYTES in the RPC field
+										4+ // BYTES in the 32 bit integer
+										1; // The last single byte
+	FixPacket(&myLocalPacket);// This is a helper function to validate the packet before sending. It makes sure the MAC address is correct and the CRC is correct
+
+	int packetLength = GetPacketLegnth(&myLocalPacket); // helper function to get packet length
+
+	printf("\r\nPreparing to send:\r\n");
+	printPacket(&myLocalPacket, INFO_PRINT);
+
+	printf("\r\nSending Packet Data back out: [ ");
+	for(i=0;i< packetLength;i++){
+		//This would be sending to the physical layer. For this example we are just printing out the data
+		printf(" %i ",myLocalPacket.stream[i]);
+	}
+	printf(" ] \r\n");
 
 
 }
