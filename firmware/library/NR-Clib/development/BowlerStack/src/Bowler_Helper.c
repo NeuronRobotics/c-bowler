@@ -38,7 +38,13 @@ void SetCRC(BowlerPacket * Packet){
 	Packet->use.head.CRC = (BYTE) (v & 0x00ff);
 }
 
-
+unsigned long GetRPCValue(char * data){
+	l.byte.FB = data[3];
+	l.byte.TB = data[2];
+	l.byte.SB = data[1];
+	l.byte.LB = data[0];
+	return l.Val;
+}
 
 UINT16 READY(BowlerPacket *Packet,BYTE code,BYTE trace){
 	Packet->use.head.Method = BOWLER_STATUS;
@@ -83,13 +89,7 @@ void copyPacket(BowlerPacket * from,BowlerPacket * to){
 UINT32 Bytes2Int32(BYTE a,BYTE b,BYTE c,BYTE d){
 	return (   (((UINT32)a)<<24) + (((UINT32)b)<<16) + (((UINT32)c)<<8) + ((UINT32)d) );
 }
-UINT32 GetRPCValue(char * data){
-	l.byte.FB = data[3];
-	l.byte.TB = data[2];
-	l.byte.SB = data[1];
-	l.byte.LB = data[0];
-	return l.Val;
-}
+
 
 BYTE CheckAddress(BYTE * one,BYTE * two){
 	for (i=0;i<6;i++){

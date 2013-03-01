@@ -1,7 +1,5 @@
-all:
-	make -C Platform/ all
-	make -C Sample/native/ all
-	./Sample/native/BowlerImplimentationExample
+all:sample
+	#make -C Platform/ all
 sample:
 	make -C Platform/ Native
 	make -C Sample/native/ all

@@ -17,6 +17,73 @@
  */
 #include "Bowler/Bowler.h"
 
+static float lastPacketTime;
+
+float getLastPacketTime(){
+	if(lastPacketTime > getMs())
+		lastPacketTime=0;
+	return lastPacketTime;
+}
+
+
+#if defined(USE_LINKED_LIST_NAMESPACE)
+
+void Process_Self_Packet(BowlerPacket * Packet){
+	int namespaceIndex = 0;
+	int foundRpc = 0;
+	int currentNamespaceIndexForPacket = namespaceIndex;
+	NAMESPACE_LIST * tmp = getBcsCoreNamespace();
+	// First locate all Namespaces for the given RPC
+	do{
+		//Start the list with the first one
+		RPC_LIST * rpc = getRpcByID(tmp,Packet->use.head.RPC, Packet->use.head.Method );
+		//null check
+		if(rpc !=NULL){
+			//Found matching RPC and Method to parse
+			foundRpc++;
+			currentNamespaceIndexForPacket =  namespaceIndex;
+			println_I("Rpc found in namespace: ");
+			print_I(tmp->namespaceString);
+		}
+		//Null check and move to next namespace
+		tmp = tmp->next;
+		namespaceIndex++;
+	}while(tmp != NULL);
+	// Now the namespace should have been found or not
+	if(foundRpc == 0){
+		println_E("##ERROR Rpc not found!");
+		ERR(Packet,0,0);
+		return;
+	}else if(foundRpc > 0 ){
+		if(foundRpc > 1){
+			if(Packet->use.head.MessageID == 0){
+				//RPC overlap but no resolution defined
+				println_E("##ERROR Rpc not resolved! Multiple implementations");
+				printPacket(Packet,ERROR_PRINT);
+				ERR(Packet,0,1);
+				return;
+			}else{
+				//RPC resolution is specified
+				currentNamespaceIndexForPacket = Packet->use.head.MessageID;
+				println_I("Rpc resolved to: ");print_I(getNamespaceAtIndex(currentNamespaceIndexForPacket)->namespaceString);
+			}
+		}
+		RPC_LIST * rpc = getRpcByID(getNamespaceAtIndex(currentNamespaceIndexForPacket),
+						Packet->use.head.RPC,
+						Packet->use.head.Method );
+		if(rpc !=NULL){
+			rpc->callback(Packet);
+		}
+		Packet->use.head.MessageID = currentNamespaceIndexForPacket;
+		Packet->use.head.ResponseFlag=1;
+		FixPacket(Packet);
+		lastPacketTime = getMs();
+	}
+
+
+}//finish processing the Packet
+
+#else
 static NAMESPACE_SET namespace={0,{{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0}}};
 static BYTE zone;
 static METHOD_HANDLER getMeth={FALSE,0};
@@ -93,12 +160,7 @@ BOOL runRPC(BowlerPacket* Packet, RPC_HANDLER_SET * set){
 	return FALSE;
 
 }
-static float lastPacketTime;
-float getLastPacketTime(){
-	if(lastPacketTime > getMs())
-		lastPacketTime=0;
-	return lastPacketTime;
-}
+
 /*
  */
 
@@ -227,5 +289,5 @@ void AddNamespace(unsigned char len, const unsigned char *  string){
 	namespace.names[index].name=string;
 	namespace.numNamespaces++;
 }
-
+#endif
 

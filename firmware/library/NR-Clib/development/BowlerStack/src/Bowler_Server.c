@@ -22,51 +22,83 @@
 const MAC_ADDR Broadcast={{{0,0,0,0,0,0}}};
 MAC_ADDR MyMAC ={{{0x74,0xf7,0x26,0x01,0x01,0x01}}} ;
 static BYTE i;
+#if defined(USE_LINKED_LIST_NAMESPACE)
+
+#else
 const unsigned char coreName[] = "bcs.core.*;0.3;;";
+#endif
 
 void Bowler_Init(void){
-	startScheduler();
-	Bowler_HAL_Init();
+	//no longer doing hardwar inits from stack
+//	startScheduler();
+//	Bowler_HAL_Init();
+
+#if defined(USE_LINKED_LIST_NAMESPACE)
+	addNamespaceToList(getBcsCoreNamespace());
+#else
 	AddNamespace(sizeof(coreName),coreName);
+#endif
 }
 
-BYTE Bowler_Server(BowlerPacket * Packet, BOOL debug){
-	//StartCritical();
-	BOOL back = GetBowlerPacket_arch(Packet);
-	//EndCritical();
-	if (back){
-		SetColor(0,1,0);
-		//if(debug){
-			if(Packet->use.head.RPC != 0x7277705f){//Ignore Power Packet
-				println("Got:",INFO_PRINT);printPacket(Packet,INFO_PRINT);
-			}
-		//}
-		if ( (CheckAddress(MyMAC.v,Packet->use.head.MAC.v) == TRUE) || ((CheckAddress((BYTE *)Broadcast.v,(BYTE *)Packet->use.head.MAC.v) == TRUE) )) {
-			Process_Self_Packet(Packet);
-			for (i=0;i<6;i++){
-				Packet->use.head.MAC.v[i]=MyMAC.v[i];
-			}
-			SetCRC(Packet);
-			PutBowlerPacket(Packet);
-			//if(debug){
-				if(Packet->use.head.RPC != 0x7277705f){//Ignore Power Packet
-					println("Response:",INFO_PRINT);printPacket(Packet,INFO_PRINT);
-				}
-			//}
-		}else{
-			//if(debug){
-				println("Packet not addressed to me: ",ERROR_PRINT);
-				printByteArray(Packet->use.head.MAC.v,6,ERROR_PRINT);
-				print(" is not mine: ",ERROR_PRINT);
-				printByteArray(MyMAC.v,6,ERROR_PRINT);
-			//}
+BOOL process(BowlerPacket * Packet){
+	//if(debug){
+		if(Packet->use.head.RPC != 0x7277705f){//Ignore Power Packet
+			println("Got:",INFO_PRINT);printPacket(Packet,INFO_PRINT);
 		}
-		SetColor(0,0,1);
+	//}
+	if ( (CheckAddress(MyMAC.v,Packet->use.head.MAC.v) == TRUE) || ((CheckAddress((BYTE *)Broadcast.v,(BYTE *)Packet->use.head.MAC.v) == TRUE) )) {
+		Process_Self_Packet(Packet);
+		for (i=0;i<6;i++){
+			Packet->use.head.MAC.v[i]=MyMAC.v[i];
+		}
+		SetCRC(Packet);
 		return TRUE;
+	}else{
+
+		println("Packet not addressed to me: ",ERROR_PRINT);
+		printByteArray(Packet->use.head.MAC.v,6,ERROR_PRINT);
+		print(" is not mine: ",ERROR_PRINT);
+		printByteArray(MyMAC.v,6,ERROR_PRINT);
+
+	}
+	return FALSE;
+}
+
+/**
+ * Run an instance of the server. THis uses static memory
+ */
+BYTE Bowler_Server_Static(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
+
+	BOOL back = GetBowlerPacket(Packet, fifo);
+
+	if (back){
+		return process( Packet);;
 	}//Have a packet
 
 	return FALSE;
 }
+
+BYTE Bowler_Server(BowlerPacket * Packet, BOOL debug){
+
+	BOOL back = GetBowlerPacket_arch(Packet);
+
+	if (back){
+		SetColor(0,1,0);
+		if(process( Packet)){
+			//Packet found, sending
+			PutBowlerPacket(Packet);
+			if(Packet->use.head.RPC != 0x7277705f){//Ignore Power Packet
+				println("Response:",INFO_PRINT);printPacket(Packet,INFO_PRINT);
+			}
+			SetColor(0,0,1);
+			return TRUE;
+		}
+	}//Have a packet
+
+	return FALSE;
+}
+
+
 
 
 
