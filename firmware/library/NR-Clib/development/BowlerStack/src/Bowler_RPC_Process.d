@@ -7,8 +7,7 @@ src/Bowler_RPC_Process.o: src/Bowler_RPC_Process.c \
  include/Bowler/BowlerTransport.h include/Bowler/namespace.h \
  include/Bowler/BowlerRPCRegestration.h \
  include/Bowler/Namespace_bcs_core.h \
- ../Platform/include/arch/AVR/BowlerConfig.h \
- ../Platform/include/arch/AVR/reg_structs.h \
+ ../Platform/include/arch/native/BowlerConfig.h \
  include/Bowler/BowlerServerHardwareAbstraction.h
 
 include/Bowler/Bowler.h:
@@ -39,8 +38,6 @@ include/Bowler/BowlerRPCRegestration.h:
 
 include/Bowler/Namespace_bcs_core.h:
 
-../Platform/include/arch/AVR/BowlerConfig.h:
-
-../Platform/include/arch/AVR/reg_structs.h:
+../Platform/include/arch/native/BowlerConfig.h:
 
 include/Bowler/BowlerServerHardwareAbstraction.h:

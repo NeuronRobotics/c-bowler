@@ -22,7 +22,6 @@
 	extern MAC_ADDR MyMAC;
 #endif
 static BYTE i;
-static UINT32_UNION l;
 BYTE CheckCRC(BowlerPacket *Packet){
 	UINT16 v=0;
 	for (i=0;i<10;i++)
@@ -38,12 +37,13 @@ void SetCRC(BowlerPacket * Packet){
 	Packet->use.head.CRC = (BYTE) (v & 0x00ff);
 }
 
-unsigned long GetRPCValue(char * data){
-	l.byte.FB = data[3];
-	l.byte.TB = data[2];
-	l.byte.SB = data[1];
-	l.byte.LB = data[0];
-	return l.Val;
+inline unsigned long GetRPCValue(char * data){
+    UINT32_UNION l;
+    l.byte.FB = data[3];
+    l.byte.TB = data[2];
+    l.byte.SB = data[1];
+    l.byte.LB = data[0];
+    return l.Val;
 }
 
 UINT16 READY(BowlerPacket *Packet,BYTE code,BYTE trace){

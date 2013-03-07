@@ -23,6 +23,7 @@ static BOOL init=FALSE;
 
 
 void Pic32_Bowler_HAL_Init(void){
+	TickInit();
 	init=TRUE;
 	//println("Init UART hal");
 	Pic32UART_HAL_INIT(PRINT_BAUD);
