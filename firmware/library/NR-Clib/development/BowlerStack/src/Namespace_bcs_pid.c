@@ -23,66 +23,66 @@ BOOL pidAsyncEventCallback(BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
 //Get RPC's
 static RPC_LIST bcsPid_APID={	BOWLER_GET,
                                 "apid",
-                                processPIDGet,
+                                &processPIDGet,
                                 NULL //Termination
 };
 static RPC_LIST bcsPid__PID={	BOWLER_GET,
                                 "_pid",
-                                processPIDGet,
+                                &processPIDGet,
                                 NULL//Termination
 };
 static RPC_LIST bcsPid_CPID={	BOWLER_GET,
                                 "cpid",
-                                processPIDGet,
+                                &processPIDGet,
                                 NULL//Termination
 };
 static RPC_LIST bcsPid_CPDV={	BOWLER_GET,
                                 "cpdv",
-                                processPIDGet,
+                                &processPIDGet,
                                 NULL//Termination
 };
 static RPC_LIST bcsPid_GPDC={	BOWLER_GET,
                                 "gpdc",
-                                processPIDGet,
+                                &processPIDGet,
                                 NULL//Termination
 };
 
 //Post RPC's
 static RPC_LIST bcsPid_APID_p={	BOWLER_POST,
                                 "apid",
-                                processPIDPost,
+                                &processPIDPost,
                                 NULL //Termination
 };
 static RPC_LIST bcsPid__PID_p={	BOWLER_POST,
                                 "_pid",
-                                processPIDPost,
+                                &processPIDPost,
                                 NULL//Termination
 };
 static RPC_LIST bcsPid__VPD={	BOWLER_POST,
                                 "apid",
-                                processPIDPost,
+                                &processPIDPost,
                                 NULL //Termination
 };
 static RPC_LIST bcsPid_RPID={	BOWLER_POST,
                                 "rpid",
-                                processPIDPost,
+                                &processPIDPost,
                                 NULL//Termination
 };
 
 //Critical
 static RPC_LIST bcsPid_KPID={	BOWLER_CRIT,
                                 "kpid",
-                                processPIDCrit,
+                                &processPIDCrit,
                                 NULL//Termination
 };
 static RPC_LIST bcsPid_CPID_c={	BOWLER_CRIT,
                                 "cpid",
-                                processPIDCrit,
+                                &processPIDCrit,
                                 NULL//Termination
 };
 static RPC_LIST bcsPid_CPDV_c={	BOWLER_CRIT,
                                 "cpdv",
-                                processPIDCrit,
+                                &processPIDCrit,
                                 NULL//Termination
 };
 
@@ -90,13 +90,14 @@ static RPC_LIST bcsPid_CPDV_c={	BOWLER_CRIT,
 
 static NAMESPACE_LIST bcsPid ={	pidNSName,// The string defining the namespace
                                 NULL,// the first element in the RPC list
-                                pidAsyncEventCallback,// async for this namespace
+                                &pidAsyncEventCallback,// async for this namespace
                                 NULL// no initial elements to the other namesapce field.
 };
 
 
 
 static BOOL namespcaedAdded = FALSE;
+
 NAMESPACE_LIST * getBcsPidNamespace(){
 	if(!namespcaedAdded){
                 //GET

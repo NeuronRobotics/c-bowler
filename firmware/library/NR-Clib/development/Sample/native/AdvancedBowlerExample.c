@@ -8,8 +8,9 @@
 
 #include <stdio.h>
 #include "Bowler/Bowler.h"
-BYTE test__png(BowlerPacket * Packet);
-BYTE test_rtst(BowlerPacket * Packet);
+#include "Bowler/AbstractPID.h"
+BOOL test__png(BowlerPacket * Packet);
+BOOL test_rtst(BowlerPacket * Packet);
 
 const char testName[] = "bcs.test.*;0.3;;";
 
@@ -21,16 +22,16 @@ static NAMESPACE_LIST bcsTest ={	testName,// The string defining the namespace
 
 static RPC_LIST bcsTest__png={	BOWLER_GET,
 								"apid",
-								test__png,
+								&test__png,
 								NULL
 };
 static RPC_LIST bcsTest_rtst={	BOWLER_GET,
 								"rtst",
-								test_rtst,
+								&test_rtst,
 								NULL
 };
 
-BYTE test__png(BowlerPacket * Packet){
+BOOL test__png(BowlerPacket * Packet){
 	printf("\r\nMy Overloaded RPC callback \r\n");
 	Packet->use.head.Method = BOWLER_POST;
 	Packet->use.head.RPC = GetRPCValue("Mpng");
@@ -38,7 +39,7 @@ BYTE test__png(BowlerPacket * Packet){
 	return TRUE;
 }
 
-BYTE test_rtst(BowlerPacket * Packet){
+BOOL test_rtst(BowlerPacket * Packet){
 	printf("\r\ntest_rtst callback \r\n");
 	Packet->use.head.DataLegnth=5;
 	Packet->use.head.Method = BOWLER_POST;
@@ -109,8 +110,10 @@ void advancedBowlerExample(){
 	/**
 	 * Now we are going to regester what namespaces we implement with the framework
 	 */
-	addNamespaceToList(getBcsPidNamespace());
-	addNamespaceToList(getBcsTestNamespace());
+	NAMESPACE_LIST * tmp =(NAMESPACE_LIST *)getBcsPidNamespace();
+	addNamespaceToList(tmp);
+	tmp = getBcsTestNamespace();
+	addNamespaceToList(tmp);
 
 
 	printf("\r\n# of namespaces declared= %i",getNumberOfNamespaces());

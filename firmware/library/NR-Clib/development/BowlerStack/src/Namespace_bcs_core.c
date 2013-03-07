@@ -4,8 +4,8 @@
  * Initializes core and returns a pointer to the namespace list
  */
 
-BYTE _nms(BowlerPacket * Packet);
-BYTE _png(BowlerPacket * Packet);
+BOOL _nms(BowlerPacket * Packet);
+BOOL _png(BowlerPacket * Packet);
 
 #if defined(USE_LINKED_LIST_NAMESPACE)
 const char coreName[] = "bcs.core.*;0.3;;";
@@ -13,12 +13,12 @@ const char coreName[] = "bcs.core.*;0.3;;";
 
 static RPC_LIST bcsCore_nms={	BOWLER_GET,
                                 "_nms",
-                                _nms,
+                                &_nms,
                                 NULL
 };
 static RPC_LIST bcsCore_png={	BOWLER_GET,
                                 "_png",
-                                _png,
+                                &_png,
                                 NULL
 };
 
@@ -55,14 +55,14 @@ NAMESPACE_LIST * getNamespaceAtIndex(int index){
 }
 
 
-BYTE _png(BowlerPacket * Packet){
+BOOL _png(BowlerPacket * Packet){
 	Packet->use.head.Method = BOWLER_POST;
 	Packet->use.head.RPC = GetRPCValue("_png");
 	Packet->use.head.DataLegnth = 4;
 	return TRUE;
 }
 
-BYTE _nms(BowlerPacket * Packet){
+BOOL _nms(BowlerPacket * Packet){
 	if(Packet->use.head.DataLegnth==4){
 		Packet->use.head.DataLegnth=5;
 		Packet->use.head.Method = BOWLER_POST;
@@ -149,7 +149,7 @@ RPC_LIST * getRpcByID(NAMESPACE_LIST * namespace,unsigned long  rpcId, BYTE bowl
 	if(rpc !=NULL){
 		//Loop over the RPC list looking for a match to the RPC
 		do{
-			if(		rpcId			== 	GetRPCValue(rpc->rpc) &&
+			if(		rpcId			== 	GetRPCValue((char*)rpc->rpc) &&
 					bowlerMethod	==	rpc->bowlerMethod ){
 				//Found matching RPC and Method to parse
 				return rpc;

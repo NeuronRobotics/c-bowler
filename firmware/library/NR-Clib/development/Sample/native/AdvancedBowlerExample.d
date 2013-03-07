@@ -7,14 +7,15 @@ AdvancedBowlerExample.o: AdvancedBowlerExample.c \
  ../../BowlerStack/include/Bowler/Bowler_Server.h \
  ../../BowlerStack/include/Bowler/FIFO.h \
  ../../BowlerStack/include/Bowler/RPC_Process.h \
+ ../../BowlerStack/include/Bowler/namespace.h \
  ../../BowlerStack/include/Bowler/Scheduler.h \
  ../../BowlerStack/include/Bowler/AbstractPID.h \
  ../../BowlerStack/include/Bowler/BowlerTransport.h \
- ../../BowlerStack/include/Bowler/namespace.h \
  ../../BowlerStack/include/Bowler/BowlerRPCRegestration.h \
  ../../BowlerStack/include/Bowler/Namespace_bcs_core.h \
  ../../Platform/include/arch/native/BowlerConfig.h \
- ../../BowlerStack/include/Bowler/BowlerServerHardwareAbstraction.h
+ ../../BowlerStack/include/Bowler/BowlerServerHardwareAbstraction.h \
+ ../../BowlerStack/include/Bowler/AbstractPID.h
 
 ../../BowlerStack/include/Bowler/Bowler.h:
 
@@ -32,13 +33,13 @@ AdvancedBowlerExample.o: AdvancedBowlerExample.c \
 
 ../../BowlerStack/include/Bowler/RPC_Process.h:
 
+../../BowlerStack/include/Bowler/namespace.h:
+
 ../../BowlerStack/include/Bowler/Scheduler.h:
 
 ../../BowlerStack/include/Bowler/AbstractPID.h:
 
 ../../BowlerStack/include/Bowler/BowlerTransport.h:
-
-../../BowlerStack/include/Bowler/namespace.h:
 
 ../../BowlerStack/include/Bowler/BowlerRPCRegestration.h:
 
@@ -47,3 +48,5 @@ AdvancedBowlerExample.o: AdvancedBowlerExample.c \
 ../../Platform/include/arch/native/BowlerConfig.h:
 
 ../../BowlerStack/include/Bowler/BowlerServerHardwareAbstraction.h:
+
+../../BowlerStack/include/Bowler/AbstractPID.h:
