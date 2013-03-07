@@ -7,7 +7,9 @@
 BYTE _nms(BowlerPacket * Packet);
 BYTE _png(BowlerPacket * Packet);
 
+#if defined(USE_LINKED_LIST_NAMESPACE)
 const char coreName[] = "bcs.core.*;0.3;;";
+
 
 static RPC_LIST bcsCore_nms={	BOWLER_GET,
 								0,
@@ -172,3 +174,4 @@ NAMESPACE_LIST * getBcsCoreNamespace(){
 	return &bcsCore;
 }
 
+#endif

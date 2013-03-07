@@ -6,7 +6,8 @@ src/Debug.o: src/Debug.c include/Bowler/Bowler.h include/Bowler/Defines.h \
  include/Bowler/BowlerTransport.h include/Bowler/namespace.h \
  include/Bowler/BowlerRPCRegestration.h \
  include/Bowler/Namespace_bcs_core.h \
- ../Platform/include/arch/native/BowlerConfig.h \
+ ../Platform/include/arch/AVR/BowlerConfig.h \
+ ../Platform/include/arch/AVR/reg_structs.h \
  include/Bowler/BowlerServerHardwareAbstraction.h
 
 include/Bowler/Bowler.h:
@@ -37,6 +38,8 @@ include/Bowler/BowlerRPCRegestration.h:
 
 include/Bowler/Namespace_bcs_core.h:
 
-../Platform/include/arch/native/BowlerConfig.h:
+../Platform/include/arch/AVR/BowlerConfig.h:
+
+../Platform/include/arch/AVR/reg_structs.h:
 
 include/Bowler/BowlerServerHardwareAbstraction.h:
