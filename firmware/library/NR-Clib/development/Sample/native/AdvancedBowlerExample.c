@@ -20,18 +20,18 @@ static NAMESPACE_LIST bcsTest ={	testName,// The string defining the namespace
 };
 
 static RPC_LIST bcsTest__png={	BOWLER_GET,
-								0,
+								"apid",
 								test__png,
 								NULL
 };
 static RPC_LIST bcsTest_rtst={	BOWLER_GET,
-								0,
+								"rtst",
 								test_rtst,
 								NULL
 };
 
 BYTE test__png(BowlerPacket * Packet){
-	printf("\r\ntest__png callback \r\n");
+	printf("\r\nMy Overloaded RPC callback \r\n");
 	Packet->use.head.Method = BOWLER_POST;
 	Packet->use.head.RPC = GetRPCValue("Mpng");
 	Packet->use.head.DataLegnth = 4;
@@ -47,13 +47,10 @@ BYTE test_rtst(BowlerPacket * Packet){
 }
 
 NAMESPACE_LIST * getBcsTestNamespace(){
-	bcsTest__png.rpc = GetRPCValue("_png");
-	bcsTest_rtst.rpc = GetRPCValue("rtst");
 	addRpcToNamespace(&bcsTest,& bcsTest__png);
 	addRpcToNamespace(&bcsTest,& bcsTest_rtst);
 	return &bcsTest;
 }
-
 
 void advancedBowlerExample(){
 	/**
@@ -64,10 +61,14 @@ void advancedBowlerExample(){
 	 * StartCritical()   Starts a critical protected section of code
  	 * EndCritical()     Ends the critical section and returns to normal operation
 	 */
+	setPrintLevelInfoPrint();// enable the stack specific printer. If you wish to use this feature putCharDebug(char c) needs to be defined
 	printf("\r\nStarting Sample Program\r\n");
 	int pngtmp = GetRPCValue("_png");
 	if(pngtmp != _PNG){
-		printf("FAIL Expected %i got %i\r\n",_PNG,pngtmp);
+		printf("\r\nFAIL Expected: ");
+		prHEX32(_PNG,INFO_PRINT);
+		printf(" got: ");
+		prHEX32(pngtmp,INFO_PRINT);
 		return;
 	}
 
@@ -76,8 +77,8 @@ void advancedBowlerExample(){
 	 * These would not exist in your implementation but would come in from the physical layer
 	 */
 	BowlerPacket myPngPacket;
-	myPngPacket.use.head.RPC = GetRPCValue("_png");
-	myPngPacket.use.head.MessageID = 1;// Specify namespace 1 for the collision detect
+	myPngPacket.use.head.RPC = GetRPCValue("apid");
+	myPngPacket.use.head.MessageID = 2;// Specify namespace 2 for the collision detect
 	myPngPacket.use.head.Method = BOWLER_GET;
 	myPngPacket.use.head.DataLegnth=4;
 	FixPacket(&myPngPacket);// Set up the stack content
@@ -108,7 +109,9 @@ void advancedBowlerExample(){
 	/**
 	 * Now we are going to regester what namespaces we implement with the framework
 	 */
+	addNamespaceToList(getBcsPidNamespace());
 	addNamespaceToList(getBcsTestNamespace());
+
 
 	printf("\r\n# of namespaces declared= %i",getNumberOfNamespaces());
 	int i=0;
@@ -156,7 +159,6 @@ void advancedBowlerExample(){
 		 * The Static server will have also called the call backs to pars the packet, so
 		 * the response should be loaded up to send back
 		 */
-		setPrintLevelInfoPrint();// enable the stack specific printer. If you wish to use this feature putCharDebug(char c) needs to be defined
 
 		int packetLength = GetPacketLegnth(&myLocalPacket); // helper function to get packet length
 

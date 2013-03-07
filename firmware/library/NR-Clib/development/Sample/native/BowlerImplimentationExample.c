@@ -18,7 +18,7 @@ int main(void){
 	/**
 	 * This is a simple example of using the BowlerStack interfaces to interact with a host entirely in user code
 	 */
-	simpleBowlerExample();
+	//simpleBowlerExample();
 
 	return 0;
 }

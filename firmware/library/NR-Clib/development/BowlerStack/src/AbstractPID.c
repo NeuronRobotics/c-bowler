@@ -760,7 +760,6 @@ void RunPIDComs(){
 }
 
 void RunPID(void){
-    RunPIDComs();
     RunPIDControl();
     RunPIDComs();
 }
