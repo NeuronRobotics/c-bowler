@@ -13,7 +13,6 @@ all:clean $(OFILES)
 %.o: %.c
 	$(CC_Bowler_Arch) -Iinclude -c $< -o $@
 clean:
-	 rm -rf src/*.o
-	 rm -rf src/*.d
+	 rm -rf $(OFILES)
 lib:$(OFILES)
 	$(AR) rcs  libNRLIB.a $(OFILES)

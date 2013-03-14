@@ -6,6 +6,7 @@ sample:
 	./Sample/native/BowlerImplimentationExample
 clean:
 	make -C Platform/ clean
+	make -C Sample/native/ clean
 release: all
 	sh release.sh
 commit:

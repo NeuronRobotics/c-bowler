@@ -32,7 +32,7 @@ NATIVE_OFILES := $(NATIVE_CFILES:%.c=%.o)
 all: COMPILE
 	echo "Done!"
 clean:
-	echo Cleaned!
+	rm -rf $(AVR_OFILES) $(PIC_OFILES) $(NATIVE_OFILES)
 
 COMPILE: Native pic32MX440F128H AVR324p AVR644p  pic32MX460F512L pic32MX795F512L  
 	echo OK
