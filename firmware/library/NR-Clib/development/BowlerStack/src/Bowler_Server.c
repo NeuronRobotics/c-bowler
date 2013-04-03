@@ -52,7 +52,6 @@ BOOL process(BowlerPacket * Packet){
 			Packet->use.head.MAC.v[i]=MyMAC.v[i];
 		}
 		SetCRC(Packet);
-		SyncSessionTime(getMs());
 		return TRUE;
 	}else{
 

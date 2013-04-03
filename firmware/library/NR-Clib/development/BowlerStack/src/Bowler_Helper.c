@@ -22,6 +22,21 @@
 	extern MAC_ADDR MyMAC;
 #endif
 static BYTE i;
+
+void LoadCorePacket(BowlerPacket * Packet){
+	//SetColor(0,1,0);
+	BYTE i;
+	Packet->use.head.ProtocolRevision=BOWLER_VERSION;
+	for (i=0;i<6;i++){
+		Packet->use.head.MAC.v[i]=0;
+	}
+	Packet->use.head.MessageID=1;
+	Packet->use.head.ResponseFlag=1;
+	Packet->use.head.Method=BOWLER_STATUS;
+	Packet->use.head.RPC=GetRPCValue("****");
+	Packet->use.head.DataLegnth=4;
+}
+
 BYTE CheckCRC(BowlerPacket *Packet){
 	UINT16 v=0;
 	for (i=0;i<10;i++)

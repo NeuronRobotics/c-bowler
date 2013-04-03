@@ -100,22 +100,22 @@ static BOOL namespcaedAdded = FALSE;
 
 NAMESPACE_LIST * getBcsPidNamespace(){
 	if(!namespcaedAdded){
-                //GET
+		//GET
 		addRpcToNamespace(&bcsPid,& bcsPid_APID);
 		addRpcToNamespace(&bcsPid,& bcsPid__PID);
-                addRpcToNamespace(&bcsPid,& bcsPid_CPID);
+		addRpcToNamespace(&bcsPid,& bcsPid_CPID);
 		addRpcToNamespace(&bcsPid,& bcsPid_CPDV);
-                addRpcToNamespace(&bcsPid,& bcsPid_GPDC);
-                //Post
-                addRpcToNamespace(&bcsPid,& bcsPid_APID_p);
+		addRpcToNamespace(&bcsPid,& bcsPid_GPDC);
+		//Post
+		addRpcToNamespace(&bcsPid,& bcsPid_APID_p);
 		addRpcToNamespace(&bcsPid,& bcsPid__PID_p);
-                addRpcToNamespace(&bcsPid,& bcsPid__VPD);
-                addRpcToNamespace(&bcsPid,& bcsPid_RPID);
+		addRpcToNamespace(&bcsPid,& bcsPid__VPD);
+		addRpcToNamespace(&bcsPid,& bcsPid_RPID);
 
-                //Critical
-                addRpcToNamespace(&bcsPid,& bcsPid_KPID);
-                addRpcToNamespace(&bcsPid,& bcsPid_CPID_c);
-                addRpcToNamespace(&bcsPid,& bcsPid_CPDV_c);
+		//Critical
+		addRpcToNamespace(&bcsPid,& bcsPid_KPID);
+		addRpcToNamespace(&bcsPid,& bcsPid_CPID_c);
+		addRpcToNamespace(&bcsPid,& bcsPid_CPDV_c);
 		namespcaedAdded =TRUE;
 	}
 
