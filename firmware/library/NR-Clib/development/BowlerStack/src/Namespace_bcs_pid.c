@@ -14,7 +14,7 @@ static const char pidNSName[]   = "bcs.pid.*;0.3;;";
 #define NULL 0
 #endif
 
-BOOL pidAsyncEventCallback(BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
+BOOL pidAsyncEventCallback(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
     // PID uses its own async callback
     RunPIDComs();
     return FALSE;

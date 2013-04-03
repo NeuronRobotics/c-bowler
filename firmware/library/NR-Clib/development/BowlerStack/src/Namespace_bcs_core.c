@@ -162,12 +162,12 @@ RPC_LIST * getRpcByID(NAMESPACE_LIST * namespace,unsigned long  rpcId, BYTE bowl
 }
 
 
-void RunNamespaceAsync(BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
+void RunNamespaceAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
     if(pidAsyncCallbackPtr != NULL){
         NAMESPACE_LIST * tmp = &bcsCore;
 	do{
             if(tmp->asyncEventCheck != NULL){
-                tmp->asyncEventCheck(pidAsyncCallbackPtr);
+                tmp->asyncEventCheck(Packet,pidAsyncCallbackPtr);
             }
             if(tmp->next != NULL)
                tmp = tmp->next;
