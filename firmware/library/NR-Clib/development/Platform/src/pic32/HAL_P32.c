@@ -62,7 +62,7 @@ BOOL Send_HAL_Packet(BYTE * packet,WORD size){
 		Pic32UARTPutArray(packet,size);
 		break;
 	case USB_WASP_PACKET:
-		//println_I("Sending to USB");
+		println_I("Sending to USB");
 		SendPacketUSB(packet,size);
 		break;
 	default:

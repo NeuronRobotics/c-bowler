@@ -8,14 +8,15 @@
 #include "Bowler/Bowler.h"
 #include "Bowler/AbstractPID.h"
 
+
 static const char pidNSName[]   = "bcs.pid.*;0.3;;";
 
-#if !defined(NULL)
-#define NULL 0
-#endif
 
-BOOL pidAsyncEventCallback(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
-    // PID uses its own async callback
+BOOL pidAsyncEventCallbackLocal(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
+
+//    println_I("\n");
+//    printPIDvals(0);
+
     RunPIDComs();
     return FALSE;
 }
@@ -90,7 +91,7 @@ static RPC_LIST bcsPid_CPDV_c={	BOWLER_CRIT,
 
 static NAMESPACE_LIST bcsPid ={	pidNSName,// The string defining the namespace
                                 NULL,// the first element in the RPC list
-                                &pidAsyncEventCallback,// async for this namespace
+                                &pidAsyncEventCallbackLocal,// async for this namespace
                                 NULL// no initial elements to the other namesapce field.
 };
 

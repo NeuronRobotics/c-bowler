@@ -7,6 +7,8 @@
 BOOL _nms(BowlerPacket * Packet);
 BOOL _png(BowlerPacket * Packet);
 
+#define USE_LINKED_LIST_NAMESPACE
+
 #if defined(USE_LINKED_LIST_NAMESPACE)
 const char coreName[] = "bcs.core.*;0.3;;";
 
@@ -171,7 +173,7 @@ void RunNamespaceAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPa
             }
             if(tmp->next != NULL)
                tmp = tmp->next;
-	}while(tmp->next != NULL);
+	}while(tmp != NULL);
     }
 }
 
