@@ -90,9 +90,7 @@ void updatePidAsync(){
 	int i;
 	int update = FALSE;
 	for (i=0;i<number_of_pid_groups;i++){
-		if(pidGroups[i].Async && (pidGroups[i].Enabled
-						||velData[i].enabled
-						)){
+		if(pidGroups[i].Async){
 			if(pidGroups[i].CurrentState != pidGroups[i].lastPushedValue){
 				update = TRUE;
 			}
@@ -480,6 +478,7 @@ BYTE SetPIDTimed(BYTE chan,INT32 val,float ms){
 	if(ms==0)
 		pidGroups[chan].SetPoint=(float)val;
 	pidGroups[chan].Enabled=TRUE;
+        pidGroups[chan].Async = TRUE;
 	velData[chan].enabled=FALSE;
 	InitAbsPIDWithPosition(&pidGroups[chan],pidGroups[chan].K.P,pidGroups[chan].K.I,pidGroups[chan].K.D, getMs(),val);
 	return TRUE;
@@ -737,15 +736,20 @@ BOOL isPIDInterpolating(int index){
     return pidGroups[index].interpolate.setTime != 0;
 }
 
+BOOL isPIDArrivedAtSetpoint(int index, float plusOrMinus){
+    return bound( pidGroups[index].SetPoint,
+                    pidGroups[index].CurrentState,
+                    plusOrMinus,
+                    plusOrMinus);
+}
+
 void RunPIDControl(){
     	int i;
 	for (i=0;i<number_of_pid_groups;i++){
+            pidGroups[i].CurrentState = getPosition(i);
             if(pidGroups[i].Enabled){
                 pidGroups[i].SetPoint = interpolate((INTERPOLATE_DATA *)&pidGroups[i].interpolate,getMs());
-                //getPosition(& local_groups[i]);
-                pidGroups[i].CurrentState = getPosition(i);
                 MathCalculationPosition(& pidGroups[i],getMs());
-                //setVelocity(& local_groups[i]);
                 setOutput(i,pidGroups[i].Output);
             }
 

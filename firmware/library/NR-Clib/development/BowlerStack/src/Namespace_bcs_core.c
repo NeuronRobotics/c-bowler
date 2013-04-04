@@ -173,7 +173,10 @@ void RunNamespaceAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPa
             }
             if(tmp->next != NULL)
                tmp = tmp->next;
-	}while(tmp != NULL);
+            else{
+                tmp=NULL;
+            }
+	}while(tmp != NULL  );
     }
 }
 
