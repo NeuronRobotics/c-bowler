@@ -37,19 +37,22 @@ void LoadCorePacket(BowlerPacket * Packet){
 	Packet->use.head.DataLegnth=4;
 }
 
-BYTE CheckCRC(BowlerPacket *Packet){
+BYTE CalcCRC(BowlerPacket *Packet){
 	UINT16 v=0;
 	for (i=0;i<10;i++)
 		v+=Packet->stream[i];
-	if(Packet->use.head.CRC ==(BYTE)(v & 0x00ff))
+	return (v & 0x00ff);
+}
+
+BYTE CheckCRC(BowlerPacket *Packet){
+	BYTE v=CalcCRC(Packet);
+	if(Packet->use.head.CRC ==v)
 		return TRUE;
 	return FALSE;
 }
 void SetCRC(BowlerPacket * Packet){
-	UINT16 v=0;
-	for (i=0;i<10;i++)
-		v+=Packet->stream[i];
-	Packet->use.head.CRC = (BYTE) (v & 0x00ff);
+	BYTE v=CalcCRC(Packet);
+	Packet->use.head.CRC = v ;
 }
 
 inline unsigned long GetRPCValue(char * data){

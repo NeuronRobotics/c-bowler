@@ -13,12 +13,13 @@ static UINT32 i;
 
 void printFiFoState(BYTE_FIFO_STORAGE * fifo, BYTE * buffer,Print_Level l){
 	int i;
-	print("\nFifo state: \n\tBytes:",l);
+	print("\nFifo state: \tBytes:",l);
 	p_ul(calcByteCount(fifo),l);
-	print("\n\tData [ ",l);
+
 	FifoReadByteStream(	buffer,
 						calcByteCount(fifo)+1,
 						fifo);
+	print("\tData [ ",l);
 	for(i=0;i<calcByteCount(fifo);i++){
 		p_ul(buffer[i],l);print(" ",l);
 	}
@@ -140,7 +141,7 @@ UINT32 FifoGetByteStream(BYTE_FIFO_STORAGE * fifo,BYTE *packet,UINT32 size){
 
 UINT32 FifoReadByteStream(BYTE *packet,UINT32 size,BYTE_FIFO_STORAGE * fifo){
 	UINT32 read=fifo->readPointer;
-	int count = calcByteCount(fifo);
+	UINT32  count = calcByteCount(fifo);
 	if(size>count)
 		size = count;
 	for (i=0;i<size;i++){

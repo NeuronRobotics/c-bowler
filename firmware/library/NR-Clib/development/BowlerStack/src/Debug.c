@@ -233,13 +233,16 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 		default:
 			printfDEBUG_NNL(unknown,l);
 			printfDEBUG_UL(Packet->stream[MethodIndex],l);
-		}
+		break;
+	}
 		printfDEBUG(id,l);
 		printfDEBUG_UL((Packet->stream[SessionIDIndex]&0x7f),l);
 		printfDEBUG(dataSise,l);
 		printfDEBUG_UL((Packet->stream[DataSizeIndex]),l);
 		printfDEBUG(crcval,l);
 		printfDEBUG_UL((Packet->stream[CRCIndex]),l);
+		printfDEBUG("\tCalculated CRC = \t",l);
+		printfDEBUG_UL(CalcCRC(Packet),l);
 		if(Packet->use.head.DataLegnth>=4){
 			printfDEBUG(rpc,l);
 			for (i=0;i<4;i++){
