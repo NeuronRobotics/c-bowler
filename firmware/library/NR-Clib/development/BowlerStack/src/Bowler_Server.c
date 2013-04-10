@@ -42,7 +42,9 @@ void Bowler_Init(void){
 
 BOOL process(BowlerPacket * Packet){
 	//if(debug){
-		if(Packet->use.head.RPC != 0x7277705f){//Ignore Power Packet
+		if(	Packet->use.head.RPC != GetRPCValue("_pwr") &&
+			Packet->use.head.RPC != GetRPCValue("_png")
+				){//Ignore Power Packet
 			println("Got:",INFO_PRINT);printPacket(Packet,INFO_PRINT);
 		}
 	//}
@@ -87,7 +89,9 @@ BYTE Bowler_Server(BowlerPacket * Packet, BOOL debug){
 		if(process( Packet)){
 			//Packet found, sending
 			PutBowlerPacket(Packet);
-			if(Packet->use.head.RPC != 0x7277705f){//Ignore Power Packet
+			if(	Packet->use.head.RPC != GetRPCValue("_pwr") &&
+				Packet->use.head.RPC != GetRPCValue("_png")
+					){//Ignore Power Packet
 				println("Response:",INFO_PRINT);printPacket(Packet,INFO_PRINT);
 			}
 			SetColor(0,0,1);

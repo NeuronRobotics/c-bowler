@@ -18,11 +18,11 @@
 
 #include "Bowler/Bowler.h"
 #include <avr/interrupt.h>
-#if defined(__AVR_ATmega324P__)
+//#if defined(__AVR_ATmega324P__)
 	#define comBuffSize (MiniPacketDataSize+4+BowlerHeaderSize)
-#else
-	#define comBuffSize (FullPacketDataSize+4+BowlerHeaderSize)
-#endif
+//#else
+//	#define comBuffSize (FullPacketDataSize+4+BowlerHeaderSize)
+//#endif
 static BYTE privateRXCom[comBuffSize];
 static BYTE_FIFO_STORAGE store;
 static UINT32 TimerOFcount=0;

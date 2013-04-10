@@ -19,8 +19,26 @@
 
 Print_Level level=NO_PRINT;
 
-//static BOOL DebugFlag=TRUE;
 static BOOL DebugINIT = FALSE;
+const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+static const char  packet[] = "\tPacket = \t";
+static const char get[] = "Get";
+static const char post[]="Post ";
+static const char stat[]= "Status";
+static const char crit[]="Critical";
+static const char unknown[] = "Unknown ";
+static const char sync[] = "(Synchronous)";
+static const char async[] = "(Asynchronous)";
+static const char ver[] ="\tVersion = \t";
+static const char mac[] = "\tMAC = \t\t";
+static const char meth[] = "\tMethod = \t";
+static const char id[] = "\tNamespace Index = \t";
+static const char dataSise[] ="\tData Size = \t";
+static const char crcval []= "\tCRC Value = \t";
+static const char dval[] = "\tData = \t\t";
+static const char dhexval[] = "\tData Hex = \t";
+static const char rpc []="\tRPC code = \t";
+static const char nodata[] = " no data";
 
 int (*sendToStream)(BYTE * ,int);
 
@@ -77,7 +95,7 @@ BOOL okToPrint(Print_Level l){
 //	setPrintLevel(NO_PRINT);
 //}
 
-const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+
 
 char GetLowNib(BYTE b){
 	return AsciiHex[b&0x0f];
@@ -170,24 +188,7 @@ void printfDEBUG_FL(float f,Print_Level l){
 #if defined(BOWLERSTRUCTDEF_H_)
 
 
-static const char  packet[] = "\tPacket = \t";
-static const char get[] = "Get";
-static const char post[]="Post ";
-static const char stat[]= "Status";
-static const char crit[]="Critical";
-static const char unknown[] = "Unknown ";
-static const char sync[] = "(Synchronous)";
-static const char async[] = "(Asynchronous)";
-static const char ver[] ="\tVersion = \t";
-static const char mac[] = "\tMAC = \t\t";
-static const char meth[] = "\tMethod = \t";
-static const char id[] = "\tNamespace Index = \t";
-static const char dataSise[] ="\tData Size = \t";
-static const char crcval []= "\tCRC Value = \t";
-static const char dval[] = "\tData = \t\t";
-static const char dhexval[] = "\tData Hex = \t";
-static const char rpc []="\tRPC code = \t";
-static const char nodata[] = " no data";
+
 
 void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
     

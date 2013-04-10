@@ -93,7 +93,8 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 	}
 	UINT16 totalLen = PacketLegnth+BowlerHeaderSize;
 	// See if all the data has arived for this packet
-	if (getNumBytes(fifo)>=(totalLen) ){
+	INT32 num = getNumBytes(fifo);
+	if (num >=(totalLen) ){
 		if(debug){
 			//println("**Found packet, ");p_ul(totalLen);//print(" Bytes, pulling out of buffer");
 		}
@@ -103,7 +104,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 		return  TRUE;
 	}
 	if(debug){
-		println("Header ready, but data is not yet. Need: ",INFO_PRINT);p_ul(totalLen,INFO_PRINT);print(" have: ",INFO_PRINT);p_ul(getNumBytes(fifo),INFO_PRINT);
+		println("Header ready, but data is not. Need: ",INFO_PRINT);p_ul(totalLen,INFO_PRINT);print(" have: ",INFO_PRINT);p_ul(num ,INFO_PRINT);
 	}
 	return FALSE;
 }

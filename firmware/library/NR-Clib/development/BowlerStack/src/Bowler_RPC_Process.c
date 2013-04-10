@@ -42,8 +42,7 @@ void Process_Self_Packet(BowlerPacket * Packet){
 			//Found matching RPC and Method to parse
 			foundRpc++;
 			currentNamespaceIndexForPacket =  namespaceIndex;
-			println_I("Rpc found in namespace: ");
-			print_I(tmp->namespaceString);
+			//println_I("Rpc found in namespace: ");print_I(tmp->namespaceString);
 		}
 		//Null check and move to next namespace
 		tmp = tmp->next;
@@ -65,7 +64,7 @@ void Process_Self_Packet(BowlerPacket * Packet){
 			}else{
 				//RPC resolution is specified
 				currentNamespaceIndexForPacket = Packet->use.head.MessageID;
-				println_I("Rpc resolved to: ");print_I(getNamespaceAtIndex(currentNamespaceIndexForPacket)->namespaceString);
+				//println_I("Rpc resolved to: ");print_I(getNamespaceAtIndex(currentNamespaceIndexForPacket)->namespaceString);
 			}
 		}
 		RPC_LIST * rpc = getRpcByID(getNamespaceAtIndex(currentNamespaceIndexForPacket),
