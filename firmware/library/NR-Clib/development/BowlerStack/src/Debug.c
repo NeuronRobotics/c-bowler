@@ -38,7 +38,6 @@ static const char id[] = "\tNamespace Index = \t";
 static const char dataSise[] ="\tData Size = \t";
 static const char crcval []= "\tCRC Value = \t";
 static const char dval[] = "\tData = \t\t";
-static const char dhexval[] = "\tData Hex = \t";
 static const char rpc []="\tRPC code = \t";
 static const char nodata[] = " no data";
 
