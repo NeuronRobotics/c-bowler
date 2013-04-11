@@ -251,7 +251,7 @@ void RunPDVel(BYTE chan){
 			velData[chan].currentOutputVel=-100;
 
 		println("Velocity set=",INFO_PRINT);p_fl(velData[chan].unitsPerSeCond,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
-		println("Velocity position diff=",INFO_PRINT);p_sl(posDiff,INFO_PRINT);print(" ticks",INFO_PRINT);
+		println("Velocity position diff=",INFO_PRINT);p_int(posDiff,INFO_PRINT);print(" ticks",INFO_PRINT);
 		println("Velocity time diff=",INFO_PRINT);p_fl(timeDiff,INFO_PRINT);print(" seConds",INFO_PRINT);
 		println("Velocity time diff=",INFO_PRINT);p_fl(timeMsDiff,INFO_PRINT);print(" ms",INFO_PRINT);
 		println("Velocity current=",INFO_PRINT);p_fl(currentVelocity,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
@@ -465,7 +465,7 @@ BYTE ClearPID(BYTE chan){
 }
 
 BYTE SetPIDTimed(BYTE chan,INT32 val,float ms){
-	println_I("@#@# PID channel Set chan=");p_ul_I(chan);print_I(" setpoint=");p_sl_I(val);print_I(" time=");p_fl_I(ms);
+	println_I("@#@# PID channel Set chan=");p_int_I(chan);print_I(" setpoint=");p_int_I(val);print_I(" time=");p_fl_I(ms);
 	if (chan>=number_of_pid_groups)
 		return FALSE;
 	if(ms<.01)
@@ -842,10 +842,10 @@ void printPIDvals(int i){
         int enabled=    pidGroups[i].Enabled;
         int polarity =  pidGroups[i].Polarity;
         int set =       pidGroups[i].SetPoint;
-	p_sl(chan,INFO_PRINT);
-	print("\t\tEnabled=",INFO_PRINT);     p_sl(enabled,INFO_PRINT);
-	print("\tPolarity=",INFO_PRINT);    p_sl(polarity,INFO_PRINT);
-	print("\tSET=",INFO_PRINT);    p_sl(set,INFO_PRINT);
+	p_int(chan,INFO_PRINT);
+	print("\t\tEnabled=",INFO_PRINT);     p_int(enabled,INFO_PRINT);
+	print("\tPolarity=",INFO_PRINT);    p_int(polarity,INFO_PRINT);
+	print("\tSET=",INFO_PRINT);    p_int(set,INFO_PRINT);
 	print("\t\t Kp=",INFO_PRINT);    p_fl(pidGroups[i].K.P,INFO_PRINT);
 	print("\t Ki=",INFO_PRINT);    p_fl(pidGroups[i].K.I,INFO_PRINT);
 	print("\t Kd=",INFO_PRINT);    p_fl(pidGroups[i].K.D,INFO_PRINT);

@@ -203,7 +203,7 @@ void GetRPCs(BowlerPacket *Packet){
 			Packet->use.head.Method = BOWLER_POST;
 			Packet->use.data[0]=namespace.numNamespaces;
 			//println("Have ");
-			//p_ul(namespace.numNamespaces);
+			//p_int(namespace.numNamespaces);
 			//println(" namespaces");
 		}else if(Packet->use.head.DataLegnth==5){
 			if(Packet->use.data[0]<namespace.numNamespaces){

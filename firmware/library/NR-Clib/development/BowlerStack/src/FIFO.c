@@ -14,14 +14,14 @@ static UINT32 i;
 void printFiFoState(BYTE_FIFO_STORAGE * fifo, BYTE * buffer,Print_Level l){
 	int i;
 	print("\nFifo state: \tBytes:",l);
-	p_ul(calcByteCount(fifo),l);
+	p_int(calcByteCount(fifo),l);
 
 	FifoReadByteStream(	buffer,
 						calcByteCount(fifo)+1,
 						fifo);
 	print("\tData [ ",l);
 	for(i=0;i<calcByteCount(fifo);i++){
-		p_ul(buffer[i],l);print(" ",l);
+		p_int(buffer[i],l);print(" ",l);
 	}
 	print(" ]\n",l);
 }
@@ -41,7 +41,7 @@ BOOL unLockFifo(BYTE_FIFO_STORAGE * fifo){
 }
 void InitByteFifo(BYTE_FIFO_STORAGE * fifo,BYTE * buff,UINT32 size){
 	if(fifo == 0 ||  buff == 0){
-		println("@#@#FIFO FAILED TO INITIALIZE",ERROR_PRINT);p_ul(size,ERROR_PRINT);
+		println("@#@#FIFO FAILED TO INITIALIZE",ERROR_PRINT);p_int(size,ERROR_PRINT);
 	}
 	fifo->buffer=buff;
 	fifo->bufferSize=size;
@@ -50,7 +50,7 @@ void InitByteFifo(BYTE_FIFO_STORAGE * fifo,BYTE * buff,UINT32 size){
 	//fifo->byteCount=0;
 	fifo->mutex=FALSE;
 	clearByteFifo(fifo);
-	//println(fifoinit);p_ul(size);
+	//println(fifoinit);p_int(size);
 }
 void clearByteFifo(BYTE_FIFO_STORAGE * fifo){
 	//StartCritical();
@@ -84,7 +84,7 @@ UINT32 FifoGetByteCount(BYTE_FIFO_STORAGE * fifo){
 
 UINT32 FifoAddByte(BYTE_FIFO_STORAGE * fifo,BYTE b, BYTE * errorCode){
 	if(calcByteCount(fifo) >= (fifo->bufferSize-2)){
-		//println(error);p_ul(fifo->bufferSize);print(",");p_ul(fifo->byteCount);
+		//println(error);p_int(fifo->bufferSize);print(",");p_int(fifo->byteCount);
 		errorCode[0]=FIFO_OVERFLOW;
 		return 0;
 	}
@@ -161,7 +161,7 @@ UINT32 FifoReadByteStream(BYTE *packet,UINT32 size,BYTE_FIFO_STORAGE * fifo){
 
 void InitPacketFifo(PACKET_FIFO_STORAGE * fifo,BowlerPacket * buff,UINT32 size){
     	if(fifo == 0 ||  buff == 0){
-		println("@#@#FIFO FAILED TO INITIALIZE",ERROR_PRINT);p_ul(size,ERROR_PRINT);
+		println("@#@#FIFO FAILED TO INITIALIZE",ERROR_PRINT);p_int(size,ERROR_PRINT);
 	}
 	fifo->buffer=buff;
 	fifo->bufferSize=size;
@@ -173,7 +173,7 @@ void InitPacketFifo(PACKET_FIFO_STORAGE * fifo,BowlerPacket * buff,UINT32 size){
 
 UINT32 FifoAddPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * toBeAdded){
     	if(FifoGetPacketCount(fifo) >= (fifo->bufferSize)){
-		println_E("Packet FIFO overflow");p_ul_E(fifo->bufferSize);print_E(",");p_ul_E(fifo->byteCount);
+		println_E("Packet FIFO overflow");p_int_E(fifo->bufferSize);print_E(",");p_int_E(fifo->byteCount);
 		return 0;
 	}
 	StartCritical();

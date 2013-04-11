@@ -93,7 +93,7 @@ void InitADCHardware(BYTE chan){
         //Use sample channel A
 	AD1CHSbits.CH0NA=1;
 	EnableADC10();
-        //println_I("Initialized ADC chan ");p_sl_I(chan);
+        //println_I("Initialized ADC chan ");p_int_I(chan);
 }
 int getAdcRaw(BYTE chan, int samples){
     InitADCHardware( chan);

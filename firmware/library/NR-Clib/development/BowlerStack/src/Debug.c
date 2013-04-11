@@ -19,6 +19,8 @@
 
 Print_Level level=NO_PRINT;
 
+#define bufferSize 64
+
 static BOOL DebugINIT = FALSE;
 const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 static const char  packet[] = "\tPacket = \t";
@@ -40,11 +42,19 @@ static const char dhexval[] = "\tData Hex = \t";
 static const char rpc []="\tRPC code = \t";
 static const char nodata[] = " no data";
 
-int (*sendToStream)(BYTE * ,int);
+//static BYTE data [bufferSize];
+static BYTE byteStr[12];
+
+static int (*sendToStream)(BYTE * ,int);
 
 int sendToStreamMine(BYTE * data ,int num){
-	int i=0;
+	int i;
+	i=0;
+	if(num>=bufferSize){
+		num=bufferSize-1;
+	}
 	for(i=0;i<num;i++){
+
 		putCharDebug(data[i]);
 	}
 	return i;
@@ -108,23 +118,22 @@ void printfDEBUG(const char *str,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
-
-	int x;
+	int i,x;
 	x=0;
-	BYTE data [1024];
-	int i=0;
-    data[i++]=('\n');
-    data[i++]=('\r');
+	i=0;
+	putCharDebug('\n');
+	putCharDebug('\r');
 	while(str[x]!='\0'){
-		data[i++]=(str[x++]);
+		putCharDebug(str[x++]);
 	}
-	sendToStreamLocal(data,i);
+	//sendToStreamLocal(data,i);
 }
 void printfDEBUG_BYTE(char b,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
-	sendToStreamLocal((BYTE *)&b,1);
+	putCharDebug(b);
+	//sendToStreamLocal((BYTE *)&b,1);
 
 }
 void printfDEBUG_NNL(const char *str,Print_Level l)
@@ -132,57 +141,53 @@ void printfDEBUG_NNL(const char *str,Print_Level l)
 	if(!okToPrint(l)){
 		return;
 	}
-	int x=0;
-	int i=0;
-	BYTE data [1024];
-	while(str[x]!='\0'){
-		data[i++]=(str[x++]);
+	int i,x;
+	x=0;
+	i=0;
+	while(str[x]!='\0' ){
+		putCharDebug(str[x++]);
 	}
-	sendToStreamLocal(data,i);
-}
-void printfDEBUG_UL(UINT32 val,Print_Level l){
-	printfDEBUG_SL(val,l);
+	//sendToStreamLocal(data,i);
 }
 
-void printfDEBUG_SL(INT32 val,Print_Level l){
+void printfDEBUG_INT(INT32 val,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
-	int i=0;
-	BYTE data [12];
-
-	BYTE byteStr[11];
-	int x=0;
+	int i,x;
+	i=0;
+	x=0;
 	if (val<0){
 		val *=-1;
-		data[i++]=('-');
+		putCharDebug('-');
 	}else{
            //data[i++]=(' ');
         }
 	ultoaMINE(val,byteStr);
-	while(byteStr[x] != '\0'){
-		data[i++]=(byteStr[x++]);
+	while(byteStr[x] != '\0' && i>0 && i<12){
+		putCharDebug(byteStr[x++]);
 	}
-	sendToStreamLocal(data,i);
+	//sendToStreamLocal(data,i);
 }
 
 void printfDEBUG_FL(float f,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
-	INT32 upper = (INT32)f;
-	INT32 shift =(INT32)(f*1000);
-	INT32 clip  = upper*1000;
-	printfDEBUG_SL(upper,l);
+	INT32 upper = (INT32)f;// set up the upper section of the decimal by int casting to clip  off the decimal places
+	INT32 shift =(INT32)(f*1000.0f);//shift up the decaml places as a float 3 places
+	INT32 clip  = upper*1000;//clip off the upper section of the decimal
+	printfDEBUG_INT(upper,l);
 	printfDEBUG_BYTE('.',l);
 	INT32 dec =shift-clip;
+	//make positive and print zeros
 	if (dec<0)
 		dec*=-1;
 	if(dec<100)
 		printfDEBUG_BYTE('0',l);
 	if(dec<10)
 		printfDEBUG_BYTE('0',l);
-	printfDEBUG_UL(dec,l);
+	printfDEBUG_INT(dec,l);
 }
 
 #if defined(BOWLERSTRUCTDEF_H_)
@@ -201,16 +206,16 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 		s = BowlerHeaderSize+Packet->stream[DataSizeIndex];
 		printfDEBUG_BYTE('[',l);
 		for (i=0;i<s;i++){
-			printfDEBUG_UL(Packet->stream[i],l);
+			p_int(Packet->stream[i],l);
 			if (i<s-1)
 				printfDEBUG_BYTE(',',l);
 		}
 		printfDEBUG_BYTE(']',l);
 		printfDEBUG(ver,l);
-		printfDEBUG_UL(Packet->stream[0],l);
+		p_int(Packet->stream[0],l);
 		printfDEBUG(mac,l);
 		for (i=0;i<6;i++){
-			printfDEBUG_UL(Packet->stream[1+i],l);
+			p_int(Packet->stream[1+i],l);
 			if (i<5)
 				printfDEBUG_BYTE(':',l);
 		}
@@ -233,17 +238,17 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 			break;
 		default:
 			printfDEBUG_NNL(unknown,l);
-			printfDEBUG_UL(Packet->stream[MethodIndex],l);
+			p_int(Packet->stream[MethodIndex],l);
 		break;
 	}
 		printfDEBUG(id,l);
-		printfDEBUG_UL((Packet->stream[SessionIDIndex]&0x7f),l);
+		p_int((Packet->stream[SessionIDIndex]&0x7f),l);
 		printfDEBUG(dataSise,l);
-		printfDEBUG_UL((Packet->stream[DataSizeIndex]),l);
+		p_int((Packet->stream[DataSizeIndex]),l);
 		printfDEBUG(crcval,l);
-		printfDEBUG_UL((Packet->stream[CRCIndex]),l);
+		p_int((Packet->stream[CRCIndex]),l);
 		printfDEBUG("\tCalculated CRC = \t",l);
-		printfDEBUG_UL(CalcCRC(Packet),l);
+		p_int(CalcCRC(Packet),l);
 		if(Packet->use.head.DataLegnth>=4){
 			printfDEBUG(rpc,l);
 			for (i=0;i<4;i++){
@@ -254,7 +259,7 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 			s= (Packet->use.head.DataLegnth-4);
 			printfDEBUG(dval,l);
 			for (i=0;i<s;i++){
-				printfDEBUG_UL(Packet->use.data[i],l);
+				p_int(Packet->use.data[i],l);
 				if (i<(s-1))
 					printfDEBUG_BYTE(',',l);
 			}
@@ -283,10 +288,10 @@ void printByteArray(BYTE * stream,UINT16 len,Print_Level l){
 	}
 	UINT16 i;
 	printfDEBUG_NNL(streamsize,l);
-	printfDEBUG_UL(len,l);
+	p_int(len,l);
 	printfDEBUG_NNL(" [",l);
 	for (i=0;i<len;i++){
-		printfDEBUG_UL(stream[i],l);
+		p_int(stream[i],l);
 		if (i<(len-1))
 			printfDEBUG_BYTE(',',l);
 	}
