@@ -42,8 +42,6 @@ static const char dhexval[] = "\tData Hex = \t";
 static const char rpc []="\tRPC code = \t";
 static const char nodata[] = " no data";
 
-//static BYTE data [bufferSize];
-static BYTE byteStr[12];
 
 static int (*sendToStream)(BYTE * ,int);
 
@@ -154,17 +152,15 @@ void printfDEBUG_INT(INT32 val,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
-	int i,x;
-	i=0;
+	int x;
 	x=0;
 	if (val<0){
 		val *=-1;
 		putCharDebug('-');
-	}else{
-           //data[i++]=(' ');
-        }
+	}
+	BYTE byteStr[12];
 	ultoaMINE(val,byteStr);
-	while(byteStr[x] != '\0' && i>0 && i<12){
+	while(byteStr[x] != '\0' && x<sizeof(byteStr)){
 		putCharDebug(byteStr[x++]);
 	}
 	//sendToStreamLocal(data,i);
@@ -206,16 +202,16 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 		s = BowlerHeaderSize+Packet->stream[DataSizeIndex];
 		printfDEBUG_BYTE('[',l);
 		for (i=0;i<s;i++){
-			p_int(Packet->stream[i],l);
+			prHEX8(Packet->stream[i],l);
 			if (i<s-1)
 				printfDEBUG_BYTE(',',l);
 		}
 		printfDEBUG_BYTE(']',l);
 		printfDEBUG(ver,l);
-		p_int(Packet->stream[0],l);
+		prHEX8(Packet->stream[0],l);
 		printfDEBUG(mac,l);
 		for (i=0;i<6;i++){
-			p_int(Packet->stream[1+i],l);
+			prHEX8(Packet->stream[1+i],l);
 			if (i<5)
 				printfDEBUG_BYTE(':',l);
 		}
@@ -238,7 +234,7 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 			break;
 		default:
 			printfDEBUG_NNL(unknown,l);
-			p_int(Packet->stream[MethodIndex],l);
+			prHEX8(Packet->stream[MethodIndex],l);
 		break;
 	}
 		printfDEBUG(id,l);
@@ -259,20 +255,9 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 			s= (Packet->use.head.DataLegnth-4);
 			printfDEBUG(dval,l);
 			for (i=0;i<s;i++){
-				p_int(Packet->use.data[i],l);
+				prHEX8(Packet->use.data[i],l);
 				if (i<(s-1))
 					printfDEBUG_BYTE(',',l);
-			}
-		}else{
-			printfDEBUG(nodata,l);
-		}
-                if(Packet->use.head.DataLegnth>4){
-			s= (Packet->use.head.DataLegnth-4);
-			printfDEBUG(dhexval,l);
-			for (i=0;i<s;i++){
-                            prHEX8(Packet->use.data[i],l);
-                            if (i<(s-1))
-				printfDEBUG_BYTE(',',l);
 			}
 		}else{
 			printfDEBUG(nodata,l);
@@ -291,7 +276,7 @@ void printByteArray(BYTE * stream,UINT16 len,Print_Level l){
 	p_int(len,l);
 	printfDEBUG_NNL(" [",l);
 	for (i=0;i<len;i++){
-		p_int(stream[i],l);
+		prHEX8(stream[i],l);
 		if (i<(len-1))
 			printfDEBUG_BYTE(',',l);
 	}

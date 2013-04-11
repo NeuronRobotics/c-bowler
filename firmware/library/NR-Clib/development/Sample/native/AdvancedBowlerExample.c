@@ -110,7 +110,7 @@ void advancedBowlerExample(){
 	/**
 	 * Now we are going to regester what namespaces we implement with the framework
 	 */
-	NAMESPACE_LIST * tmp =(NAMESPACE_LIST *)getBcsPidNamespace();
+	NAMESPACE_LIST * tmp =getBcsPidNamespace();
 	addNamespaceToList(tmp);
 	tmp = getBcsTestNamespace();
 	addNamespaceToList(tmp);
