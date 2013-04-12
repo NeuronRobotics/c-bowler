@@ -9,6 +9,7 @@
 #include "Bowler/AbstractPID.h"
 #include "Bowler/Debug.h"
 #include "Bowler/Defines.h"
+
 void FixPacket(BowlerPacket * Packet);
 //float lastPacketTime[16];
 //INT32 lastPacketVal[16];
@@ -18,7 +19,6 @@ AbsPID * pidGroups;
 float (*getPosition)(int);
 void (*setOutput)(int, float);
 int (*resetPosition)(int,int);
-BOOL (*pidAsyncCallback)(BowlerPacket *Packet);
 void (*onPidConfigure)(int);
 void (*MathCalculationPosition)(AbsPID * ,float );
 void (*MathCalculationVelocity)(AbsPID * ,float );
@@ -26,15 +26,19 @@ PidLimitEvent* (*checkPIDLimitEvents)(BYTE group);
 
 
 PD_VEL * velData;
-static BowlerPacket packetTemp;
+//static BowlerPacket packetTemp;
 
 float getMs();
 
 void updatePidAsync();
 void pidReset(BYTE chan,INT32 val);
 float pidResetNoStop(BYTE chan,INT32 val);
-void pushAllPIDPositions();
+void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet));
 void prep(BowlerPacket * Packet);
+
+AbsPID * getPidGroupDataTable(){
+	return pidGroups;
+}
 
 BOOL isPidEnabled(BYTE i){
     return pidGroups[i].Enabled;
@@ -55,7 +59,6 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 							float (*getPositionPtr)(int),
 							void (*setOutputPtr)(int,float),
 							int (*resetPositionPtr)(int,int),
-							BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),
 							void (*onPidConfigurePtr)(int),
 							PidLimitEvent* (*checkPIDLimitEventsPtr)(BYTE group)){
 	if(groups ==0||
@@ -63,7 +66,6 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 		getPositionPtr==0||
 		setOutputPtr==0||
 		resetPositionPtr==0||
-		pidAsyncCallbackPtr==0||
 		checkPIDLimitEventsPtr==0||
 		onPidConfigurePtr==0){
 		println("Null pointer exception in PID Configure",ERROR_PRINT);
@@ -74,7 +76,6 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 	getPosition=getPositionPtr;
 	setOutput=setOutputPtr;
 	resetPosition=resetPositionPtr;
-	pidAsyncCallback = pidAsyncCallbackPtr;
 	onPidConfigure=onPidConfigurePtr;
 	checkPIDLimitEvents=checkPIDLimitEventsPtr;
 	velData=vel;
@@ -86,7 +87,7 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 
 
 
-void updatePidAsync(){
+void updatePidAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
 	int i;
 	int update = FALSE;
 	for (i=0;i<number_of_pid_groups;i++){
@@ -97,31 +98,32 @@ void updatePidAsync(){
 		}
 	}
 	if(update){
-		pushAllPIDPositions();
+		pushAllPIDPositions(Packet,pidAsyncCallbackPtr);
 	}
 }
 
-void pushAllPIDPositions(){
+void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
 	//float time = getMs();
 //	for(i=0;i<number_of_pid_groups;i++){
 //		pushPID(i,pidGroups[i].CurrentState, time);
 //	}
         INT32_UNION PID_Temp;
-        prep(& packetTemp);
-        packetTemp.use.head.DataLegnth=5;
-        packetTemp.use.head.RPC = GetRPCValue("apid");
+        prep(Packet);
+        Packet->use.head.DataLegnth=5;
+        Packet->use.head.RPC = GetRPCValue("apid");
         int i;
         for(i=0;i<number_of_pid_groups;i++){
                 PID_Temp.Val=pidGroups[i].CurrentState;
-                packetTemp.use.data[0+(i*4)]=PID_Temp.byte.FB;
-                packetTemp.use.data[1+(i*4)]=PID_Temp.byte.TB;
-                packetTemp.use.data[2+(i*4)]=PID_Temp.byte.SB;
-                packetTemp.use.data[3+(i*4)]=PID_Temp.byte.LB;
-                packetTemp.use.head.DataLegnth+=4;
+                Packet->use.data[0+(i*4)]=PID_Temp.byte.FB;
+                Packet->use.data[1+(i*4)]=PID_Temp.byte.TB;
+                Packet->use.data[2+(i*4)]=PID_Temp.byte.SB;
+                Packet->use.data[3+(i*4)]=PID_Temp.byte.LB;
+                Packet->use.head.DataLegnth+=4;
         }
-        packetTemp.use.head.Method=BOWLER_ASYN;
-        FixPacket(&packetTemp);
-	pidAsyncCallback(& packetTemp);
+        Packet->use.head.Method=BOWLER_ASYN;
+        FixPacket(Packet);
+		if(pidAsyncCallbackPtr!=NULL)
+			pidAsyncCallbackPtr(Packet);
 }
 
 void prep(BowlerPacket * Packet){
@@ -137,7 +139,7 @@ void prep(BowlerPacket * Packet){
 	Packet->use.head.DataLegnth=4;
 }
 
-void pushPIDLimitEvent(PidLimitEvent * event){
+void pushPIDLimitEvent(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),PidLimitEvent * event){
 	if(event->type == NO_LIMIT){
 		return;
 	}
@@ -162,72 +164,75 @@ void pushPIDLimitEvent(PidLimitEvent * event){
 
 	pidGroups[event->group].lastPushedValue=event->value;
 
-	prep(& packetTemp);
-	packetTemp.use.head.MessageID = 0;
-	packetTemp.use.head.Method=BOWLER_ASYN;
-	packetTemp.use.head.RPC = GetRPCValue("pidl");
+	prep(Packet);
+	Packet->use.head.MessageID = 0;
+	Packet->use.head.Method=BOWLER_ASYN;
+	Packet->use.head.RPC = GetRPCValue("pidl");
 
-	packetTemp.use.data[0]=event->group;
-	packetTemp.use.data[1]=event->type;
+	Packet->use.data[0]=event->group;
+	Packet->use.data[1]=event->type;
 	INT32_UNION tmp;
 	tmp.Val=event->value;
-	packetTemp.use.data[2]=tmp.byte.FB;
-	packetTemp.use.data[3]=tmp.byte.TB;
-	packetTemp.use.data[4]=tmp.byte.SB;
-	packetTemp.use.data[5]=tmp.byte.LB;
+	Packet->use.data[2]=tmp.byte.FB;
+	Packet->use.data[3]=tmp.byte.TB;
+	Packet->use.data[4]=tmp.byte.SB;
+	Packet->use.data[5]=tmp.byte.LB;
 	tmp.Val=event->time;
-	packetTemp.use.data[6]=tmp.byte.FB;
-	packetTemp.use.data[7]=tmp.byte.TB;
-	packetTemp.use.data[8]=tmp.byte.SB;
-	packetTemp.use.data[9]=tmp.byte.LB;
+	Packet->use.data[6]=tmp.byte.FB;
+	Packet->use.data[7]=tmp.byte.TB;
+	Packet->use.data[8]=tmp.byte.SB;
+	Packet->use.data[9]=tmp.byte.LB;
 
 	tmp.Val=event->latchTickError;
-	packetTemp.use.data[10]=tmp.byte.FB;
-	packetTemp.use.data[11]=tmp.byte.TB;
-	packetTemp.use.data[12]=tmp.byte.SB;
-	packetTemp.use.data[13]=tmp.byte.LB;
+	Packet->use.data[10]=tmp.byte.FB;
+	Packet->use.data[11]=tmp.byte.TB;
+	Packet->use.data[12]=tmp.byte.SB;
+	Packet->use.data[13]=tmp.byte.LB;
 
-	packetTemp.use.head.DataLegnth = 4+1+1+(4*3);
+	Packet->use.head.DataLegnth = 4+1+1+(4*3);
 
 	event->type = NO_LIMIT;
-	FixPacket(&packetTemp);
-	pidAsyncCallback(& packetTemp);
+	FixPacket(Packet);
+	if(pidAsyncCallbackPtr!=NULL)
+		pidAsyncCallbackPtr(Packet);
 }
 
-void pushPID(BYTE chan, INT32 value, float time){
-	prep(& packetTemp);
-	packetTemp.use.head.Method=BOWLER_ASYN;
-	packetTemp.use.head.MessageID = 0;
-	packetTemp.use.head.RPC = GetRPCValue("_pid");
-	packetTemp.use.head.DataLegnth = 4+1+4+4+4;
-	packetTemp.use.data[0]=chan;
+void pushPID(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),BYTE chan, INT32 value, float time){
+	prep(Packet);
+	Packet->use.head.Method=BOWLER_ASYN;
+	Packet->use.head.MessageID = 0;
+	Packet->use.head.RPC = GetRPCValue("_pid");
+	Packet->use.head.DataLegnth = 4+1+4+4+4;
+	Packet->use.data[0]=chan;
 	INT32_UNION tmp;
 	tmp.Val=value;
-	packetTemp.use.data[1]=tmp.byte.FB;
-	packetTemp.use.data[2]=tmp.byte.TB;
-	packetTemp.use.data[3]=tmp.byte.SB;
-	packetTemp.use.data[4]=tmp.byte.LB;
+	Packet->use.data[1]=tmp.byte.FB;
+	Packet->use.data[2]=tmp.byte.TB;
+	Packet->use.data[3]=tmp.byte.SB;
+	Packet->use.data[4]=tmp.byte.LB;
 	tmp.Val=time;
-	packetTemp.use.data[5]=tmp.byte.FB;
-	packetTemp.use.data[6]=tmp.byte.TB;
-	packetTemp.use.data[7]=tmp.byte.SB;
-	packetTemp.use.data[8]=tmp.byte.LB;
+	Packet->use.data[5]=tmp.byte.FB;
+	Packet->use.data[6]=tmp.byte.TB;
+	Packet->use.data[7]=tmp.byte.SB;
+	Packet->use.data[8]=tmp.byte.LB;
 
 	float diffTime = time-pidGroups[chan].lastPushedValue;
 	float diffVal  = value -pidGroups[chan].lastPushedTime;
 
 	tmp.Val = (INT32) (diffVal/diffTime);
-	packetTemp.use.data[9]=tmp.byte.FB;
-	packetTemp.use.data[10]=tmp.byte.TB;
-	packetTemp.use.data[11]=tmp.byte.SB;
-	packetTemp.use.data[12]=tmp.byte.LB;
+	Packet->use.data[9]=tmp.byte.FB;
+	Packet->use.data[10]=tmp.byte.TB;
+	Packet->use.data[11]=tmp.byte.SB;
+	Packet->use.data[12]=tmp.byte.LB;
 
 	
-        FixPacket(&packetTemp);
-	if(pidAsyncCallback(& packetTemp)){
+    FixPacket(Packet);
+    if(pidAsyncCallbackPtr !=NULL){
+    	if(pidAsyncCallbackPtr(Packet)){
             pidGroups[chan].lastPushedValue =value;
             pidGroups[chan].lastPushedTime=time;
         }
+    }
 }
 
 
@@ -755,17 +760,17 @@ void RunPIDControl(){
 
 	}
 }
-void RunPIDComs(){
-    	int i;
+void RunPIDComs(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
+    int i;
 	for (i=0;i<number_of_pid_groups;i++){
-            pushPIDLimitEvent(checkPIDLimitEvents(i));
+            pushPIDLimitEvent(Packet,pidAsyncCallbackPtr,checkPIDLimitEvents(i));
 	}
-	updatePidAsync();
+	updatePidAsync(Packet,pidAsyncCallbackPtr);
 }
 
-void RunPID(void){
+void RunPID(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
     RunPIDControl();
-    RunPIDComs();
+    RunPIDComs(Packet,pidAsyncCallbackPtr);
 }
 
 /**
@@ -824,33 +829,15 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
         Print_Level l = getPrintLevel();
 //        if(state->channel == 0)
 //            setPrintLevelInfoPrint();
-	println("Setpoint is: ",INFO_PRINT);
-	p_fl(state->SetPoint,INFO_PRINT);
-	print(" current state is: ",INFO_PRINT);
-	p_fl(state->CurrentState,INFO_PRINT);
-	print(" error is: ",INFO_PRINT);
-	p_fl(error,INFO_PRINT);
-	print(", Control set is: ",INFO_PRINT);
-	p_fl(state->Output ,INFO_PRINT);
-        setPrintLevel(l);
+//	println("Setpoint is: ",INFO_PRINT);
+//	p_fl(state->SetPoint,INFO_PRINT);
+//	print(" current state is: ",INFO_PRINT);
+//	p_fl(state->CurrentState,INFO_PRINT);
+//	print(" error is: ",INFO_PRINT);
+//	p_fl(error,INFO_PRINT);
+//	print(", Control set is: ",INFO_PRINT);
+//	p_fl(state->Output ,INFO_PRINT);
+//        setPrintLevel(l);
 }
 
 
-void printPIDvals(int i){
-	println("Starting values of PID: chan=",INFO_PRINT);
-        int chan =      pidGroups[i].channel;
-        int enabled=    pidGroups[i].Enabled;
-        int polarity =  pidGroups[i].Polarity;
-        int set =       pidGroups[i].SetPoint;
-	p_int(chan,INFO_PRINT);
-	print("\t\tEnabled=",INFO_PRINT);     p_int(enabled,INFO_PRINT);
-	print("\tPolarity=",INFO_PRINT);    p_int(polarity,INFO_PRINT);
-	print("\tSET=",INFO_PRINT);    p_int(set,INFO_PRINT);
-	print("\t\t Kp=",INFO_PRINT);    p_fl(pidGroups[i].K.P,INFO_PRINT);
-	print("\t Ki=",INFO_PRINT);    p_fl(pidGroups[i].K.I,INFO_PRINT);
-	print("\t Kd=",INFO_PRINT);    p_fl(pidGroups[i].K.D,INFO_PRINT);
-        print("\t Setpoint=",INFO_PRINT);    p_fl(pidGroups[i].SetPoint,INFO_PRINT);
-        print("\t Current State=",INFO_PRINT);    p_fl(pidGroups[i].CurrentState,INFO_PRINT);
-        print("\t Control set is: ",INFO_PRINT);
-	p_fl(pidGroups[i].Output ,INFO_PRINT);
-}

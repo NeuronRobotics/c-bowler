@@ -17,7 +17,7 @@ BOOL pidAsyncEventCallbackLocal(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)
 //    println_I("\n");
 //    printPIDvals(0);
 
-    RunPIDComs();
+    RunPIDComs(Packet,pidAsyncCallbackPtr);
     return FALSE;
 }
 
