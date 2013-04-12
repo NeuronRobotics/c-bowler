@@ -17,3 +17,5 @@ all:clean $(OFILES)
 	$(CC_Bowler_Arch) -I../../Platform/include/ -I../../BowlerStack/include/ -c $< -o $@
 clean:
 	 rm -rf $(OFILES)
+	 rm -rf *.d
+	 rm -rf $(BIN)
