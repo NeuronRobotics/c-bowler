@@ -43,6 +43,8 @@ Native:
 	$(AR) rcs  $(LIBDIR)/native/linux/libNRLIB.a $(NATIVE_OFILES)
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCNAT) -I../Platform/include/" 
 	$(AR) rcs  $(LIBDIR)/native/linux/libNRLIB_debug.a $(NATIVE_OFILES)
+	make -C ../BowlerStack/ clean
+	make -C src/native/  clean
 
 AVR644p:
 	make -C src/avr/  CC_Bowler_Arch="$(CCA_avratmega644p)" 
@@ -50,13 +52,17 @@ AVR644p:
 	$(ARAVR) rcs  $(LIBDIR)/AVR/atmega644p/libNRLIB.a $(AVR_OFILES)
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCA_avratmega644p) -I../Platform/include/" 
 	$(ARAVR) rcs  $(LIBDIR)/AVR/atmega644p/libNRLIB_debug.a $(AVR_OFILES)
-
+	make -C ../BowlerStack/ clean
+	make -C src/avr/ clean
+	
 AVR324p:
 	make -C src/avr/  CC_Bowler_Arch="$(CCA_avratmega324p)" 
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCA_avratmega324p) -DNO_PRINTING -I../Platform/include/" 
 	$(ARAVR) rcs  $(LIBDIR)/AVR/atmega324p/libNRLIB.a $(AVR_OFILES)
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCA_avratmega324p) -I../Platform/include/" 
 	$(ARAVR) rcs  $(LIBDIR)/AVR/atmega324p/libNRLIB_debug.a $(AVR_OFILES)
+	make -C ../BowlerStack/ clean
+	make -C src/avr/ clean
 	
 pic32MX440F128H:
 	make -C src/pic32/  CC_Bowler_Arch="$(CCP_pic32MX440F128H)" 
@@ -64,6 +70,8 @@ pic32MX440F128H:
 	$(ARP) rcs  $(LIBDIR)/PIC32/32MX440F128H/libNRLIB.a $(PIC_OFILES)
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCP_pic32MX440F128H) -I../Platform/include/" 
 	$(ARP) rcs  $(LIBDIR)/PIC32/32MX440F128H/libNRLIB_debug.a $(PIC_OFILES)
+	make -C ../BowlerStack/ clean
+	make -C src/pic32/      clean
 
 pic32MX460F512L:
 	make -C src/pic32/  CC_Bowler_Arch="$(CCP_pic32MX460F512L)" 
@@ -71,7 +79,8 @@ pic32MX460F512L:
 	$(ARP) rcs  $(LIBDIR)/PIC32/32MX460F512L/libNRLIB.a $(PIC_OFILES)
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCP_pic32MX460F512L) -I../Platform/include/" 
 	$(ARP) rcs  $(LIBDIR)/PIC32/32MX460F512L/libNRLIB_debug.a $(PIC_OFILES)
-	
+	make -C ../BowlerStack/ clean
+	make -C src/pic32/      clean
 	
 pic32MX795F512L:
 	make -C src/pic32/  CC_Bowler_Arch="$(CCP_pic32MX795F512L)" 
@@ -79,6 +88,8 @@ pic32MX795F512L:
 	$(ARP) rcs  $(LIBDIR)/PIC32/32MX795F512L/libNRLIB.a $(PIC_OFILES)
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCP_pic32MX795F512L) -I../Platform/include/" 
 	$(ARP) rcs  $(LIBDIR)/PIC32/32MX795F512L/libNRLIB_debug.a $(PIC_OFILES)
+	make -C ../BowlerStack/ clean
+	make -C src/pic32/      clean
 	
 	
 	
