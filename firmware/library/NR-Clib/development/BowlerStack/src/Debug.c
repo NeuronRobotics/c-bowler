@@ -29,8 +29,6 @@ static const char post[]="Post ";
 static const char stat[]= "Status";
 static const char crit[]="Critical";
 static const char unknown[] = "Unknown ";
-static const char sync[] = "(Synchronous)";
-static const char async[] = "(Asynchronous)";
 static const char ver[] ="\tVersion = \t";
 static const char mac[] = "\tMAC = \t\t";
 static const char meth[] = "\tMethod = \t";
@@ -228,7 +226,7 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 		case BOWLER_CRIT:
 			printfDEBUG_NNL(crit,l);
 			break;
-                case BOWLER_ASYN:
+        case BOWLER_ASYN:
 			printfDEBUG_NNL("ASYNCHRONUS",l);
 			break;
 		default:
