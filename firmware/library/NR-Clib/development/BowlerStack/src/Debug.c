@@ -23,22 +23,24 @@ Print_Level level=NO_PRINT;
 
 static BOOL DebugINIT = FALSE;
 const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-static const char  packet[] = "\tPacket = \t";
-static const char get[] = "Get";
-static const char post[]="Post ";
-static const char stat[]= "Status";
-static const char crit[]="Critical";
-static const char unknown[] = "Unknown ";
-static const char ver[] ="\tVersion = \t";
-static const char mac[] = "\tMAC = \t\t";
-static const char meth[] = "\tMethod = \t";
-static const char id[] = "\tNamespace Index = \t";
-static const char dataSise[] ="\tData Size = \t";
-static const char crcval []= "\tCRC Value = \t";
-static const char dval[] = "\tData = \t\t";
-static const char rpc []="\tRPC code = \t";
-static const char nodata[] = " no data";
-
+#if !defined(NO_PRINTING)
+	static const char  packet[] = "\tPacket = \t";
+	static const char get[] = "Get";
+	static const char post[]="Post ";
+	static const char stat[]= "Status";
+	static const char crit[]="Critical";
+	static const char unknown[] = "Unknown ";
+	static const char ver[] ="\tVersion = \t";
+	static const char mac[] = "\tMAC = \t\t";
+	static const char meth[] = "\tMethod = \t";
+	static const char id[] = "\tNamespace Index = \t";
+	static const char dataSise[] ="\tData Size = \t";
+	static const char crcval []= "\tCRC Value = \t";
+	static const char dval[] = "\tData = \t\t";
+	static const char rpc []="\tRPC code = \t";
+	static const char nodata[] = " no data";
+	static const char streamsize[] = " Stream: size=";
+#endif
 
 static int (*sendToStream)(BYTE * ,int);
 
@@ -186,11 +188,12 @@ void printfDEBUG_FL(float f,Print_Level l){
 #if defined(BOWLERSTRUCTDEF_H_)
 
 void printPIDvals(int i){
+#if !defined(NO_PRINTING)
 	println("Starting values of PID: chan=",INFO_PRINT);
-        int chan =      getPidGroupDataTable()[i].channel;
-        int enabled=    getPidGroupDataTable()[i].Enabled;
-        int polarity =  getPidGroupDataTable()[i].Polarity;
-        int set =       getPidGroupDataTable()[i].SetPoint;
+	int chan =      getPidGroupDataTable()[i].channel;
+	int enabled=    getPidGroupDataTable()[i].Enabled;
+	int polarity =  getPidGroupDataTable()[i].Polarity;
+	int set =       getPidGroupDataTable()[i].SetPoint;
 	p_int(chan,INFO_PRINT);
 	print("\t\tEnabled=",INFO_PRINT);     p_int(enabled,INFO_PRINT);
 	print("\tPolarity=",INFO_PRINT);    p_int(polarity,INFO_PRINT);
@@ -198,16 +201,17 @@ void printPIDvals(int i){
 	print("\t\t Kp=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].K.P,INFO_PRINT);
 	print("\t Ki=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].K.I,INFO_PRINT);
 	print("\t Kd=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].K.D,INFO_PRINT);
-        print("\t Setpoint=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].SetPoint,INFO_PRINT);
-        print("\t Current State=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].CurrentState,INFO_PRINT);
-        print("\t Control set is: ",INFO_PRINT);
+	print("\t Setpoint=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].SetPoint,INFO_PRINT);
+	print("\t Current State=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].CurrentState,INFO_PRINT);
+	print("\t Control set is: ",INFO_PRINT);
 	p_fl(getPidGroupDataTable()[i].Output ,INFO_PRINT);
+#endif
 }
 
 
 
 void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
-    
+#if !defined(NO_PRINTING)
 	if(!okToPrint(l)){
 		return;
 	}
@@ -279,9 +283,10 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 		}
 
 		printfDEBUG("\n",l);
+#endif
 }
 #endif
-static const char streamsize[] = " Stream: size=";
+
 void printByteArray(BYTE * stream,UINT16 len,Print_Level l){
 	if(!okToPrint(l)){
 		return;
@@ -324,5 +329,5 @@ void ultoaMINE(UINT32 Value, BYTE* Buffer)
 		*Buffer++ = '0';
 	}
 
-	*Buffer = 0;
+	*Buffer = 0;//null terminator
 }
