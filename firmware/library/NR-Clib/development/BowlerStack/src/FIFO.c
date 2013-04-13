@@ -7,7 +7,7 @@
 
 #include "Bowler/Bowler.h"
 void clearByteFifo(BYTE_FIFO_STORAGE * fifo);
-static UINT32 i;
+//static UINT32 i;
 //const char * fifoinit = "Initializing FIFO, Buffer Size: ";
 //const char * error = "@##ERROR fifo is overflown! Size, buffer: ";
 
@@ -54,6 +54,7 @@ void InitByteFifo(BYTE_FIFO_STORAGE * fifo,BYTE * buff,UINT32 size){
 }
 void clearByteFifo(BYTE_FIFO_STORAGE * fifo){
 	//StartCritical();
+	int i;
 	for (i=0;i < fifo->bufferSize;i++){
 		fifo->buffer[i]=0;
 	}
@@ -122,6 +123,7 @@ BYTE getByte(BYTE_FIFO_STORAGE * fifo, BYTE * errorCode){
 
 UINT32 FifoGetByteStream(BYTE_FIFO_STORAGE * fifo,BYTE *packet,UINT32 size){
 	BYTE err;
+	int i;
 	int count = calcByteCount(fifo);
 	if(size>count)
 		size = count;
@@ -142,6 +144,7 @@ UINT32 FifoGetByteStream(BYTE_FIFO_STORAGE * fifo,BYTE *packet,UINT32 size){
 UINT32 FifoReadByteStream(BYTE *packet,UINT32 size,BYTE_FIFO_STORAGE * fifo){
 	UINT32 read=fifo->readPointer;
 	UINT32  count = calcByteCount(fifo);
+	int i;
 	if(size>count)
 		size = count;
 	for (i=0;i<size;i++){

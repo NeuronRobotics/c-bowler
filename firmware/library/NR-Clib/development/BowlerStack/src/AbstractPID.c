@@ -68,7 +68,7 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 		resetPositionPtr==0||
 		checkPIDLimitEventsPtr==0||
 		onPidConfigurePtr==0){
-		println("Null pointer exception in PID Configure",ERROR_PRINT);
+		//println("Null pointer exception in PID Configure",ERROR_PRINT);
 		while(1);
 	}
 	pidGroups = groups;
@@ -155,7 +155,7 @@ void pushPIDLimitEvent(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPa
 			}
 		}
 	}else{
-            println_I("ABSTRACTPID: End stop limit, setting new PID setpoint");
+        //println_I("ABSTRACTPID: End stop limit, setting new PID setpoint");
 		event->value=GetPIDPosition(event->group);
 		event->latchTickError=0;
 		event->time = getMs();
@@ -255,13 +255,13 @@ void RunPDVel(BYTE chan){
 		if(velData[chan].currentOutputVel<-100)
 			velData[chan].currentOutputVel=-100;
 
-		println("Velocity set=",INFO_PRINT);p_fl(velData[chan].unitsPerSeCond,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
-		println("Velocity position diff=",INFO_PRINT);p_int(posDiff,INFO_PRINT);print(" ticks",INFO_PRINT);
-		println("Velocity time diff=",INFO_PRINT);p_fl(timeDiff,INFO_PRINT);print(" seConds",INFO_PRINT);
-		println("Velocity time diff=",INFO_PRINT);p_fl(timeMsDiff,INFO_PRINT);print(" ms",INFO_PRINT);
-		println("Velocity current=",INFO_PRINT);p_fl(currentVelocity,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
-		println("Velocity offset=",INFO_PRINT);p_fl(set,INFO_PRINT);print("\n",INFO_PRINT);
-		println("Velocity set=",INFO_PRINT);p_fl(velData[chan].currentOutputVel,INFO_PRINT);print("\n",INFO_PRINT);
+//		println("Velocity set=",INFO_PRINT);p_fl(velData[chan].unitsPerSeCond,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
+//		println("Velocity position diff=",INFO_PRINT);p_int(posDiff,INFO_PRINT);print(" ticks",INFO_PRINT);
+//		println("Velocity time diff=",INFO_PRINT);p_fl(timeDiff,INFO_PRINT);print(" seConds",INFO_PRINT);
+//		println("Velocity time diff=",INFO_PRINT);p_fl(timeMsDiff,INFO_PRINT);print(" ms",INFO_PRINT);
+//		println("Velocity current=",INFO_PRINT);p_fl(currentVelocity,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
+//		println("Velocity offset=",INFO_PRINT);p_fl(set,INFO_PRINT);print("\n",INFO_PRINT);
+//		println("Velocity set=",INFO_PRINT);p_fl(velData[chan].currentOutputVel,INFO_PRINT);print("\n",INFO_PRINT);
 
 		pidGroups[chan].Output=velData[chan].currentOutputVel;
 
@@ -457,7 +457,7 @@ BYTE ConfigPID(BowlerPacket * Packet){
 
 
 BYTE ZeroPID(BYTE chan){
-	println("Resetting PID channel from zeroPID:",INFO_PRINT);
+	//println("Resetting PID channel from zeroPID:",INFO_PRINT);
 	pidReset(chan,0);
 	return TRUE;
 }
@@ -470,7 +470,7 @@ BYTE ClearPID(BYTE chan){
 }
 
 BYTE SetPIDTimed(BYTE chan,INT32 val,float ms){
-	println_I("@#@# PID channel Set chan=");p_int_I(chan);print_I(" setpoint=");p_int_I(val);print_I(" time=");p_fl_I(ms);
+	//println_I("@#@# PID channel Set chan=");p_int_I(chan);print_I(" setpoint=");p_int_I(val);print_I(" time=");p_fl_I(ms);
 	if (chan>=number_of_pid_groups)
 		return FALSE;
 	if(ms<.01)

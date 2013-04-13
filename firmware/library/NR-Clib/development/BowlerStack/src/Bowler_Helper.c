@@ -21,7 +21,7 @@
 #else
 	extern MAC_ADDR MyMAC;
 #endif
-static BYTE i;
+//static BYTE i;
 
 void LoadCorePacket(BowlerPacket * Packet){
 	//SetColor(0,1,0);
@@ -39,6 +39,7 @@ void LoadCorePacket(BowlerPacket * Packet){
 
 BYTE CalcCRC(BowlerPacket *Packet){
 	UINT16 v=0;
+	int i;
 	for (i=0;i<10;i++)
 		v+=Packet->stream[i];
 	return (v & 0x00ff);
@@ -110,6 +111,7 @@ UINT32 Bytes2Int32(BYTE a,BYTE b,BYTE c,BYTE d){
 
 
 BYTE CheckAddress(BYTE * one,BYTE * two){
+	int i;
 	for (i=0;i<6;i++){
 		if (one[i] != two[i])
 			return FALSE;

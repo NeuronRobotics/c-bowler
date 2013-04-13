@@ -23,7 +23,7 @@ Print_Level level=NO_PRINT;
 
 static BOOL DebugINIT = FALSE;
 const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-#if !defined(NO_PRINTING)
+//#if !defined(NO_PRINTING)
 	static const char  packet[] = "\tPacket = \t";
 	static const char get[] = "Get";
 	static const char post[]="Post ";
@@ -40,7 +40,7 @@ const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','
 	static const char rpc []="\tRPC code = \t";
 	static const char nodata[] = " no data";
 	static const char streamsize[] = " Stream: size=";
-#endif
+//#endif
 
 static int (*sendToStream)(BYTE * ,int);
 
@@ -115,9 +115,8 @@ void printfDEBUG(const char *str,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
-	int i,x;
+	int x;
 	x=0;
-	i=0;
 	putCharDebug('\n');
 	putCharDebug('\r');
 	while(str[x]!='\0'){
@@ -138,9 +137,8 @@ void printfDEBUG_NNL(const char *str,Print_Level l)
 	if(!okToPrint(l)){
 		return;
 	}
-	int i,x;
+	int x;
 	x=0;
-	i=0;
 	while(str[x]!='\0' ){
 		putCharDebug(str[x++]);
 	}
@@ -159,8 +157,10 @@ void printfDEBUG_INT(INT32 val,Print_Level l){
 	}
 	BYTE byteStr[12];
 	ultoaMINE(val,byteStr);
-	while(byteStr[x] != '\0' && x<sizeof(byteStr)){
+	while(byteStr[x] != '\0' ){
 		putCharDebug(byteStr[x++]);
+		if(x==12)
+			return;
 	}
 	//sendToStreamLocal(data,i);
 }
