@@ -41,14 +41,17 @@
 
 float RunEvery(RunEveryData * data){
     EndCritical();//The interrupts must be running for this to function
-	float tmp;
+	float currentTime;
 	float diff;
-	tmp = getMs();
-	if(tmp<data->MsTime)
-		data->MsTime=tmp;//Check and fix overflow
-	diff =(tmp-data->MsTime);
+	currentTime = getMs();
+	if(currentTime< data->MsTime)
+		data->MsTime=currentTime;//Check and fix overflow
+	diff =(currentTime-data->MsTime);
 	if (diff > data->setPoint){
-		data->MsTime=tmp-diff+data->setPoint;
+		if(data->MsTime+data->setPoint<currentTime)
+			data->MsTime = currentTime;
+		else
+			data->MsTime += data->setPoint;
 		return diff-data->setPoint;
 	}
 	return 0;
