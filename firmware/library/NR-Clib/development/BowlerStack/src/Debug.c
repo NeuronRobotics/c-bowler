@@ -188,7 +188,7 @@ void printfDEBUG_FL(float f,Print_Level l){
 #if defined(BOWLERSTRUCTDEF_H_)
 
 void printPIDvals(int i){
-#if !defined(NO_PRINTING)
+/*
 	println("Starting values of PID: chan=",INFO_PRINT);
 	int chan =      getPidGroupDataTable()[i].channel;
 	int enabled=    getPidGroupDataTable()[i].Enabled;
@@ -205,7 +205,7 @@ void printPIDvals(int i){
 	print("\t Current State=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].CurrentState,INFO_PRINT);
 	print("\t Control set is: ",INFO_PRINT);
 	p_fl(getPidGroupDataTable()[i].Output ,INFO_PRINT);
-#endif
+*/
 }
 
 
@@ -288,6 +288,7 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 #endif
 
 void printByteArray(BYTE * stream,UINT16 len,Print_Level l){
+//#if !defined(NO_PRINTING)
 	if(!okToPrint(l)){
 		return;
 	}
@@ -301,6 +302,7 @@ void printByteArray(BYTE * stream,UINT16 len,Print_Level l){
 			printfDEBUG_BYTE(',',l);
 	}
 	printfDEBUG_NNL("]",l);
+//#endif
 }
 
 void ultoaMINE(UINT32 Value, BYTE* Buffer)
