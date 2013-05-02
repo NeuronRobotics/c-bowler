@@ -716,11 +716,12 @@ void InitAbsPIDWithPosition(AbsPID * state,float KP,float KI,float KD,float time
 	state->K.P=KP;
 	state->K.I=KI;
 	state->K.D=KD;
-	state->integralCircularBufferIndex = 0;
+	//state->integralCircularBufferIndex = 0;
 	state->integralTotal = 0;
-	for (loop=0;loop<IntegralSize;loop++){
-		state->IntegralCircularBuffer[loop]=0;
-	}
+        state->integralSize  = 10;
+//	for (loop=0;loop<IntegralSize;loop++){
+//		state->IntegralCircularBuffer[loop]=0;
+//	}
 	state->SetPoint = currentPosition;
         state->interpolate.set=state->SetPoint;
 	state->PreviousError=0;
@@ -790,26 +791,27 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 	error = state->SetPoint- state->CurrentState;
 
 	//remove the value that is INTEGRALSIZE cycles old from the integral calculation to avoid overflow
-	state->integralTotal -= state->IntegralCircularBuffer[state->integralCircularBufferIndex];
+	//state->integralTotal -= state->IntegralCircularBuffer[state->integralCircularBufferIndex];
 	//add the latest value to the integral
-	state->integralTotal +=error;
+	state->integralTotal =  (error*(1.0/state->integralSize)) +
+                                (state->integralTotal*((state->integralTotal-1.0)/state->integralSize));
 	
 	//add error to circular buffer
-	state->IntegralCircularBuffer[state->integralCircularBufferIndex++]=error;
+	//state->IntegralCircularBuffer[state->integralCircularBufferIndex++]=error;
 	//increment the circular buffer index
-	if (state->integralCircularBufferIndex == (IntegralSize)){
-		state->integralCircularBufferIndex=0;
-	}
+//	if (state->integralCircularBufferIndex == (IntegralSize)){
+//		state->integralCircularBufferIndex=0;
+//	}
         //This section clears the integral buffer when the zero is crossed
         int i;
         if((state->PreviousError>=0 && error<0)||
             (state->PreviousError<0 && error>=0)    ){
             
-            state->integralCircularBufferIndex=0;
+            //state->integralCircularBufferIndex=0;
             state->integralTotal = 0;
-            for (i=0;i<IntegralSize;i++){
-                    state->IntegralCircularBuffer[i]=0;
-            }
+//            for (i=0;i<IntegralSize;i++){
+//                    state->IntegralCircularBuffer[i]=0;
+//            }
         }
 
 
@@ -818,9 +820,9 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
         state->PreviousError=error;
 	 
 	//do the PID calculation
-	Correction = (state->K.P)*(error) + (state->K.D)*derivative +(state->K.I)*(state->integralTotal/((float)IntegralSize));
-	// Scale for time and set the output
-	state->Output = (Correction);
+	state->Output = ((state->K.P)*(error)) +
+                        ((state->K.D)*derivative) +
+                        ((state->K.I)*(state->integralTotal));
         if(!state->Polarity)
             state->Output *=-1;
 	//Store the current time for next iterations previous time
