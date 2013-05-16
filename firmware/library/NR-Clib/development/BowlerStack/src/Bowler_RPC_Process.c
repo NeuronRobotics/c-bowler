@@ -50,7 +50,10 @@ void Process_Self_Packet(BowlerPacket * Packet){
 	}while(tmp != NULL);
 	// Now the namespace should have been found or not
 	if(foundRpc == 0){
+                Print_Level l = getPrintLevel();
+                setPrintLevelErrorPrint();
 		println_E("##ERROR Rpc not found!");
+                setPrintLevel(l);
 		ERR(Packet,0,0);
 		return;
 	}else if(foundRpc > 0 ){

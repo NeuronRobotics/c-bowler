@@ -188,14 +188,14 @@ void printfDEBUG_FL(float f,Print_Level l){
 #if defined(BOWLERSTRUCTDEF_H_)
 
 void printPIDvals(int i){
-/*
-	println("Starting values of PID: chan=",INFO_PRINT);
+
+	println("PID chan=",INFO_PRINT);
 	int chan =      getPidGroupDataTable()[i].channel;
 	int enabled=    getPidGroupDataTable()[i].Enabled;
 	int polarity =  getPidGroupDataTable()[i].Polarity;
 	int set =       getPidGroupDataTable()[i].SetPoint;
 	p_int(chan,INFO_PRINT);
-	print("\t\tEnabled=",INFO_PRINT);     p_int(enabled,INFO_PRINT);
+	print("\tEnabled=",INFO_PRINT);     p_int(enabled,INFO_PRINT);
 	print("\tPolarity=",INFO_PRINT);    p_int(polarity,INFO_PRINT);
 	print("\tSET=",INFO_PRINT);    p_int(set,INFO_PRINT);
 	print("\t\t Kp=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].K.P,INFO_PRINT);
@@ -205,7 +205,7 @@ void printPIDvals(int i){
 	print("\t Current State=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].CurrentState,INFO_PRINT);
 	print("\t Control set is: ",INFO_PRINT);
 	p_fl(getPidGroupDataTable()[i].Output ,INFO_PRINT);
-*/
+
 }
 
 

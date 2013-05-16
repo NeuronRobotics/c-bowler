@@ -60,7 +60,7 @@ static RPC_LIST bcsPid__PID_p={	BOWLER_POST,
                                 NULL//Termination
 };
 static RPC_LIST bcsPid__VPD={	BOWLER_POST,
-                                "apid",
+                                "_vpd",
                                 &processPIDPost,
                                 NULL //Termination
 };

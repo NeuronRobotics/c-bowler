@@ -9,6 +9,7 @@
 #include "Bowler/AbstractPID.h"
 #include "Bowler/Debug.h"
 #include "Bowler/Defines.h"
+#include "ReplicatorHeader.h"
 
 void FixPacket(BowlerPacket * Packet);
 //float lastPacketTime[16];
@@ -275,23 +276,23 @@ void RunPDVel(BYTE chan){
 }
 
 void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms){
-	if(unitsPerSeCond>1){
-		if(ms<.1){
-			velData[chan].enabled=TRUE;
-			pidGroups[chan].Enabled=FALSE;
-			velData[chan].lastPosition=GetPIDPosition(chan);
-			velData[chan].lastTime=getMs();
-			velData[chan].unitsPerSeCond=unitsPerSeCond;
-			velData[chan].currentOutputVel =0;
-		}else{
-			float seConds = ms/1000;
-			INT32 dist = (INT32)unitsPerSeCond*(INT32)seConds;
-			INT32 delt = ((INT32) (GetPIDPosition(chan))-dist);
-			SetPIDTimed(chan, delt, ms);
-		}
-	}else{
-		SetPIDTimed(chan, GetPIDPosition(chan), 0);
-	}
+
+        if(ms<.1){
+            println_I("Starting Velocity");
+            velData[chan].enabled=TRUE;
+            pidGroups[chan].Enabled=FALSE;
+            velData[chan].lastPosition=GetPIDPosition(chan);
+            velData[chan].lastTime=getMs();
+            velData[chan].unitsPerSeCond=unitsPerSeCond;
+            velData[chan].currentOutputVel =0;
+        }else{
+            println_I("Starting Velocity Timed");
+            float seConds = ms/1000;
+            INT32 dist = (INT32)unitsPerSeCond*(INT32)seConds;
+            INT32 delt = ((INT32) (GetPIDPosition(chan))-dist);
+            SetPIDTimed(chan, delt, ms);
+        }
+	
 
 }
 
@@ -712,16 +713,12 @@ void setPIDConstants(int group,float p,float i,float d){
  * @param CurrentTime a float of the time it is called in MS for use by the PID calculation
  */
 void InitAbsPIDWithPosition(AbsPID * state,float KP,float KI,float KD,float time,float currentPosition){
-	int loop;
 	state->K.P=KP;
 	state->K.I=KI;
 	state->K.D=KD;
 	//state->integralCircularBufferIndex = 0;
-	state->integralTotal = 0;
-        state->integralSize  = 10;
-//	for (loop=0;loop<IntegralSize;loop++){
-//		state->IntegralCircularBuffer[loop]=0;
-//	}
+	state->integralTotal = 0.0;
+        state->integralSize  = 10.0;
 	state->SetPoint = currentPosition;
         state->interpolate.set=state->SetPoint;
 	state->PreviousError=0;
@@ -785,7 +782,6 @@ void RunPID(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packe
 
 void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 	float error;
-	float Correction;
 	float derivative;
 	//calculate set error
 	error = state->SetPoint- state->CurrentState;
@@ -794,7 +790,7 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 	//state->integralTotal -= state->IntegralCircularBuffer[state->integralCircularBufferIndex];
 	//add the latest value to the integral
 	state->integralTotal =  (error*(1.0/state->integralSize)) +
-                                (state->integralTotal*((state->integralTotal-1.0)/state->integralSize));
+                                (state->integralTotal*((state->integralSize-1.0)/state->integralSize));
 	
 	//add error to circular buffer
 	//state->IntegralCircularBuffer[state->integralCircularBufferIndex++]=error;
@@ -803,7 +799,6 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 //		state->integralCircularBufferIndex=0;
 //	}
         //This section clears the integral buffer when the zero is crossed
-        int i;
         if((state->PreviousError>=0 && error<0)||
             (state->PreviousError<0 && error>=0)    ){
             
@@ -820,26 +815,16 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
         state->PreviousError=error;
 	 
 	//do the PID calculation
-	state->Output = ((state->K.P)*(error)) +
-                        ((state->K.D)*derivative) +
-                        ((state->K.I)*(state->integralTotal));
+	state->Output = (   (state->K.P*error) +
+                            (state->K.D*derivative) +
+                            (state->K.I*state->integralTotal)
+                        );
+
         if(!state->Polarity)
-            state->Output *=-1;
+            state->Output *=-1.0;
 	//Store the current time for next iterations previous time
 	state->PreviousTime=CurrentTime;
 
-        Print_Level l = getPrintLevel();
-//        if(state->channel == 0)
-//            setPrintLevelInfoPrint();
-//	println("Setpoint is: ",INFO_PRINT);
-//	p_fl(state->SetPoint,INFO_PRINT);
-//	print(" current state is: ",INFO_PRINT);
-//	p_fl(state->CurrentState,INFO_PRINT);
-//	print(" error is: ",INFO_PRINT);
-//	p_fl(error,INFO_PRINT);
-//	print(", Control set is: ",INFO_PRINT);
-//	p_fl(state->Output ,INFO_PRINT);
-//        setPrintLevel(l);
 }
 
 
