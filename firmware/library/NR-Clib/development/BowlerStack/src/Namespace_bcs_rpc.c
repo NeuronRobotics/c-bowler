@@ -34,7 +34,6 @@ BOOL _rpcArgs(BowlerPacket * Packet){
         UINT32_UNION rpcValue;
         rpcValue.Val = GetRPCValue((char*)rpc->rpc);
         int i;
-
         Packet->use.data[(index++)] = rpc->bowlerMethod;
         int argNumIndex = index;
         Packet->use.data[(index++)] = 0;// place holder for number of arguments
@@ -68,11 +67,11 @@ BOOL _rpcArgs(BowlerPacket * Packet){
 static RPC_LIST bcsRpc__RPC={	.bowlerMethod=BOWLER_GET,
                                 .rpc="_rpc",
                                 .callback=&_rpc,
-                                .arguments=&((const char *){ (const char )BOWLER_I08,
+                                .arguments=((const char [3]){(const char )BOWLER_I08,
                                                             (const char )BOWLER_I08,
                                                             (const char )0}),// Calling arguments
                                 .responseMethod=BOWLER_POST,// response method
-                                .responseArguments=&( (const char *){(const char )BOWLER_I08,
+                                .responseArguments=( (const char [5]){(const char )BOWLER_I08,
                                                                     (const char )BOWLER_I08,
                                                                     (const char )BOWLER_I08,
                                                                     (const char )BOWLER_I32,
@@ -83,11 +82,11 @@ static RPC_LIST bcsRpc__RPC={	.bowlerMethod=BOWLER_GET,
 static RPC_LIST bcsRpc_ARGS={	.bowlerMethod=BOWLER_GET,
                                 .rpc="args",
                                 .callback=&_rpcArgs,
-                                .arguments=&((const char *){ (const char )BOWLER_I08,
+                                .arguments=((const char [3]){(const char )BOWLER_I08,
                                                             (const char )BOWLER_I08,
                                                             (const char )0}),// Calling arguments
                                 .responseMethod=BOWLER_POST,// response method
-                                .responseArguments=&((const char *){ (const char )BOWLER_I08,
+                                .responseArguments=((const char [6]){ (const char )BOWLER_I08,
                                                                     (const char )BOWLER_I08,
                                                                     (const char )BOWLER_STR,
                                                                     (const char )BOWLER_I32,
