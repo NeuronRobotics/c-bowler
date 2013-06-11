@@ -25,66 +25,102 @@ BOOL pidAsyncEventCallbackLocal(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)
 static RPC_LIST bcsPid_APID={	BOWLER_GET,
                                 "apid",
                                 &processPIDGet,
+                                NULL,// Calling arguments
+                                BOWLER_POST,// response method
+                                NULL,// Response arguments
                                 NULL //Termination
 };
 static RPC_LIST bcsPid__PID={	BOWLER_GET,
                                 "_pid",
                                 &processPIDGet,
-                                NULL//Termination
+                                NULL,// Calling arguments
+                                BOWLER_POST,// response method
+                                NULL,// Response arguments
+                                NULL //Termination
 };
 static RPC_LIST bcsPid_CPID={	BOWLER_GET,
                                 "cpid",
                                 &processPIDGet,
-                                NULL//Termination
+                                NULL,// Calling arguments
+                                BOWLER_POST,// response method
+                                NULL,// Response arguments
+                                NULL //Termination
 };
 static RPC_LIST bcsPid_CPDV={	BOWLER_GET,
                                 "cpdv",
                                 &processPIDGet,
-                                NULL//Termination
+                                NULL,// Calling arguments
+                                BOWLER_POST,// response method
+                                NULL,// Response arguments
+                                NULL //Termination
 };
 static RPC_LIST bcsPid_GPDC={	BOWLER_GET,
                                 "gpdc",
                                 &processPIDGet,
-                                NULL//Termination
+                                NULL,// Calling arguments
+                                BOWLER_POST,// response method
+                                NULL,// Response arguments
+                                NULL //Termination
 };
 
 //Post RPC's
 static RPC_LIST bcsPid_APID_p={	BOWLER_POST,
                                 "apid",
                                 &processPIDPost,
+                                NULL,// Calling arguments
+                                BOWLER_POST,// response method
+                                NULL,// Response arguments
                                 NULL //Termination
 };
 static RPC_LIST bcsPid__PID_p={	BOWLER_POST,
                                 "_pid",
                                 &processPIDPost,
-                                NULL//Termination
+                                NULL,// Calling arguments
+                                BOWLER_POST,// response method
+                                NULL,// Response arguments
+                                NULL //Termination
 };
 static RPC_LIST bcsPid__VPD={	BOWLER_POST,
                                 "_vpd",
                                 &processPIDPost,
+                                NULL,// Calling arguments
+                                BOWLER_POST,// response method
+                                NULL,// Response arguments
                                 NULL //Termination
 };
 static RPC_LIST bcsPid_RPID={	BOWLER_POST,
                                 "rpid",
                                 &processPIDPost,
-                                NULL//Termination
+                                NULL,// Calling arguments
+                                BOWLER_POST,// response method
+                                NULL,// Response arguments
+                                NULL //Termination
 };
 
 //Critical
 static RPC_LIST bcsPid_KPID={	BOWLER_CRIT,
                                 "kpid",
                                 &processPIDCrit,
-                                NULL//Termination
+                                NULL,// Calling arguments
+                                BOWLER_POST,// response method
+                                NULL,// Response arguments
+                                NULL //Termination
 };
 static RPC_LIST bcsPid_CPID_c={	BOWLER_CRIT,
                                 "cpid",
                                 &processPIDCrit,
-                                NULL//Termination
+                                NULL,// Calling arguments
+                                BOWLER_POST,// response method
+                                NULL,// Response arguments
+                                NULL //Termination
 };
 static RPC_LIST bcsPid_CPDV_c={	BOWLER_CRIT,
                                 "cpdv",
                                 &processPIDCrit,
-                                NULL//Termination
+                                NULL,// Calling arguments
+                                BOWLER_POST,// response method
+                                NULL,// Response arguments
+                                NULL //Termination
 };
 
 

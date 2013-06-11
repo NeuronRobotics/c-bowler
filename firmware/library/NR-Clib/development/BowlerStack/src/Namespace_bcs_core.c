@@ -16,12 +16,18 @@ const char coreName[] = "bcs.core.*;0.3;;";
 static RPC_LIST bcsCore_nms={	BOWLER_GET,
                                 "_nms",
                                 &_nms,
-                                NULL
+                                NULL,// Calling arguments
+								BOWLER_POST,// response method
+								NULL,// Response arguments
+								NULL //Termination
 };
 static RPC_LIST bcsCore_png={	BOWLER_GET,
                                 "_png",
                                 &_png,
-                                NULL
+                                NULL,// Calling arguments
+								BOWLER_POST,// response method
+								NULL,// Response arguments
+								NULL //Termination
 };
 
 static NAMESPACE_LIST bcsCore ={	coreName,// The string defining the namespace
@@ -34,16 +40,27 @@ static NAMESPACE_LIST bcsCore ={	coreName,// The string defining the namespace
 
 BYTE getNumberOfNamespaces(){
 	int i=1;
-	NAMESPACE_LIST * tmp = &bcsCore;
+	NAMESPACE_LIST * tmp = getBcsCoreNamespace();
 	while(tmp->next != NULL){
 		tmp = tmp->next;
 		i++;
 	}
 	return i;
 }
+
+BYTE getNumberOfRpcs(int namespaceIndex){
+	int i=1;
+	RPC_LIST * tmp = getNamespaceAtIndex(namespaceIndex)->rpcSet;
+	while(tmp->next != NULL){
+		tmp = tmp->next;
+		i++;
+	}
+	return i;
+}
+
 NAMESPACE_LIST * getNamespaceAtIndex(int index){
 	int i=0;
-	NAMESPACE_LIST * tmp = &bcsCore;
+	NAMESPACE_LIST * tmp = getBcsCoreNamespace();
 	while(i != index){
 		if(tmp->next !=NULL){
 			tmp = tmp->next;
@@ -129,7 +146,8 @@ void addNamespaceToList(NAMESPACE_LIST * newNs){
 		while(1);
 	}
 	newNs->next=NULL;
-	NAMESPACE_LIST * tmp = &bcsCore;
+
+	NAMESPACE_LIST * tmp = getBcsCoreNamespace();
 	do{
 		if(tmp == newNs){
 			//this namespace is already regestered
@@ -163,10 +181,29 @@ RPC_LIST * getRpcByID(NAMESPACE_LIST * namespace,unsigned long  rpcId, BYTE bowl
 	return NULL;
 }
 
+RPC_LIST * getRpcByIndex(NAMESPACE_LIST * namespace,BYTE index){
+	if(namespace == NULL)
+		return NULL;
+	RPC_LIST * rpc =  namespace->rpcSet;
+        int iterator = 0;
+	//null check
+	if(rpc !=NULL){
+		//Loop over the RPC list looking for a match to the RPC
+		do{
+			if(iterator++ ==index ){
+				//Found matching RPC and Method to parse
+				return rpc;
+			}
+			//null check and move to the next RPC
+			rpc= rpc->next;
+		}while(rpc != NULL );
+	}
+	return NULL;
+}
 
 void RunNamespaceAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
     if(pidAsyncCallbackPtr != NULL){
-        NAMESPACE_LIST * tmp = &bcsCore;
+        NAMESPACE_LIST * tmp = getBcsCoreNamespace();
 	do{
             if(tmp->asyncEventCheck != NULL){
                 tmp->asyncEventCheck(Packet,pidAsyncCallbackPtr);
@@ -183,11 +220,10 @@ void RunNamespaceAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPa
 static BOOL namespcaedAdded = FALSE;
 NAMESPACE_LIST * getBcsCoreNamespace(){
 	if(!namespcaedAdded){
-		addRpcToNamespace(&bcsCore,& bcsCore_png);
-		addRpcToNamespace(&bcsCore,& bcsCore_nms);
-		namespcaedAdded =TRUE;
+            namespcaedAdded =TRUE;
+            addRpcToNamespace(&bcsCore,& bcsCore_png);
+            addRpcToNamespace(&bcsCore,& bcsCore_nms);
 	}
-
 	return &bcsCore;
 }
 
