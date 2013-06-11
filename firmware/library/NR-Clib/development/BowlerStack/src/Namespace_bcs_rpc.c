@@ -19,7 +19,6 @@ BOOL _rpc(BowlerPacket * Packet){
         for(i=0;i<4;i++){
             Packet->use.data[index++] = rpcValue.v[i];
         }
-        Packet->use.data[index++] = rpc->bowlerMethod;
         
         Packet->use.head.DataLegnth = 4+index;
 	return TRUE;
@@ -35,52 +34,66 @@ BOOL _rpcArgs(BowlerPacket * Packet){
         UINT32_UNION rpcValue;
         rpcValue.Val = GetRPCValue((char*)rpc->rpc);
         int i;
-        for(i=0;i<4;i++){
-            Packet->use.data[(index++)] = rpcValue.v[i];
-        }
 
         Packet->use.data[(index++)] = rpc->bowlerMethod;
-
-        if(rpc->arguments == NULL){
-             Packet->use.data[(index++)] = 0;
-        }else{
+        int argNumIndex = index;
+        Packet->use.data[(index++)] = 0;// place holder for number of arguments
+        if(rpc->arguments != NULL){
            //add non NULL arguments
             i=0;
-            while(rpc->arguments[i]!=NULL){
+            while(rpc->arguments[i]!= 0){
                 Packet->use.data[(index++)]= rpc->arguments[i++];
+                Packet->use.data[argNumIndex]++;
             }
         }
+        Packet->use.data[(index++)] = 0;
+
         Packet->use.data[(index++)] = rpc->responseMethod;
-        if(rpc->responseArguments == NULL){
-             Packet->use.data[(index++)] = 0;
-        }else{
+        argNumIndex = index;
+        Packet->use.data[(index++)] = 0;// place holder for number of arguments
+        if(rpc->responseArguments != NULL){
            //add non NULL arguments
             i=0;
-            while(rpc->responseArguments[i]!=NULL){
+            while(rpc->responseArguments[i]!=0){
                 Packet->use.data[(index++)]= rpc->responseArguments[i++];
+                Packet->use.data[argNumIndex]++;
             }
         }
+        Packet->use.data[(index++)] = 0;
 
         Packet->use.head.DataLegnth = 4+index;
 	return TRUE;
 }
 //Get RPC's
-static RPC_LIST bcsRpc__RPC={	BOWLER_GET,
-                                "_rpc",
-                                &_rpc,
-                                {BOWLER_I08,BOWLER_I08,NULL},// Calling arguments
-                                BOWLER_POST,// response method
-                                {BOWLER_I08,BOWLER_I08,BOWLER_I08,BOWLER_I32,BOWLER_I08,NULL},// Response arguments
-                                NULL //Termination
+static RPC_LIST bcsRpc__RPC={	.bowlerMethod=BOWLER_GET,
+                                .rpc="_rpc",
+                                .callback=&_rpc,
+                                .arguments=&((const char *){ (const char )BOWLER_I08,
+                                                            (const char )BOWLER_I08,
+                                                            (const char )0}),// Calling arguments
+                                .responseMethod=BOWLER_POST,// response method
+                                .responseArguments=&( (const char *){(const char )BOWLER_I08,
+                                                                    (const char )BOWLER_I08,
+                                                                    (const char )BOWLER_I08,
+                                                                    (const char )BOWLER_I32,
+                                                                    (const char )0}),// Response arguments
+                                .next = NULL //Termination
 };
 //Get RPC's
-static RPC_LIST bcsRpc_ARGS={	BOWLER_GET,
-                                "args",
-                                &_rpcArgs,
-                                {BOWLER_I08,BOWLER_I08,NULL},// Calling arguments
-                                BOWLER_POST,// response method
-                                {BOWLER_I08,BOWLER_I08,BOWLER_I32,BOWLER_STR,BOWLER_I32,BOWLER_STR,NULL},// Response arguments
-                                NULL //Termination
+static RPC_LIST bcsRpc_ARGS={	.bowlerMethod=BOWLER_GET,
+                                .rpc="args",
+                                .callback=&_rpcArgs,
+                                .arguments=&((const char *){ (const char )BOWLER_I08,
+                                                            (const char )BOWLER_I08,
+                                                            (const char )0}),// Calling arguments
+                                .responseMethod=BOWLER_POST,// response method
+                                .responseArguments=&((const char *){ (const char )BOWLER_I08,
+                                                                    (const char )BOWLER_I08,
+                                                                    (const char )BOWLER_STR,
+                                                                    (const char )BOWLER_I32,
+                                                                    (const char )BOWLER_STR,
+                                                                    (const char )0}),// Response arguments
+                                .next = NULL //Termination
 };
 
 

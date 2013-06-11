@@ -39,10 +39,15 @@
 
 //Method Codes
 #define BOWLER_STATUS 					0x00
-#define BOWLER_GET						0x10
+#define BOWLER_GET					0x10
 #define BOWLER_POST  					0x20
 #define BOWLER_CRIT 	 				0x30
 #define BOWLER_ASYN 	 				0x40
+
+#define BOWLER_I08  8
+#define BOWLER_I16  16
+#define BOWLER_I32  32
+#define BOWLER_STR  37
 
 #if !defined(__GENERIC_TYPE_DEFS_H_)
 	typedef enum _BOOL { FALSE = 0, TRUE } BOOL;    /* Undefined size */

@@ -34,7 +34,8 @@ void Bowler_Init(void){
 //	Bowler_HAL_Init();
 
 #if defined(USE_LINKED_LIST_NAMESPACE)
-	addNamespaceToList(getBcsCoreNamespace());
+	addNamespaceToList((NAMESPACE_LIST * ) getBcsCoreNamespace());
+        addNamespaceToList((NAMESPACE_LIST * ) getBcsRpcNamespace());
 #else
 	AddNamespace(sizeof(coreName),coreName);
 #endif
