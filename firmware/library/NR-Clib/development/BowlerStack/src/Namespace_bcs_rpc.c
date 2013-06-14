@@ -53,7 +53,7 @@ BOOL _rpcArgs(BowlerPacket * Packet){
                 Packet->use.data[argNumIndex]++;
             }
         }
-        Packet->use.data[(index++)] = 0;
+        //Packet->use.data[(index++)] = 0;
 
         Packet->use.data[(index++)] = rpc->responseMethod;
         argNumIndex = index;
@@ -66,7 +66,7 @@ BOOL _rpcArgs(BowlerPacket * Packet){
                 Packet->use.data[argNumIndex]++;
             }
         }
-        Packet->use.data[(index++)] = 0;
+        //Packet->use.data[(index++)] = 0;
 
         Packet->use.head.DataLegnth = 4+index;
 	return TRUE;
@@ -75,31 +75,32 @@ BOOL _rpcArgs(BowlerPacket * Packet){
 static RPC_LIST bcsRpc__RPC={	.bowlerMethod=BOWLER_GET,
                                 .rpc="_rpc",
                                 .callback=&_rpc,
-                                .arguments=((const char [3]){(const char )BOWLER_I08,
-                                                            (const char )BOWLER_I08,
-                                                            (const char )0}),// Calling arguments
+                                .arguments=((const char [3]){BOWLER_I08,
+                                                            BOWLER_I08,
+                                                            0}),// Calling arguments
                                 .responseMethod=BOWLER_POST,// response method
-                                .responseArguments=( (const char [5]){(const char )BOWLER_I08,
-                                                                    (const char )BOWLER_I08,
-                                                                    (const char )BOWLER_I08,
-                                                                    (const char )BOWLER_I32,
-                                                                    (const char )0}),// Response arguments
+                                .responseArguments=( (const char [5]){BOWLER_I08,
+                                                                    BOWLER_I08,
+                                                                    BOWLER_I08,
+                                                                    BOWLER_ASCII,
+                                                                    0}),// Response arguments
                                 .next = NULL //Termination
 };
 //Get RPC's
 static RPC_LIST bcsRpc_ARGS={	.bowlerMethod=BOWLER_GET,
                                 .rpc="args",
                                 .callback=&_rpcArgs,
-                                .arguments=((const char [3]){(const char )BOWLER_I08,
-                                                            (const char )BOWLER_I08,
-                                                            (const char )0}),// Calling arguments
+                                .arguments=((const char [3]){BOWLER_I08,//namespace index
+                                                            BOWLER_I08,//rpc index
+                                                            0}),// Calling arguments
                                 .responseMethod=BOWLER_POST,// response method
-                                .responseArguments=((const char [6]){ (const char )BOWLER_I08,
-                                                                    (const char )BOWLER_I08,
-                                                                    (const char )BOWLER_STR,
-                                                                    (const char )BOWLER_I32,
-                                                                    (const char )BOWLER_STR,
-                                                                    (const char )0}),// Response arguments
+                                .responseArguments=((const char [7]){ BOWLER_I08,//namespace index
+                                                                    BOWLER_I08,//rpc index
+                                                                    BOWLER_I08,//Downstream method
+                                                                    BOWLER_STR,//downstream arguments
+                                                                    BOWLER_I08,//upstream method
+                                                                    BOWLER_STR,//upstream arguments
+                                                                    0}),// Response arguments
                                 .next = NULL //Termination
 };
 

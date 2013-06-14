@@ -16,24 +16,27 @@ const char coreName[] = "bcs.core.*;0.3;;";
 static RPC_LIST bcsCore_nms={	BOWLER_GET,
                                 "_nms",
                                 &_nms,
-                                NULL,// Calling arguments
-								BOWLER_POST,// response method
-								NULL,// Response arguments
-								NULL //Termination
+                                ((const char [2]){  BOWLER_I08,
+                                                    0}),// Calling arguments
+                                BOWLER_POST,// response method
+                                ((const char [3]){  BOWLER_ASCII,
+                                                    BOWLER_I08,
+                                                    0}),// Response arguments
+                                NULL //Termination
 };
 static RPC_LIST bcsCore_png={	BOWLER_GET,
                                 "_png",
                                 &_png,
                                 NULL,// Calling arguments
-								BOWLER_POST,// response method
-								NULL,// Response arguments
-								NULL //Termination
+                                BOWLER_POST,// response method
+                                NULL,// Response arguments
+                                NULL //Termination
 };
 
 static NAMESPACE_LIST bcsCore ={	coreName,// The string defining the namespace
-									NULL,// the first element in the RPC string
-									NULL,// no async for this namespace
-									NULL// no initial elements to the other namesapce field.
+                                        NULL,// the first element in the RPC string
+                                        NULL,// no async for this namespace
+                                        NULL// no initial elements to the other namesapce field.
 };
 
 
@@ -41,6 +44,7 @@ static NAMESPACE_LIST bcsCore ={	coreName,// The string defining the namespace
 BYTE getNumberOfNamespaces(){
 	int i=1;
 	NAMESPACE_LIST * tmp = getBcsCoreNamespace();
+
 	while(tmp->next != NULL){
 		tmp = tmp->next;
 		i++;
@@ -51,6 +55,9 @@ BYTE getNumberOfNamespaces(){
 BYTE getNumberOfRpcs(int namespaceIndex){
 	int i=1;
 	RPC_LIST * tmp = getNamespaceAtIndex(namespaceIndex)->rpcSet;
+        if(tmp == NULL){
+            return 0;
+        }
 	while(tmp->next != NULL){
 		tmp = tmp->next;
 		i++;
@@ -59,18 +66,21 @@ BYTE getNumberOfRpcs(int namespaceIndex){
 }
 
 NAMESPACE_LIST * getNamespaceAtIndex(int index){
-	int i=0;
-	NAMESPACE_LIST * tmp = getBcsCoreNamespace();
-	while(i != index){
-		if(tmp->next !=NULL){
-			tmp = tmp->next;
-			i++;
-		}else{
-			//walked off the end of the list
-			return NULL;
-		}
-	}
-	return tmp;
+    if(index>=getNumberOfNamespaces()){
+        return NULL;
+    }
+    int i=0;
+    NAMESPACE_LIST * tmp = getBcsCoreNamespace();
+    while(i != index){
+            if(tmp->next !=NULL){
+                    tmp = tmp->next;
+                    i++;
+            }else{
+                    //walked off the end of the list
+                    return NULL;
+            }
+    }
+    return tmp;
 }
 
 
@@ -105,6 +115,10 @@ BOOL _nms(BowlerPacket * Packet){
 				Packet->use.head.DataLegnth++;
 				i++;
 			}
+                        Packet->use.data[i++] = 0;//null terminate the string
+                        Packet->use.head.DataLegnth++;
+                        Packet->use.data[i++] = getNumberOfNamespaces();//Append the number of namespaces
+                        Packet->use.head.DataLegnth++;
 		}else{
 			ERR(Packet,0,5);
 		}

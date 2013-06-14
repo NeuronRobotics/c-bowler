@@ -44,10 +44,14 @@
 #define BOWLER_CRIT 	 				0x30
 #define BOWLER_ASYN 	 				0x40
 
-#define BOWLER_I08  8
-#define BOWLER_I16  16
-#define BOWLER_I32  32
-#define BOWLER_STR  37
+#define BOWLER_I08      8 // 8 bit integer
+#define BOWLER_I16      16//16 bit integer
+#define BOWLER_I32      32//32 bit integer
+#define BOWLER_STR      37// first byte is number of values, next is byte values
+#define BOWLER_I32STR   38// first byte is number of values, next is 32 bit values
+#define BOWLER_ASCII    39// ASCII string, null terminated
+
+
 
 #if !defined(__GENERIC_TYPE_DEFS_H_)
 	typedef enum _BOOL { FALSE = 0, TRUE } BOOL;    /* Undefined size */
