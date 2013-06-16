@@ -50,8 +50,8 @@
 #define BOWLER_STR      37// first byte is number of values, next is byte values
 #define BOWLER_I32STR   38// first byte is number of values, next is 32 bit values
 #define BOWLER_ASCII    39// ASCII string, null terminated
-
-
+#define BOWLER_FIXED100    41// ASCII string, null terminated
+#define BOWLER_FIXED1K    42// ASCII string, null terminated
 
 #if !defined(__GENERIC_TYPE_DEFS_H_)
 	typedef enum _BOOL { FALSE = 0, TRUE } BOOL;    /* Undefined size */

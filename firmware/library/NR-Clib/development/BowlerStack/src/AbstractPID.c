@@ -513,13 +513,14 @@ BOOL processPIDGet(BowlerPacket * Packet){
 	int i;
 	switch (Packet->use.head.RPC){
 	case APID:
-		Packet->use.head.DataLegnth=4;
+		Packet->use.head.DataLegnth=5;
+		Packet->use.data[0]=number_of_pid_groups;
 		for(i=0;i<number_of_pid_groups;i++){
 			PID_Temp.Val=GetPIDPosition(i);
-			Packet->use.data[0+(i*4)]=PID_Temp.byte.FB;
-			Packet->use.data[1+(i*4)]=PID_Temp.byte.TB;
-			Packet->use.data[2+(i*4)]=PID_Temp.byte.SB;
-			Packet->use.data[3+(i*4)]=PID_Temp.byte.LB;
+			Packet->use.data[1+(i*4)]=PID_Temp.byte.FB;
+			Packet->use.data[2+(i*4)]=PID_Temp.byte.TB;
+			Packet->use.data[3+(i*4)]=PID_Temp.byte.SB;
+			Packet->use.data[4+(i*4)]=PID_Temp.byte.LB;
 			Packet->use.head.DataLegnth+=4;
 		}
 		Packet->use.head.Method=BOWLER_POST;
