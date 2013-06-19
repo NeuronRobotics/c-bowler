@@ -38,8 +38,8 @@ static RPC_LIST bcsPid__PID={	BOWLER_GET,
                                                     0}),// Response arguments
                                 BOWLER_POST,// response method
                                 ((const char [3]){	BOWLER_I08,//channel
-													BOWLER_I32,//current position
-                                					0}),// Response arguments
+							BOWLER_I32,//current position
+                                			0}),// Response arguments
                                 NULL //Termination
 };
 static RPC_LIST bcsPid_CPID={	BOWLER_GET,
@@ -49,24 +49,28 @@ static RPC_LIST bcsPid_CPID={	BOWLER_GET,
                                                              0}),// Response arguments
                                 BOWLER_POST,// response method
                                 ((const char [11]){	BOWLER_I08,//channel
-													BOWLER_I08,//enabled
-													BOWLER_I08,//Polarity
-													BOWLER_I08,//async
-													BOWLER_FIXED100,//Kp
-													BOWLER_FIXED100,//Ki
-													BOWLER_FIXED100,//Kd
-													BOWLER_I32,//Latch value
-													BOWLER_I08,//Use index latch
-													BOWLER_I08,//Stop On latch
+                                                        BOWLER_I08,//enabled
+                                                        BOWLER_I08,//Polarity
+                                                        BOWLER_I08,//async
+                                                        BOWLER_FIXED100,//Kp
+                                                        BOWLER_FIXED100,//Ki
+                                                        BOWLER_FIXED100,//Kd
+                                                        BOWLER_I32,//Latch value
+                                                        BOWLER_I08,//Use index latch
+                                                        BOWLER_I08,//Stop On latch
                                                    0}),// Response arguments
                                 NULL //Termination
 };
 static RPC_LIST bcsPid_CPDV={	BOWLER_GET,
                                 "cpdv",
                                 &processPIDGet,
-                                NULL,// Calling arguments
+                                ((const char [2]){	BOWLER_I08,//channel
+                                                             0}),// Response arguments
                                 BOWLER_POST,// response method
-                                NULL,// Response arguments
+                                ((const char [4]){	BOWLER_I08,//channel
+                                                        BOWLER_FIXED100,//Kp
+                                                        BOWLER_FIXED100,//Kd
+                                                   0}),// Response arguments
                                 NULL //Termination
 };
 static RPC_LIST bcsPid_GPDC={	BOWLER_GET,
@@ -74,7 +78,8 @@ static RPC_LIST bcsPid_GPDC={	BOWLER_GET,
                                 &processPIDGet,
                                 NULL,// Calling arguments
                                 BOWLER_POST,// response method
-                                NULL,// Response arguments
+                                ((const char [2]){	BOWLER_I08,//channel
+                                                             0}),// Response arguments
                                 NULL //Termination
 };
 
@@ -124,8 +129,18 @@ static RPC_LIST bcsPid_KPID={	BOWLER_CRIT,
 static RPC_LIST bcsPid_CPID_c={	BOWLER_CRIT,
                                 "cpid",
                                 &processPIDCrit,
-                                NULL,// Calling arguments
-                                BOWLER_POST,// response method
+                                ((const char [11]){	BOWLER_I08,//channel
+                                                        BOWLER_I08,//enabled
+                                                        BOWLER_I08,//Polarity
+                                                        BOWLER_I08,//async
+                                                        BOWLER_FIXED100,//Kp
+                                                        BOWLER_FIXED100,//Ki
+                                                        BOWLER_FIXED100,//Kd
+                                                        BOWLER_I32,//Latch value
+                                                        BOWLER_I08,//Use index latch
+                                                        BOWLER_I08,//Stop On latch
+                                                   0}),// Response arguments
+                                BOWLER_STATUS,// response method
                                 NULL,// Response arguments
                                 NULL //Termination
 };
