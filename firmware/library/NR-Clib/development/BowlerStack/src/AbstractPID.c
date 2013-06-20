@@ -564,11 +564,11 @@ BOOL processPIDPost(BowlerPacket * Packet){
 		PID_Temp.byte.LB=Packet->use.data[3];
 		time = (float)PID_Temp.Val;
 		BYTE i=0;
-		for(i=0;i<number_of_pid_groups;i++){
-			PID_Temp.byte.FB=Packet->use.data[4+(i*4)];
-			PID_Temp.byte.TB=Packet->use.data[5+(i*4)];
-			PID_Temp.byte.SB=Packet->use.data[6+(i*4)];
-			PID_Temp.byte.LB=Packet->use.data[7+(i*4)];
+		for(i=0;i<Packet->use.data[4];i++){
+			PID_Temp.byte.FB=Packet->use.data[5+(i*4)];
+			PID_Temp.byte.TB=Packet->use.data[6+(i*4)];
+			PID_Temp.byte.SB=Packet->use.data[7+(i*4)];
+			PID_Temp.byte.LB=Packet->use.data[8+(i*4)];
 			val=PID_Temp.Val;
 			SetPIDTimed(i,val,time);
 		}
