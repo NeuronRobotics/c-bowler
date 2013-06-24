@@ -9,7 +9,7 @@
 #include "Bowler/AbstractPID.h"
 
 
-static const char pidNSName[]   = "bcs.pid.*;0.3;;";
+static const char pidNSName[]   = "bcs.pid.*;1.0;;";
 
 
 BOOL pidAsyncEventCallbackLocal(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
