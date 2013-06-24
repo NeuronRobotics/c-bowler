@@ -21,7 +21,9 @@ LIBDIR  		= ../lib
 
 
 AVR_CFILES :=$(wildcard src/avr/*.c) $(wildcard ../BowlerStack/src/*.c)
-AVR_OFILES := $(AVR_CFILES:%.c=%.o)
+AVR_FILTERED:=$(filter-out ../BowlerStack/src/Namespace_bcs_pid.c, $(AVR_CFILES))
+AVR_OFILES := $(AVR_FILTERED:%.c=%.o)
+
 
 PIC_CFILES :=$(wildcard src/pic32/*.c) $(wildcard src/pic32/usb/*.c) $(wildcard ../BowlerStack/src/*.c)
 PIC_OFILES := $(PIC_CFILES:%.c=%.o)
@@ -47,13 +49,22 @@ Native:
 	make -C src/native/  clean
 
 AVR644p:
+	echo $(AVR_OFILES)
+	rm -f $(LIBDIR)/AVR/atmega644p/libNRLIB.a
+	rm -f  $(LIBDIR)/AVR/atmega644p/libNRLIB_debug.a
 	make -C src/avr/  CC_Bowler_Arch="$(CCA_avratmega644p)" 
+	
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCA_avratmega644p) -DNO_PRINTING -I../Platform/include/" 
 	$(ARAVR) rcs  $(LIBDIR)/AVR/atmega644p/libNRLIB.a $(AVR_OFILES)
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCA_avratmega644p) -I../Platform/include/" 
 	$(ARAVR) rcs  $(LIBDIR)/AVR/atmega644p/libNRLIB_debug.a $(AVR_OFILES)
+	rm -rf o
+	mkdir o
+	cd o/;ar x ../$(LIBDIR)/AVR/atmega644p/libNRLIB_debug.a
+	ls -al o/*
 	make -C ../BowlerStack/ clean
 	make -C src/avr/ clean
+	
 	
 AVR324p:
 	make -C src/avr/  CC_Bowler_Arch="$(CCA_avratmega324p)" 
