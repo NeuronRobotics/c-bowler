@@ -17,7 +17,6 @@
  */
 
 #include "Bowler/Bowler.h"
-#include <avr/interrupt.h>
 //#if defined(__AVR_ATmega324P__)
 	#define comBuffSize (MiniPacketDataSize+4+BowlerHeaderSize)
 //#else

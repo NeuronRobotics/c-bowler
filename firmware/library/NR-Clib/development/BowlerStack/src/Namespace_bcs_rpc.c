@@ -39,8 +39,8 @@ BOOL _rpcArgs(BowlerPacket * Packet){
             ERR(Packet,0,10);
             return FALSE;
         }
-        UINT32_UNION rpcValue;
-        rpcValue.Val = GetRPCValue((char*)rpc->rpc);
+        //UINT32_UNION rpcValue;
+        //rpcValue.Val = GetRPCValue((char*)rpc->rpc);
         int i;
         Packet->use.data[(index++)] = rpc->bowlerMethod;
         int argNumIndex = index;
