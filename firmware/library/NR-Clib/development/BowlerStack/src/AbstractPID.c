@@ -750,8 +750,8 @@ BOOL isPIDArrivedAtSetpoint(int index, float plusOrMinus){
 void RunPIDControl(){
     	int i;
 	for (i=0;i<number_of_pid_groups;i++){
-            pidGroups[i].CurrentState = getPosition(i);
             if(pidGroups[i].Enabled){
+                pidGroups[i].CurrentState = getPosition(i);
                 pidGroups[i].SetPoint = interpolate((INTERPOLATE_DATA *)&pidGroups[i].interpolate,getMs());
                 MathCalculationPosition(& pidGroups[i],getMs());
                 setOutput(i,pidGroups[i].Output);

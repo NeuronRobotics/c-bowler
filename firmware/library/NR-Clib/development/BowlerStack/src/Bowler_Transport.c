@@ -16,13 +16,13 @@ void allign(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 		FifoReadByteStream(Packet->stream,1,fifo);
 		if((Packet->use.head.ProtocolRevision != BOWLER_VERSION)){
 			if(first==0){
-				//println("##Junking bad first byte. Fifo Size=",INFO_PRINT);  // SPI ISR shits out messages when 0xAA fails to match. making this info.
-				//p_int(calcByteCount(fifo),INFO_PRINT);
-				//print(" [",INFO_PRINT);
+				println("##Junking bad first byte. Fifo Size=",INFO_PRINT);  // SPI ISR shits out messages when 0xAA fails to match. making this info.
+				p_int(calcByteCount(fifo),INFO_PRINT);
+				print(" [",INFO_PRINT);
 			}
 			first++;
-			//print(" 0x",INFO_PRINT);
-			//prHEX8(Packet->use.head.ProtocolRevision,INFO_PRINT);
+			print(" 0x",INFO_PRINT);
+			prHEX8(Packet->use.head.ProtocolRevision,INFO_PRINT);
 			BYTE b;
 			if(getNumBytes(fifo)==0)
 				return;
@@ -49,7 +49,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 
 	if (getNumBytes(fifo) < ((BowlerHeaderSize)+4)) {
 		if(debug){
-			println("Current num bytes: ",INFO_PRINT);p_int(getNumBytes(fifo),INFO_PRINT);
+			//println("Current num bytes: ",ERROR_PRINT);p_int(getNumBytes(fifo),ERROR_PRINT);
 		}
 		return FALSE;//Not enough bytes to even be a header, try back later
 	}
