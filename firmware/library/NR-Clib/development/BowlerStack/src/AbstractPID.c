@@ -35,7 +35,7 @@ void updatePidAsync();
 void pidReset(BYTE chan,INT32 val);
 float pidResetNoStop(BYTE chan,INT32 val);
 void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet));
-void prep(BowlerPacket * Packet);
+void LoadCorePacket(BowlerPacket * Packet);
 
 AbsPID * getPidGroupDataTable(){
 	return pidGroups;
@@ -81,6 +81,13 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 	checkPIDLimitEvents=checkPIDLimitEventsPtr;
 	velData=vel;
 	SetControllerMath(&RunAbstractPIDCalc);
+        int i;
+
+        for(i=0;i<numberOfGroups;i++){
+            int enabled = pidGroups[i].Enabled;
+            pidReset(i,0);
+            pidGroups[i].Enabled = enabled ;
+        }
 }
 
 
@@ -109,7 +116,7 @@ void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(Bowler
 //		pushPID(i,pidGroups[i].CurrentState, time);
 //	}
         INT32_UNION PID_Temp;
-        prep(Packet);
+        LoadCorePacket(Packet);
         Packet->use.head.DataLegnth=5;
         Packet->use.head.RPC = GetRPCValue("apid");
         int i;
@@ -127,18 +134,7 @@ void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(Bowler
 			pidAsyncCallbackPtr(Packet);
 }
 
-void prep(BowlerPacket * Packet){
-	BYTE i;
-	Packet->use.head.ProtocolRevision=BOWLER_VERSION;
-	for (i=0;i<6;i++){
-		Packet->use.head.MAC.v[i]=0;
-	}
-	Packet->use.head.MessageID=0;
-	Packet->use.head.ResponseFlag=1;
-	Packet->use.head.Method=BOWLER_STATUS;
-	Packet->use.head.RPC=GetRPCValue("****");
-	Packet->use.head.DataLegnth=4;
-}
+
 
 void pushPIDLimitEvent(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),PidLimitEvent * event){
 	if(event->type == NO_LIMIT){
@@ -165,7 +161,7 @@ void pushPIDLimitEvent(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPa
 
 	pidGroups[event->group].lastPushedValue=event->value;
 
-	prep(Packet);
+	LoadCorePacket(Packet);
 	Packet->use.head.MessageID = 0;
 	Packet->use.head.Method=BOWLER_ASYN;
 	Packet->use.head.RPC = GetRPCValue("pidl");
@@ -199,7 +195,7 @@ void pushPIDLimitEvent(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPa
 }
 
 void pushPID(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),BYTE chan, INT32 value, float time){
-	prep(Packet);
+	LoadCorePacket(Packet);
 	Packet->use.head.Method=BOWLER_ASYN;
 	Packet->use.head.MessageID = 0;
 	Packet->use.head.RPC = GetRPCValue("_pid");
@@ -483,7 +479,7 @@ BYTE SetPIDTimed(BYTE chan,INT32 val,float ms){
 	pidGroups[chan].interpolate.startTime=getMs();
 	if(ms==0)
 		pidGroups[chan].SetPoint=(float)val;
-	pidGroups[chan].Enabled=TRUE;
+	//pidGroups[chan].Enabled=TRUE;
         pidGroups[chan].Async = TRUE;
 	velData[chan].enabled=FALSE;
 	InitAbsPIDWithPosition(&pidGroups[chan],pidGroups[chan].K.P,pidGroups[chan].K.I,pidGroups[chan].K.D, getMs(),val);
@@ -627,10 +623,10 @@ BOOL processPIDCrit(BowlerPacket * Packet){
 	case KPID:
 		for(i=0;i<number_of_pid_groups;i++){
 			pidGroups[i].Enabled = TRUE;
-			setOutput(i,0);
+			setOutput(i,0.0);
 			pidGroups[i].Enabled = FALSE;
 			velData[i].enabled=FALSE;
-			pidGroups[i].Output=0;
+			pidGroups[i].Output=0.0;
 		}
 		READY(Packet,zone,0);
 		break;
@@ -688,7 +684,7 @@ void pidReset(BYTE chan,INT32 val){
 	pidGroups[chan].interpolate.startTime=time;
 	pidGroups[chan].SetPoint=value;
 	pidGroups[chan].Enabled=TRUE;//Ensures output enabled to stop motors
-	pidGroups[chan].Output=0;
+	pidGroups[chan].Output=0.0;
 	setOutput(chan,pidGroups[chan].Output);
 	velData[chan].enabled=FALSE;
 }
@@ -723,7 +719,7 @@ void InitAbsPIDWithPosition(AbsPID * state,float KP,float KI,float KD,float time
 	state->SetPoint = currentPosition;
         state->interpolate.set=state->SetPoint;
 	state->PreviousError=0;
-	state->Output=0;
+	state->Output=0.0;
 	state->PreviousTime=time;
 }
 
@@ -793,21 +789,10 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 	state->integralTotal =  (error*(1.0/state->integralSize)) +
                                 (state->integralTotal*((state->integralSize-1.0)/state->integralSize));
 	
-	//add error to circular buffer
-	//state->IntegralCircularBuffer[state->integralCircularBufferIndex++]=error;
-	//increment the circular buffer index
-//	if (state->integralCircularBufferIndex == (IntegralSize)){
-//		state->integralCircularBufferIndex=0;
-//	}
         //This section clears the integral buffer when the zero is crossed
         if((state->PreviousError>=0 && error<0)||
             (state->PreviousError<0 && error>=0)    ){
             
-            //state->integralCircularBufferIndex=0;
-            //state->integralTotal = 0;
-//            for (i=0;i<IntegralSize;i++){
-//                    state->IntegralCircularBuffer[i]=0;
-//            }
         }
 
 

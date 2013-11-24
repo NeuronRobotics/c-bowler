@@ -42,6 +42,8 @@ const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','
 	static const char streamsize[] = " Stream: size=";
 //#endif
 
+const char errorColor[]="\033[31m";
+const char clearErrorColor[]="\033[39m";
 static int (*sendToStream)(BYTE * ,int);
 
 int sendToStreamMine(BYTE * data ,int num){
@@ -92,6 +94,7 @@ BOOL okToPrint(Print_Level l){
 		}
 		return TRUE;
 	}
+        
 	return FALSE;
 }
 //
@@ -119,29 +122,40 @@ void printfDEBUG(const char *str,Print_Level l){
 	x=0;
 	putCharDebug('\n');
 	putCharDebug('\r');
-	while(str[x]!='\0'){
-		putCharDebug(str[x++]);
-	}
+	printfDEBUG_NNL(str,l);
 	//sendToStreamLocal(data,i);
+}
+void sendStr(const char *str){
+   int x=0;
+    while(str[x]!='\0' ){
+            putCharDebug(str[x++]);
+    }
 }
 void printfDEBUG_BYTE(char b,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
+        if(l==ERROR_PRINT){
+             sendStr(errorColor);
+        }else{
+            sendStr(clearErrorColor);
+        }
 	putCharDebug(b);
 	//sendToStreamLocal((BYTE *)&b,1);
 
 }
+
 void printfDEBUG_NNL(const char *str,Print_Level l)
 {
 	if(!okToPrint(l)){
 		return;
 	}
-	int x;
-	x=0;
-	while(str[x]!='\0' ){
-		putCharDebug(str[x++]);
-	}
+        if(l==ERROR_PRINT){
+            sendStr(errorColor);
+        }else{
+            sendStr(clearErrorColor);
+        }
+        sendStr(str);
 	//sendToStreamLocal(data,i);
 }
 
@@ -149,6 +163,11 @@ void printfDEBUG_INT(INT32 val,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
+        if(l==ERROR_PRINT){
+            sendStr(errorColor);
+        }else{
+            sendStr(clearErrorColor);
+        }
 	int x;
 	x=0;
 	if (val<0){
@@ -159,8 +178,12 @@ void printfDEBUG_INT(INT32 val,Print_Level l){
 	ultoaMINE(val,byteStr);
 	while(byteStr[x] != '\0' ){
 		putCharDebug(byteStr[x++]);
-		if(x==12)
-			return;
+		if(x==12){
+                    if(l==ERROR_PRINT){
+                         sendStr(clearErrorColor);
+                    }
+                    return;
+                }
 	}
 	//sendToStreamLocal(data,i);
 }
@@ -195,16 +218,17 @@ void printPIDvals(int i){
 	int polarity =  getPidGroupDataTable()[i].Polarity;
 	int set =       getPidGroupDataTable()[i].SetPoint;
 	p_int(chan,INFO_PRINT);
-	print("\tEnabled=",INFO_PRINT);     p_int(enabled,INFO_PRINT);
-	print("\tPolarity=",INFO_PRINT);    p_int(polarity,INFO_PRINT);
-	print("\tSET=",INFO_PRINT);    p_int(set,INFO_PRINT);
-	print("\t\t Kp=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].K.P,INFO_PRINT);
-	print("\t Ki=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].K.I,INFO_PRINT);
-	print("\t Kd=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].K.D,INFO_PRINT);
+	print(" Enabled=",INFO_PRINT);     p_int(enabled,INFO_PRINT);
+	print(" Polarity=",INFO_PRINT);    p_int(polarity,INFO_PRINT);
+	print(" SET=",INFO_PRINT);    p_int(set,INFO_PRINT);
+	print(" Kp=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].K.P,INFO_PRINT);
+	print(" Ki=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].K.I,INFO_PRINT);
+	print(" Kd=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].K.D,INFO_PRINT);
 	print("\t Setpoint=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].SetPoint,INFO_PRINT);
 	print("\t Current State=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].CurrentState,INFO_PRINT);
-	print("\t Control set is: ",INFO_PRINT);
-	p_fl(getPidGroupDataTable()[i].Output ,INFO_PRINT);
+        print("\t Error=",ERROR_PRINT);    p_fl(getPidGroupDataTable()[i].PreviousError,ERROR_PRINT);
+	print("\t Control Output: ",INFO_PRINT); p_fl(getPidGroupDataTable()[i].Output ,INFO_PRINT);
+        print("\t Output Set: ",INFO_PRINT); p_fl(getPidGroupDataTable()[i].OutputSet ,INFO_PRINT);
 
 }
 

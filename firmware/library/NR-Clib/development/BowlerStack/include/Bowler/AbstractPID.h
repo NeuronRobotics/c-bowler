@@ -76,6 +76,7 @@ typedef struct _AbsPID
         float	 		integralTotal;
         float                   integralSize;
         float			Output;
+        float			OutputSet;
         // This must be in MS
         float			PreviousTime;
         unsigned char           Async;
