@@ -49,6 +49,7 @@ void Process_Self_Packet(BowlerPacket * Packet){
 		namespaceIndex++;
 	}while(tmp != NULL);
 	// Now the namespace should have been found or not
+       
 	if(foundRpc == 0){
                 Print_Level l = getPrintLevel();
                 setPrintLevelErrorPrint();
@@ -57,6 +58,7 @@ void Process_Self_Packet(BowlerPacket * Packet){
 		ERR(Packet,0,0);
 		return;
 	}else if(foundRpc > 0 ){
+                println_I("Namespace found: ");println_I(getNamespaceAtIndex(currentNamespaceIndexForPacket)->namespaceString);
 		if(foundRpc > 1){
 			if(Packet->use.head.MessageID == 0){
 				//RPC overlap but no resolution defined
@@ -70,11 +72,14 @@ void Process_Self_Packet(BowlerPacket * Packet){
 				//println_I("Rpc resolved to: ");print_I(getNamespaceAtIndex(currentNamespaceIndexForPacket)->namespaceString);
 			}
 		}
+
 		RPC_LIST * rpc = getRpcByID(getNamespaceAtIndex(currentNamespaceIndexForPacket),
 						Packet->use.head.RPC,
 						Packet->use.head.Method );
+
 		if(rpc !=NULL){
-			rpc->callback(Packet);
+                     println_I("RPC found: ");println_I(rpc->rpc);
+                     rpc->callback(Packet);
 		}
 		Packet->use.head.MessageID = currentNamespaceIndexForPacket;
 		Packet->use.head.ResponseFlag=1;

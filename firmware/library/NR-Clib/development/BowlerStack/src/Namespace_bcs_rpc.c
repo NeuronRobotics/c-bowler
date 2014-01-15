@@ -11,10 +11,16 @@ BOOL _rpc(BowlerPacket * Packet){
         int index = 0;
         int nsIndex = Packet->use.data[index++];
         int rpcIndex = Packet->use.data[index++];
+
         Packet->use.data[index++] = getNumberOfRpcs(nsIndex);
-        RPC_LIST * rpc = getRpcByIndex(getNamespaceAtIndex(nsIndex),rpcIndex);
-        if(rpc == NULL){
+        NAMESPACE_LIST * list = getNamespaceAtIndex(nsIndex);
+        if(list == NULL){
             ERR(Packet,0,9);
+            return FALSE;
+        }
+        RPC_LIST * rpc = getRpcByIndex(list,rpcIndex);
+        if(rpc == NULL){
+            ERR(Packet,0,10);
             return FALSE;
         }
         UINT32_UNION rpcValue;
