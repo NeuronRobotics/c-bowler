@@ -38,6 +38,16 @@ typedef enum _PidLimitType {
 	CONTROLLER_ERROR=(0x04)
 }PidLimitType;
 
+typedef enum _PidCalibrationType {
+        CALIBRARTION_Uncalibrated  =(0),
+	CALIBRARTION_DONE  =(1),
+        CALIBRARTION_hysteresis  =(2),
+        CALIBRARTION_home_up  =(3),
+        CALIBRARTION_home_down  =(4)
+}PidCalibrationType;
+
+
+
 typedef struct  _PidLimitEvent{
 	int group;
 	PidLimitType type;
@@ -88,7 +98,10 @@ typedef struct _AbsPID
 			float		D;
 		} K;
         INTERPOLATE_DATA interpolate;
-        //float  			IntegralCircularBuffer[IntegralSize];
+        struct{
+            PidCalibrationType calibrationState;
+
+        }calibration;
         
 } AbsPID;
 
@@ -212,5 +225,9 @@ BOOL processPIDCrit(BowlerPacket * Packet);
 NAMESPACE_LIST * getBcsPidNamespace();
 
 AbsPID * getPidGroupDataTable();
+
+void SetPIDCalibrateionState(int group, PidCalibrationType state);
+
+PidCalibrationType GetPIDCalibrateionState(int group);
 
 #endif /* ABSTRACTPID_H_ */

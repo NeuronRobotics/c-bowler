@@ -90,9 +90,13 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
         }
 }
 
+void SetPIDCalibrateionState(int group, PidCalibrationType state){
+    pidGroups[group].calibration.calibrationState=state;
+}
 
-
-
+PidCalibrationType GetPIDCalibrateionState(int group){
+    return pidGroups[group].calibration.calibrationState;
+}
 
 
 void updatePidAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
@@ -262,7 +266,8 @@ void RunPDVel(BYTE chan){
 
 		pidGroups[chan].Output=velData[chan].currentOutputVel;
 
-		setOutput(chan,pidGroups[chan].Output);
+                if(pidGroups[chan].calibration.calibrationState<=CALIBRARTION_DONE)
+                    setOutput(chan,pidGroups[chan].Output);
 
 		//cleanup
 		velData[chan].lastPosition=pidGroups[chan].CurrentState;
@@ -750,7 +755,8 @@ void RunPIDControl(){
                 pidGroups[i].CurrentState = getPosition(i);
                 pidGroups[i].SetPoint = interpolate((INTERPOLATE_DATA *)&pidGroups[i].interpolate,getMs());
                 MathCalculationPosition(& pidGroups[i],getMs());
-                setOutput(i,pidGroups[i].Output);
+                if(pidGroups[chan].calibration.calibrationState<=CALIBRARTION_DONE)
+                    setOutput(i,pidGroups[i].Output);
             }
 
 	}
