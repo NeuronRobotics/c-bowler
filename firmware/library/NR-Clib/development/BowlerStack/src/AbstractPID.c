@@ -237,44 +237,7 @@ void pushPID(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Pack
 }
 
 
-void RunPDVel(BYTE chan){
-	if(velData[chan].enabled==TRUE){
-		pidGroups[chan].CurrentState = getPosition(chan);
-		float currentTime = getMs();
-		float timeMsDiff =  (currentTime -velData[chan].lastTime);
-		float timeDiff =  timeMsDiff/1000;
-		int posDiff=pidGroups[chan].CurrentState -velData[chan].lastPosition;
-		float currentVelocity = posDiff/timeDiff;
-		//float velocityDiff = currentVelocity-velData[chan].lastVelocity;
-		float velocityDiff=0;
-		float proportional =  currentVelocity-velData[chan].unitsPerSeCond;
-		float set = (velData[chan].currentOutputVel+(proportional*velData[chan].K.P)+(velocityDiff*velData[chan].K.D))/-10;
-		velData[chan].currentOutputVel+=set;
 
-		if (velData[chan].currentOutputVel>100)
-			velData[chan].currentOutputVel=100;
-		if(velData[chan].currentOutputVel<-100)
-			velData[chan].currentOutputVel=-100;
-
-//		println("Velocity set=",INFO_PRINT);p_fl(velData[chan].unitsPerSeCond,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
-//		println("Velocity position diff=",INFO_PRINT);p_int(posDiff,INFO_PRINT);print(" ticks",INFO_PRINT);
-//		println("Velocity time diff=",INFO_PRINT);p_fl(timeDiff,INFO_PRINT);print(" seConds",INFO_PRINT);
-//		println("Velocity time diff=",INFO_PRINT);p_fl(timeMsDiff,INFO_PRINT);print(" ms",INFO_PRINT);
-//		println("Velocity current=",INFO_PRINT);p_fl(currentVelocity,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
-//		println("Velocity offset=",INFO_PRINT);p_fl(set,INFO_PRINT);print("\n",INFO_PRINT);
-//		println("Velocity set=",INFO_PRINT);p_fl(velData[chan].currentOutputVel,INFO_PRINT);print("\n",INFO_PRINT);
-
-		pidGroups[chan].Output=velData[chan].currentOutputVel;
-
-                if(pidGroups[chan].calibration.calibrationState<=CALIBRARTION_DONE)
-                    setOutput(chan,pidGroups[chan].Output);
-
-		//cleanup
-		velData[chan].lastPosition=pidGroups[chan].CurrentState;
-		velData[chan].lastVelocity=currentVelocity;
-		velData[chan].lastTime=currentTime;
-	}
-}
 
 void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms){
 
@@ -759,6 +722,44 @@ void RunPIDControl(){
                     setOutput(i,pidGroups[i].Output);
             }
 
+	}
+}
+void RunPDVel(BYTE chan){
+	if(velData[chan].enabled==TRUE){
+		pidGroups[chan].CurrentState = getPosition(chan);
+		float currentTime = getMs();
+		float timeMsDiff =  (currentTime -velData[chan].lastTime);
+		float timeDiff =  timeMsDiff/1000;
+		int posDiff=pidGroups[chan].CurrentState -velData[chan].lastPosition;
+		float currentVelocity = posDiff/timeDiff;
+		//float velocityDiff = currentVelocity-velData[chan].lastVelocity;
+		float velocityDiff=0;
+		float proportional =  currentVelocity-velData[chan].unitsPerSeCond;
+		float set = (velData[chan].currentOutputVel+(proportional*velData[chan].K.P)+(velocityDiff*velData[chan].K.D))/-10;
+		velData[chan].currentOutputVel+=set;
+
+		if (velData[chan].currentOutputVel>100)
+			velData[chan].currentOutputVel=100;
+		if(velData[chan].currentOutputVel<-100)
+			velData[chan].currentOutputVel=-100;
+
+//		println("Velocity set=",INFO_PRINT);p_fl(velData[chan].unitsPerSeCond,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
+//		println("Velocity position diff=",INFO_PRINT);p_int(posDiff,INFO_PRINT);print(" ticks",INFO_PRINT);
+//		println("Velocity time diff=",INFO_PRINT);p_fl(timeDiff,INFO_PRINT);print(" seConds",INFO_PRINT);
+//		println("Velocity time diff=",INFO_PRINT);p_fl(timeMsDiff,INFO_PRINT);print(" ms",INFO_PRINT);
+//		println("Velocity current=",INFO_PRINT);p_fl(currentVelocity,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
+//		println("Velocity offset=",INFO_PRINT);p_fl(set,INFO_PRINT);print("\n",INFO_PRINT);
+//		println("Velocity set=",INFO_PRINT);p_fl(velData[chan].currentOutputVel,INFO_PRINT);print("\n",INFO_PRINT);
+
+		pidGroups[chan].Output=velData[chan].currentOutputVel;
+
+                if(pidGroups[chan].calibration.calibrationState<=CALIBRARTION_DONE)
+                    setOutput(chan,pidGroups[chan].Output);
+
+		//cleanup
+		velData[chan].lastPosition=pidGroups[chan].CurrentState;
+		velData[chan].lastVelocity=currentVelocity;
+		velData[chan].lastTime=currentTime;
 	}
 }
 void RunPIDComs(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
