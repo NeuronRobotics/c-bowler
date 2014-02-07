@@ -91,6 +91,7 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 }
 
 void SetPIDCalibrateionState(int group, PidCalibrationType state){
+
     pidGroups[group].calibration.calibrationState=state;
 }
 
@@ -471,7 +472,7 @@ int GetPIDPosition(BYTE chan){
 
 static INT32_UNION PID_Temp;
 static float time;
-static int val,chan;
+
 int zone = 66;
 BOOL processPIDGet(BowlerPacket * Packet){
 	int i;
@@ -520,6 +521,7 @@ BOOL processPIDGet(BowlerPacket * Packet){
 }
 
 BOOL processPIDPost(BowlerPacket * Packet){
+    int chan, val;
 	switch (Packet->use.head.RPC){
 	case APID:
 		PID_Temp.byte.FB=Packet->use.data[0];
@@ -718,7 +720,7 @@ void RunPIDControl(){
                 pidGroups[i].CurrentState = getPosition(i);
                 pidGroups[i].SetPoint = interpolate((INTERPOLATE_DATA *)&pidGroups[i].interpolate,getMs());
                 MathCalculationPosition(& pidGroups[i],getMs());
-                if(pidGroups[chan].calibration.calibrationState<=CALIBRARTION_DONE)
+                if(pidGroups[i].calibration.calibrationState<=CALIBRARTION_DONE)
                     setOutput(i,pidGroups[i].Output);
             }
 
