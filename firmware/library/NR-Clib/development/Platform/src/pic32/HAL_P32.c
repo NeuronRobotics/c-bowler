@@ -134,15 +134,11 @@ static BYTE_FIFO_STORAGE storeUSB;
 static BYTE privateRXUSB[BOWLER_PacketSize*3];
 static BYTE_FIFO_STORAGE storeUART;
 static BYTE privateRXUART[BOWLER_PacketSize*3];
-typedef enum _hal_state
-{
-	NO_WASP_PACKET=0,
-    UART_WASP_PACKET,
-    USB_WASP_PACKET
-} HAL_WASP_SWITCH;
 
-static HAL_WASP_SWITCH HalSwitch;
 static BOOL init=FALSE;
+
+static BOOL usbComs = FALSE;
+static BOOL uartComs = FALSE;
 
 
 void Pic32_Bowler_HAL_Init(void){
@@ -154,7 +150,6 @@ void Pic32_Bowler_HAL_Init(void){
 	InitByteFifo(&storeUSB,privateRXUSB,sizeof(privateRXUSB));
 	//println("Init UART fifo");
 	InitByteFifo(&storeUART,privateRXUART,sizeof(privateRXUART));
-	HalSwitch= NO_WASP_PACKET;
 	//println("Setting Serial FIFO buffer");
 	SetPICUARTFifo(&storeUART);
 	//println("Setting USB FIFO buffer");
@@ -165,34 +160,25 @@ void Pic32_Bowler_HAL_Init(void){
 //HAL init functions
 
 void Get_HAL_Packet(BYTE * packet,WORD size){
-	switch (HalSwitch){
-	case UART_WASP_PACKET:
-		FifoGetByteStream(&storeUART,packet,size);
-		break;
-	case USB_WASP_PACKET:
-		FifoGetByteStream(&storeUSB,packet,size);
-		break;
-	case NO_WASP_PACKET:
-		break;
-	}
+
+    if(usbComs){
+        if(FifoGetByteStream(&storeUSB,packet,size) != 0)
+            return;
+    }
+
+    if(uartComs){
+        if(FifoGetByteStream(&storeUART,packet,size) != 0)
+            return;
+    }
 }
 
 BOOL Send_HAL_Packet(BYTE * packet,WORD size){
-	//SetColor(1,0,0);
-	switch (HalSwitch){
-	case UART_WASP_PACKET:
-		//println_I("Sending to UART");
-		Pic32UARTPutArray(packet,size);
-		break;
-	case USB_WASP_PACKET:
-		//println_I("Sending to USB");
-		SendPacketUSB(packet,size);
-		break;
-	default:
-		//println_I("Not sending upstream");
-		break;
-	}
-	return TRUE;
+
+    if(usbComs)
+        SendPacketUSB(packet,size);
+    if(uartComs)
+        Pic32UARTPutArray(packet,size);
+    return TRUE;
 }
 WORD Get_HAL_Byte_Count(){
 #if defined(USB_POLLING)
@@ -205,28 +191,24 @@ WORD Get_HAL_Byte_Count(){
 	GetNumUSBBytes();//This runs other update tasks for the USB stack
 
 	if(GetNumUSBBytes()>0){
-		HalSwitch =USB_WASP_PACKET;
-		return FifoGetByteCount(&storeUSB);
+            usbComs=TRUE;
+            return FifoGetByteCount(&storeUSB);
 	}
 	else if(Pic32Get_UART_Byte_Count()>0){
-		HalSwitch =UART_WASP_PACKET;
-		//return storeUART.byteCount;
-		return FifoGetByteCount(&storeUART);
+            uartComs=TRUE;
+            return FifoGetByteCount(&storeUART);
 	}
 	return 0;
 }
 
 BOOL GetBowlerPacket_arch(BowlerPacket * Packet){
-
 	Get_HAL_Byte_Count();//This runs other update tasks for the HAL
-	switch (HalSwitch){
-	case UART_WASP_PACKET:
-		return GetBowlerPacketDebug(Packet,&storeUART);
-	case USB_WASP_PACKET:
-		return GetBowlerPacketDebug(Packet,&storeUSB);
-	case NO_WASP_PACKET:
-		break;
-	}
+        if(usbComs)
+            if(GetBowlerPacketDebug(Packet,&storeUSB))
+                return TRUE;
+        if (uartComs)
+            if(GetBowlerPacketDebug(Packet,&storeUART))
+                return TRUE;
 	return FALSE;
 }
 
