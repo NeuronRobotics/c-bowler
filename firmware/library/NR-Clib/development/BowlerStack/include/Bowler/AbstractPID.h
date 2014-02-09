@@ -9,6 +9,7 @@
 #define ABSTRACTPID_H_
 #include "Bowler_Helper.h"
 #include "namespace.h"
+#include "Scheduler.h"
 
 #define IntegralSize  10
 
@@ -65,6 +66,12 @@ typedef struct  _PidLimitEvent{
 		float 		I;
 		float		D;
 	} AdsPID_ConFIG;
+
+        typedef enum _CAL_STATE {
+                forward  = 0,
+                backward = 1,
+                done     = 2
+            }CAL_STATE;
 /**
  * This is the storage struct for all the information needed to run the PID calculation
  * Note that this has no assumptions on the type of inputs or type of outputs
@@ -98,10 +105,23 @@ typedef struct _AbsPID
 			float		D;
 		} K;
         INTERPOLATE_DATA interpolate;
+        PidCalibrationType calibrationState;
         struct{
-            PidCalibrationType calibrationState;
-
+            int upperHistoresis;
+            int lowerHistoresis;
+            int stop;
+            BOOL calibrating;
+            BOOL calibrated;
+            CAL_STATE state;
+            int dummy;
+            RunEveryData timer;
         }calibration;
+        struct{
+
+            RunEveryData timer;
+            float homingStallBound;
+            float previousValue;
+        }homing;
         
 } AbsPID;
 
