@@ -16,7 +16,7 @@
  *
  */
 #include "Bowler/Bowler.h"
-
+void sendStr(const char *str);
 Print_Level level=NO_PRINT;
 
 #define bufferSize 64
@@ -43,8 +43,29 @@ const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','
 //#endif
 
 const char errorColor[]="\033[31m";
+const char infoColor[]="\033[39m";
+const char warningColor[]="\033[93m";
+//const char debugColor[]="\033[94m";
 const char clearErrorColor[]="\033[39m";
 static int (*sendToStream)(BYTE * ,int);
+
+void setColor(Print_Level l){
+	switch (l){
+	case NO_PRINT:
+		return;
+	case INFO_PRINT:
+		  sendStr(infoColor);
+		  return;
+	case WARN_PRINT:
+		  sendStr(warningColor);
+		  return;
+	case ERROR_PRINT:
+		  sendStr( errorColor);
+		  return;
+	default:
+		return;
+	}
+}
 
 int sendToStreamMine(BYTE * data ,int num){
 	int i;
@@ -134,11 +155,7 @@ void printfDEBUG_BYTE(char b,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
-        if(l==ERROR_PRINT){
-             sendStr(errorColor);
-        }else{
-            sendStr(clearErrorColor);
-        }
+	setColor(l);
 	putCharDebug(b);
 	//sendToStreamLocal((BYTE *)&b,1);
 
@@ -149,11 +166,7 @@ void printfDEBUG_NNL(const char *str,Print_Level l)
 	if(!okToPrint(l)){
 		return;
 	}
-        if(l==ERROR_PRINT){
-            sendStr(errorColor);
-        }else{
-            sendStr(clearErrorColor);
-        }
+	setColor(l);
         sendStr(str);
 	//sendToStreamLocal(data,i);
 }
@@ -162,11 +175,7 @@ void printfDEBUG_INT(INT32 val,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
-        if(l==ERROR_PRINT){
-            sendStr(errorColor);
-        }else{
-            sendStr(clearErrorColor);
-        }
+	setColor(l);
 	int x;
 	x=0;
 	if (val<0){

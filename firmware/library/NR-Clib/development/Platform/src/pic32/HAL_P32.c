@@ -138,17 +138,17 @@ static BOOL uartComs = FALSE;
 void Pic32_Bowler_HAL_Init(void){
 	TickInit();
 	init=TRUE;
-	//println("Init UART hal");
+	println_W("Init UART hal");
 	Pic32UART_HAL_INIT(PRINT_BAUD);
-	//println("Init USB fifo");
+	println_W("Init USB fifo");
 	InitByteFifo(&storeUSB,privateRXUSB,sizeof(privateRXUSB));
-	//println("Init UART fifo");
+	println_W("Init UART fifo");
 	InitByteFifo(&storeUART,privateRXUART,sizeof(privateRXUART));
-	//println("Setting Serial FIFO buffer");
+	println_W("Setting Serial FIFO buffer");
 	SetPICUARTFifo(&storeUART);
-	//println("Setting USB FIFO buffer");
+	println_W("Setting USB FIFO buffer");
 	SetPICUSBFifo(&storeUSB);
-	//println("Pic32 is initialized...");
+	println_W("Pic32 is initialized...");
 }
 
 //HAL init functions
