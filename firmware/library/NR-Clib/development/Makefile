@@ -1,5 +1,5 @@
-all:sample
-	mkdir -p lib/native/linux/
+
+all:directories
 	make -C Platform/ all
 sample:
 	make -C Platform/ Native
@@ -13,4 +13,13 @@ release: all
 commit:
 	svn update;
 	make -C Platform/ all
-	svn commit -m="Building nrlib";
+
+directories:
+	mkdir -p ./lib/PIC32/32MX440F128H/
+	mkdir -p ./lib/AVR/atmega324p/
+	mkdir -p ./lib/AVR/atmega644p/
+	mkdir -p ./lib/PIC32/32MX460F512L/
+	mkdir -p ./lib/PIC32/32MX795F512L/
+	mkdir -p ./lib/native/linux/
+	mkdir -p .
+	mkdir -p .

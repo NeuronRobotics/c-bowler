@@ -4,7 +4,7 @@ SHELL := /bin/bash -e
 CFILES := $(wildcard *.c)
 OFILES := $(CFILES:%.c=%.o)
 
-BIN :=BowlerImplimentationExample
+BIN :=BowlerImplimentationExample.exe
 
 ifndef CC_Bowler_Arch
     CC_Bowler_Arch :=gcc -Os -g3 -Wall -fmessage-length=0 -MMD -MP
