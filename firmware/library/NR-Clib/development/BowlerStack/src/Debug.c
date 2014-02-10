@@ -118,8 +118,7 @@ void printfDEBUG(const char *str,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
-	int x;
-	x=0;
+
 	putCharDebug('\n');
 	putCharDebug('\r');
 	printfDEBUG_NNL(str,l);

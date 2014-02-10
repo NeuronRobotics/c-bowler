@@ -250,4 +250,8 @@ void SetPIDCalibrateionState(int group, PidCalibrationType state);
 
 PidCalibrationType GetPIDCalibrateionState(int group);
 
+int getUpperPidHistoresis(int group);
+int getLowerPidHistoresis(int group);
+int getPidStop(int group);
+
 #endif /* ABSTRACTPID_H_ */

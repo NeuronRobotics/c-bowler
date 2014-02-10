@@ -851,7 +851,7 @@ void decrementHistoresis(int group){
 
 void calcCenter(int group){
     int diff = (getPidGroupDataTable()[group].calibration.upperHistoresis+getPidGroupDataTable()[group].calibration.lowerHistoresis)/2;
-    //getPidGroupDataTable()[group].calibration.stop = defaultServoCenter+diff;
+    getPidGroupDataTable()[group].calibration.stop = diff;
 }
 
 void checkCalibration(int group){

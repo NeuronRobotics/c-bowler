@@ -1,4 +1,5 @@
 all:sample
+	mkdir -p lib/native/linux/
 	make -C Platform/ all
 sample:
 	make -C Platform/ Native
