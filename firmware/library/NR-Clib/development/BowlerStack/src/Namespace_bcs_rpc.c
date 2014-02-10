@@ -1,7 +1,7 @@
 #include "Bowler/Bowler.h"
-
-
-
+#if !defined(NULL)
+	#define NULL 0
+#endif
 static const char rpcNSName[]   = "bcs.rpc.*;0.3;;";
 
 
