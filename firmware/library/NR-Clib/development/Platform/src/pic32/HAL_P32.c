@@ -120,14 +120,8 @@ void _general_exception_handler(unsigned cause, unsigned status){
         DelayMs(1000);
 
         print_I("\n\r2");
-	while(1){
-//		if(isPressed()	)
-//			Reset();
-//		setLed(1,0,0);
-//		DelayMs(1000);
-//		setLed(0,1,0);
-//		DelayMs(1000);
-	}
+
+        Reset();
 }
 
 static BYTE_FIFO_STORAGE storeUSB;
