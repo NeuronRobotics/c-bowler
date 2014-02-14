@@ -21,8 +21,8 @@
 
 
 
-static BYTE privateRX[BOWLER_PacketSize];
-static BYTE_FIFO_STORAGE store;
+//static BYTE privateRX[BOWLER_PacketSize];
+//static BYTE_FIFO_STORAGE store;
 static BYTE_FIFO_STORAGE * my_store;
 static UINT16 gotData = FALSE;
 
@@ -112,8 +112,8 @@ void Pic32UARTSetBaud(int baud){
 }
 void Pic32UART_HAL_INIT(int BAUDRATE){
 	Pic32UARTSetBaud(BAUDRATE);
-	InitByteFifo(&store,privateRX,sizeof(privateRX));
-	my_store=&store;
+	//InitByteFifo(&store,privateRX,sizeof(privateRX));
+	//my_store=&store;
 }
 
 void Pic32UARTGetArray(BYTE *packet,WORD size){

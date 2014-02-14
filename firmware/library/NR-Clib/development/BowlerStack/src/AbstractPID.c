@@ -245,7 +245,7 @@ void pushPID(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Pack
 void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms){
 
         if(ms<.1){
-            println_I("Starting Velocity");
+            //println_I("Starting Velocity");
             velData[chan].enabled=TRUE;
             pidGroups[chan].Enabled=FALSE;
             velData[chan].lastPosition=GetPIDPosition(chan);
@@ -253,7 +253,7 @@ void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms){
             velData[chan].unitsPerSeCond=unitsPerSeCond;
             velData[chan].currentOutputVel =0;
         }else{
-            println_I("Starting Velocity Timed");
+            //println_I("Starting Velocity Timed");
             float seConds = ms/1000;
             INT32 dist = (INT32)unitsPerSeCond*(INT32)seConds;
             INT32 delt = ((INT32) (GetPIDPosition(chan))-dist);
@@ -580,7 +580,7 @@ BOOL processPIDPost(BowlerPacket * Packet){
 		PID_Temp.byte.TB=Packet->use.data[2];
 		PID_Temp.byte.SB=Packet->use.data[3];
 		PID_Temp.byte.LB=Packet->use.data[4];
-		println("Resetting PID channel from packet:",INFO_PRINT);printBowlerPacketDEBUG(Packet,INFO_PRINT);
+		//println("Resetting PID channel from packet:",INFO_PRINT);printBowlerPacketDEBUG(Packet,INFO_PRINT);
 		pidReset(chan, PID_Temp.Val);
 		READY(Packet,zone,6);
 		break;
@@ -878,18 +878,18 @@ int getPidStop(int group){
 
 void runPidHysterisisCalibration(int group){
 
-    println_E("\r\n\nStart calibration #");p_int_E(group);
+//    println_E("\r\n\nStart calibration #");p_int_E(group);
     getPidGroupDataTable()[group].calibration.lowerHistoresis = 0;
     getPidGroupDataTable()[group].calibration.upperHistoresis = 0;
     getPidGroupDataTable()[group].calibration.stop = 0;
-    println_I("\tReset PID");
+//    println_I("\tReset PID");
     pidReset(group,0);// Zero encoder reading
-    println_I("\tDisable PID Output");
+ //   println_I("\tDisable PID Output");
     SetPIDEnabled(group, TRUE);
     SetPIDCalibrateionState(group, CALIBRARTION_hysteresis);
 
     getPidGroupDataTable()[group].calibration.state =  backward;
-    println_I("\tSetting slow move");
+  //  println_I("\tSetting slow move");
     setOutput(group, -1.0f);
     getPidGroupDataTable()[group].calibration.timer.setPoint=1000;
     getPidGroupDataTable()[group].calibration.timer.MsTime=getMs();
@@ -909,27 +909,27 @@ CAL_STATE pidHysterisis(int group){
         }
         if( bound(0, extr, boundVal, boundVal)){// check to see if the encoder has moved
             //we have not moved
-            println_I("NOT moved ");p_fl_I(extr);
+  //          println_I("NOT moved ");p_fl_I(extr);
             int historesisBound = 50;
             if( getPidGroupDataTable()[group].calibration.lowerHistoresis<-historesisBound &&
                 getPidGroupDataTable()[group].calibration.state == backward){
-                println_E("Backward Motor seems damaged, more then counts of historesis ");
+   //             println_E("Backward Motor seems damaged, more then counts of historesis ");
                 getPidGroupDataTable()[group].calibration.state = forward;
             }
             if(     getPidGroupDataTable()[group].calibration.upperHistoresis>historesisBound &&
                     getPidGroupDataTable()[group].calibration.state == forward){
-                println_E("Forward Motor seems damaged, more then counts of historesis ");
+   //             println_E("Forward Motor seems damaged, more then counts of historesis ");
                 getPidGroupDataTable()[group].calibration.state = done;
             }
         }else{
             pidReset(group,0);
             setOutput(group, 0);
-            println_E("Moved ");p_fl_E(extr);
+ //           println_E("Moved ");p_fl_E(extr);
             if(getPidGroupDataTable()[group].calibration.state == backward){
-                println_I("Backward Calibrated for link# ");p_int_I(group);
+  //              println_I("Backward Calibrated for link# ");p_int_I(group);
                 getPidGroupDataTable()[group].calibration.state = forward;
             }else{
-                println_I("Calibration done for link# ");p_int_I(group);
+   //             println_I("Calibration done for link# ");p_int_I(group);
                 getPidGroupDataTable()[group].calibration.state = done;
                 SetPIDCalibrateionState(group, CALIBRARTION_DONE);
                 //calcCenter( group);

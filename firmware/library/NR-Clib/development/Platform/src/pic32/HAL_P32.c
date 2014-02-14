@@ -57,77 +57,71 @@ void _general_exception_handler(unsigned cause, unsigned status){
         //setLed(1,0,0);
         setPrintLevelInfoPrint();
 
-        print_I("\r\n\r\n\r\nException handeler!! cause=");
-        prHEX32(cause,INFO_PRINT);print_I(" status=");
-        prHEX32(status,INFO_PRINT);
-        print_I(" exec code=");
-        p_int_I(u.EXCCODE);
-        print_I(" return address=");
-        prHEX32(x,INFO_PRINT);
-        println_I("===    CAUSE val Parsed    ===\n\r");
-        print_I("31:\t");prHEX32(u.BD,INFO_PRINT);print_I("\t Exception During Branch Delay\r\n");
-        print_I("30:\t");prHEX32(u.TI,INFO_PRINT);print_I("\t Exception During Pending Timer Interupt\r\n");
-        print_I("29:28:\t");prHEX32(u.CE,INFO_PRINT);print_I("\t Coproc Ref number fpr a coprpc unisable exception\r\n");
-        print_I("27:\t");prHEX32(u.DC,INFO_PRINT);print_I("\t Disable Count Register\r\n");
-        print_I("23:\t");prHEX32(u.IV,INFO_PRINT);print_I("\t Special Interrupt Vector used\r\n");
-        print_I("15:10:\t");prHEX32(u.RIPL,INFO_PRINT);print_I("\t Pending Interrupt indicator or Requested Interrupt Priority Level\r\n");
-        print_I("6:2:\t");prHEX32(u.EXCCODE,INFO_PRINT);print_I("\t Exception Code\r\n");
-        switch(u.EXCCODE){
-            case 0: print_I("\t\tInterrupt\r\n"); break;
-            case 4: print_I("\t\tAddress Error Exception (Load or Instruction Fetch)\r\n"); break;
-            case 5: print_I("\t\tAddress Error Exception (Store)\r\n"); break;
-            case 6: print_I("\t\tBus Error Exception (Instruction Fetch)\r\n"); break;
-            case 7: print_I("\t\tBus Error Exception (Data Reference: load or store)\r\n"); break;
-            case 8: print_I("\t\tSyscall Exception\r\n"); break;
-            case 9: print_I("\t\tBreakpoint Exception\r\n"); break;
-            case 10: print_I("\t\tReversed Instruction Exception\r\n"); break;
-            case 11: print_I("\t\tCoProcessor Unusable exception\r\n"); break;
-            case 12: print_I("\t\tArithmatic Overflow Exception\r\n"); break;
-            case 13: print_I("\t\tTrap Exception\r\n"); break;
-            case 16: print_I("\t\tImplementation Specific Exception (COP2)\r\n"); break;
-            case 17: print_I("\t\tCorExtend Unusable\r\n"); break;
-            case 18: print_I("\t\tCoprocessor 2 Exceptions\r\n"); break;
-            default: print_I("\t\treserved\r\n"); break;
+        print_E("\r\n\r\n\r\nException handeler!! ");
+//        prHEX32(cause,INFO_PRINT);print_I(" status=");
+//        prHEX32(status,INFO_PRINT);
+//        print_I(" exec code=");
+//        p_int_I(u.EXCCODE);
+//        print_I(" return address=");
+//        prHEX32(x,INFO_PRINT);
+//        println_I("===    CAUSE val Parsed    ===\n\r");
+//        print_I("31:\t");prHEX32(u.BD,INFO_PRINT);print_I("\t Exception During Branch Delay\r\n");
+//        print_I("30:\t");prHEX32(u.TI,INFO_PRINT);print_I("\t Exception During Pending Timer Interupt\r\n");
+//        print_I("29:28:\t");prHEX32(u.CE,INFO_PRINT);print_I("\t Coproc Ref number fpr a coprpc unisable exception\r\n");
+//        print_I("27:\t");prHEX32(u.DC,INFO_PRINT);print_I("\t Disable Count Register\r\n");
+//        print_I("23:\t");prHEX32(u.IV,INFO_PRINT);print_I("\t Special Interrupt Vector used\r\n");
+//        print_I("15:10:\t");prHEX32(u.RIPL,INFO_PRINT);print_I("\t Pending Interrupt indicator or Requested Interrupt Priority Level\r\n");
+//        print_I("6:2:\t");prHEX32(u.EXCCODE,INFO_PRINT);print_I("\t Exception Code\r\n");
+//        switch(u.EXCCODE){
+//            case 0: print_I("\t\tInterrupt\r\n"); break;
+//            case 4: print_I("\t\tAddress Error Exception (Load or Instruction Fetch)\r\n"); break;
+//            case 5: print_I("\t\tAddress Error Exception (Store)\r\n"); break;
+//            case 6: print_I("\t\tBus Error Exception (Instruction Fetch)\r\n"); break;
+//            case 7: print_I("\t\tBus Error Exception (Data Reference: load or store)\r\n"); break;
+//            case 8: print_I("\t\tSyscall Exception\r\n"); break;
+//            case 9: print_I("\t\tBreakpoint Exception\r\n"); break;
+//            case 10: print_I("\t\tReversed Instruction Exception\r\n"); break;
+//            case 11: print_I("\t\tCoProcessor Unusable exception\r\n"); break;
+//            case 12: print_I("\t\tArithmatic Overflow Exception\r\n"); break;
+//            case 13: print_I("\t\tTrap Exception\r\n"); break;
+//            case 16: print_I("\t\tImplementation Specific Exception (COP2)\r\n"); break;
+//            case 17: print_I("\t\tCorExtend Unusable\r\n"); break;
+//            case 18: print_I("\t\tCoprocessor 2 Exceptions\r\n"); break;
+//            default: print_I("\t\treserved\r\n"); break;
+//
+//        }
+//
+//        println_I("=== CoProc 0 Register Dump ===");
+//        println_I(" BadVAddr=\t");
+//        prHEX32(_CP0_GET_BADVADDR(),INFO_PRINT);
+//        println_I(" Compare=\t");
+//        prHEX32(_CP0_GET_COMPARE(),INFO_PRINT);
+//        println_I(" Count=\t");
+//        prHEX32(_CP0_GET_COUNT(),INFO_PRINT);
+//        println_I(" Status=\t");
+//        prHEX32(_CP0_GET_STATUS(),INFO_PRINT);
+//        println_I(" EPC=\t");
+//        prHEX32(_CP0_GET_EPC(),INFO_PRINT);
+//        println_I(" PRID=\t");
+//        prHEX32(_CP0_GET_PRID(),INFO_PRINT);
+//        println_I(" EBASE=\t");
+//        prHEX32(_CP0_GET_EBASE(),INFO_PRINT);
+//        println_I(" CONFIG=\t");
+//        prHEX32(_CP0_GET_CONFIG(),INFO_PRINT);
+//        println_I(" ERROREPC=\t");
+//        prHEX32(_CP0_GET_DEPC(),INFO_PRINT);
+//        println_I(" ERROREPC=\t");
+//        prHEX32(_CP0_GET_DEPC(),INFO_PRINT);
+//        print_I(" \r\n\r\n\r\n");
 
-        }
-
-        println_I("=== CoProc 0 Register Dump ===");
-        println_I(" BadVAddr=\t");
-        prHEX32(_CP0_GET_BADVADDR(),INFO_PRINT);
-        println_I(" Compare=\t");
-        prHEX32(_CP0_GET_COMPARE(),INFO_PRINT);
-        println_I(" Count=\t");
-        prHEX32(_CP0_GET_COUNT(),INFO_PRINT);
-        println_I(" Status=\t");
-        prHEX32(_CP0_GET_STATUS(),INFO_PRINT);
-        println_I(" EPC=\t");
-        prHEX32(_CP0_GET_EPC(),INFO_PRINT);
-        println_I(" PRID=\t");
-        prHEX32(_CP0_GET_PRID(),INFO_PRINT);
-        println_I(" EBASE=\t");
-        prHEX32(_CP0_GET_EBASE(),INFO_PRINT);
-        println_I(" CONFIG=\t");
-        prHEX32(_CP0_GET_CONFIG(),INFO_PRINT);
-        println_I(" ERROREPC=\t");
-        prHEX32(_CP0_GET_DEPC(),INFO_PRINT);
-        println_I(" ERROREPC=\t");
-        prHEX32(_CP0_GET_DEPC(),INFO_PRINT);
-        print_I(" \r\n\r\n\r\n");
-
-
-
-        print_I("\n\r1");
         DelayMs(1000);
-
-        print_I("\n\r2");
-
         Reset();
 }
 
 static BYTE_FIFO_STORAGE storeUSB;
-static BYTE privateRXUSB[BOWLER_PacketSize*3];
+static BYTE privateRXUSB[BOWLER_PacketSize];
 static BYTE_FIFO_STORAGE storeUART;
-static BYTE privateRXUART[BOWLER_PacketSize*3];
+static BYTE privateRXUART[BOWLER_PacketSize];
 
 static BOOL init=FALSE;
 
@@ -138,17 +132,17 @@ static BOOL uartComs = FALSE;
 void Pic32_Bowler_HAL_Init(void){
 	TickInit();
 	init=TRUE;
-	println_W("Init UART hal");
+	//println_W("Init UART hal");
 	Pic32UART_HAL_INIT(PRINT_BAUD);
-	println_W("Init USB fifo");
+	//println_W("Init USB fifo");
 	InitByteFifo(&storeUSB,privateRXUSB,sizeof(privateRXUSB));
-	println_W("Init UART fifo");
+	//println_W("Init UART fifo");
 	InitByteFifo(&storeUART,privateRXUART,sizeof(privateRXUART));
-	println_W("Setting Serial FIFO buffer");
+	//println_W("Setting Serial FIFO buffer");
 	SetPICUARTFifo(&storeUART);
-	println_W("Setting USB FIFO buffer");
+	//println_W("Setting USB FIFO buffer");
 	SetPICUSBFifo(&storeUSB);
-	println_W("Pic32 is initialized...");
+	//println_W("Pic32 is initialized...");
 }
 
 //HAL init functions

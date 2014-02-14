@@ -29,8 +29,8 @@
 #define USBNotOk	(USBDeviceState < CONFIGURED_STATE)||(USBSuspendControl==1)
 
 #define TxPrivateSize 64
-static BYTE RxTmpBuffer[BOWLER_PacketSize*2];
-static BYTE privateRX[BOWLER_PacketSize*2];
+static BYTE RxTmpBuffer[BOWLER_PacketSize];
+//static BYTE privateRX[BOWLER_PacketSize];
 static BYTE TxBuffer[TxPrivateSize+1 ];
 static UINT16 gotData = 0;
 static BOOL bufferSet=FALSE;
@@ -38,7 +38,7 @@ static BOOL bufferSet=FALSE;
 static WORD     txSize;
 
 
-static BYTE_FIFO_STORAGE store;
+//static BYTE_FIFO_STORAGE store;
 static BYTE_FIFO_STORAGE * my_store;
 
 static BOOL usbActive = TRUE;
@@ -72,9 +72,9 @@ void usb_CDC_Serial_Init(char * DevStr,char * SerialStr,UINT16 vid,UINT16 pid){
 		tris_self_power = INPUT_PIN;	// See HardwareProfile.h
 	#endif
 	USBDeviceInit();
-	InitByteFifo(&store,privateRX,sizeof(privateRX));
-	if(bufferSet==FALSE)
-		my_store=&store;
+	//InitByteFifo(&store,privateRX,sizeof(privateRX));
+//	if(bufferSet==FALSE)
+//		my_store=&store;
 	#if defined(USB_INTERRUPT)
         USBDeviceAttach();
     #endif

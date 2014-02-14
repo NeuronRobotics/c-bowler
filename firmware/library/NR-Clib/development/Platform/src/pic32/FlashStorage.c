@@ -18,13 +18,13 @@ void FlashLoad(void){
 
 void FlashSync(void){
 	int i;
-	//println("Erasing Storage page");
+	println_I("Erasing Storage page");
 	NVMErasePage( (DWORD*) StartStorePhysical);
-	//println("Writing new data Storage page");
+	println_I("Writing new data Storage page");
 	for (i=0;i<FLASHSTORE;i++){
 		NVMWriteWord((DWORD*)(StartStoreVirtual+(i*4)), flash.stream[i]);
 	}
-	//println("Storage synced");
+	println_I("Storage synced");
 }
 
 BYTE FlashSetMac(BYTE * mac){
