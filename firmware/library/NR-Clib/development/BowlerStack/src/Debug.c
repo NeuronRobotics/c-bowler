@@ -24,22 +24,22 @@ Print_Level level=NO_PRINT;
 static BOOL DebugINIT = FALSE;
 const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 //#if !defined(NO_PRINTING)
-	static const char  packet[] = "\tPacket = \t";
-	static const char get[] = "Get";
-	static const char post[]="Post ";
-	static const char stat[]= "Status";
-	static const char crit[]="Critical";
-	static const char unknown[] = "Unknown ";
-	static const char ver[] ="\tVersion = \t";
-	static const char mac[] = "\tMAC = \t\t";
-	static const char meth[] = "\tMethod = \t";
-	static const char id[] = "\tNamespace Index = \t";
-	static const char dataSise[] ="\tData Size = \t";
-	static const char crcval []= "\tCRC Value = \t";
-	static const char dval[] = "\tData = \t\t";
-	static const char rpc []="\tRPC code = \t";
-	static const char nodata[] = " no data";
-	static const char streamsize[] = " Stream: size=";
+	//static const char  packet[] = "\tPacket = \t";
+	//static const char get[] = "Get";
+	//static const char post[]="Post ";
+	//static const char stat[]= "Status";
+	//static const char crit[]="Critical";
+	//static const char unknown[] = "Unknown ";
+	//static const char ver[] ="\tVersion = \t";
+	//static const char mac[] = "\tMAC = \t\t";
+	//static const char meth[] = "\tMethod = \t";
+	//static const char id[] = "\tNamespace Index = \t";
+	//static const char dataSise[] ="\tData Size = \t";
+	//static const char crcval []= "\tCRC Value = \t";
+//	static const char dval[] = "\tData = \t\t";
+//	static const char rpc []="\tRPC code = \t";
+//	static const char nodata[] = " no data";
+	//static const char streamsize[] = " Stream: size=";
 //#endif
 
 const char errorColor[]="\033[31m";
@@ -135,7 +135,7 @@ char GetHighNib(BYTE b){
 	return AsciiHex[((b&0xF0)>>4)];
 }
 
-void printfDEBUG(const char *str,Print_Level l){
+void printfDEBUG( char *str,Print_Level l){
 	if(!okToPrint(l)){
 		return;
 	}
@@ -161,7 +161,7 @@ void printfDEBUG_BYTE(char b,Print_Level l){
 
 }
 
-void printfDEBUG_NNL(const char *str,Print_Level l)
+void printfDEBUG_NNL(char *str,Print_Level l)
 {
 	if(!okToPrint(l)){
 		return;
@@ -249,7 +249,7 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 	}
 		int i;
 		BYTE s;
-		printfDEBUG(packet,l);
+		println("\tPacket = \t",l);
 		s = BowlerHeaderSize+Packet->stream[DataSizeIndex];
 		printfDEBUG_BYTE('[',l);
 		for (i=0;i<s;i++){
@@ -258,63 +258,63 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 				printfDEBUG_BYTE(',',l);
 		}
 		printfDEBUG_BYTE(']',l);
-		printfDEBUG(ver,l);
+		println("\tVersion = \t",l);
 		prHEX8(Packet->stream[0],l);
-		printfDEBUG(mac,l);
+		println("\tMAC = \t\t",l);
 		for (i=0;i<6;i++){
 			prHEX8(Packet->stream[1+i],l);
 			if (i<5)
 				printfDEBUG_BYTE(':',l);
 		}
-		printfDEBUG(meth,l);
+		println("\tMethod = \t",l);
 		switch (Packet->stream[MethodIndex]){
 		case BOWLER_STATUS:
-			printfDEBUG_NNL(stat,l);
+			print("Status",l);
 			break;
 		case BOWLER_GET:
-			printfDEBUG_NNL(get,l);
+			print("Get",l);
 			break;
 		case BOWLER_POST:
-			printfDEBUG_NNL(post,l);
+			print("Post ",l);
 			break;
 		case BOWLER_CRIT:
-			printfDEBUG_NNL(crit,l);
+			print("Critical",l);
 			break;
         case BOWLER_ASYN:
-			printfDEBUG_NNL("ASYNCHRONUS",l);
+			print("ASYNCHRONUS",l);
 			break;
 		default:
-			printfDEBUG_NNL(unknown,l);
+			print("Unknown ",l);
 			prHEX8(Packet->stream[MethodIndex],l);
 		break;
 	}
-		printfDEBUG(id,l);
+		println("\tNamespace Index = \t",l);
 		p_int((Packet->stream[SessionIDIndex]&0x7f),l);
-		printfDEBUG(dataSise,l);
+		println("\tData Size = \t",l);
 		p_int((Packet->stream[DataSizeIndex]),l);
-		printfDEBUG(crcval,l);
+		println("\tCRC Value = \t",l);
 		p_int((Packet->stream[CRCIndex]),l);
-		printfDEBUG("\tCalculated CRC = \t",l);
+		println("\tCalculated CRC = \t",l);
 		p_int(CalcCRC(Packet),l);
 		if(Packet->use.head.DataLegnth>=4){
-			printfDEBUG(rpc,l);
+			println("\tRPC code = \t",l);
 			for (i=0;i<4;i++){
 				printfDEBUG_BYTE(Packet->stream[RPCCodeStart+i],l);
 			}
 		}
 		if(Packet->use.head.DataLegnth>4){
 			s= (Packet->use.head.DataLegnth-4);
-			printfDEBUG(dval,l);
+			println( "\tData = \t\t",l);
 			for (i=0;i<s;i++){
 				prHEX8(Packet->use.data[i],l);
 				if (i<(s-1))
 					printfDEBUG_BYTE(',',l);
 			}
 		}else{
-			printfDEBUG(nodata,l);
+			println(" no data",l);
 		}
 
-		printfDEBUG("\n",l);
+		println("\n",l);
 #endif
 }
 #endif
@@ -325,15 +325,15 @@ void printByteArray(BYTE * stream,UINT16 len,Print_Level l){
 		return;
 	}
 	UINT16 i;
-	printfDEBUG_NNL(streamsize,l);
+	print(" Stream: size=",l);
 	p_int(len,l);
-	printfDEBUG_NNL(" [",l);
+	print(" [",l);
 	for (i=0;i<len;i++){
 		prHEX8(stream[i],l);
 		if (i<(len-1))
 			printfDEBUG_BYTE(',',l);
 	}
-	printfDEBUG_NNL("]",l);
+	print("]",l);
 //#endif
 }
 

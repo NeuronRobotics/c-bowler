@@ -23,7 +23,7 @@ const MAC_ADDR Broadcast={{{0,0,0,0,0,0}}};
 MAC_ADDR MyMAC ={{{0x74,0xf7,0x26,0x01,0x01,0x01}}} ;
 //static BYTE i;
 #if defined(USE_LINKED_LIST_NAMESPACE)
-
+NAMESPACE_LIST * getBcsRpcNamespace();
 #else
 const unsigned char coreName[] = "bcs.core.*;0.3;;";
 #endif

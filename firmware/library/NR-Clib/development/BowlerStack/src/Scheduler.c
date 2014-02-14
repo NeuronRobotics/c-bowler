@@ -40,7 +40,6 @@
  */
 
 float RunEvery(RunEveryData * data){
-    EndCritical();//The interrupts must be running for this to function
 	float currentTime;
 	float diff;
 	currentTime = getMs();

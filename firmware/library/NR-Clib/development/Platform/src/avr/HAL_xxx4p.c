@@ -170,3 +170,9 @@ void EnableDebugTerminal(void){
 	UCSR1B =( _BV(TXEN1));
 	UCSR1A = 0x00;
 }
+
+void showString (PGM_P s,Print_Level l,char newLine) {
+	char c;
+	while ((c = pgm_read_byte(s++)) != 0)
+		putCharDebug(c);
+}
