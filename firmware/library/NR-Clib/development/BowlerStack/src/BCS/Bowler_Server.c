@@ -21,24 +21,83 @@
 
 const MAC_ADDR Broadcast={{{0,0,0,0,0,0}}};
 MAC_ADDR MyMAC ={{{0x74,0xf7,0x26,0x01,0x01,0x01}}} ;
-//static BYTE i;
-#if defined(USE_LINKED_LIST_NAMESPACE)
+
 NAMESPACE_LIST * getBcsRpcNamespace();
-#else
-const unsigned char coreName[] = "bcs.core.*;0.3;;";
-#endif
+
+static float lastPacketTime;
+
+float getLastPacketTime(){
+	if(lastPacketTime > getMs())
+		lastPacketTime=0;
+	return lastPacketTime;
+}
+
+
+void Process_Self_Packet(BowlerPacket * Packet){
+	int namespaceIndex = 0;
+	int foundRpc = 0;
+	int currentNamespaceIndexForPacket = namespaceIndex;
+	NAMESPACE_LIST * tmp = getBcsCoreNamespace();
+	// First locate all Namespaces for the given RPC
+	do{
+		//Start the list with the first one
+		RPC_LIST * rpc = getRpcByID(tmp,Packet->use.head.RPC, Packet->use.head.Method );
+		//null check
+		if(rpc !=NULL){
+			//Found matching RPC and Method to parse
+			foundRpc++;
+			currentNamespaceIndexForPacket =  namespaceIndex;
+			//println_I("Rpc found in namespace: ");print_I(tmp->namespaceString);
+		}
+		//Null check and move to next namespace
+		tmp = tmp->next;
+		namespaceIndex++;
+	}while(tmp != NULL);
+	// Now the namespace should have been found or not
+
+	if(foundRpc == 0){
+                Print_Level l = getPrintLevel();
+                setPrintLevelErrorPrint();
+		println_E("##ERROR Rpc not found!");
+                setPrintLevel(l);
+		ERR(Packet,0,0);
+		return;
+	}else if(foundRpc > 0 ){
+                //println_I("Namespace found: ");print_I(getNamespaceAtIndex(currentNamespaceIndexForPacket)->namespaceString);
+		if(foundRpc > 1){
+			if(Packet->use.head.MessageID == 0){
+				//RPC overlap but no resolution defined
+				println_E("##ERROR Rpc not resolved! Multiple implementations");
+				printPacket(Packet,ERROR_PRINT);
+				ERR(Packet,0,1);
+				return;
+			}else{
+				//RPC resolution is specified
+				currentNamespaceIndexForPacket = Packet->use.head.MessageID;
+				//println_I("Rpc resolved to: ");print_I(getNamespaceAtIndex(currentNamespaceIndexForPacket)->namespaceString);
+			}
+		}
+
+		RPC_LIST * rpc = getRpcByID(getNamespaceAtIndex(currentNamespaceIndexForPacket),
+						Packet->use.head.RPC,
+						Packet->use.head.Method );
+
+		if(rpc !=NULL){
+                     //println_I("RPC found: ");print_I(rpc->rpc);
+                     rpc->callback(Packet);
+		}
+		Packet->use.head.MessageID = currentNamespaceIndexForPacket;
+		Packet->use.head.ResponseFlag=1;
+		FixPacket(Packet);
+		lastPacketTime = getMs();
+	}
+
+
+}//finish processing the Packet
 
 void Bowler_Init(void){
-	//no longer doing hardwar inits from stack
-//	startScheduler();
-//	Bowler_HAL_Init();
-
-#if defined(USE_LINKED_LIST_NAMESPACE)
 	addNamespaceToList((NAMESPACE_LIST * ) getBcsCoreNamespace());
-        addNamespaceToList((NAMESPACE_LIST * ) getBcsRpcNamespace());
-#else
-	AddNamespace(sizeof(coreName),coreName);
-#endif
+    addNamespaceToList((NAMESPACE_LIST * ) getBcsRpcNamespace());
 }
 
 BOOL process(BowlerPacket * Packet){
