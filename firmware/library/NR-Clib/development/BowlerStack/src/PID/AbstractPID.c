@@ -100,29 +100,6 @@ PidCalibrationType GetPIDCalibrateionState(int group){
 }
 
 
-void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms){
-
-        if(ms<.1){
-            //println_I("Starting Velocity");
-            velData[chan].enabled=TRUE;
-            pidGroups[chan].Enabled=FALSE;
-            velData[chan].lastPosition=GetPIDPosition(chan);
-            velData[chan].lastTime=getMs();
-            velData[chan].unitsPerSeCond=unitsPerSeCond;
-            velData[chan].currentOutputVel =0;
-        }else{
-            //println_I("Starting Velocity Timed");
-            float seConds = ms/1000;
-            INT32 dist = (INT32)unitsPerSeCond*(INT32)seConds;
-            INT32 delt = ((INT32) (GetPIDPosition(chan))-dist);
-            SetPIDTimed(chan, delt, ms);
-        }
-	
-
-}
-
-
-
 BYTE ZeroPID(BYTE chan){
 	//println("Resetting PID channel from zeroPID:",INFO_PRINT);
 	pidReset(chan,0);
