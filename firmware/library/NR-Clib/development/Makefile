@@ -1,5 +1,5 @@
 
-all:directories
+all:clean directories
 	make -C Platform/ all
 sample:
 	make -C Platform/ Native

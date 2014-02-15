@@ -1,7 +1,7 @@
 #@ Author Kevin Harrington
 SHELL := /bin/bash -e
 
-CFILES := $(wildcard src/*.c)
+CFILES := $(wildcard src/*.c) $(wildcard src/*/*.c) 
 OFILES := $(CFILES:%.c=%.o)
 DFILES := $(CFILES:%.c=%.d)
 #ifndef CC_Bowler_Arch

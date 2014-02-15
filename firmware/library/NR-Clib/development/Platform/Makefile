@@ -20,15 +20,15 @@ CCNAT    		= gcc -Os -g3 -Wall -fmessage-length=0 -MMD -MP
 LIBDIR  		= ../lib
 
 
-AVR_CFILES :=$(wildcard src/avr/*.c) $(wildcard ../BowlerStack/src/*.c)
+AVR_CFILES :=$(wildcard src/avr/*.c) $(wildcard ../BowlerStack/src/*.c) $(wildcard ../BowlerStack/src/*/*.c)
 AVR_FILTERED:=$(filter-out ../BowlerStack/src/Namespace_bcs_pid.c, $(AVR_CFILES))
 AVR_OFILES := $(AVR_FILTERED:%.c=%.o)
 
 
-PIC_CFILES :=$(wildcard src/pic32/*.c) $(wildcard src/pic32/usb/*.c) $(wildcard ../BowlerStack/src/*.c)
+PIC_CFILES :=$(wildcard src/pic32/*.c) $(wildcard src/pic32/usb/*.c) $(wildcard ../BowlerStack/src/*.c) $(wildcard ../BowlerStack/src/*/*.c)
 PIC_OFILES := $(PIC_CFILES:%.c=%.o)
 
-NATIVE_CFILES :=$(wildcard src/native/*.c) $(wildcard ../BowlerStack/src/*.c)
+NATIVE_CFILES :=$(wildcard src/native/*.c) $(wildcard ../BowlerStack/src/*.c) $(wildcard ../BowlerStack/src/*/*.c)
 NATIVE_OFILES := $(NATIVE_CFILES:%.c=%.o)
 
 all: COMPILE
@@ -36,8 +36,8 @@ all: COMPILE
 clean:
 	rm -rf $(AVR_OFILES) $(PIC_OFILES) $(NATIVE_OFILES)
 
-COMPILE: pic32MX440F128H AVR324p AVR644p  pic32MX460F512L pic32MX795F512L  Native 
-#COMPILE: AVR644p 
+#COMPILE: pic32MX440F128H AVR324p AVR644p  pic32MX460F512L pic32MX795F512L  Native 
+COMPILE: pic32MX440F128H 
 	echo OK
 	
 Native:
