@@ -41,6 +41,7 @@ COMPILE: pic32MX440F128H AVR324p AVR644p  pic32MX460F512L pic32MX795F512L  Nativ
 	echo OK
 	
 Native:
+	mkdir -p $(LIBDIR)/native/linux/
 	make -C src/native/  CC_Bowler_Arch="$(CCNAT)" 
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCNAT) -DNO_PRINTING -I../Platform/include/" 
 	$(AR) rcs  $(LIBDIR)/native/linux/libNRLIB.a $(NATIVE_OFILES)
@@ -51,6 +52,7 @@ Native:
 
 AVR644p:
 	echo $(AVR_OFILES)
+	mkdir -p $(LIBDIR)/AVR/atmega644p/
 	rm -f $(LIBDIR)/AVR/atmega644p/libNRLIB.a
 	rm -f  $(LIBDIR)/AVR/atmega644p/libNRLIB_debug.a
 	make -C src/avr/  CC_Bowler_Arch="$(CCA_avratmega644p)" 
@@ -68,6 +70,7 @@ AVR644p:
 	
 	
 AVR324p:
+	mkdir -p $(LIBDIR)/AVR/atmega324p/
 	make -C src/avr/  CC_Bowler_Arch="$(CCA_avratmega324p)" 
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCA_avratmega324p) -DNO_PRINTING -I../Platform/include/" 
 	$(ARAVR) rcs  $(LIBDIR)/AVR/atmega324p/libNRLIB.a $(AVR_OFILES)
@@ -77,6 +80,7 @@ AVR324p:
 	make -C src/avr/ clean
 	
 pic32MX440F128H:
+	mkdir -p $(LIBDIR)/PIC32/32MX440F128H/
 	make -C src/pic32/  CC_Bowler_Arch="$(CCP_pic32MX440F128H)" 
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCP_pic32MX440F128H) -DNO_PRINTING -I../Platform/include/" 
 	$(ARP) rcs  $(LIBDIR)/PIC32/32MX440F128H/libNRLIB.a $(PIC_OFILES)
@@ -86,6 +90,7 @@ pic32MX440F128H:
 	make -C src/pic32/      clean
 
 pic32MX460F512L:
+	mkdir -p $(LIBDIR)/PIC32/32MX460F512L/
 	make -C src/pic32/  CC_Bowler_Arch="$(CCP_pic32MX460F512L)" 
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCP_pic32MX460F512L) -DNO_PRINTING -I../Platform/include/" 
 	$(ARP) rcs  $(LIBDIR)/PIC32/32MX460F512L/libNRLIB.a $(PIC_OFILES)
@@ -95,6 +100,7 @@ pic32MX460F512L:
 	make -C src/pic32/      clean
 	
 pic32MX795F512L:
+	mkdir -p $(LIBDIR)/32MX795F512L/
 	make -C src/pic32/  CC_Bowler_Arch="$(CCP_pic32MX795F512L)" 
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCP_pic32MX795F512L) -DNO_PRINTING -I../Platform/include/" 
 	$(ARP) rcs  $(LIBDIR)/PIC32/32MX795F512L/libNRLIB.a $(PIC_OFILES)
