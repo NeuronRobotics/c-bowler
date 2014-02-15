@@ -199,6 +199,8 @@ void InitilizePidController(AbsPID  groups [],
  */
 void SetControllerMath( void (*math)(AbsPID * ,float ));
 
+int getNumberOfPidChannels();
+
 void SetPIDEnabled(BYTE index, BOOL enabled);
 
 BOOL isPidEnabled(BYTE i);
@@ -221,6 +223,7 @@ void RunPIDComs(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *P
  */
 void RunPIDControl();
 void RunPDVel(BYTE chan);
+void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms);
 void pushPID(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),BYTE chan, INT32 value, float time);
 void pushPIDLimitEvent(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),PidLimitEvent * event);
 
@@ -266,5 +269,7 @@ void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(Bowler
 CAL_STATE pidHysterisis(int group);
 
 void OnPidConfigure(int v);
+
+void setOutput(int group, float val);
 
 #endif /* ABSTRACTPID_H_ */
