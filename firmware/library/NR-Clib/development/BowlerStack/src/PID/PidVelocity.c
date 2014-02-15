@@ -56,3 +56,25 @@ void RunPDVel(BYTE chan){
 	}
 }
 
+void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms){
+
+        if(ms<.1){
+            //println_I("Starting Velocity");
+            getPidVelocityDataTable()[chan].enabled=TRUE;
+            getPidGroupDataTable()[chan].Enabled=FALSE;
+            getPidVelocityDataTable()[chan].lastPosition=GetPIDPosition(chan);
+            getPidVelocityDataTable()[chan].lastTime=getMs();
+            getPidVelocityDataTable()[chan].unitsPerSeCond=unitsPerSeCond;
+            getPidVelocityDataTable()[chan].currentOutputVel =0;
+        }else{
+            //println_I("Starting Velocity Timed");
+            float seConds = ms/1000;
+            INT32 dist = (INT32)unitsPerSeCond*(INT32)seConds;
+            INT32 delt = ((INT32) (GetPIDPosition(chan))-dist);
+            SetPIDTimed(chan, delt, ms);
+        }
+
+
+}
+
+
