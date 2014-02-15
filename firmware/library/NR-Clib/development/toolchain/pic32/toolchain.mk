@@ -13,7 +13,7 @@ else
 
 endif
 
-GCCP			=$(PICTOOLCHAIN)xc32-gcc -Os -s  -fomit-frame-pointer -fno-strict-aliasing -fpack-struct -fshort-enums -funsigned-char -funsigned-bitfields
+GCCP			=$(PICTOOLCHAIN)xc32-gcc -Os -s 
 ARP				=$(PICTOOLCHAIN)xc32-ar
 BIN2HEX			=$(PICTOOLCHAIN)xc32-bin2hex
 #PICTOOLCHAIN    = /usr/local/bin/
