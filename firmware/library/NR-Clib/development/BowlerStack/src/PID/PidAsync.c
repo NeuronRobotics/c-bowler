@@ -7,6 +7,7 @@
 #include "Bowler/AbstractPID.h"
 #include "Bowler/Debug.h"
 #include "Bowler/Defines.h"
+#include "Bowler/BowlerTransport.h"
 
 
 void updatePidAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
