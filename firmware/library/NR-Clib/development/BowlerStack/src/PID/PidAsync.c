@@ -16,7 +16,7 @@ void updatePidAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacke
 	for (i=0;i<getNumberOfPidChannels();i++){
 		if(getPidGroupDataTable()[i].Async){
 			if(getPidGroupDataTable()[i].CurrentState != getPidGroupDataTable()[i].lastPushedValue){
-                            println_E("Async because of ");p_int_E(i);
+                            //println_E("Async because of ");p_int_E(i);
 				update = TRUE;
 			}
 		}
