@@ -128,7 +128,12 @@ static BOOL init=FALSE;
 static BOOL usbComs = FALSE;
 static BOOL uartComs = FALSE;
 
+static BOOL disableSerial=FALSE;
 
+void disableSerialComs(BOOL state){
+    disableSerial=state;
+    uartComs = !state;
+}
 void Pic32_Bowler_HAL_Init(void){
 	TickInit();
 	init=TRUE;
@@ -183,7 +188,8 @@ WORD Get_HAL_Byte_Count(){
             return FifoGetByteCount(&storeUSB);
 	}
 	else if(Pic32Get_UART_Byte_Count()>0){
-            uartComs=TRUE;
+            if(!disableSerial)
+                uartComs=TRUE;
             return FifoGetByteCount(&storeUART);
 	}
 	return 0;

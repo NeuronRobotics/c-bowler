@@ -127,7 +127,6 @@ BYTE SetPIDTimed(BYTE chan,INT32 val,float ms){
 	if(ms==0)
 		pidGroups[chan].SetPoint=(float)val;
 	//pidGroups[chan].Enabled=TRUE;
-        pidGroups[chan].Async = TRUE;
 	velData[chan].enabled=FALSE;
 	InitAbsPIDWithPosition(&pidGroups[chan],pidGroups[chan].K.P,pidGroups[chan].K.I,pidGroups[chan].K.D, getMs(),val);
 	return TRUE;
