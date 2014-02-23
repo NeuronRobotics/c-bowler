@@ -9,10 +9,15 @@
 #define FLASHSTORAGE_H_
 
 #define FLASH_PAGE_SIZE 				0x1000
-#define StartStorePhysical			0x1D01EFFF
-#define EndStorePhysical			0x1D01FFFF
+//#define StartStorePhysical			0x1D009000
+//#define EndStorePhysical			0x1D00A000
+//
+//#define StartStoreVirtual			0x9D009000
+#define StartStorePhysical			0x1D01F000
+//#define EndStorePhysical			0x1D01FFFF
 
-#define StartStoreVirtual			0x9D01EFFF
+#define StartStoreVirtual			0x9D01F000
+
 
 #define LOCKBYTE					37
 

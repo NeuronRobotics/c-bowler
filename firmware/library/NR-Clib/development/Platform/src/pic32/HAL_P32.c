@@ -163,6 +163,7 @@ void Get_HAL_Packet(BYTE * packet,WORD size){
         if(FifoGetByteStream(&storeUART,packet,size) != 0)
             return;
     }
+    println_E("Hal reported error in retriving packet __FILE__");println_E(__FILE__);
 }
 
 BOOL Send_HAL_Packet(BYTE * packet,WORD size){
@@ -178,7 +179,7 @@ WORD Get_HAL_Byte_Count(){
         USBDeviceTasks();
 #endif
 	if( init==FALSE){
-		//println("***Initializing the PIC hal***");
+		println_W("***Initializing the PIC hal***");
 		Pic32_Bowler_HAL_Init();
 	}
 	GetNumUSBBytes();//This runs other update tasks for the USB stack
@@ -196,7 +197,9 @@ WORD Get_HAL_Byte_Count(){
 }
 
 BOOL GetBowlerPacket_arch(BowlerPacket * Packet){
+	println_I("Checking packet from HAL");
 	Get_HAL_Byte_Count();//This runs other update tasks for the HAL
+	println_I("Getting packet from HAL");
         if(usbComs)
             if(GetBowlerPacketDebug(Packet,&storeUSB))
                 return TRUE;
