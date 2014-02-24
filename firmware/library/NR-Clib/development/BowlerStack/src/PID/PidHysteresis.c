@@ -59,14 +59,14 @@ void runPidHysterisisCalibration(int group){
     getPidGroupDataTable()[group].calibration.state =  backward;
   //  println_I("\tSetting slow move");
     setOutput(group, -1.0f);
-    getPidGroupDataTable()[group].calibration.timer.setPoint=1000;
-    getPidGroupDataTable()[group].calibration.timer.MsTime=getMs();
+    getPidGroupDataTable()[group].timer.setPoint=1000;
+    getPidGroupDataTable()[group].timer.MsTime=getMs();
 
 }
 
 CAL_STATE pidHysterisis(int group){
 
-    if(RunEvery(&getPidGroupDataTable()[group].calibration.timer)>0){
+    if(RunEvery(&getPidGroupDataTable()[group].timer)>0){
 
         float boundVal = 6.0;
         float extr=GetPIDPosition(group);

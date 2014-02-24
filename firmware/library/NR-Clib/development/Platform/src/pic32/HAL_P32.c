@@ -135,19 +135,23 @@ void disableSerialComs(BOOL state){
     uartComs = !state;
 }
 void Pic32_Bowler_HAL_Init(void){
-	TickInit();
+
 	init=TRUE;
-	//println_W("Init UART hal");
-	Pic32UART_HAL_INIT(PRINT_BAUD);
-	//println_W("Init USB fifo");
+
+	println_W("Init USB fifo");
 	InitByteFifo(&storeUSB,privateRXUSB,sizeof(privateRXUSB));
-	//println_W("Init UART fifo");
+	println_W("Init UART fifo");
 	InitByteFifo(&storeUART,privateRXUART,sizeof(privateRXUART));
-	//println_W("Setting Serial FIFO buffer");
+	println_W("Setting Serial FIFO buffer");
 	SetPICUARTFifo(&storeUART);
-	//println_W("Setting USB FIFO buffer");
+	println_W("Setting USB FIFO buffer");
 	SetPICUSBFifo(&storeUSB);
-	//println_W("Pic32 is initialized...");
+
+	println_W("Init UART hal");
+	Pic32UART_HAL_INIT(PRINT_BAUD);
+	TickInit();
+
+	println_W("Pic32 is initialized...");
 }
 
 //HAL init functions
@@ -182,16 +186,21 @@ WORD Get_HAL_Byte_Count(){
 		println_W("***Initializing the PIC hal***");
 		Pic32_Bowler_HAL_Init();
 	}
-	GetNumUSBBytes();//This runs other update tasks for the USB stack
+	println_I("Getting the USB bytes");
 
 	if(GetNumUSBBytes()>0){
             usbComs=TRUE;
+            println_I("Found USB bytes");
             return FifoGetByteCount(&storeUSB);
 	}
-	else if(Pic32Get_UART_Byte_Count()>0){
-            if(!disableSerial)
-                uartComs=TRUE;
-            return FifoGetByteCount(&storeUART);
+	else {
+		println_I("Getting the UART bytes");
+		if(Pic32Get_UART_Byte_Count()>0){
+			println_I("Found the UART bytes");
+			if(!disableSerial)
+				uartComs=TRUE;
+			return FifoGetByteCount(&storeUART);
+		}
 	}
 	return 0;
 }

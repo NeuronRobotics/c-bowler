@@ -11,7 +11,10 @@
 #include "Bowler/Defines.h"
 
 int number_of_pid_groups= 0;
-AbsPID * pidGroups;
+
+static AbsPID * pidGroups=NULL;
+static PD_VEL * velData=NULL;
+
 float (*getPosition)(int);
 void (*setOutputLocal)(int, float);
 void setOutput(int group, float val);
@@ -22,7 +25,7 @@ void (*MathCalculationVelocity)(AbsPID * ,float );
 PidLimitEvent* (*checkPIDLimitEvents)(BYTE group);
 
 
-PD_VEL * velData;
+
 //static BowlerPacket packetTemp;
 
 void OnPidConfigure(int v){
@@ -34,10 +37,19 @@ int getNumberOfPidChannels(){
 }
 
 PD_VEL  * getPidVelocityDataTable(){
+	if(pidGroups == NULL){
+		println_E("Velocity data table is null");
+		return NULL;
+	}
 	return velData;
 }
 
 AbsPID * getPidGroupDataTable(){
+	if(pidGroups == NULL){
+		println_E("PID data table is null");
+		return NULL;
+	}
+
 	return pidGroups;
 }
 
@@ -69,7 +81,7 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 		resetPositionPtr==0||
 		checkPIDLimitEventsPtr==0||
 		onPidConfigurePtr==0){
-		//println("Null pointer exception in PID Configure",ERROR_PRINT);
+		println("Null pointer exception in PID Configure",ERROR_PRINT);
 		while(1);
 	}
 	pidGroups = groups;
@@ -96,6 +108,7 @@ void SetPIDCalibrateionState(int group, PidCalibrationType state){
 }
 
 PidCalibrationType GetPIDCalibrateionState(int group){
+
     return pidGroups[group].calibrationState;
 }
 

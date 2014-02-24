@@ -81,6 +81,7 @@ AVR324p:
 	
 pic32MX440F128H:
 	mkdir -p $(LIBDIR)/PIC32/32MX440F128H/
+	rm -f $(LIBDIR)/PIC32/32MX440F128H/*.a
 	make -C src/pic32/  CC_Bowler_Arch="$(CCP_pic32MX440F128H)" 
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCP_pic32MX440F128H) -DNO_PRINTING -I../Platform/include/" 
 	$(ARP) rcs  $(LIBDIR)/PIC32/32MX440F128H/libNRLIB.a $(PIC_OFILES)
@@ -91,6 +92,7 @@ pic32MX440F128H:
 
 pic32MX460F512L:
 	mkdir -p $(LIBDIR)/PIC32/32MX460F512L/
+	rm -f $(LIBDIR)/PIC32/32MX460F512L/*.a
 	make -C src/pic32/  CC_Bowler_Arch="$(CCP_pic32MX460F512L)" 
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCP_pic32MX460F512L) -DNO_PRINTING -I../Platform/include/" 
 	$(ARP) rcs  $(LIBDIR)/PIC32/32MX460F512L/libNRLIB.a $(PIC_OFILES)
@@ -100,7 +102,8 @@ pic32MX460F512L:
 	make -C src/pic32/      clean
 	
 pic32MX795F512L:
-	mkdir -p $(LIBDIR)/32MX795F512L/
+	mkdir -p $(LIBDIR)/PIC32/32MX795F512L/
+	rm -f $(LIBDIR)/PIC32/32MX795F512L/*.a
 	make -C src/pic32/  CC_Bowler_Arch="$(CCP_pic32MX795F512L)" 
 	make -C ../BowlerStack/ CC_Bowler_Arch="$(CCP_pic32MX795F512L) -DNO_PRINTING -I../Platform/include/" 
 	$(ARP) rcs  $(LIBDIR)/PIC32/32MX795F512L/libNRLIB.a $(PIC_OFILES)

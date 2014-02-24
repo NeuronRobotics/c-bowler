@@ -11,6 +11,7 @@
 void RunVel(void){
 	BYTE i;
 	for (i=0;i<getNumberOfPidChannels();i++){
+		println_I("Checking velocity on ");p_int_I(i);
 		if(!getPidGroupDataTable()[i].Enabled){
 			RunPDVel(i);
 		}
@@ -18,6 +19,7 @@ void RunVel(void){
 }
 
 void RunPDVel(BYTE chan){
+	//println_I("Running PID vel");
 	if(getPidVelocityDataTable()[chan].enabled==TRUE){
 		getPidGroupDataTable()[chan].CurrentState = GetPIDPosition(chan);
 		float currentTime = getMs();
@@ -36,13 +38,13 @@ void RunPDVel(BYTE chan){
 		if(getPidVelocityDataTable()[chan].currentOutputVel<-100)
 			getPidVelocityDataTable()[chan].currentOutputVel=-100;
 
-//		println("Velocity set=",INFO_PRINT);p_fl(getPidVelocityDataTable()[chan].unitsPerSeCond,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
-//		println("Velocity position diff=",INFO_PRINT);p_int(posDiff,INFO_PRINT);print(" ticks",INFO_PRINT);
-//		println("Velocity time diff=",INFO_PRINT);p_fl(timeDiff,INFO_PRINT);print(" seConds",INFO_PRINT);
-//		println("Velocity time diff=",INFO_PRINT);p_fl(timeMsDiff,INFO_PRINT);print(" ms",INFO_PRINT);
-//		println("Velocity current=",INFO_PRINT);p_fl(currentVelocity,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
-//		println("Velocity offset=",INFO_PRINT);p_fl(set,INFO_PRINT);print("\n",INFO_PRINT);
-//		println("Velocity set=",INFO_PRINT);p_fl(getPidVelocityDataTable()[chan].currentOutputVel,INFO_PRINT);print("\n",INFO_PRINT);
+		println("Velocity set=",INFO_PRINT);p_fl(getPidVelocityDataTable()[chan].unitsPerSeCond,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
+		println("Velocity position diff=",INFO_PRINT);p_int(posDiff,INFO_PRINT);print(" ticks",INFO_PRINT);
+		println("Velocity time diff=",INFO_PRINT);p_fl(timeDiff,INFO_PRINT);print(" seConds",INFO_PRINT);
+		println("Velocity time diff=",INFO_PRINT);p_fl(timeMsDiff,INFO_PRINT);print(" ms",INFO_PRINT);
+		println("Velocity current=",INFO_PRINT);p_fl(currentVelocity,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
+		println("Velocity offset=",INFO_PRINT);p_fl(set,INFO_PRINT);print("\n",INFO_PRINT);
+		println("Velocity set=",INFO_PRINT);p_fl(getPidVelocityDataTable()[chan].currentOutputVel,INFO_PRINT);print("\n",INFO_PRINT);
 
 		getPidGroupDataTable()[chan].Output=getPidVelocityDataTable()[chan].currentOutputVel;
 

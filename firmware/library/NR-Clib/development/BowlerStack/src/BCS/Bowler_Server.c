@@ -19,8 +19,8 @@
 
 #define __WASP2_C
 
-const MAC_ADDR Broadcast={{{0,0,0,0,0,0}}};
-MAC_ADDR MyMAC ={{{0x74,0xf7,0x26,0x01,0x01,0x01}}} ;
+const MAC_ADDR Broadcast={{0,0,0,0,0,0}};
+MAC_ADDR MyMAC ={{0x74,0xf7,0x26,0x01,0x01,0x01}} ;
 
 NAMESPACE_LIST * getBcsRpcNamespace();
 

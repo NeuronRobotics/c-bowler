@@ -39,7 +39,8 @@ static WORD     txSize;
 
 
 //static BYTE_FIFO_STORAGE store;
-static BYTE_FIFO_STORAGE * my_store;
+static BYTE_FIFO_STORAGE * usb_fifo_my_store=NULL;
+static BYTE_FIFO_STORAGE * last_my_store=NULL;
 
 static BOOL usbActive = TRUE;
 
@@ -47,15 +48,41 @@ BOOL GotUSBData(void){
 	return gotData>0;
 }
 
-BYTE_FIFO_STORAGE  * GetPICUSBFifo(void){
-	return my_store;
+void printBufferState(BYTE_FIFO_STORAGE  * s){
+	println_E("\tFIFO state ");p_int_E((int)s);
+	println_E("\tBuffer state ");p_int_E((int)s->buffer);
+	println_E("\tBuffer size ");p_int_E((int)s->bufferSize);
+	println_E("\tBuffer count ");p_int_E((int)s->byteCount);
+	println_E("\tRead Pointer ");p_int_E((int)s->readPointer);
+	println_E("\tWrite Pointer ");p_int_E((int)s->writePointer);
 }
 
+BYTE_FIFO_STORAGE  * GetPICUSBFifo(void){
+	if(usb_fifo_my_store == NULL || usb_fifo_my_store!=last_my_store){
+		setPrintLevelInfoPrint();
+		println_E("Usb storage changed!! was");printBufferState(last_my_store);
+		println_E("Is: ");printBufferState(usb_fifo_my_store);
+		while(1);
+	}
+	last_my_store=usb_fifo_my_store;
+	return usb_fifo_my_store;
+}
+
+
+
 void SetPICUSBFifo(BYTE_FIFO_STORAGE  * s){
+	Print_Level l = getPrintLevel();
+	setPrintLevelInfoPrint();
+	println_E("Starting To set FIFO ");
 	if(bufferSet==TRUE)
 		return;
 	bufferSet=TRUE;
-	my_store=s;
+	printBufferState(s);
+	usb_fifo_my_store=s;
+	last_my_store=s;
+	printBufferState(GetPICUSBFifo());
+	setPrintLevel(l);
+
 }
 
 void usb_CDC_Serial_Init(char * DevStr,char * SerialStr,UINT16 vid,UINT16 pid){
@@ -74,12 +101,14 @@ void usb_CDC_Serial_Init(char * DevStr,char * SerialStr,UINT16 vid,UINT16 pid){
 	USBDeviceInit();
 	//InitByteFifo(&store,privateRX,sizeof(privateRX));
 //	if(bufferSet==FALSE)
-//		my_store=&store;
+//		usb_fifo_my_store=&store;
 	#if defined(USB_INTERRUPT)
         USBDeviceAttach();
     #endif
     INTEnableSystemMultiVectoredInt();
-    usb_Buffer_Update();
+
+	GetNumUSBBytes();
+	println_I("Initialized the USB");
 }
 
 WORD USBGetArray(BYTE* stream, WORD num){
@@ -88,7 +117,8 @@ WORD USBGetArray(BYTE* stream, WORD num){
 	}
 	usb_Buffer_Update();
 	gotData-=num;
-	BYTE n = FifoGetByteStream(my_store,stream,num);
+
+	BYTE n = FifoGetByteStream(GetPICUSBFifo(),stream,num);
 	return n;
 }
 //static BYTE tmp [64];
@@ -197,7 +227,13 @@ int USBPutArray(BYTE* stream, int num){
 
 WORD GetNumUSBBytes(void){
 	usb_Buffer_Update();
-	return FifoGetByteCount(my_store);
+	printBufferState(GetPICUSBFifo());
+	println_I("Update Buffer = ");
+//	BYTE_FIFO_STORAGE* fifo = GetPICUSBFifo();
+
+	WORD data = FifoGetByteCount(GetPICUSBFifo());
+	p_int_I(data);
+	return data;
 }
 
 
@@ -212,7 +248,7 @@ void usb_Buffer_Update(void){
 	if (gSize>0){
 		for(i=0;i<gSize;i++){
 			do{
-				FifoAddByte(my_store,RxTmpBuffer[i], & err);
+				FifoAddByte(GetPICUSBFifo(),RxTmpBuffer[i], & err);
 			}while(err != FIFO_OK );
 			gotData++;
 			usbActive = TRUE;
