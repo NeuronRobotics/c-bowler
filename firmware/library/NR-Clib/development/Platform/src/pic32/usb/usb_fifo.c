@@ -77,10 +77,10 @@ void SetPICUSBFifo(BYTE_FIFO_STORAGE  * s){
 	if(bufferSet==TRUE)
 		return;
 	bufferSet=TRUE;
-	printBufferState(s);
+	//printBufferState(s);
 	usb_fifo_my_store=s;
 	last_my_store=s;
-	printBufferState(GetPICUSBFifo());
+	//printBufferState(GetPICUSBFifo());
 	setPrintLevel(l);
 
 }
@@ -227,12 +227,12 @@ int USBPutArray(BYTE* stream, int num){
 
 WORD GetNumUSBBytes(void){
 	usb_Buffer_Update();
-	printBufferState(GetPICUSBFifo());
-	println_I("Update Buffer = ");
+	//printBufferState(GetPICUSBFifo());
+	//println_I("Update Buffer = ");
 //	BYTE_FIFO_STORAGE* fifo = GetPICUSBFifo();
 
 	WORD data = FifoGetByteCount(GetPICUSBFifo());
-	p_int_I(data);
+	//p_int_I(data);
 	return data;
 }
 
