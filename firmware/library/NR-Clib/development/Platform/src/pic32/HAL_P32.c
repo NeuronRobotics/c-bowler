@@ -186,17 +186,17 @@ WORD Get_HAL_Byte_Count(){
 		println_W("***Initializing the PIC hal***");
 		Pic32_Bowler_HAL_Init();
 	}
-	println_I("Getting the USB bytes");
+	//println_I("Getting the USB bytes");
 
 	if(GetNumUSBBytes()>0){
             usbComs=TRUE;
-            println_I("Found USB bytes");
+            //println_I("Found USB bytes");
             return FifoGetByteCount(&storeUSB);
 	}
 	else {
-		println_I("Getting the UART bytes");
+		//println_I("Getting the UART bytes");
 		if(Pic32Get_UART_Byte_Count()>0){
-			println_I("Found the UART bytes");
+			//println_I("Found the UART bytes");
 			if(!disableSerial)
 				uartComs=TRUE;
 			return FifoGetByteCount(&storeUART);
@@ -206,9 +206,9 @@ WORD Get_HAL_Byte_Count(){
 }
 
 BOOL GetBowlerPacket_arch(BowlerPacket * Packet){
-	println_I("Checking packet from HAL");
+	//println_I("Checking packet from HAL");
 	Get_HAL_Byte_Count();//This runs other update tasks for the HAL
-	println_I("Getting packet from HAL");
+	//println_I("Getting packet from HAL");
         if(usbComs)
             if(GetBowlerPacketDebug(Packet,&storeUSB))
                 return TRUE;
