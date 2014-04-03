@@ -31,12 +31,12 @@ BOOL lockFifo(BYTE_FIFO_STORAGE * fifo){
 //		return FALSE;
 //	}
 //	fifo->mutex=TRUE;
-	StartCritical();
+	//StartCritical();
 	return TRUE;
 }
 BOOL unLockFifo(BYTE_FIFO_STORAGE * fifo){
 	//fifo->mutex=FALSE;
-	EndCritical();
+	//EndCritical();
 	return TRUE;
 }
 void InitByteFifo(BYTE_FIFO_STORAGE * fifo,BYTE * buff,UINT32 size){
@@ -179,7 +179,7 @@ UINT32 FifoAddPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * toBeAdded){
 		println_E("Packet FIFO overflow");p_int_E(fifo->bufferSize);print_E(",");p_int_E(fifo->byteCount);
 		return 0;
 	}
-	StartCritical();
+	//StartCritical();
 
         copyPacket(toBeAdded,&fifo->buffer[fifo->writePointer]);
 
@@ -190,7 +190,7 @@ UINT32 FifoAddPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * toBeAdded){
 	//fifo->byteCount++;
 	FifoGetPacketCount(fifo);
         
-        EndCritical();
+        //EndCritical();
 	return (FifoGetPacketCount(fifo)<=fifo->bufferSize);
 }
 
@@ -212,7 +212,7 @@ UINT32 FifoGetPacketSpaceAvailible(PACKET_FIFO_STORAGE * fifo){
 }
 
 UINT32 FifoGetPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * retrived){
-        StartCritical();
+        //StartCritical();
 
         if(FifoGetPacketCount(fifo)>0)
             copyPacket(&fifo->buffer[fifo->readPointer],retrived);
@@ -224,6 +224,6 @@ UINT32 FifoGetPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * retrived){
 	}
 
 	FifoGetPacketCount(fifo);
-	EndCritical();
+	//EndCritical();
 	return TRUE;
 }
