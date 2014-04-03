@@ -70,14 +70,14 @@ CAL_STATE pidHysterisis(int group){
 
         float boundVal = 6.0;
         float extr=GetPIDPosition(group);
-        if(getPidGroupDataTable()[group].calibration.state == forward){
-            incrementHistoresis( group );
-        }else if (getPidGroupDataTable()[group].calibration.state == backward){
-            decrementHistoresis( group );
-        }
         if( bound(0, extr, boundVal, boundVal)){// check to see if the encoder has moved
             //we have not moved
   //          println_I("NOT moved ");p_fl_I(extr);
+            if(getPidGroupDataTable()[group].calibration.state == forward){
+                incrementHistoresis( group );
+            }else if (getPidGroupDataTable()[group].calibration.state == backward){
+                decrementHistoresis( group );
+            }
             int historesisBound = 50;
             if( getPidGroupDataTable()[group].calibration.lowerHistoresis<-historesisBound &&
                 getPidGroupDataTable()[group].calibration.state == backward){
