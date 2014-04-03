@@ -9,8 +9,8 @@
 #define FLASHSTORAGE_H_
 
 #define FLASH_PAGE_SIZE 				0x1000
-#define StartStorePhysical		    0x1D009000
-//#define StartStorePhysical	    0x1D01F000
+//#define StartStorePhysical		    0x1D009000//End of the bootloader page
+#define StartStorePhysical                  0x1D01F000//end of the chip
 #define StartStoreVirtual			(StartStorePhysical+0x80000000)
 
 
