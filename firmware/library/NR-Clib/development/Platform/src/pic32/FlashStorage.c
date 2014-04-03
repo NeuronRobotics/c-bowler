@@ -7,12 +7,28 @@
 #include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 FLASH_STORE flash;
+
+UINT32 * stream;
+UINT32 streamSize=0;
+
 BYTE  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
+
+void SetFlashData(UINT32 * s,UINT32 size){
+    if((size+FLASHSTORE)/4 > FLASH_PAGE_SIZE ){
+        println_E("This data page is too big for the flash page!");
+        SoftReset();
+    }
+    stream=s;
+    streamSize=size;
+}
 
 void FlashLoad(void){
 	int i;
 	for (i=0;i<FLASHSTORE;i++){
 		flash.stream[i]=*((UINT32 *)(StartStoreVirtual+(i*4)));
+	}
+        for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
+		stream[i-FLASHSTORE]=*((UINT32 *)(StartStoreVirtual+(i*4)));
 	}
 }
 
@@ -23,6 +39,9 @@ void FlashSync(void){
 	println_I("Writing new data Storage page");
 	for (i=0;i<FLASHSTORE;i++){
 		NVMWriteWord((DWORD*)(StartStoreVirtual+(i*4)), flash.stream[i]);
+	}
+        for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
+                NVMWriteWord((DWORD*)(StartStoreVirtual+(i*4)), stream[i-FLASHSTORE]);
 	}
 	println_I("Storage synced");
 }
