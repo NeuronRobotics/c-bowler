@@ -113,3 +113,47 @@ CAL_STATE pidHysterisis(int group){
 
     return getPidGroupDataTable()[group].calibration.state;
 }
+
+
+void startHomingLink(int group, PidCalibrationType type){
+    float speed=20.0;
+    if(type == CALIBRARTION_home_up)
+       speed*=1.0;
+    else if (type == CALIBRARTION_home_down)
+        speed*=-1.0;
+    else{
+        println_E("Invalid homing type");
+        return;
+    }
+    SetPIDCalibrateionState(group, type);
+    setOutput(group, speed);
+    getPidGroupDataTable()[group].timer.MsTime=getMs();
+    getPidGroupDataTable()[group].timer.setPoint = 1000;
+    getPidGroupDataTable()[group].homing.homingStallBound = 2;
+    getPidGroupDataTable()[group].homing.previousValue = GetPIDPosition(group);
+}
+
+void checkLinkHomingStatus(int group){
+    if(!(   GetPIDCalibrateionState(group)==CALIBRARTION_home_down ||
+            GetPIDCalibrateionState(group)==CALIBRARTION_home_up)
+            ){
+        return;//Calibration is not running
+    }
+    if(RunEvery(&getPidGroupDataTable()[group].timer)>0){
+            float boundVal = getPidGroupDataTable()[group].homing.homingStallBound;
+
+            if( bound(  getPidGroupDataTable()[group].homing.previousValue,
+                        GetPIDPosition(group),
+                        boundVal,
+                        boundVal
+                    )
+                ){
+                pidReset(group,0);
+                println_W("Homing Done for group ");p_int_W(group);
+                SetPIDCalibrateionState(group, CALIBRARTION_DONE);
+            }else{
+
+                getPidGroupDataTable()[group].homing.previousValue = GetPIDPosition(group);
+            }
+        }
+}

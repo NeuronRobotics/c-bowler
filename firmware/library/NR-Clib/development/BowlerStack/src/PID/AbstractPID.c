@@ -238,6 +238,8 @@ void RunPIDControl(){
                     setOutput(i,pidGroups[i].Output);
                 }else if(GetPIDCalibrateionState(i) == CALIBRARTION_hysteresis){
                     pidHysterisis( i );
+                }else if((GetPIDCalibrateionState(i) == CALIBRARTION_home_down) ||(GetPIDCalibrateionState(i) == CALIBRARTION_home_up)){
+                    checkLinkHomingStatus(i);
                 }
             }
 

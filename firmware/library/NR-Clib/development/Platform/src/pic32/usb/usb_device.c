@@ -791,7 +791,7 @@ void USBDeviceTasksLocal(void);
    //void __ISR(_USB_1_VECTOR, ipl5) USB1_ISR(void)
   #endif
 #else
-#warning compiling USB Polling
+//                                                           #warning compiling USB Polling
 void USBDeviceTasks(void)
 
 #endif
