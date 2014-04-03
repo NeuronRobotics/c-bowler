@@ -219,10 +219,12 @@ BOOL isPIDInterpolating(int index){
 }
 
 BOOL isPIDArrivedAtSetpoint(int index, float plusOrMinus){
-    return bound( pidGroups[index].SetPoint,
-                    pidGroups[index].CurrentState,
-                    plusOrMinus,
-                    plusOrMinus);
+    if(pidGroups[index].Enabled)
+        return bound( pidGroups[index].SetPoint,
+                        pidGroups[index].CurrentState,
+                        plusOrMinus,
+                        plusOrMinus);
+    return TRUE;
 }
 
 void RunPIDControl(){
