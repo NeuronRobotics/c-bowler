@@ -204,7 +204,7 @@ void InitAbsPIDWithPosition(AbsPID * state,float KP,float KI,float KD,float time
 	state->K.D=KD;
 	//state->integralCircularBufferIndex = 0;
 	state->integralTotal = 0.0;
-        state->integralSize  = 10.0;
+        state->integralSize  = 20.0;
 	state->SetPoint = currentPosition;
         state->interpolate.set=state->SetPoint;
 	state->PreviousError=0;
@@ -283,7 +283,7 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
         //This section clears the integral buffer when the zero is crossed
         if((state->PreviousError>=0 && error<0)||
             (state->PreviousError<0 && error>=0)    ){
-            
+            state->integralTotal=0;
         }
 
 
