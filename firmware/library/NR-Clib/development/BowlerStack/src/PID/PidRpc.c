@@ -25,8 +25,8 @@
 void GetConfigPDVelocity(BowlerPacket * Packet){
 //   2700	      4	      8	   2712	    a98	output/o/PidRpc.o
 
-	set32bit(Packet,getPidVelocityDataTable()[Packet->use.data[0]].K.P*100, 1);
-	set32bit(Packet,getPidVelocityDataTable()[Packet->use.data[0]].K.D*100, 5);
+	set32bit(Packet,getPidGroupDataTable()[Packet->use.data[0]].config.V.P*100, 1);
+	set32bit(Packet,getPidGroupDataTable()[Packet->use.data[0]].config.V.D*100, 5);
 
 	Packet->use.head.DataLegnth=4+9;
 	Packet->use.head.Method=BOWLER_POST;
@@ -42,8 +42,8 @@ BYTE ConfigPDVelovity(BowlerPacket * Packet){
 	KP=(float)get32bit(Packet,1);
 	KD=(float)get32bit(Packet,5);
 
-	getPidVelocityDataTable()[chan].K.P=KP/100.0;
-	getPidVelocityDataTable()[chan].K.D=KD/100.0;
+	getPidGroupDataTable()[chan].config.V.P=KP/100.0;
+	getPidGroupDataTable()[chan].config.V.D=KD/100.0;
 
 	OnPidConfigure(chan);
 	return TRUE;

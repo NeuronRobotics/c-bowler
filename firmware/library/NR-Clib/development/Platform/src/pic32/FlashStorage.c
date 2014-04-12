@@ -13,36 +13,58 @@ UINT32 streamSize=0;
 
 BYTE  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
 
+UINT32 MEMORY_BASE =DefaultStartStorePhysical;
+UINT32 VirtualBase = DefaultStartStorePhysical+VirtualAddress;
+
+void FlashSwitchMemoryToBootloader(){
+    VirtualBase = BootloaderStartStorePhysical+VirtualAddress;
+    MEMORY_BASE = BootloaderStartStorePhysical;
+}
+
+
+
+
 void SetFlashData(UINT32 * s,UINT32 size){
-    if((size+FLASHSTORE)/4 > FLASH_PAGE_SIZE ){
+    if(((size*4)+FLASHSTORE) > FLASH_PAGE_SIZE ){
         println_E("This data page is too big for the flash page!");
         SoftReset();
     }
-    stream=s;
     streamSize=size;
+    stream=s;
+    
 }
 
 void FlashLoad(void){
 	int i;
 	for (i=0;i<FLASHSTORE;i++){
-		flash.stream[i]=*((UINT32 *)(StartStoreVirtual+(i*4)));
+		flash.stream[i]=*((UINT32 *)(VirtualBase +(i*4)));
 	}
         for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
-		stream[i-FLASHSTORE]=*((UINT32 *)(StartStoreVirtual+(i*4)));
+		stream[i-FLASHSTORE]=*((UINT32 *)(VirtualBase +(i*4)));
 	}
 }
 
 void FlashSync(void){
-	int i;
+	UINT32 i;
+        UINT32 data=0, read=0,addr=0;
+
 	println_I("Erasing Storage page");
-	NVMErasePage( (DWORD*) StartStorePhysical);
+	NVMErasePage( (DWORD*) MEMORY_BASE);
 	println_I("Writing new data Storage page");
 	for (i=0;i<FLASHSTORE;i++){
-		NVMWriteWord((DWORD*)(StartStoreVirtual+(i*4)), flash.stream[i]);
+		NVMWriteWord((DWORD*)(VirtualBase +(i*4)), flash.stream[i]);
 	}
         for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
-                NVMWriteWord((DWORD*)(StartStoreVirtual+(i*4)), stream[i-FLASHSTORE]);
-	}
+                data = stream[i-FLASHSTORE];
+                addr = (VirtualBase +(i*4));
+                NVMWriteWord((DWORD*)(addr), data );
+                read=*((UINT32 *)(addr));
+                if(data != read){
+                    println_E("Data write failed! ");prHEX32(read,ERROR_PRINT);
+                    print_E(" expected ");prHEX32(data,ERROR_PRINT);
+                    print_E(" at ");prHEX32(addr,ERROR_PRINT);
+                }
+        }
 	println_I("Storage synced");
 }
 

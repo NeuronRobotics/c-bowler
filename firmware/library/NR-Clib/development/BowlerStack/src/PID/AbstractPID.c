@@ -103,13 +103,13 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 }
 
 void SetPIDCalibrateionState(int group, PidCalibrationType state){
-
-    pidGroups[group].calibrationState=state;
+    pidGroups[group].config.calibrationState=state;
+    //OnPidConfigure(group);
 }
 
 PidCalibrationType GetPIDCalibrateionState(int group){
 
-    return pidGroups[group].calibrationState;
+    return pidGroups[group].config.calibrationState;
 }
 
 
@@ -161,7 +161,6 @@ float pidResetNoStop(BYTE chan,INT32 val){
 	float value = (float)resetPosition(chan,val);
 	//println("From pidReset 1 Current setpoint:");p_fl(local_groups[chan].SetPoint); print(" Target value:");p_fl(value);
 	float time = getMs();
-	pidGroups[chan].channel=chan;
 	pidGroups[chan].lastPushedValue=value;
 	InitAbsPIDWithPosition(&pidGroups[chan],pidGroups[chan].config.K.P,pidGroups[chan].config.K.I,pidGroups[chan].config.K.D, time,value );
 	velData[chan].lastPosition=val;

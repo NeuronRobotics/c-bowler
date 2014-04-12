@@ -61,12 +61,6 @@ typedef struct  _PidLimitEvent{
 /**
  * These are your Control Constants
  */
-	typedef struct _AdsPID_ConFIG{
-		float		P;
-		float 		I;
-		float		D;
-	} AdsPID_ConFIG;
-
         typedef enum _CAL_STATE {
                 forward  = 0,
                 backward = 1,
@@ -79,6 +73,7 @@ typedef struct  _PidLimitEvent{
  * will calculate scaling based on that and the current time
  */
 typedef struct _AbsPID_Config{
+
     unsigned char           Enabled;
     unsigned char           Polarity;
     float			IndexLatchValue;
@@ -90,18 +85,23 @@ typedef struct _AbsPID_Config{
             float 		I;
             float		D;
     } K;
+    struct {
+            float		P;
+            float		D;
+    } V;
     int upperHistoresis;
     int lowerHistoresis;
     int stop;
+    PidCalibrationType calibrationState;
 }AbsPID_Config;
 
 typedef struct _AbsPID
 {
     union{
-        unsigned char raw [ sizeof(AbsPID_Config)] ;
+        unsigned long int raw [ sizeof(AbsPID_Config)] ;
         AbsPID_Config config;
     };
-        unsigned char           channel;     
+        //unsigned char           channel;
         float 			SetPoint;
         float			CurrentState;
         float			PreviousError;
@@ -114,9 +114,7 @@ typedef struct _AbsPID
         float			PreviousTime;
         float                   lastPushedValue;
         float                   lastPushedTime;
-
         INTERPOLATE_DATA interpolate;
-        PidCalibrationType calibrationState;
         struct{
             BOOL calibrating;
             BOOL calibrated;
@@ -148,10 +146,7 @@ typedef struct _PD_VEL
         float lastVelocity;
         float lastTime;
         float currentOutputVel;
-        struct {
-			float		P;
-			float		D;
-		} K;
+
 } PD_VEL;
 /**
  * RunAbstractPIDCalc

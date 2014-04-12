@@ -221,7 +221,7 @@ void printfDEBUG_FL(float f,Print_Level l){
 void printPIDvals(int i){
 
 	println("PID chan=",INFO_PRINT);
-	int chan =      getPidGroupDataTable()[i].channel;
+	int chan =      i;
 	int enabled=    getPidGroupDataTable()[i].config.Enabled;
 	int polarity =  getPidGroupDataTable()[i].config.Polarity;
 	int set =       getPidGroupDataTable()[i].SetPoint;
@@ -234,7 +234,7 @@ void printPIDvals(int i){
 	print(" Kd=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].config.K.D,INFO_PRINT);
 	print("\t Setpoint=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].SetPoint,INFO_PRINT);
 	print("\t Current State=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].CurrentState,INFO_PRINT);
-        print("\t Error=",ERROR_PRINT);    p_fl(getPidGroupDataTable()[i].PreviousError,ERROR_PRINT);
+        print("\t Error=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].PreviousError,INFO_PRINT);
 	print("\t Control Output: ",INFO_PRINT); p_fl(getPidGroupDataTable()[i].Output ,INFO_PRINT);
         print("\t Output Set: ",INFO_PRINT); p_fl(getPidGroupDataTable()[i].OutputSet ,INFO_PRINT);
 

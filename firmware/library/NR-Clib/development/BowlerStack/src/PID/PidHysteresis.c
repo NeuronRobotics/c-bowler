@@ -151,6 +151,7 @@ void checkLinkHomingStatus(int group){
                 pidReset(group,0);
                 println_W("Homing Done for group ");p_int_W(group);
                 SetPIDCalibrateionState(group, CALIBRARTION_DONE);
+                OnPidConfigure(group);
             }else{
 
                 getPidGroupDataTable()[group].homing.previousValue = GetPIDPosition(group);
