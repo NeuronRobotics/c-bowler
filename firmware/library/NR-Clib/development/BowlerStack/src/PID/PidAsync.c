@@ -14,7 +14,7 @@ void updatePidAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacke
 	int i;
 	int update = FALSE;
 	for (i=0;i<getNumberOfPidChannels();i++){
-		if(getPidGroupDataTable()[i].Async){
+		if(getPidGroupDataTable()[i].config.Async){
 			if(getPidGroupDataTable()[i].CurrentState != getPidGroupDataTable()[i].lastPushedValue){
                             //println_E("Async because of ");p_int_E(i);
 				update = TRUE;
@@ -58,10 +58,10 @@ void pushPIDLimitEvent(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPa
 	}
 	event->latchTickError=0;
 	if(event->type == INDEXEVENT){
-		if(getPidGroupDataTable()[event->group].useIndexLatch){
+		if(getPidGroupDataTable()[event->group].config.useIndexLatch){
 			event->latchTickError = event->value-GetPIDPosition(event->group);
-			event->value = getPidGroupDataTable()[event->group].IndexLatchValue;
-			if(getPidGroupDataTable()[event->group].stopOnIndex){
+			event->value = getPidGroupDataTable()[event->group].config.IndexLatchValue;
+			if(getPidGroupDataTable()[event->group].config.stopOnIndex){
 				pidReset(event->group,event->value);
 			}else{
 				event->value = pidResetNoStop(event->group,event->value);

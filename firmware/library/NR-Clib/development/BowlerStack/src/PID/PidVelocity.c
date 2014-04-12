@@ -12,7 +12,7 @@ void RunVel(void){
 	BYTE i;
 	for (i=0;i<getNumberOfPidChannels();i++){
 		println_I("Checking velocity on ");p_int_I(i);
-		if(!getPidGroupDataTable()[i].Enabled){
+		if(!getPidGroupDataTable()[i].config.Enabled){
 			RunPDVel(i);
 		}
 	}
@@ -63,7 +63,7 @@ void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms){
         if(ms<.1){
             //println_I("Starting Velocity");
             getPidVelocityDataTable()[chan].enabled=TRUE;
-            getPidGroupDataTable()[chan].Enabled=FALSE;
+            getPidGroupDataTable()[chan].config.Enabled=FALSE;
             getPidVelocityDataTable()[chan].lastPosition=GetPIDPosition(chan);
             getPidVelocityDataTable()[chan].lastTime=getMs();
             getPidVelocityDataTable()[chan].unitsPerSeCond=unitsPerSeCond;

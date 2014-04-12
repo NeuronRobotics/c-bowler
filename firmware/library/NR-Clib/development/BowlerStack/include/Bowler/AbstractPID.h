@@ -78,15 +78,31 @@ typedef struct  _PidLimitEvent{
  * It also has no assumptions on the time step it is run over. It stores previous time and
  * will calculate scaling based on that and the current time
  */
+typedef struct _AbsPID_Config{
+    unsigned char           Enabled;
+    unsigned char           Polarity;
+    float			IndexLatchValue;
+    unsigned char 		stopOnIndex;
+    unsigned char   	useIndexLatch;
+    unsigned char           Async;
+    struct {
+            float		P;
+            float 		I;
+            float		D;
+    } K;
+    int upperHistoresis;
+    int lowerHistoresis;
+    int stop;
+}AbsPID_Config;
+
 typedef struct _AbsPID
 {
-        unsigned char           channel;
-        unsigned char           Enabled;
-        unsigned char           Polarity;
+    union{
+        unsigned char raw [ sizeof(AbsPID_Config)] ;
+        AbsPID_Config config;
+    };
+        unsigned char           channel;     
         float 			SetPoint;
-        float			IndexLatchValue;
-        unsigned char 		stopOnIndex;
-        unsigned char   	useIndexLatch;
         float			CurrentState;
         float			PreviousError;
         //unsigned int            integralCircularBufferIndex;
@@ -96,28 +112,18 @@ typedef struct _AbsPID
         float			OutputSet;
         // This must be in MS
         float			PreviousTime;
-        unsigned char           Async;
         float                   lastPushedValue;
         float                   lastPushedTime;
-        struct {
-			float		P;
-			float 		I;
-			float		D;
-		} K;
+
         INTERPOLATE_DATA interpolate;
         PidCalibrationType calibrationState;
         struct{
-            int upperHistoresis;
-            int lowerHistoresis;
-            int stop;
             BOOL calibrating;
             BOOL calibrated;
             CAL_STATE state;
-            int dummy;
             //RunEveryData timer;
         }calibration;
         struct{
-
             //RunEveryData timer;
             float homingStallBound;
             float previousValue;
