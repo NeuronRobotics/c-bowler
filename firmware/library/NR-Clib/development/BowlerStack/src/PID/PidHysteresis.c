@@ -100,7 +100,7 @@ CAL_STATE pidHysterisis(int group){
    //             println_I("Calibration done for link# ");p_int_I(group);
                 getPidGroupDataTable()[group].calibration.state = done;
                 SetPIDCalibrateionState(group, CALIBRARTION_DONE);
-                //calcCenter( group);
+                calcCenter( group);
             }
 
         }
