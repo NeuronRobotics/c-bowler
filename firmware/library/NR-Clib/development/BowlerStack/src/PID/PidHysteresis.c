@@ -9,47 +9,47 @@
 #include "Bowler/Defines.h"
 
 void incrementHistoresis(int group){
-    getPidGroupDataTable()[group].calibration.upperHistoresis+=1;
+    getPidGroupDataTable()[group].config.upperHistoresis+=1;
     //calcCenter( group);
 }
 void decrementHistoresis(int group){
-    getPidGroupDataTable()[group].calibration.lowerHistoresis-=1;
+    getPidGroupDataTable()[group].config.lowerHistoresis-=1;
 }
 
 
 void calcCenter(int group){
-    int diff = (getPidGroupDataTable()[group].calibration.upperHistoresis+getPidGroupDataTable()[group].calibration.lowerHistoresis)/2;
-    getPidGroupDataTable()[group].calibration.stop = diff;
+    int diff = (getPidGroupDataTable()[group].config.upperHistoresis+getPidGroupDataTable()[group].config.lowerHistoresis)/2;
+    getPidGroupDataTable()[group].config.stop = diff;
 }
 
 void checkCalibration(int group){
     if(getPidGroupDataTable()[group].calibration.calibrated != TRUE){
-       getPidGroupDataTable()[group].calibration.upperHistoresis=0;
-       getPidGroupDataTable()[group].calibration.lowerHistoresis=0;
-       getPidGroupDataTable()[group].calibration.stop=0;
+       getPidGroupDataTable()[group].config.upperHistoresis=0;
+       getPidGroupDataTable()[group].config.lowerHistoresis=0;
+       getPidGroupDataTable()[group].config.stop=0;
        getPidGroupDataTable()[group].calibration.calibrated = TRUE ;
     }
 }
 
 int getUpperPidHistoresis(int group){
     checkCalibration(group);
-    return getPidGroupDataTable()[group].calibration.upperHistoresis;
+    return getPidGroupDataTable()[group].config.upperHistoresis;
 }
 int getLowerPidHistoresis(int group){
     checkCalibration(group);
-    return getPidGroupDataTable()[group].calibration.lowerHistoresis;
+    return getPidGroupDataTable()[group].config.lowerHistoresis;
 }
 int getPidStop(int group){
     checkCalibration(group);
-    return getPidGroupDataTable()[group].calibration.stop;
+    return getPidGroupDataTable()[group].config.stop;
 }
 
 void runPidHysterisisCalibration(int group){
 
 //    println_E("\r\n\nStart calibration #");p_int_E(group);
-    getPidGroupDataTable()[group].calibration.lowerHistoresis = 0;
-    getPidGroupDataTable()[group].calibration.upperHistoresis = 0;
-    getPidGroupDataTable()[group].calibration.stop = 0;
+    getPidGroupDataTable()[group].config.lowerHistoresis = 0;
+    getPidGroupDataTable()[group].config.upperHistoresis = 0;
+    getPidGroupDataTable()[group].config.stop = 0;
 //    println_I("\tReset PID");
     pidReset(group,0);// Zero encoder reading
  //   println_I("\tDisable PID Output");
@@ -79,12 +79,12 @@ CAL_STATE pidHysterisis(int group){
                 decrementHistoresis( group );
             }
             int historesisBound = 50;
-            if( getPidGroupDataTable()[group].calibration.lowerHistoresis<-historesisBound &&
+            if( getPidGroupDataTable()[group].config.lowerHistoresis<-historesisBound &&
                 getPidGroupDataTable()[group].calibration.state == backward){
    //             println_E("Backward Motor seems damaged, more then counts of historesis ");
                 getPidGroupDataTable()[group].calibration.state = forward;
             }
-            if(     getPidGroupDataTable()[group].calibration.upperHistoresis>historesisBound &&
+            if(     getPidGroupDataTable()[group].config.upperHistoresis>historesisBound &&
                     getPidGroupDataTable()[group].calibration.state == forward){
    //             println_E("Forward Motor seems damaged, more then counts of historesis ");
                 getPidGroupDataTable()[group].calibration.state = done;
@@ -151,6 +151,7 @@ void checkLinkHomingStatus(int group){
                 pidReset(group,0);
                 println_W("Homing Done for group ");p_int_W(group);
                 SetPIDCalibrateionState(group, CALIBRARTION_DONE);
+                OnPidConfigure(group);
             }else{
 
                 getPidGroupDataTable()[group].homing.previousValue = GetPIDPosition(group);

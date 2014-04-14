@@ -221,20 +221,20 @@ void printfDEBUG_FL(float f,Print_Level l){
 void printPIDvals(int i){
 
 	println("PID chan=",INFO_PRINT);
-	int chan =      getPidGroupDataTable()[i].channel;
-	int enabled=    getPidGroupDataTable()[i].Enabled;
-	int polarity =  getPidGroupDataTable()[i].Polarity;
+	int chan =      i;
+	int enabled=    getPidGroupDataTable()[i].config.Enabled;
+	int polarity =  getPidGroupDataTable()[i].config.Polarity;
 	int set =       getPidGroupDataTable()[i].SetPoint;
 	p_int(chan,INFO_PRINT);
 	print(" Enabled=",INFO_PRINT);     p_int(enabled,INFO_PRINT);
 	print(" Polarity=",INFO_PRINT);    p_int(polarity,INFO_PRINT);
 	print(" SET=",INFO_PRINT);    p_int(set,INFO_PRINT);
-	print(" Kp=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].K.P,INFO_PRINT);
-	print(" Ki=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].K.I,INFO_PRINT);
-	print(" Kd=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].K.D,INFO_PRINT);
+	print(" Kp=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].config.K.P,INFO_PRINT);
+	print(" Ki=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].config.K.I,INFO_PRINT);
+	print(" Kd=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].config.K.D,INFO_PRINT);
 	print("\t Setpoint=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].SetPoint,INFO_PRINT);
 	print("\t Current State=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].CurrentState,INFO_PRINT);
-        print("\t Error=",ERROR_PRINT);    p_fl(getPidGroupDataTable()[i].PreviousError,ERROR_PRINT);
+        print("\t Error=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].PreviousError,INFO_PRINT);
 	print("\t Control Output: ",INFO_PRINT); p_fl(getPidGroupDataTable()[i].Output ,INFO_PRINT);
         print("\t Output Set: ",INFO_PRINT); p_fl(getPidGroupDataTable()[i].OutputSet ,INFO_PRINT);
 

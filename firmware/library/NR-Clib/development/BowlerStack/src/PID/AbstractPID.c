@@ -54,11 +54,11 @@ AbsPID * getPidGroupDataTable(){
 }
 
 BOOL isPidEnabled(BYTE i){
-    return pidGroups[i].Enabled;
+    return pidGroups[i].config.Enabled;
 }
 
 void SetPIDEnabled(BYTE index, BOOL enabled){
-    pidGroups[index].Enabled=enabled;
+    pidGroups[index].config.Enabled=enabled;
 }
 
 void SetControllerMath( void (*math)(AbsPID * ,float )){
@@ -96,20 +96,20 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
         int i;
 
         for(i=0;i<numberOfGroups;i++){
-            int enabled = pidGroups[i].Enabled;
+            int enabled = pidGroups[i].config.Enabled;
             pidReset(i,0);
-            pidGroups[i].Enabled = enabled ;
+            pidGroups[i].config.Enabled = enabled ;
         }
 }
 
 void SetPIDCalibrateionState(int group, PidCalibrationType state){
-
-    pidGroups[group].calibrationState=state;
+    pidGroups[group].config.calibrationState=state;
+    //OnPidConfigure(group);
 }
 
 PidCalibrationType GetPIDCalibrateionState(int group){
 
-    return pidGroups[group].calibrationState;
+    return pidGroups[group].config.calibrationState;
 }
 
 
@@ -122,7 +122,7 @@ BYTE ZeroPID(BYTE chan){
 BYTE ClearPID(BYTE chan){
 	if (chan>=getNumberOfPidChannels())
 		return FALSE;
-	pidGroups[chan].Enabled=FALSE;
+	pidGroups[chan].config.Enabled=FALSE;
 	return TRUE;
 }
 
@@ -132,16 +132,16 @@ BYTE SetPIDTimed(BYTE chan,INT32 val,float ms){
 		return FALSE;
 	if(ms<.01)
 		ms=0;
-	//local_groups[chan].Enabled=TRUE;
+	//local_groups[chan].config.Enabled=TRUE;
 	pidGroups[chan].interpolate.set=(float)val;
 	pidGroups[chan].interpolate.setTime=ms;
 	pidGroups[chan].interpolate.start=pidGroups[chan].SetPoint;
 	pidGroups[chan].interpolate.startTime=getMs();
 	if(ms==0)
 		pidGroups[chan].SetPoint=(float)val;
-	//pidGroups[chan].Enabled=TRUE;
+	//pidGroups[chan].config.Enabled=TRUE;
 	velData[chan].enabled=FALSE;
-	InitAbsPIDWithPosition(&pidGroups[chan],pidGroups[chan].K.P,pidGroups[chan].K.I,pidGroups[chan].K.D, getMs(),val);
+	InitAbsPIDWithPosition(&pidGroups[chan],pidGroups[chan].config.K.P,pidGroups[chan].config.K.I,pidGroups[chan].config.K.D, getMs(),val);
 	return TRUE;
 }
 BYTE SetPID(BYTE chan,INT32 val){
@@ -161,9 +161,8 @@ float pidResetNoStop(BYTE chan,INT32 val){
 	float value = (float)resetPosition(chan,val);
 	//println("From pidReset 1 Current setpoint:");p_fl(local_groups[chan].SetPoint); print(" Target value:");p_fl(value);
 	float time = getMs();
-	pidGroups[chan].channel=chan;
 	pidGroups[chan].lastPushedValue=value;
-	InitAbsPIDWithPosition(&pidGroups[chan],pidGroups[chan].K.P,pidGroups[chan].K.I,pidGroups[chan].K.D, time,value );
+	InitAbsPIDWithPosition(&pidGroups[chan],pidGroups[chan].config.K.P,pidGroups[chan].config.K.I,pidGroups[chan].config.K.D, time,value );
 	velData[chan].lastPosition=val;
 	velData[chan].lastTime=time;
 	return value;
@@ -176,7 +175,7 @@ void pidReset(BYTE chan,INT32 val){
 	pidGroups[chan].interpolate.start=value;
 	pidGroups[chan].interpolate.startTime=getMs();
 	pidGroups[chan].SetPoint=value;
-	pidGroups[chan].Enabled=TRUE;//Ensures output enabled to stop motors
+	pidGroups[chan].config.Enabled=TRUE;//Ensures output enabled to stop motors
 	pidGroups[chan].Output=0.0;
 	setOutput(chan,pidGroups[chan].Output);
 	velData[chan].enabled=FALSE;
@@ -188,9 +187,9 @@ void InitAbsPID(AbsPID * state,float KP,float KI,float KD,float time){
 }
 
 void setPIDConstants(int group,float p,float i,float d){
-    pidGroups[group].K.P=p;
-    pidGroups[group].K.I=i;
-    pidGroups[group].K.D=d;
+    pidGroups[group].config.K.P=p;
+    pidGroups[group].config.K.I=i;
+    pidGroups[group].config.K.D=d;
 }
 
 /**
@@ -199,9 +198,9 @@ void setPIDConstants(int group,float p,float i,float d){
  * @param CurrentTime a float of the time it is called in MS for use by the PID calculation
  */
 void InitAbsPIDWithPosition(AbsPID * state,float KP,float KI,float KD,float time,float currentPosition){
-	state->K.P=KP;
-	state->K.I=KI;
-	state->K.D=KD;
+	state->config.K.P=KP;
+	state->config.K.I=KI;
+	state->config.K.D=KD;
 	//state->integralCircularBufferIndex = 0;
 	state->integralTotal = 0.0;
         state->integralSize  = 20.0;
@@ -219,7 +218,7 @@ BOOL isPIDInterpolating(int index){
 }
 
 BOOL isPIDArrivedAtSetpoint(int index, float plusOrMinus){
-    if(pidGroups[index].Enabled)
+    if(pidGroups[index].config.Enabled)
         return bound( pidGroups[index].SetPoint,
                         pidGroups[index].CurrentState,
                         plusOrMinus,
@@ -230,7 +229,7 @@ BOOL isPIDArrivedAtSetpoint(int index, float plusOrMinus){
 void RunPIDControl(){
     	int i;
 	for (i=0;i<getNumberOfPidChannels();i++){
-            if(pidGroups[i].Enabled){
+            if(pidGroups[i].config.Enabled){
                 pidGroups[i].CurrentState = getPosition(i);
                 pidGroups[i].SetPoint = interpolate((INTERPOLATE_DATA *)&pidGroups[i].interpolate,getMs());
                 MathCalculationPosition(& pidGroups[i],getMs());
@@ -292,12 +291,12 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
         state->PreviousError=error;
 	 
 	//do the PID calculation
-	state->Output = (   (state->K.P*error) +
-                            (state->K.D*derivative) +
-                            (state->K.I*state->integralTotal)
+	state->Output = (   (state->config.K.P*error) +
+                            (state->config.K.D*derivative) +
+                            (state->config.K.I*state->integralTotal)
                         );
 
-        if(!state->Polarity)
+        if(!state->config.Polarity)
             state->Output *=-1.0;
 	//Store the current time for next iterations previous time
 	state->PreviousTime=CurrentTime;

@@ -12,7 +12,7 @@ void RunVel(void){
 	BYTE i;
 	for (i=0;i<getNumberOfPidChannels();i++){
 		println_I("Checking velocity on ");p_int_I(i);
-		if(!getPidGroupDataTable()[i].Enabled){
+		if(!getPidGroupDataTable()[i].config.Enabled){
 			RunPDVel(i);
 		}
 	}
@@ -30,7 +30,7 @@ void RunPDVel(BYTE chan){
 		//float velocityDiff = currentVelocity-getPidVelocityDataTable()[chan].lastVelocity;
 		float velocityDiff=0;
 		float proportional =  currentVelocity-getPidVelocityDataTable()[chan].unitsPerSeCond;
-		float set = (getPidVelocityDataTable()[chan].currentOutputVel+(proportional*getPidVelocityDataTable()[chan].K.P)+(velocityDiff*getPidVelocityDataTable()[chan].K.D))/-10;
+		float set = (getPidVelocityDataTable()[chan].currentOutputVel+(proportional*getPidGroupDataTable()[chan].config.V.P)+(velocityDiff*getPidGroupDataTable()[chan].config.V.D))/-10;
 		getPidVelocityDataTable()[chan].currentOutputVel+=set;
 
 		if (getPidVelocityDataTable()[chan].currentOutputVel>100)
@@ -63,7 +63,7 @@ void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms){
         if(ms<.1){
             //println_I("Starting Velocity");
             getPidVelocityDataTable()[chan].enabled=TRUE;
-            getPidGroupDataTable()[chan].Enabled=FALSE;
+            getPidGroupDataTable()[chan].config.Enabled=FALSE;
             getPidVelocityDataTable()[chan].lastPosition=GetPIDPosition(chan);
             getPidVelocityDataTable()[chan].lastTime=getMs();
             getPidVelocityDataTable()[chan].unitsPerSeCond=unitsPerSeCond;
