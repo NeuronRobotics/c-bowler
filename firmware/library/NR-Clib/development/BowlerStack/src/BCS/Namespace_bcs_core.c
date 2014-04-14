@@ -218,6 +218,8 @@ RPC_LIST * getRpcByIndex(NAMESPACE_LIST * namespace,BYTE index){
 void RunNamespaceAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
     if(pidAsyncCallbackPtr != NULL){
         NAMESPACE_LIST * tmp = getBcsCoreNamespace();
+        if(tmp == NULL)
+            return;
         int i=0;
 		do{
 				if(tmp->asyncEventCheck != NULL){
