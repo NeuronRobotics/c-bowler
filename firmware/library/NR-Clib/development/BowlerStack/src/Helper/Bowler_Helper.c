@@ -121,12 +121,24 @@ BYTE CheckAddress(BYTE * one,BYTE * two){
 
 float interpolate(INTERPOLATE_DATA * data, float currentTime){
 	float back;
-	float diffTime;
-	if(data->setTime > 0){
+	float diffTime, timeToSet,totalDistance;
+
+
+	if(data->setTime >= 0){
+                if(data->setTime<.01){
+                    data->setTime=.01;
+                }
 		diffTime = currentTime-data->startTime;
-		if((diffTime < data->setTime) && (diffTime>0)){
-			float elapsed = 1-((data->setTime-diffTime)/data->setTime);
-			float tmp=((float)data->start+(float)(data->set-data->start)*elapsed);
+                timeToSet = data->setTime-diffTime;
+                totalDistance=data->set-data->start;
+		if((diffTime>0)){
+                    if((timeToSet>0) ){
+			float elapsed = 1-((timeToSet)/data->setTime);
+                        if(elapsed<0)
+                           elapsed=0;
+                        if(elapsed>1)
+                           elapsed=1;
+			float tmp=(data->start+(totalDistance*elapsed));
 
 			if(data->set > data->start){
 				if((tmp>data->set)||(tmp<data->start))
@@ -136,14 +148,21 @@ float interpolate(INTERPOLATE_DATA * data, float currentTime){
 					tmp=data->set;
 			}
 			back=tmp;
+                    }else{
+                        //time out case
+                        if(timeToSet*-1>data->setTime*.1){
+                            //println_E("Interpolation ran over time by more then 10%");
+                        }
+                        back=data->set;
+                    }
 		}else{
-			// Fixes the overflow case and the timeout case
-			data->setTime=0;
-			back=data->set;
+                    println_E("Timer roll over, !");
+                    // Fixes the overflow case
+                    back=data->set;
 		}
 	}else{
-		back=data->set;
-		data->setTime = 0;
+            println_E("Error: Interpolation can not be negative! ");p_fl_E(data->setTime );
+            back=data->set;
 	}
 	return back;
 }
