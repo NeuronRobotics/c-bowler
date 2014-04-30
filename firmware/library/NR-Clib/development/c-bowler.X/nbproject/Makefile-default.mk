@@ -95,350 +95,350 @@ ${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o: ../BowlerStack/src/BCS/BowlerP
 	@${MKDIR} ${OBJECTDIR}/_ext/850752066 
 	@${RM} ${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o.d" -o ${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o ../BowlerStack/src/BCS/BowlerPacketParser.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o.d" -o ${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o ../BowlerStack/src/BCS/BowlerPacketParser.c   
 	
 ${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o: ../BowlerStack/src/BCS/Namespace_bcs_rpc.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850752066 
 	@${RM} ${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o.d" -o ${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o ../BowlerStack/src/BCS/Namespace_bcs_rpc.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o.d" -o ${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o ../BowlerStack/src/BCS/Namespace_bcs_rpc.c   
 	
 ${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o: ../BowlerStack/src/BCS/Namespace_bcs_core.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850752066 
 	@${RM} ${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o.d" -o ${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o ../BowlerStack/src/BCS/Namespace_bcs_core.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o.d" -o ${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o ../BowlerStack/src/BCS/Namespace_bcs_core.c   
 	
 ${OBJECTDIR}/_ext/850752066/Bowler_Server.o: ../BowlerStack/src/BCS/Bowler_Server.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850752066 
 	@${RM} ${OBJECTDIR}/_ext/850752066/Bowler_Server.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850752066/Bowler_Server.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/Bowler_Server.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/Bowler_Server.o.d" -o ${OBJECTDIR}/_ext/850752066/Bowler_Server.o ../BowlerStack/src/BCS/Bowler_Server.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/Bowler_Server.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/Bowler_Server.o.d" -o ${OBJECTDIR}/_ext/850752066/Bowler_Server.o ../BowlerStack/src/BCS/Bowler_Server.c   
 	
 ${OBJECTDIR}/_ext/356814782/Debug.o: ../BowlerStack/src/Helper/Debug.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/356814782 
 	@${RM} ${OBJECTDIR}/_ext/356814782/Debug.o.d 
 	@${RM} ${OBJECTDIR}/_ext/356814782/Debug.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/Debug.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/Debug.o.d" -o ${OBJECTDIR}/_ext/356814782/Debug.o ../BowlerStack/src/Helper/Debug.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/Debug.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/Debug.o.d" -o ${OBJECTDIR}/_ext/356814782/Debug.o ../BowlerStack/src/Helper/Debug.c   
 	
 ${OBJECTDIR}/_ext/356814782/FIFO.o: ../BowlerStack/src/Helper/FIFO.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/356814782 
 	@${RM} ${OBJECTDIR}/_ext/356814782/FIFO.o.d 
 	@${RM} ${OBJECTDIR}/_ext/356814782/FIFO.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/FIFO.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/FIFO.o.d" -o ${OBJECTDIR}/_ext/356814782/FIFO.o ../BowlerStack/src/Helper/FIFO.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/FIFO.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/FIFO.o.d" -o ${OBJECTDIR}/_ext/356814782/FIFO.o ../BowlerStack/src/Helper/FIFO.c   
 	
 ${OBJECTDIR}/_ext/356814782/Bowler_Helper.o: ../BowlerStack/src/Helper/Bowler_Helper.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/356814782 
 	@${RM} ${OBJECTDIR}/_ext/356814782/Bowler_Helper.o.d 
 	@${RM} ${OBJECTDIR}/_ext/356814782/Bowler_Helper.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/Bowler_Helper.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/Bowler_Helper.o.d" -o ${OBJECTDIR}/_ext/356814782/Bowler_Helper.o ../BowlerStack/src/Helper/Bowler_Helper.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/Bowler_Helper.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/Bowler_Helper.o.d" -o ${OBJECTDIR}/_ext/356814782/Bowler_Helper.o ../BowlerStack/src/Helper/Bowler_Helper.c   
 	
 ${OBJECTDIR}/_ext/356814782/Scheduler.o: ../BowlerStack/src/Helper/Scheduler.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/356814782 
 	@${RM} ${OBJECTDIR}/_ext/356814782/Scheduler.o.d 
 	@${RM} ${OBJECTDIR}/_ext/356814782/Scheduler.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/Scheduler.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/Scheduler.o.d" -o ${OBJECTDIR}/_ext/356814782/Scheduler.o ../BowlerStack/src/Helper/Scheduler.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/Scheduler.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/Scheduler.o.d" -o ${OBJECTDIR}/_ext/356814782/Scheduler.o ../BowlerStack/src/Helper/Scheduler.c   
 	
 ${OBJECTDIR}/_ext/850765691/PidVelocity.o: ../BowlerStack/src/PID/PidVelocity.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850765691 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidVelocity.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidVelocity.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidVelocity.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidVelocity.o.d" -o ${OBJECTDIR}/_ext/850765691/PidVelocity.o ../BowlerStack/src/PID/PidVelocity.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidVelocity.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidVelocity.o.d" -o ${OBJECTDIR}/_ext/850765691/PidVelocity.o ../BowlerStack/src/PID/PidVelocity.c   
 	
 ${OBJECTDIR}/_ext/850765691/PidRpc.o: ../BowlerStack/src/PID/PidRpc.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850765691 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidRpc.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidRpc.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidRpc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidRpc.o.d" -o ${OBJECTDIR}/_ext/850765691/PidRpc.o ../BowlerStack/src/PID/PidRpc.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidRpc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidRpc.o.d" -o ${OBJECTDIR}/_ext/850765691/PidRpc.o ../BowlerStack/src/PID/PidRpc.c   
 	
 ${OBJECTDIR}/_ext/850765691/PidHysteresis.o: ../BowlerStack/src/PID/PidHysteresis.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850765691 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidHysteresis.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidHysteresis.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidHysteresis.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidHysteresis.o.d" -o ${OBJECTDIR}/_ext/850765691/PidHysteresis.o ../BowlerStack/src/PID/PidHysteresis.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidHysteresis.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidHysteresis.o.d" -o ${OBJECTDIR}/_ext/850765691/PidHysteresis.o ../BowlerStack/src/PID/PidHysteresis.c   
 	
 ${OBJECTDIR}/_ext/850765691/PidAsync.o: ../BowlerStack/src/PID/PidAsync.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850765691 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidAsync.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidAsync.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidAsync.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidAsync.o.d" -o ${OBJECTDIR}/_ext/850765691/PidAsync.o ../BowlerStack/src/PID/PidAsync.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidAsync.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidAsync.o.d" -o ${OBJECTDIR}/_ext/850765691/PidAsync.o ../BowlerStack/src/PID/PidAsync.c   
 	
 ${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o: ../BowlerStack/src/PID/Namespace_bcs_pid.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850765691 
 	@${RM} ${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o.d" -o ${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o ../BowlerStack/src/PID/Namespace_bcs_pid.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o.d" -o ${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o ../BowlerStack/src/PID/Namespace_bcs_pid.c   
 	
 ${OBJECTDIR}/_ext/850765691/AbstractPID.o: ../BowlerStack/src/PID/AbstractPID.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850765691 
 	@${RM} ${OBJECTDIR}/_ext/850765691/AbstractPID.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850765691/AbstractPID.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/AbstractPID.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/AbstractPID.o.d" -o ${OBJECTDIR}/_ext/850765691/AbstractPID.o ../BowlerStack/src/PID/AbstractPID.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/AbstractPID.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/AbstractPID.o.d" -o ${OBJECTDIR}/_ext/850765691/AbstractPID.o ../BowlerStack/src/PID/AbstractPID.c   
 	
 ${OBJECTDIR}/_ext/1193168346/usb_interrupt.o: ../Platform/src/pic32/usb/usb_interrupt.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1193168346 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_interrupt.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_interrupt.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_interrupt.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_interrupt.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_interrupt.o ../Platform/src/pic32/usb/usb_interrupt.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_interrupt.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_interrupt.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_interrupt.o ../Platform/src/pic32/usb/usb_interrupt.c   
 	
 ${OBJECTDIR}/_ext/1193168346/usb_callback.o: ../Platform/src/pic32/usb/usb_callback.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1193168346 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_callback.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_callback.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_callback.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_callback.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_callback.o ../Platform/src/pic32/usb/usb_callback.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_callback.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_callback.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_callback.o ../Platform/src/pic32/usb/usb_callback.c   
 	
 ${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o: ../Platform/src/pic32/usb/usb_function_cdc.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1193168346 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o ../Platform/src/pic32/usb/usb_function_cdc.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o ../Platform/src/pic32/usb/usb_function_cdc.c   
 	
 ${OBJECTDIR}/_ext/1193168346/usb_descriptors.o: ../Platform/src/pic32/usb/usb_descriptors.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1193168346 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_descriptors.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_descriptors.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_descriptors.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_descriptors.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_descriptors.o ../Platform/src/pic32/usb/usb_descriptors.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_descriptors.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_descriptors.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_descriptors.o ../Platform/src/pic32/usb/usb_descriptors.c   
 	
 ${OBJECTDIR}/_ext/1193168346/usb_fifo.o: ../Platform/src/pic32/usb/usb_fifo.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1193168346 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_fifo.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_fifo.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_fifo.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_fifo.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_fifo.o ../Platform/src/pic32/usb/usb_fifo.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_fifo.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_fifo.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_fifo.o ../Platform/src/pic32/usb/usb_fifo.c   
 	
 ${OBJECTDIR}/_ext/1193168346/usb_device.o: ../Platform/src/pic32/usb/usb_device.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1193168346 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_device.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_device.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_device.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_device.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_device.o ../Platform/src/pic32/usb/usb_device.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_device.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_device.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_device.o ../Platform/src/pic32/usb/usb_device.c   
 	
 ${OBJECTDIR}/_ext/126603185/LED.o: ../Platform/src/pic32/LED.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/LED.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/LED.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/LED.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/LED.o.d" -o ${OBJECTDIR}/_ext/126603185/LED.o ../Platform/src/pic32/LED.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/LED.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/LED.o.d" -o ${OBJECTDIR}/_ext/126603185/LED.o ../Platform/src/pic32/LED.c   
 	
 ${OBJECTDIR}/_ext/126603185/ADC.o: ../Platform/src/pic32/ADC.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/ADC.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/ADC.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/ADC.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/ADC.o.d" -o ${OBJECTDIR}/_ext/126603185/ADC.o ../Platform/src/pic32/ADC.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/ADC.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/ADC.o.d" -o ${OBJECTDIR}/_ext/126603185/ADC.o ../Platform/src/pic32/ADC.c   
 	
 ${OBJECTDIR}/_ext/126603185/HAL_P32.o: ../Platform/src/pic32/HAL_P32.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/HAL_P32.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/HAL_P32.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/HAL_P32.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/HAL_P32.o.d" -o ${OBJECTDIR}/_ext/126603185/HAL_P32.o ../Platform/src/pic32/HAL_P32.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/HAL_P32.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/HAL_P32.o.d" -o ${OBJECTDIR}/_ext/126603185/HAL_P32.o ../Platform/src/pic32/HAL_P32.c   
 	
 ${OBJECTDIR}/_ext/126603185/Delay.o: ../Platform/src/pic32/Delay.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Delay.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Delay.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Delay.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Delay.o.d" -o ${OBJECTDIR}/_ext/126603185/Delay.o ../Platform/src/pic32/Delay.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Delay.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Delay.o.d" -o ${OBJECTDIR}/_ext/126603185/Delay.o ../Platform/src/pic32/Delay.c   
 	
 ${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o: ../Platform/src/pic32/Bowler_USB_HAL.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o.d" -o ${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o ../Platform/src/pic32/Bowler_USB_HAL.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o.d" -o ${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o ../Platform/src/pic32/Bowler_USB_HAL.c   
 	
 ${OBJECTDIR}/_ext/126603185/FlashStorage.o: ../Platform/src/pic32/FlashStorage.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/FlashStorage.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/FlashStorage.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/FlashStorage.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/FlashStorage.o.d" -o ${OBJECTDIR}/_ext/126603185/FlashStorage.o ../Platform/src/pic32/FlashStorage.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/FlashStorage.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/FlashStorage.o.d" -o ${OBJECTDIR}/_ext/126603185/FlashStorage.o ../Platform/src/pic32/FlashStorage.c   
 	
 ${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o: ../Platform/src/pic32/Bowler_UART_HAL.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o.d" -o ${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o ../Platform/src/pic32/Bowler_UART_HAL.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o.d" -o ${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o ../Platform/src/pic32/Bowler_UART_HAL.c   
 	
 ${OBJECTDIR}/_ext/126603185/Tick.o: ../Platform/src/pic32/Tick.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Tick.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Tick.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Tick.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Tick.o.d" -o ${OBJECTDIR}/_ext/126603185/Tick.o ../Platform/src/pic32/Tick.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Tick.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Tick.o.d" -o ${OBJECTDIR}/_ext/126603185/Tick.o ../Platform/src/pic32/Tick.c   
 	
 ${OBJECTDIR}/_ext/126603185/UART.o: ../Platform/src/pic32/UART.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/UART.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/UART.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/UART.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/UART.o.d" -o ${OBJECTDIR}/_ext/126603185/UART.o ../Platform/src/pic32/UART.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/UART.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/UART.o.d" -o ${OBJECTDIR}/_ext/126603185/UART.o ../Platform/src/pic32/UART.c   
 	
 else
 ${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o: ../BowlerStack/src/BCS/BowlerPacketParser.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850752066 
 	@${RM} ${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o.d" -o ${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o ../BowlerStack/src/BCS/BowlerPacketParser.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o.d" -o ${OBJECTDIR}/_ext/850752066/BowlerPacketParser.o ../BowlerStack/src/BCS/BowlerPacketParser.c   
 	
 ${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o: ../BowlerStack/src/BCS/Namespace_bcs_rpc.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850752066 
 	@${RM} ${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o.d" -o ${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o ../BowlerStack/src/BCS/Namespace_bcs_rpc.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o.d" -o ${OBJECTDIR}/_ext/850752066/Namespace_bcs_rpc.o ../BowlerStack/src/BCS/Namespace_bcs_rpc.c   
 	
 ${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o: ../BowlerStack/src/BCS/Namespace_bcs_core.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850752066 
 	@${RM} ${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o.d" -o ${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o ../BowlerStack/src/BCS/Namespace_bcs_core.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o.d" -o ${OBJECTDIR}/_ext/850752066/Namespace_bcs_core.o ../BowlerStack/src/BCS/Namespace_bcs_core.c   
 	
 ${OBJECTDIR}/_ext/850752066/Bowler_Server.o: ../BowlerStack/src/BCS/Bowler_Server.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850752066 
 	@${RM} ${OBJECTDIR}/_ext/850752066/Bowler_Server.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850752066/Bowler_Server.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/Bowler_Server.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/Bowler_Server.o.d" -o ${OBJECTDIR}/_ext/850752066/Bowler_Server.o ../BowlerStack/src/BCS/Bowler_Server.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850752066/Bowler_Server.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850752066/Bowler_Server.o.d" -o ${OBJECTDIR}/_ext/850752066/Bowler_Server.o ../BowlerStack/src/BCS/Bowler_Server.c   
 	
 ${OBJECTDIR}/_ext/356814782/Debug.o: ../BowlerStack/src/Helper/Debug.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/356814782 
 	@${RM} ${OBJECTDIR}/_ext/356814782/Debug.o.d 
 	@${RM} ${OBJECTDIR}/_ext/356814782/Debug.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/Debug.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/Debug.o.d" -o ${OBJECTDIR}/_ext/356814782/Debug.o ../BowlerStack/src/Helper/Debug.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/Debug.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/Debug.o.d" -o ${OBJECTDIR}/_ext/356814782/Debug.o ../BowlerStack/src/Helper/Debug.c   
 	
 ${OBJECTDIR}/_ext/356814782/FIFO.o: ../BowlerStack/src/Helper/FIFO.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/356814782 
 	@${RM} ${OBJECTDIR}/_ext/356814782/FIFO.o.d 
 	@${RM} ${OBJECTDIR}/_ext/356814782/FIFO.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/FIFO.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/FIFO.o.d" -o ${OBJECTDIR}/_ext/356814782/FIFO.o ../BowlerStack/src/Helper/FIFO.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/FIFO.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/FIFO.o.d" -o ${OBJECTDIR}/_ext/356814782/FIFO.o ../BowlerStack/src/Helper/FIFO.c   
 	
 ${OBJECTDIR}/_ext/356814782/Bowler_Helper.o: ../BowlerStack/src/Helper/Bowler_Helper.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/356814782 
 	@${RM} ${OBJECTDIR}/_ext/356814782/Bowler_Helper.o.d 
 	@${RM} ${OBJECTDIR}/_ext/356814782/Bowler_Helper.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/Bowler_Helper.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/Bowler_Helper.o.d" -o ${OBJECTDIR}/_ext/356814782/Bowler_Helper.o ../BowlerStack/src/Helper/Bowler_Helper.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/Bowler_Helper.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/Bowler_Helper.o.d" -o ${OBJECTDIR}/_ext/356814782/Bowler_Helper.o ../BowlerStack/src/Helper/Bowler_Helper.c   
 	
 ${OBJECTDIR}/_ext/356814782/Scheduler.o: ../BowlerStack/src/Helper/Scheduler.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/356814782 
 	@${RM} ${OBJECTDIR}/_ext/356814782/Scheduler.o.d 
 	@${RM} ${OBJECTDIR}/_ext/356814782/Scheduler.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/Scheduler.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/Scheduler.o.d" -o ${OBJECTDIR}/_ext/356814782/Scheduler.o ../BowlerStack/src/Helper/Scheduler.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/356814782/Scheduler.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/356814782/Scheduler.o.d" -o ${OBJECTDIR}/_ext/356814782/Scheduler.o ../BowlerStack/src/Helper/Scheduler.c   
 	
 ${OBJECTDIR}/_ext/850765691/PidVelocity.o: ../BowlerStack/src/PID/PidVelocity.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850765691 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidVelocity.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidVelocity.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidVelocity.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidVelocity.o.d" -o ${OBJECTDIR}/_ext/850765691/PidVelocity.o ../BowlerStack/src/PID/PidVelocity.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidVelocity.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidVelocity.o.d" -o ${OBJECTDIR}/_ext/850765691/PidVelocity.o ../BowlerStack/src/PID/PidVelocity.c   
 	
 ${OBJECTDIR}/_ext/850765691/PidRpc.o: ../BowlerStack/src/PID/PidRpc.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850765691 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidRpc.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidRpc.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidRpc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidRpc.o.d" -o ${OBJECTDIR}/_ext/850765691/PidRpc.o ../BowlerStack/src/PID/PidRpc.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidRpc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidRpc.o.d" -o ${OBJECTDIR}/_ext/850765691/PidRpc.o ../BowlerStack/src/PID/PidRpc.c   
 	
 ${OBJECTDIR}/_ext/850765691/PidHysteresis.o: ../BowlerStack/src/PID/PidHysteresis.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850765691 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidHysteresis.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidHysteresis.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidHysteresis.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidHysteresis.o.d" -o ${OBJECTDIR}/_ext/850765691/PidHysteresis.o ../BowlerStack/src/PID/PidHysteresis.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidHysteresis.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidHysteresis.o.d" -o ${OBJECTDIR}/_ext/850765691/PidHysteresis.o ../BowlerStack/src/PID/PidHysteresis.c   
 	
 ${OBJECTDIR}/_ext/850765691/PidAsync.o: ../BowlerStack/src/PID/PidAsync.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850765691 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidAsync.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850765691/PidAsync.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidAsync.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidAsync.o.d" -o ${OBJECTDIR}/_ext/850765691/PidAsync.o ../BowlerStack/src/PID/PidAsync.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/PidAsync.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/PidAsync.o.d" -o ${OBJECTDIR}/_ext/850765691/PidAsync.o ../BowlerStack/src/PID/PidAsync.c   
 	
 ${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o: ../BowlerStack/src/PID/Namespace_bcs_pid.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850765691 
 	@${RM} ${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o.d" -o ${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o ../BowlerStack/src/PID/Namespace_bcs_pid.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o.d" -o ${OBJECTDIR}/_ext/850765691/Namespace_bcs_pid.o ../BowlerStack/src/PID/Namespace_bcs_pid.c   
 	
 ${OBJECTDIR}/_ext/850765691/AbstractPID.o: ../BowlerStack/src/PID/AbstractPID.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/850765691 
 	@${RM} ${OBJECTDIR}/_ext/850765691/AbstractPID.o.d 
 	@${RM} ${OBJECTDIR}/_ext/850765691/AbstractPID.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/AbstractPID.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/AbstractPID.o.d" -o ${OBJECTDIR}/_ext/850765691/AbstractPID.o ../BowlerStack/src/PID/AbstractPID.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/850765691/AbstractPID.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/850765691/AbstractPID.o.d" -o ${OBJECTDIR}/_ext/850765691/AbstractPID.o ../BowlerStack/src/PID/AbstractPID.c   
 	
 ${OBJECTDIR}/_ext/1193168346/usb_interrupt.o: ../Platform/src/pic32/usb/usb_interrupt.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1193168346 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_interrupt.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_interrupt.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_interrupt.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_interrupt.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_interrupt.o ../Platform/src/pic32/usb/usb_interrupt.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_interrupt.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_interrupt.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_interrupt.o ../Platform/src/pic32/usb/usb_interrupt.c   
 	
 ${OBJECTDIR}/_ext/1193168346/usb_callback.o: ../Platform/src/pic32/usb/usb_callback.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1193168346 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_callback.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_callback.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_callback.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_callback.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_callback.o ../Platform/src/pic32/usb/usb_callback.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_callback.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_callback.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_callback.o ../Platform/src/pic32/usb/usb_callback.c   
 	
 ${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o: ../Platform/src/pic32/usb/usb_function_cdc.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1193168346 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o ../Platform/src/pic32/usb/usb_function_cdc.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_function_cdc.o ../Platform/src/pic32/usb/usb_function_cdc.c   
 	
 ${OBJECTDIR}/_ext/1193168346/usb_descriptors.o: ../Platform/src/pic32/usb/usb_descriptors.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1193168346 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_descriptors.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_descriptors.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_descriptors.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_descriptors.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_descriptors.o ../Platform/src/pic32/usb/usb_descriptors.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_descriptors.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_descriptors.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_descriptors.o ../Platform/src/pic32/usb/usb_descriptors.c   
 	
 ${OBJECTDIR}/_ext/1193168346/usb_fifo.o: ../Platform/src/pic32/usb/usb_fifo.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1193168346 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_fifo.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_fifo.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_fifo.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_fifo.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_fifo.o ../Platform/src/pic32/usb/usb_fifo.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_fifo.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_fifo.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_fifo.o ../Platform/src/pic32/usb/usb_fifo.c   
 	
 ${OBJECTDIR}/_ext/1193168346/usb_device.o: ../Platform/src/pic32/usb/usb_device.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/1193168346 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_device.o.d 
 	@${RM} ${OBJECTDIR}/_ext/1193168346/usb_device.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_device.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_device.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_device.o ../Platform/src/pic32/usb/usb_device.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/1193168346/usb_device.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/1193168346/usb_device.o.d" -o ${OBJECTDIR}/_ext/1193168346/usb_device.o ../Platform/src/pic32/usb/usb_device.c   
 	
 ${OBJECTDIR}/_ext/126603185/LED.o: ../Platform/src/pic32/LED.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/LED.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/LED.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/LED.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/LED.o.d" -o ${OBJECTDIR}/_ext/126603185/LED.o ../Platform/src/pic32/LED.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/LED.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/LED.o.d" -o ${OBJECTDIR}/_ext/126603185/LED.o ../Platform/src/pic32/LED.c   
 	
 ${OBJECTDIR}/_ext/126603185/ADC.o: ../Platform/src/pic32/ADC.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/ADC.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/ADC.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/ADC.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/ADC.o.d" -o ${OBJECTDIR}/_ext/126603185/ADC.o ../Platform/src/pic32/ADC.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/ADC.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/ADC.o.d" -o ${OBJECTDIR}/_ext/126603185/ADC.o ../Platform/src/pic32/ADC.c   
 	
 ${OBJECTDIR}/_ext/126603185/HAL_P32.o: ../Platform/src/pic32/HAL_P32.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/HAL_P32.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/HAL_P32.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/HAL_P32.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/HAL_P32.o.d" -o ${OBJECTDIR}/_ext/126603185/HAL_P32.o ../Platform/src/pic32/HAL_P32.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/HAL_P32.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/HAL_P32.o.d" -o ${OBJECTDIR}/_ext/126603185/HAL_P32.o ../Platform/src/pic32/HAL_P32.c   
 	
 ${OBJECTDIR}/_ext/126603185/Delay.o: ../Platform/src/pic32/Delay.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Delay.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Delay.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Delay.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Delay.o.d" -o ${OBJECTDIR}/_ext/126603185/Delay.o ../Platform/src/pic32/Delay.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Delay.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Delay.o.d" -o ${OBJECTDIR}/_ext/126603185/Delay.o ../Platform/src/pic32/Delay.c   
 	
 ${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o: ../Platform/src/pic32/Bowler_USB_HAL.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o.d" -o ${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o ../Platform/src/pic32/Bowler_USB_HAL.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o.d" -o ${OBJECTDIR}/_ext/126603185/Bowler_USB_HAL.o ../Platform/src/pic32/Bowler_USB_HAL.c   
 	
 ${OBJECTDIR}/_ext/126603185/FlashStorage.o: ../Platform/src/pic32/FlashStorage.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/FlashStorage.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/FlashStorage.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/FlashStorage.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/FlashStorage.o.d" -o ${OBJECTDIR}/_ext/126603185/FlashStorage.o ../Platform/src/pic32/FlashStorage.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/FlashStorage.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/FlashStorage.o.d" -o ${OBJECTDIR}/_ext/126603185/FlashStorage.o ../Platform/src/pic32/FlashStorage.c   
 	
 ${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o: ../Platform/src/pic32/Bowler_UART_HAL.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o.d" -o ${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o ../Platform/src/pic32/Bowler_UART_HAL.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o.d" -o ${OBJECTDIR}/_ext/126603185/Bowler_UART_HAL.o ../Platform/src/pic32/Bowler_UART_HAL.c   
 	
 ${OBJECTDIR}/_ext/126603185/Tick.o: ../Platform/src/pic32/Tick.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Tick.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/Tick.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Tick.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Tick.o.d" -o ${OBJECTDIR}/_ext/126603185/Tick.o ../Platform/src/pic32/Tick.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/Tick.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/Tick.o.d" -o ${OBJECTDIR}/_ext/126603185/Tick.o ../Platform/src/pic32/Tick.c   
 	
 ${OBJECTDIR}/_ext/126603185/UART.o: ../Platform/src/pic32/UART.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/_ext/126603185 
 	@${RM} ${OBJECTDIR}/_ext/126603185/UART.o.d 
 	@${RM} ${OBJECTDIR}/_ext/126603185/UART.o 
-	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/UART.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/UART.o.d" -o ${OBJECTDIR}/_ext/126603185/UART.o ../Platform/src/pic32/UART.c   
+	@${FIXDEPS} "${OBJECTDIR}/_ext/126603185/UART.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -mips16 -I"../BowlerStack/include" -I"../Platform/include" -MMD -MF "${OBJECTDIR}/_ext/126603185/UART.o.d" -o ${OBJECTDIR}/_ext/126603185/UART.o ../Platform/src/pic32/UART.c   
 	
 endif
 

@@ -48,7 +48,7 @@ typedef union {
 void _general_exception_handler(unsigned cause, unsigned status){
         unsigned int x = 0;
         //asm volatile ("move %0, $ra" : "=r" (x));
-        asm volatile ("sw $ra, %0" : "=m" (x));
+        //asm volatile ("sw $ra, %0" : "=m" (x));
 //        /register unsigned int cp0count asm ("c0r1");
 
         cause_union u;

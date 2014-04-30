@@ -306,13 +306,15 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 
 
 void setOutput(int group, float val){
-        if(val>0 && val<getUpperPidHistoresis(group))
-            val = getUpperPidHistoresis(group);
-        if(val<0 && val>getLowerPidHistoresis(group))
-            val = getLowerPidHistoresis(group);
+    val += getPidStop(group);
 
-        val += getPidStop(group);
-        getPidGroupDataTable()[group].OutputSet=val;
-        setOutputLocal(group,val);
+    if(val>getPidStop(group) && val<getUpperPidHistoresis(group))
+        val = getUpperPidHistoresis(group);
+    if(val<getPidStop(group) && val>getLowerPidHistoresis(group))
+        val = getLowerPidHistoresis(group);
+
+
+    getPidGroupDataTable()[group].OutputSet=val;
+    setOutputLocal(group,val);
 }
 
