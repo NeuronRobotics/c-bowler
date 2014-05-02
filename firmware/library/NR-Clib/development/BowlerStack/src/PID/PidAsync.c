@@ -9,21 +9,24 @@
 #include "Bowler/Defines.h"
 #include "Bowler/BowlerTransport.h"
 
+static RunEveryData pid ={0,100};
 
 void updatePidAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
-	int i;
-	int update = FALSE;
-	for (i=0;i<getNumberOfPidChannels();i++){
-		if(getPidGroupDataTable()[i].config.Async){
-			if(getPidGroupDataTable()[i].CurrentState != getPidGroupDataTable()[i].lastPushedValue){
+    if(RunEvery(&pid)){
+        int i;
+        int update = FALSE;
+        for (i=0;i<getNumberOfPidChannels();i++){
+                if(getPidGroupDataTable()[i].config.Async){
+                        if(getPidGroupDataTable()[i].CurrentState != getPidGroupDataTable()[i].lastPushedValue){
                             //println_E("Async because of ");p_int_E(i);
-				update = TRUE;
-			}
-		}
-	}
-	if(update){
-		pushAllPIDPositions(Packet,pidAsyncCallbackPtr);
-	}
+                                update = TRUE;
+                        }
+                }
+        }
+        if(update){
+                pushAllPIDPositions(Packet,pidAsyncCallbackPtr);
+        }
+    }
 }
 
 void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
