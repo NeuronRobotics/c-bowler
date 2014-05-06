@@ -48,7 +48,7 @@ static RPC_LIST bcsPid_CPID={	BOWLER_GET,
                                 ((const char [2]){	BOWLER_I08,//channel
                                                              0}),// Response arguments
                                 BOWLER_POST,// response method
-                                ((const char [11]){	BOWLER_I08,//channel
+                                ((const char [14]){	BOWLER_I08,//channel
                                                         BOWLER_I08,//enabled
                                                         BOWLER_I08,//Polarity
                                                         BOWLER_I08,//async
@@ -58,6 +58,9 @@ static RPC_LIST bcsPid_CPID={	BOWLER_GET,
                                                         BOWLER_I32,//Latch value
                                                         BOWLER_I08,//Use index latch
                                                         BOWLER_I08,//Stop On latch
+                                                        BOWLER_FIXED1K,//stop
+                                                        BOWLER_FIXED1K,//upper
+                                                        BOWLER_FIXED1K,//lower
                                                    0}),// Response arguments
                                 NULL //Termination
 };
@@ -135,6 +138,18 @@ static RPC_LIST bcsPid_RPID={	BOWLER_POST,
                                 NULL //Termination
 };
 
+static RPC_LIST bcsPid_ACAL={	BOWLER_CRIT,
+                                "acal",
+                                &processRunAutoCal,
+                                ( (const char [2]){	BOWLER_I08,//group
+							0}),// no arguments, kills all PID's
+                                BOWLER_STATUS,// response method
+                                ( (const char [3]){	BOWLER_I08,//location
+                                                        BOWLER_I08,//trace
+							0}),// Response arguments,// Response arguments
+                                NULL //Termination
+};
+
 //Critical
 static RPC_LIST bcsPid_KPID={	BOWLER_CRIT,
                                 "kpid",
@@ -149,7 +164,7 @@ static RPC_LIST bcsPid_KPID={	BOWLER_CRIT,
 static RPC_LIST bcsPid_CPID_c={	BOWLER_CRIT,
                                 "cpid",
                                 &processPIDCrit,
-                                ((const char [11]){	BOWLER_I08,//channel
+                                ((const char [14]){	BOWLER_I08,//channel
                                                         BOWLER_I08,//enabled
                                                         BOWLER_I08,//Polarity
                                                         BOWLER_I08,//async
@@ -159,6 +174,9 @@ static RPC_LIST bcsPid_CPID_c={	BOWLER_CRIT,
                                                         BOWLER_I32,//Latch value
                                                         BOWLER_I08,//Use index latch
                                                         BOWLER_I08,//Stop On latch
+                                                        BOWLER_FIXED1K,//stop
+                                                        BOWLER_FIXED1K,//upper
+                                                        BOWLER_FIXED1K,//lower
                                                    0}),// Response arguments
                                 BOWLER_STATUS,// response method
                                 ( (const char [3]){	BOWLER_I08,//location

@@ -268,6 +268,8 @@ float pidResetNoStop(BYTE chan,INT32 val);
 void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet));
 
 CAL_STATE pidHysterisis(int group);
+void runPidHysterisisCalibration(int group);
+BOOL processRunAutoCal(BowlerPacket * Packet);
 
 void OnPidConfigure(int v);
 

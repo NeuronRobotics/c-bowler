@@ -65,8 +65,11 @@ void GetConfigPID(BowlerPacket * Packet){
 	Packet->use.data[20]=getPidGroupDataTable()[chan].config.useIndexLatch;//
 	Packet->use.data[21]=getPidGroupDataTable()[chan].config.stopOnIndex;//
 
+        set32bit(Packet,getPidGroupDataTable()[chan].config.stop*1000,22);
+	set32bit(Packet,getPidGroupDataTable()[chan].config.upperHistoresis*1000,26);
+	set32bit(Packet,getPidGroupDataTable()[chan].config.lowerHistoresis*1000,30);
 
-	Packet->use.head.DataLegnth=4+22;
+	Packet->use.head.DataLegnth=4+22+(3*4);
 	Packet->use.head.Method=BOWLER_POST;
 
 }
@@ -99,10 +102,16 @@ BYTE ConfigPID(BowlerPacket * Packet){
 
 		getPidGroupDataTable()[chan].config.useIndexLatch= Packet->use.data[20];
 		getPidGroupDataTable()[chan].config.stopOnIndex = Packet->use.data[21];
-	}else{
+                getPidGroupDataTable()[chan].config.stop=(float)get32bit(Packet,22)/1000.0;
+                getPidGroupDataTable()[chan].config.upperHistoresis=(float)get32bit(Packet,26)/1000.0;
+                getPidGroupDataTable()[chan].config.lowerHistoresis=(float)get32bit(Packet,30)/1000.0;
+        }else{
 		temp=0;
 		getPidGroupDataTable()[chan].config.useIndexLatch= TRUE;
 		getPidGroupDataTable()[chan].config.stopOnIndex = TRUE;
+                getPidGroupDataTable()[chan].config.stop=0;
+                getPidGroupDataTable()[chan].config.upperHistoresis=0;
+                getPidGroupDataTable()[chan].config.lowerHistoresis=0;
 	}
 	getPidGroupDataTable()[chan].config.IndexLatchValue=(float)temp;
 
