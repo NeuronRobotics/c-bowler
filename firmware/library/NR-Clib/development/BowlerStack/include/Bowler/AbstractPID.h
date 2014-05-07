@@ -93,6 +93,7 @@ typedef struct _AbsPID_Config{
     int lowerHistoresis;
     int stop;
     PidCalibrationType calibrationState;
+    float offset;
 }AbsPID_Config;
 
 typedef struct _AbsPID

@@ -21,7 +21,7 @@ void RunVel(void){
 void RunPDVel(BYTE chan){
 	//println_I("Running PID vel");
 	if(getPidVelocityDataTable()[chan].enabled==TRUE){
-		getPidGroupDataTable()[chan].CurrentState = GetPIDPosition(chan);
+         
 		float currentTime = getMs();
 		float timeMsDiff =  (currentTime -getPidVelocityDataTable()[chan].lastTime);
 		float timeDiff =  timeMsDiff/1000;

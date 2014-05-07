@@ -58,6 +58,7 @@ BOOL isPidEnabled(BYTE i){
 }
 
 void SetPIDEnabled(BYTE index, BOOL enabled){
+
     pidGroups[index].config.Enabled=enabled;
 }
 
@@ -158,14 +159,15 @@ int GetPIDPosition(BYTE chan){
 
 
 float pidResetNoStop(BYTE chan,INT32 val){
-	float value = (float)resetPosition(chan,val);
+	//float value = (float)resetPosition(chan,val);
+        pidGroups[chan].config.offset = (getPosition(chan) - val);
 	//println("From pidReset 1 Current setpoint:");p_fl(local_groups[chan].SetPoint); print(" Target value:");p_fl(value);
 	float time = getMs();
-	pidGroups[chan].lastPushedValue=value;
-	InitAbsPIDWithPosition(&pidGroups[chan],pidGroups[chan].config.K.P,pidGroups[chan].config.K.I,pidGroups[chan].config.K.D, time,value );
+	pidGroups[chan].lastPushedValue=val;
+	InitAbsPIDWithPosition(&pidGroups[chan],pidGroups[chan].config.K.P,pidGroups[chan].config.K.I,pidGroups[chan].config.K.D, time,val );
 	velData[chan].lastPosition=val;
 	velData[chan].lastTime=time;
-	return value;
+	return val;
 }
 
 void pidReset(BYTE chan,INT32 val){
@@ -230,7 +232,7 @@ void RunPIDControl(){
     	int i;
 	for (i=0;i<getNumberOfPidChannels();i++){
             if(pidGroups[i].config.Enabled){
-                pidGroups[i].CurrentState = getPosition(i);
+                pidGroups[i].CurrentState = getPosition(i) +pidGroups[i].config.offset;
                 pidGroups[i].SetPoint = interpolate((INTERPOLATE_DATA *)&pidGroups[i].interpolate,getMs());
                 MathCalculationPosition(& pidGroups[i],getMs());
                 if(GetPIDCalibrateionState(i)<=CALIBRARTION_DONE){
