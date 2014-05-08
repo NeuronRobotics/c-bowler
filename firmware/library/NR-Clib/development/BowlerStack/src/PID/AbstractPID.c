@@ -160,8 +160,14 @@ int GetPIDPosition(BYTE chan){
 
 float pidResetNoStop(BYTE chan,INT32 val){
 	//float value = (float)resetPosition(chan,val);
-        pidGroups[chan].config.offset = (getPosition(chan) - val);
-	//println("From pidReset 1 Current setpoint:");p_fl(local_groups[chan].SetPoint); print(" Target value:");p_fl(value);
+        float raw =pidGroups[chan].CurrentState+pidGroups[chan].config.offset;
+        float value=(float)val;
+        pidGroups[chan].config.offset = (raw - value);
+        pidGroups[chan].CurrentState = raw - pidGroups[chan].config.offset;
+	println_E("From pidReset Current State: ");p_fl_E(pidGroups[chan].CurrentState);
+        print_E(" Target value: ");p_fl_E(value);
+        print_E(" Offset: ");p_int_E(pidGroups[chan].config.offset);
+        print_E(" Raw: ");p_int_E(raw);
 	float time = getMs();
 	pidGroups[chan].lastPushedValue=val;
 	InitAbsPIDWithPosition(&pidGroups[chan],pidGroups[chan].config.K.P,pidGroups[chan].config.K.I,pidGroups[chan].config.K.D, time,val );
@@ -177,10 +183,11 @@ void pidReset(BYTE chan,INT32 val){
 	pidGroups[chan].interpolate.start=value;
 	pidGroups[chan].interpolate.startTime=getMs();
 	pidGroups[chan].SetPoint=value;
+        BYTE enabled=pidGroups[chan].config.Enabled;
 	pidGroups[chan].config.Enabled=TRUE;//Ensures output enabled to stop motors
 	pidGroups[chan].Output=0.0;
 	setOutput(chan,pidGroups[chan].Output);
-	velData[chan].enabled=FALSE;
+	velData[chan].enabled=enabled;
 }
 
 
@@ -232,7 +239,7 @@ void RunPIDControl(){
     	int i;
 	for (i=0;i<getNumberOfPidChannels();i++){
             if(pidGroups[i].config.Enabled){
-                pidGroups[i].CurrentState = getPosition(i) +pidGroups[i].config.offset;
+                pidGroups[i].CurrentState = getPosition(i) - pidGroups[i].config.offset;
                 pidGroups[i].SetPoint = interpolate((INTERPOLATE_DATA *)&pidGroups[i].interpolate,getMs());
                 MathCalculationPosition(& pidGroups[i],getMs());
                 if(GetPIDCalibrateionState(i)<=CALIBRARTION_DONE){

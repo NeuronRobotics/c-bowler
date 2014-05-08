@@ -17,6 +17,7 @@
 #include "Bowler/AbstractPID.h"
 #include "Bowler/Debug.h"
 #include "Bowler/Defines.h"
+#include "arch/pic32/BowlerConfig.h"
 
 //static INT32_UNION PID_Temp;
 //static float time;
@@ -197,8 +198,11 @@ BOOL processPIDPost(BowlerPacket * Packet){
 		break;
 	case RPID:
 		chan = Packet->use.data[0];
-		//println("Resetting PID channel from packet:",INFO_PRINT);printBowlerPacketDEBUG(Packet,INFO_PRINT);
-		pidReset(chan, get32bit(Packet,1));
+                StartCritical();
+  		println("Resetting PID channel from packet:",ERROR_PRINT);printBowlerPacketDEBUG(Packet,ERROR_PRINT);
+
+                pidReset(chan, get32bit(Packet,1));
+                EndCritical();
 		READY(Packet,zone,6);
 		break;
         default:
