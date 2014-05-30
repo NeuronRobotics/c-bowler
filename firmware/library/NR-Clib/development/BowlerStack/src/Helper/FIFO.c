@@ -13,17 +13,17 @@ void clearByteFifo(BYTE_FIFO_STORAGE * fifo);
 
 void printFiFoState(BYTE_FIFO_STORAGE * fifo, BYTE * buffer,Print_Level l){
 	int i;
-	print("\nFifo state: \tBytes:",l);
+	print_nnl("\nFifo state: \tBytes:",l);
 	p_int(calcByteCount(fifo),l);
 
 	FifoReadByteStream(	buffer,
 						calcByteCount(fifo)+1,
 						fifo);
-	print("\tData [ ",l);
+	print_nnl("\tData [ ",l);
 	for(i=0;i<calcByteCount(fifo);i++){
-		p_int(buffer[i],l);print(" ",l);
+		p_int(buffer[i],l);print_nnl(" ",l);
 	}
-	print(" ]\n",l);
+	print_nnl(" ]\n",l);
 }
 
 BOOL lockFifo(BYTE_FIFO_STORAGE * fifo){
@@ -85,7 +85,7 @@ UINT32 FifoGetByteCount(BYTE_FIFO_STORAGE * fifo){
 
 UINT32 FifoAddByte(BYTE_FIFO_STORAGE * fifo,BYTE b, BYTE * errorCode){
 	if(calcByteCount(fifo) >= (fifo->bufferSize-2)){
-		//println(error);p_int(fifo->bufferSize);print(",");p_int(fifo->byteCount);
+		//println(error);p_int(fifo->bufferSize);print_nnl(",");p_int(fifo->byteCount);
 		errorCode[0]=FIFO_OVERFLOW;
 		return 0;
 	}

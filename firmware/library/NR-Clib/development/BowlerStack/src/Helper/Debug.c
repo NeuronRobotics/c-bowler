@@ -107,7 +107,7 @@ Print_Level setPrintLevel(Print_Level l){
 	return getPrintLevel();
 }
 
-BOOL okToPrint(Print_Level l){
+BOOL okToprint(Print_Level l){
 	if(getPrintLevel()>=l){
 		if(DebugINIT == FALSE){
 			DebugINIT = TRUE;
@@ -136,7 +136,7 @@ char GetHighNib(BYTE b){
 }
 
 void printfDEBUG( char *str,Print_Level l){
-	if(!okToPrint(l)){
+	if(!okToprint(l)){
 		return;
 	}
 
@@ -152,18 +152,17 @@ void sendStr(const char *str){
     }
 }
 void printfDEBUG_BYTE(char b,Print_Level l){
-	if(!okToPrint(l)){
+	if(!okToprint(l)){
 		return;
 	}
 	setColor(l);
 	putCharDebug(b);
 	//sendToStreamLocal((BYTE *)&b,1);
-
 }
 
 void printfDEBUG_NNL(char *str,Print_Level l)
 {
-	if(!okToPrint(l)){
+	if(!okToprint(l)){
 		return;
 	}
 	setColor(l);
@@ -172,7 +171,7 @@ void printfDEBUG_NNL(char *str,Print_Level l)
 }
 
 void printfDEBUG_INT(INT32 val,Print_Level l){
-	if(!okToPrint(l)){
+	if(!okToprint(l)){
 		return;
 	}
 	setColor(l);
@@ -197,7 +196,7 @@ void printfDEBUG_INT(INT32 val,Print_Level l){
 }
 
 void printfDEBUG_FL(float f,Print_Level l){
-	if(!okToPrint(l)){
+	if(!okToprint(l)){
 		return;
 	}
 	INT32 upper = (INT32)f;// set up the upper section of the decimal by int casting to clip  off the decimal places
@@ -226,17 +225,17 @@ void printPIDvals(int i){
 	int polarity =  getPidGroupDataTable()[i].config.Polarity;
 	int set =       getPidGroupDataTable()[i].SetPoint;
 	p_int(chan,INFO_PRINT);
-	print(" Enabled=",INFO_PRINT);     p_int(enabled,INFO_PRINT);
-	print(" Polarity=",INFO_PRINT);    p_int(polarity,INFO_PRINT);
-	print(" SET=",INFO_PRINT);    p_int(set,INFO_PRINT);
-	print(" Kp=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].config.K.P,INFO_PRINT);
-	print(" Ki=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].config.K.I,INFO_PRINT);
-	print(" Kd=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].config.K.D,INFO_PRINT);
-	print("\t Setpoint=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].SetPoint,INFO_PRINT);
-	print("\t Current State=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].CurrentState,INFO_PRINT);
-        print("\t Error=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].PreviousError,INFO_PRINT);
-	print("\t Control Output: ",INFO_PRINT); p_fl(getPidGroupDataTable()[i].Output ,INFO_PRINT);
-        print("\t Output Set: ",INFO_PRINT); p_fl(getPidGroupDataTable()[i].OutputSet ,INFO_PRINT);
+	print_nnl(" Enabled=",INFO_PRINT);     p_int(enabled,INFO_PRINT);
+	print_nnl(" Polarity=",INFO_PRINT);    p_int(polarity,INFO_PRINT);
+	print_nnl(" SET=",INFO_PRINT);    p_int(set,INFO_PRINT);
+	print_nnl(" Kp=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].config.K.P,INFO_PRINT);
+	print_nnl(" Ki=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].config.K.I,INFO_PRINT);
+	print_nnl(" Kd=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].config.K.D,INFO_PRINT);
+	print_nnl("\t Setpoint=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].SetPoint,INFO_PRINT);
+	print_nnl("\t Current State=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].CurrentState,INFO_PRINT);
+        print_nnl("\t Error=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].PreviousError,INFO_PRINT);
+	print_nnl("\t Control Output: ",INFO_PRINT); p_fl(getPidGroupDataTable()[i].Output ,INFO_PRINT);
+        print_nnl("\t Output Set: ",INFO_PRINT); p_fl(getPidGroupDataTable()[i].OutputSet ,INFO_PRINT);
 
 }
 
@@ -244,7 +243,7 @@ void printPIDvals(int i){
 
 void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 #if !defined(NO_PRINTING)
-	if(!okToPrint(l)){
+	if(!okToprint(l)){
 		return;
 	}
 		int i;
@@ -269,22 +268,22 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 		println("\tMethod = \t",l);
 		switch (Packet->stream[MethodIndex]){
 		case BOWLER_STATUS:
-			print("Status",l);
+			print_nnl("Status",l);
 			break;
 		case BOWLER_GET:
-			print("Get",l);
+			print_nnl("Get",l);
 			break;
 		case BOWLER_POST:
-			print("Post ",l);
+			print_nnl("Post ",l);
 			break;
 		case BOWLER_CRIT:
-			print("Critical",l);
+			print_nnl("Critical",l);
 			break;
         case BOWLER_ASYN:
-			print("ASYNCHRONUS",l);
+			print_nnl("ASYNCHRONUS",l);
 			break;
 		default:
-			print("Unknown ",l);
+			print_nnl("Unknown ",l);
 			prHEX8(Packet->stream[MethodIndex],l);
 		break;
 	}
@@ -321,19 +320,19 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 
 void printByteArray(BYTE * stream,UINT16 len,Print_Level l){
 //#if !defined(NO_PRINTING)
-	if(!okToPrint(l)){
+	if(!okToprint(l)){
 		return;
 	}
 	UINT16 i;
-	print(" Stream: size=",l);
+	print_nnl(" Stream: size=",l);
 	p_int(len,l);
-	print(" [",l);
+	print_nnl(" [",l);
 	for (i=0;i<len;i++){
 		prHEX8(stream[i],l);
 		if (i<(len-1))
 			printfDEBUG_BYTE(',',l);
 	}
-	print("]",l);
+	print_nnl("]",l);
 //#endif
 }
 

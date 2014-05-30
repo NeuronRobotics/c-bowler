@@ -57,7 +57,7 @@ void Process_Self_Packet(BowlerPacket * Packet){
 
 	if(foundRpc == 0){
                 Print_Level l = getPrintLevel();
-                setPrintLevelErrorPrint();
+                setPrintLevelErrorprint_nnl();
 		println_E("##ERROR Rpc not found!");
                 setPrintLevel(l);
 		ERR(Packet,0,0);
@@ -120,7 +120,7 @@ BOOL process(BowlerPacket * Packet){
 
 		println("Packet not addressed to me: ",ERROR_PRINT);
 		printByteArray(Packet->use.head.MAC.v,6,ERROR_PRINT);
-		print(" is not mine: ",ERROR_PRINT);
+		print_nnl(" is not mine: ",ERROR_PRINT);
 		printByteArray(MyMAC.v,6,ERROR_PRINT);
 
 	}

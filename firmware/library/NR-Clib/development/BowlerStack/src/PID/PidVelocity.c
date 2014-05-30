@@ -38,13 +38,13 @@ void RunPDVel(BYTE chan){
 		if(getPidVelocityDataTable()[chan].currentOutputVel<-100)
 			getPidVelocityDataTable()[chan].currentOutputVel=-100;
 
-		println("Velocity set=",INFO_PRINT);p_fl(getPidVelocityDataTable()[chan].unitsPerSeCond,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
-		println("Velocity position diff=",INFO_PRINT);p_int(posDiff,INFO_PRINT);print(" ticks",INFO_PRINT);
-		println("Velocity time diff=",INFO_PRINT);p_fl(timeDiff,INFO_PRINT);print(" seConds",INFO_PRINT);
-		println("Velocity time diff=",INFO_PRINT);p_fl(timeMsDiff,INFO_PRINT);print(" ms",INFO_PRINT);
-		println("Velocity current=",INFO_PRINT);p_fl(currentVelocity,INFO_PRINT);print(" ticks/seCond",INFO_PRINT);
-		println("Velocity offset=",INFO_PRINT);p_fl(set,INFO_PRINT);print("\n",INFO_PRINT);
-		println("Velocity set=",INFO_PRINT);p_fl(getPidVelocityDataTable()[chan].currentOutputVel,INFO_PRINT);print("\n",INFO_PRINT);
+		println("Velocity set=",INFO_PRINT);p_fl(getPidVelocityDataTable()[chan].unitsPerSeCond,INFO_PRINT);print_nnl(" ticks/seCond",INFO_PRINT);
+		println("Velocity position diff=",INFO_PRINT);p_int(posDiff,INFO_PRINT);print_nnl(" ticks",INFO_PRINT);
+		println("Velocity time diff=",INFO_PRINT);p_fl(timeDiff,INFO_PRINT);print_nnl(" seConds",INFO_PRINT);
+		println("Velocity time diff=",INFO_PRINT);p_fl(timeMsDiff,INFO_PRINT);print_nnl(" ms",INFO_PRINT);
+		println("Velocity current=",INFO_PRINT);p_fl(currentVelocity,INFO_PRINT);print_nnl(" ticks/seCond",INFO_PRINT);
+		println("Velocity offset=",INFO_PRINT);p_fl(set,INFO_PRINT);print_nnl("\n",INFO_PRINT);
+		println("Velocity set=",INFO_PRINT);p_fl(getPidVelocityDataTable()[chan].currentOutputVel,INFO_PRINT);print_nnl("\n",INFO_PRINT);
 
 		getPidGroupDataTable()[chan].Output=getPidVelocityDataTable()[chan].currentOutputVel;
 
