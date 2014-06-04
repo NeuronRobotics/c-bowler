@@ -57,7 +57,7 @@ void Process_Self_Packet(BowlerPacket * Packet){
 
 	if(foundRpc == 0){
                 Print_Level l = getPrintLevel();
-                setPrintLevelErrorprint_nnl();
+                setPrintLevelErrorPrint();
 		println_E("##ERROR Rpc not found!");
                 setPrintLevel(l);
 		ERR(Packet,0,0);

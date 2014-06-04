@@ -34,7 +34,7 @@
 
 
 #if defined(__PIC32MX__)
-#error
+
 	#include "arch/pic32/BowlerConfig.h"
 
 #elif defined(__AVR_ATmega644P__) || defined(__AVR_ATmega644PA__) || defined(__AVR_ATmega324P__)

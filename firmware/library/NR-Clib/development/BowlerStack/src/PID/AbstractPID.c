@@ -160,11 +160,12 @@ int GetPIDPosition(BYTE chan){
 
 float pidResetNoStop(BYTE chan,INT32 val){
 	//float value = (float)resetPosition(chan,val);
-        float raw =pidGroups[chan].CurrentState+pidGroups[chan].config.offset;
+        float current=pidGroups[chan].CurrentState;
+        float raw =current+pidGroups[chan].config.offset;
         float value=(float)val;
         pidGroups[chan].config.offset = (raw - value);
         pidGroups[chan].CurrentState = raw - pidGroups[chan].config.offset;
-	println_E("From pidReset Current State: ");p_fl_E(pidGroups[chan].CurrentState);
+	println_E("From pidReset Current State: ");p_fl_E(current);
         print_E(" Target value: ");p_fl_E(value);
         print_E(" Offset: ");p_int_E(pidGroups[chan].config.offset);
         print_E(" Raw: ");p_int_E(raw);
