@@ -94,14 +94,14 @@ typedef struct _AbsPID_Config{
     int stop;
     PidCalibrationType calibrationState;
     float offset;
+
+    float buffer[5];
+    
 }AbsPID_Config;
 
 typedef struct _AbsPID
 {
-    union{
-        unsigned long int raw [ sizeof(AbsPID_Config)] ;
-        AbsPID_Config config;
-    };
+
         //unsigned char           channel;
         float 			SetPoint;
         float			CurrentState;
@@ -128,6 +128,10 @@ typedef struct _AbsPID
             float previousValue;
         }homing;
         RunEveryData timer;
+        //union{
+        //  unsigned int raw [ sizeof(AbsPID_Config)/4] ;
+            AbsPID_Config config;
+        //};
 } AbsPID;
 
 typedef struct _DYIO_PID

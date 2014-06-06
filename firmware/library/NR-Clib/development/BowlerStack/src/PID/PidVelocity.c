@@ -11,7 +11,7 @@
 void RunVel(void){
 	BYTE i;
 	for (i=0;i<getNumberOfPidChannels();i++){
-		println_I("Checking velocity on ");p_int_I(i);
+		//println_I("Checking velocity on ");p_int_I(i);
 		if(!getPidGroupDataTable()[i].config.Enabled){
 			RunPDVel(i);
 		}
