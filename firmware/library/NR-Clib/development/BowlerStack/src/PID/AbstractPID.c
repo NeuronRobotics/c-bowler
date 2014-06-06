@@ -239,8 +239,8 @@ BOOL isPIDArrivedAtSetpoint(int index, float plusOrMinus){
 void RunPIDControl(){
     	int i;
 	for (i=0;i<getNumberOfPidChannels();i++){
+            pidGroups[i].CurrentState = getPosition(i) - pidGroups[i].config.offset;
             if(pidGroups[i].config.Enabled){
-                pidGroups[i].CurrentState = getPosition(i) - pidGroups[i].config.offset;
                 pidGroups[i].SetPoint = interpolate((INTERPOLATE_DATA *)&pidGroups[i].interpolate,getMs());
                 MathCalculationPosition(& pidGroups[i],getMs());
                 if(GetPIDCalibrateionState(i)<=CALIBRARTION_DONE){
