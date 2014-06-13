@@ -78,7 +78,8 @@ void runPidHysterisisCalibration(int group){
 CAL_STATE pidHysterisis(int group){
 
     if(RunEvery(&getPidGroupDataTable()[group].timer)>0){
-
+        Print_Level l = getPrintLevel();
+        setPrintLevelInfoPrint();
         float boundVal = 15.0;
         float extr=GetPIDPosition(group);
         if( bound(0, extr, boundVal, boundVal)){// check to see if the encoder has moved
@@ -89,28 +90,28 @@ CAL_STATE pidHysterisis(int group){
             }else if (getPidGroupDataTable()[group].calibration.state == backward){
                 decrementHistoresis( group );
             }
-            int historesisBound = 15;
+            int historesisBound = 25;
             if( getPidGroupDataTable()[group].config.lowerHistoresis<(-historesisBound) &&
                 getPidGroupDataTable()[group].calibration.state == backward){
-   //             println_E("Backward Motor seems damaged, more then counts of historesis ");
+                println_E("Backward Motor seems damaged, more then counts of historesis #");p_int_I(group);
                 getPidGroupDataTable()[group].calibration.state = forward;
             }
             if(     getPidGroupDataTable()[group].config.upperHistoresis>(historesisBound) &&
                     getPidGroupDataTable()[group].calibration.state == forward){
-   //             println_E("Forward Motor seems damaged, more then counts of historesis ");
+                println_E("Forward Motor seems damaged, more then counts of historesis #");p_int_I(group);
                 getPidGroupDataTable()[group].calibration.state = done;
             }
         }else{
             pidReset(group,0);
             setOutput(group, 0);
- //           println_E("Moved ");p_fl_E(extr);
+            println_E("Moved ");p_fl_E(extr);
             if(getPidGroupDataTable()[group].calibration.state == backward){
-  //              println_I("Backward Calibrated for link# ");p_int_I(group);
+                println_I("Backward Calibrated for link# ");p_int_I(group);
                 getPidGroupDataTable()[group].calibration.state = forward;
             }else{
-   //             println_I("Calibration done for link# ");p_int_I(group);
+                println_I("Calibration done for link# ");p_int_I(group);
                 getPidGroupDataTable()[group].calibration.state = done;
-                SetPIDCalibrateionState(group, CALIBRARTION_DONE);
+               
                 getPidGroupDataTable()[group].config.lowerHistoresis *=.7;
                 getPidGroupDataTable()[group].config.upperHistoresis *=.7;
                 calcCenter( group);
@@ -122,8 +123,10 @@ CAL_STATE pidHysterisis(int group){
         }else if (getPidGroupDataTable()[group].calibration.state == backward){
             setOutput(group, -1.0f);
         }
+        setPrintLevel(l);
     }
-
+    if(getPidGroupDataTable()[group].calibration.state == done)
+        SetPIDCalibrateionState(group, CALIBRARTION_DONE);
     return getPidGroupDataTable()[group].calibration.state;
 }
 
