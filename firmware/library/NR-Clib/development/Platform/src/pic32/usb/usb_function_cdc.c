@@ -714,7 +714,7 @@ void putrsUSBUSART(const ROM char *data)
  
 void CDCTxService(void)
 {
-	USBDeviceTasksLocal();
+    USBDeviceTasksLocal();
     UINT16 byte_to_send;
     BYTE i;
     

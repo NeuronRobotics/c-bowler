@@ -39,7 +39,7 @@ void SetPICUARTFifo(BYTE_FIFO_STORAGE * s){
 	my_store=s;
 }
 void newByteUartHal(){
-	int timeout =0;
+	//int timeout =0;
 	BYTE err;
 	if(DataRdyUART1())
 		FifoAddByte(my_store,UARTGetDataByte(UART1),&err);
@@ -48,7 +48,7 @@ void newByteUartHal(){
 
 void __ISR(_UART_1_VECTOR, ipl7) U1_ISR(void){
 	//StartCritical();
-	int tick =8;
+	//int tick =8;
 	if (INTGetFlag(INT_SOURCE_UART_RX(UART1))){
 
 		newByteUartHal();

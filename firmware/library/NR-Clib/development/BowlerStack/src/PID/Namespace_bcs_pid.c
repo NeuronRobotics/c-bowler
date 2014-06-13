@@ -228,6 +228,7 @@ NAMESPACE_LIST * getBcsPidNamespace(){
 		addRpcToNamespace(&bcsPid,& bcsPid_KPID);
 		addRpcToNamespace(&bcsPid,& bcsPid_CPID_c);
 		addRpcToNamespace(&bcsPid,& bcsPid_CPDV_c);
+                addRpcToNamespace(&bcsPid,& bcsPid_ACAL);
 		namespcaedAdded =TRUE;
 	}
 

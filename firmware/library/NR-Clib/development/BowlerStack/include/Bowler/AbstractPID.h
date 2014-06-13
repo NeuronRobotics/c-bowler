@@ -233,6 +233,7 @@ void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms);
 void pushPID(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),BYTE chan, INT32 value, float time);
 void pushPIDLimitEvent(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),PidLimitEvent * event);
 
+void checkLinkHomingStatus(int group);
 /***
  * This is a getter for the interpolation state
  */
@@ -273,6 +274,7 @@ float pidResetNoStop(BYTE chan,INT32 val);
 void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet));
 
 CAL_STATE pidHysterisis(int group);
+void startHomingLink(int group, PidCalibrationType type);
 void runPidHysterisisCalibration(int group);
 BOOL processRunAutoCal(BowlerPacket * Packet);
 

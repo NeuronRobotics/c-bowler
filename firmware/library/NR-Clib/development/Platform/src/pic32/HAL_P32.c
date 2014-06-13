@@ -46,7 +46,7 @@ typedef union {
 
 }cause_union;
 void _general_exception_handler(unsigned cause, unsigned status){
-        unsigned int x = 0;
+        //unsigned int x = 0;
         //asm volatile ("move %0, $ra" : "=r" (x));
         //asm volatile ("sw $ra, %0" : "=m" (x));
 //        /register unsigned int cp0count asm ("c0r1");
@@ -119,9 +119,9 @@ void _general_exception_handler(unsigned cause, unsigned status){
 }
 
 static BYTE_FIFO_STORAGE storeUSB;
-static BYTE privateRXUSB[BOWLER_PacketSize];
+static BYTE privateRXUSB[BOWLER_PacketSize*2];
 static BYTE_FIFO_STORAGE storeUART;
-static BYTE privateRXUART[BOWLER_PacketSize];
+static BYTE privateRXUART[BOWLER_PacketSize*2];
 
 static BOOL init=FALSE;
 

@@ -53,12 +53,14 @@
 #define BOWLER_ASCII    39// ASCII string, null terminated
 #define BOWLER_FIXED100    41// ASCII string, null terminated
 #define BOWLER_FIXED1K    42// ASCII string, null terminated
-
+#define B_TRUE 1
+#define B_FALSE 0
+typedef unsigned char			B_BOOL;
 #if !defined(__GENERIC_TYPE_DEFS_H_)
-#define TRUE 1
-#define FALSE 0
-	typedef unsigned char			BOOL;
-	//typedef enum _BOOL { FALSE = 0, TRUE } BOOL;    /* Undefined size */
+//#define TRUE 1
+//#define FALSE 0
+//	typedef unsigned char			BOOL;
+        typedef enum _BOOL { FALSE = 0, TRUE } BOOL;    /* Undefined size */
 	typedef unsigned char			BYTE;
 	typedef signed int          	INT;
 	typedef signed char         	INT8;
