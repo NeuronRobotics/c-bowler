@@ -8,111 +8,53 @@
 #include "Bowler/Bowler.h"
 
 
-typedef enum {
-    EXCEP_IRQ = 0,          // interrupt
-    EXCEP_AdEL = 4,         // address error exception (load or ifetch)
-    EXCEP_AdES=5,             // address error exception (store)
-    EXCEP_IBE=6,              // bus error (ifetch)
-    EXCEP_DBE=7,              // bus error (load/store)
-    EXCEP_Sys=8,              // syscall
-    EXCEP_Bp=9,               // breakpoint
-    EXCEP_RI=10,               // reserved instruction
-    EXCEP_CpU=11,              // coprocessor unusable
-    EXCEP_Overflow=12,         // arithmetic overflow
-    EXCEP_Trap=13,             // trap (possible divide by zero)
-    EXCEP_IS1 = 16,         // implementation specfic 1
-    EXCEP_CEU=17,              // CorExtend Unuseable
-    EXCEP_C2E=18               // coprocessor 2
-} excep_code;
+static enum {
+      EXCEP_IRQ = 0,            // interrupt
+      EXCEP_AdEL = 4,            // address error exception (load or ifetch)
+      EXCEP_AdES,                // address error exception (store)
+      EXCEP_IBE,                // bus error (ifetch)
+      EXCEP_DBE,                // bus error (load/store)
+      EXCEP_Sys,                // syscall
+      EXCEP_Bp,                // breakpoint
+      EXCEP_RI,                // reserved instruction
+      EXCEP_CpU,                // coprocessor unusable
+      EXCEP_Overflow,            // arithmetic overflow
+      EXCEP_Trap,                // trap (possible divide by zero)
+      EXCEP_IS1 = 16,            // implementation specfic 1
+      EXCEP_CEU,                // CorExtend Unuseable
+      EXCEP_C2E                // coprocessor 2
+  } _excep_code;
 
-typedef union {
-    UINT32 value;
-    struct{
-        unsigned :2;//reserved
-        unsigned EXCCODE :5;//Exception code
-        unsigned :1;//reserved
-        unsigned IP:2;//Controls request for software interrupt
-        unsigned RIPL :6;//Request Interupt Priority Level
-        unsigned :6;//reserved
-        unsigned R1 :1;//undocumented
-        unsigned IV :1;//Interrupt Vector Bit
-        unsigned :2;//reserved
-        unsigned R2 :1;//undocumented
-        unsigned DC :1;//Disable Count
-        unsigned CE:2;// Coprocessor Exception Bits
-        unsigned TI :1;// Timer Interrupt
-        unsigned BD :1;// Branch Delay
-    };
 
-}cause_union;
-void _general_exception_handler(unsigned cause, unsigned status){
-        //unsigned int x = 0;
-        //asm volatile ("move %0, $ra" : "=r" (x));
-        //asm volatile ("sw $ra, %0" : "=m" (x));
-//        /register unsigned int cp0count asm ("c0r1");
+void __attribute__((nomips16)) _general_exception_handler() {
+        //static unsigned int _epc_code;
+        static unsigned int _excep_addr;
+        asm volatile("mfc0 %0,$13" : "=r" (_excep_code));
+        asm volatile("mfc0 %0,$14" : "=r" (_excep_addr));
+        _excep_code = (_excep_code & 0x0000007C) >> 2;
 
-        cause_union u;
-        u.value=cause;
-
-        //setLed(1,0,0);
         setPrintLevelInfoPrint();
 
         print_E("\r\n\r\n\r\nException handeler!! ");
-//        prHEX32(cause,INFO_PRINT);print_I(" status=");
-//        prHEX32(status,INFO_PRINT);
-//        print_I(" exec code=");
-//        p_int_I(u.EXCCODE);
-//        print_I(" return address=");
-//        prHEX32(x,INFO_PRINT);
-//        println_I("===    CAUSE val Parsed    ===\n\r");
-//        print_I("31:\t");prHEX32(u.BD,INFO_PRINT);print_I("\t Exception During Branch Delay\r\n");
-//        print_I("30:\t");prHEX32(u.TI,INFO_PRINT);print_I("\t Exception During Pending Timer Interupt\r\n");
-//        print_I("29:28:\t");prHEX32(u.CE,INFO_PRINT);print_I("\t Coproc Ref number fpr a coprpc unisable exception\r\n");
-//        print_I("27:\t");prHEX32(u.DC,INFO_PRINT);print_I("\t Disable Count Register\r\n");
-//        print_I("23:\t");prHEX32(u.IV,INFO_PRINT);print_I("\t Special Interrupt Vector used\r\n");
-//        print_I("15:10:\t");prHEX32(u.RIPL,INFO_PRINT);print_I("\t Pending Interrupt indicator or Requested Interrupt Priority Level\r\n");
-//        print_I("6:2:\t");prHEX32(u.EXCCODE,INFO_PRINT);print_I("\t Exception Code\r\n");
-//        switch(u.EXCCODE){
-//            case 0: print_I("\t\tInterrupt\r\n"); break;
-//            case 4: print_I("\t\tAddress Error Exception (Load or Instruction Fetch)\r\n"); break;
-//            case 5: print_I("\t\tAddress Error Exception (Store)\r\n"); break;
-//            case 6: print_I("\t\tBus Error Exception (Instruction Fetch)\r\n"); break;
-//            case 7: print_I("\t\tBus Error Exception (Data Reference: load or store)\r\n"); break;
-//            case 8: print_I("\t\tSyscall Exception\r\n"); break;
-//            case 9: print_I("\t\tBreakpoint Exception\r\n"); break;
-//            case 10: print_I("\t\tReversed Instruction Exception\r\n"); break;
-//            case 11: print_I("\t\tCoProcessor Unusable exception\r\n"); break;
-//            case 12: print_I("\t\tArithmatic Overflow Exception\r\n"); break;
-//            case 13: print_I("\t\tTrap Exception\r\n"); break;
-//            case 16: print_I("\t\tImplementation Specific Exception (COP2)\r\n"); break;
-//            case 17: print_I("\t\tCorExtend Unusable\r\n"); break;
-//            case 18: print_I("\t\tCoprocessor 2 Exceptions\r\n"); break;
-//            default: print_I("\t\treserved\r\n"); break;
-//
-//        }
-//
-//        println_I("=== CoProc 0 Register Dump ===");
-//        println_I(" BadVAddr=\t");
-//        prHEX32(_CP0_GET_BADVADDR(),INFO_PRINT);
-//        println_I(" Compare=\t");
-//        prHEX32(_CP0_GET_COMPARE(),INFO_PRINT);
-//        println_I(" Count=\t");
-//        prHEX32(_CP0_GET_COUNT(),INFO_PRINT);
-//        println_I(" Status=\t");
-//        prHEX32(_CP0_GET_STATUS(),INFO_PRINT);
-//        println_I(" EPC=\t");
-//        prHEX32(_CP0_GET_EPC(),INFO_PRINT);
-//        println_I(" PRID=\t");
-//        prHEX32(_CP0_GET_PRID(),INFO_PRINT);
-//        println_I(" EBASE=\t");
-//        prHEX32(_CP0_GET_EBASE(),INFO_PRINT);
-//        println_I(" CONFIG=\t");
-//        prHEX32(_CP0_GET_CONFIG(),INFO_PRINT);
-//        println_I(" ERROREPC=\t");
-//        prHEX32(_CP0_GET_DEPC(),INFO_PRINT);
-//        println_I(" ERROREPC=\t");
-//        prHEX32(_CP0_GET_DEPC(),INFO_PRINT);
-//        print_I(" \r\n\r\n\r\n");
+        switch(_excep_code){
+            case EXCEP_IRQ: print_E ("interrupt");break;
+            case EXCEP_AdEL: print_E ("address error exception (load or ifetch)");break;
+            case EXCEP_AdES: print_E ("address error exception (store)");break;
+            case EXCEP_IBE: print_E ("bus error (ifetch)");break;
+            case EXCEP_DBE: print_E ("bus error (load/store)");break;
+            case EXCEP_Sys: print_E ("syscall");break;
+            case EXCEP_Bp: print_E ("breakpoint");break;
+            case EXCEP_RI: print_E ("reserved instruction");break;
+            case EXCEP_CpU: print_E ("coprocessor unusable");break;
+            case EXCEP_Overflow: print_E ("arithmetic overflow");break;
+            case EXCEP_Trap: print_E ("trap (possible divide by zero)");break;
+            case EXCEP_IS1: print_E ("implementation specfic 1");break;
+            case EXCEP_CEU: print_E ("CorExtend Unuseable");break;
+            case EXCEP_C2E: print_E ("coprocessor 2");break;
+        }
+        print_E(" at 0x");
+        prHEX32(_excep_addr,ERROR_PRINT);
+        print_E("\r\n");
 
         DelayMs(1000);
         Reset();
@@ -167,7 +109,7 @@ void Get_HAL_Packet(BYTE * packet,WORD size){
         if(FifoGetByteStream(&storeUART,packet,size) != 0)
             return;
     }
-    println_E("Hal reported error in retriving packet __FILE__");println_E(__FILE__);
+    print_E("Hal reported error in retriving packet __FILE__");print_E(__FILE__);
 }
 
 BOOL Send_HAL_Packet(BYTE * packet,WORD size){
