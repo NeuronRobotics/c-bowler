@@ -18,10 +18,10 @@ void allign(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 			if(first==0){
 				println("##Junking bad first byte. Fifo Size=",INFO_PRINT);  // SPI ISR shits out messages when 0xAA fails to match. making this info.
 				p_int(calcByteCount(fifo),INFO_PRINT);
-				print(" [",INFO_PRINT);
+				print_nnl(" [",INFO_PRINT);
 			}
 			first++;
-			print(" 0x",INFO_PRINT);
+			print_nnl(" 0x",INFO_PRINT);
 			prHEX8(Packet->use.head.ProtocolRevision,INFO_PRINT);
 			BYTE b;
 			if(getNumBytes(fifo)==0)
@@ -65,7 +65,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 			}else if(CheckCRC(Packet)==FALSE){
 				println("###Bad crc check=",ERROR_PRINT);
 			}
-			prHEX8(Packet->use.head.ProtocolRevision,ERROR_PRINT);print(" Fifo Size=",ERROR_PRINT);p_int(calcByteCount(fifo),ERROR_PRINT);
+			prHEX8(Packet->use.head.ProtocolRevision,ERROR_PRINT);print_nnl(" Fifo Size=",ERROR_PRINT);p_int(calcByteCount(fifo),ERROR_PRINT);
 			BYTE b;
 			if(getNumBytes(fifo)==0)
 				return FALSE;
@@ -96,7 +96,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 	INT32 num = getNumBytes(fifo);
 	if (num >=(totalLen) ){
 		if(debug){
-			//println("**Found packet, ");p_int(totalLen);//print(" Bytes, pulling out of buffer");
+			//println("**Found packet, ");p_int(totalLen);//print_nnl(" Bytes, pulling out of buffer");
 		}
 		//StartCritical();
 		getStream(Packet->stream,totalLen,fifo);
@@ -104,7 +104,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 		return  TRUE;
 	}
 	if(debug){
-		println("Header ready, but data is not. Need: ",INFO_PRINT);p_int(totalLen,INFO_PRINT);print(" have: ",INFO_PRINT);p_int(num ,INFO_PRINT);
+		println("Header ready, but data is not. Need: ",INFO_PRINT);p_int(totalLen,INFO_PRINT);print_nnl(" have: ",INFO_PRINT);p_int(num ,INFO_PRINT);
 	}
 	return FALSE;
 }

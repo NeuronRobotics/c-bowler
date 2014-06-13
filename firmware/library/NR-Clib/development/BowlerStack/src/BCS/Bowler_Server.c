@@ -120,7 +120,7 @@ BOOL process(BowlerPacket * Packet){
 
 		println("Packet not addressed to me: ",ERROR_PRINT);
 		printByteArray(Packet->use.head.MAC.v,6,ERROR_PRINT);
-		print(" is not mine: ",ERROR_PRINT);
+		print_nnl(" is not mine: ",ERROR_PRINT);
 		printByteArray(MyMAC.v,6,ERROR_PRINT);
 
 	}
