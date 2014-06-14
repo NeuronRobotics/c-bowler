@@ -4,10 +4,7 @@
  *  Created on: Feb 14, 2014
  *      Author: hephaestus
  */
-#include "Bowler/AbstractPID.h"
-#include "Bowler/Debug.h"
-#include "Bowler/Defines.h"
-#include "Bowler/BowlerTransport.h"
+#include "Bowler/Bowler.h"
 
 static RunEveryData pid ={0,100};
 

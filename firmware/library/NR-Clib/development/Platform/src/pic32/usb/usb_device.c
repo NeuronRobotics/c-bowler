@@ -113,7 +113,7 @@
 /** INCLUDES *******************************************************/
 #include "arch/pic32/USB/usb_fifo.h"
 
-
+void USBDeviceTasksLocal(void);
 #if defined(USB_USE_MSD)
     #include "./USB/usb_function_msd.h"
 #endif
@@ -742,64 +742,7 @@ void USBDeviceInit(void)
     USBDeviceState = DETACHED_STATE;
 }
 
-//DOM-IGNORE-BEGIN
-/****************************************************************************
-  Function:
-    void USBDeviceTasks(void)
 
-  Description:
-    This function is the main state machine of the
-    USB device side stack.  This function should be
-    called periodically to receive and transmit
-    packets through the stack.  This function should
-    be called  preferably once every 100us
-    during the enumeration process.  After the
-    enumeration process this function still needs to
-    be called periodically to respond to various
-    situations on the bus but is more relaxed in its
-    time requirements.  This function should also
-    be called at least as fast as the OUT data
-    expected from the PC.
-
-  Precondition:
-    None
-
-  Parameters:
-    None
-
-  Return Values:
-    None
-
-  Remarks:
-    None
-  ***************************************************************************/
-void USBDeviceTasksLocal(void);
-//DOM-IGNORE-END
-#if !defined(__PIC32MX__)
-//#define __PIC32MX__
-#endif
-#if defined(USB_INTERRUPT)
-  #if defined(__18CXX)
-    void USBDeviceTasks(void)
-  #elif defined(__C30__)
-    //void __attribute__((interrupt,auto_psv,address(0xA800))) _USB1Interrupt()
-    void __attribute__((interrupt,auto_psv,nomips16)) _USB1Interrupt()
-  #elif defined(__PIC32MX__)
-
-    #pragma interrupt _USB1Interrupt ipl4 vector 45
-    void __attribute__((nomips16)) _USB1Interrupt( void )
-   //void __ISR(_USB_1_VECTOR, ipl5) USB1_ISR(void)
-  #endif
-#else
-//                                                           #warning compiling USB Polling
-void USBDeviceTasks(void)
-
-#endif
-{
-    //StartCritical();
-    USBDeviceTasksLocal();
-    //EndCritical();
-}
 void USBDeviceTasksLocal(void){
     //INTDisableInterrupts();
     unsigned char i;
@@ -2823,3 +2766,63 @@ void USBDeviceAttach(void)
 }
 #endif  //#if defined(USB_INTERRUPT)
 /** EOF USBDevice.c *****************************************************/
+
+
+//DOM-IGNORE-BEGIN
+/****************************************************************************
+  Function:
+    void USBDeviceTasks(void)
+
+  Description:
+    This function is the main state machine of the
+    USB device side stack.  This function should be
+    called periodically to receive and transmit
+    packets through the stack.  This function should
+    be called  preferably once every 100us
+    during the enumeration process.  After the
+    enumeration process this function still needs to
+    be called periodically to respond to various
+    situations on the bus but is more relaxed in its
+    time requirements.  This function should also
+    be called at least as fast as the OUT data
+    expected from the PC.
+
+  Precondition:
+    None
+
+  Parameters:
+    None
+
+  Return Values:
+    None
+
+  Remarks:
+    None
+  ***************************************************************************/
+
+//DOM-IGNORE-END
+#if !defined(__PIC32MX__)
+//#define __PIC32MX__
+#endif
+#if defined(USB_INTERRUPT)
+  #if defined(__18CXX)
+    void USBDeviceTasks(void)
+  #elif defined(__C30__)
+    //void __attribute__((interrupt,auto_psv,address(0xA800))) _USB1Interrupt()
+    void __attribute__((interrupt,auto_psv,nomips16)) _USB1Interrupt()
+  #elif defined(__PIC32MX__)
+
+    #pragma interrupt _USB1Interrupt ipl5 vector 45
+    void __attribute__((nomips16)) _USB1Interrupt( void )
+   //void __ISR(_USB_1_VECTOR, ipl5) USB1_ISR(void)
+  #endif
+#else
+//                                                           #warning compiling USB Polling
+void USBDeviceTasks(void)
+
+#endif
+{
+    //StartCritical();
+    USBDeviceTasksLocal();
+    //EndCritical();
+}

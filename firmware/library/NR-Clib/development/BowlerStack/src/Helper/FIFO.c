@@ -32,6 +32,7 @@ BOOL lockFifo(BYTE_FIFO_STORAGE * fifo){
 //	}
 //	fifo->mutex=TRUE;
 	//StartCritical();
+
 	return TRUE;
 }
 BOOL unLockFifo(BYTE_FIFO_STORAGE * fifo){
@@ -93,6 +94,12 @@ UINT32 FifoAddByte(BYTE_FIFO_STORAGE * fifo,BYTE b, BYTE * errorCode){
 		errorCode[0]=FIFO_FAILED_TO_SET;
 		//return 0;
 	}
+        if(fifo->buffer == NULL){
+            setPrintLevelErrorPrint();
+            println_E("Null buffer in fifo call");
+            //return 0;
+        }
+
 	fifo->buffer[fifo->writePointer]=b;
 	fifo->writePointer++;
 	if (fifo->writePointer == fifo->bufferSize){

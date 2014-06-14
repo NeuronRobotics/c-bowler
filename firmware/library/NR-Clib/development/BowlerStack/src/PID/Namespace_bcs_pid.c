@@ -6,8 +6,6 @@
  */
 
 #include "Bowler/Bowler.h"
-#include "Bowler/AbstractPID.h"
-
 
 static const char pidNSName[]   = "bcs.pid.*;1.0;;";
 

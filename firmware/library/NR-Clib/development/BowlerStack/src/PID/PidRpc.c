@@ -14,10 +14,7 @@
  */
 
 
-#include "Bowler/AbstractPID.h"
-#include "Bowler/Debug.h"
-#include "Bowler/Defines.h"
-#include  "Bowler/Bowler.h"
+#include "Bowler/Bowler.h"
 //#include "arch/pic32/BowlerConfig.h"
 
 //static INT32_UNION PID_Temp;

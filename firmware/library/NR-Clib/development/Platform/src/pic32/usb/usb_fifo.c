@@ -49,8 +49,9 @@ BOOL GotUSBData(void){
 }
 
 void printBufferState(BYTE_FIFO_STORAGE  * s){
-	println_E("\tFIFO state ");p_int_E((int)s);
-	println_E("\tBuffer state ");p_int_E((int)s->buffer);
+	println_E("\tFIFO state 0x");prHEX32((int)s,ERROR_PRINT);
+        println_E("\tTo  0x");prHEX32(((int)s+sizeof(BYTE_FIFO_STORAGE)),ERROR_PRINT);
+	println_E("\tBuffer state 0x");prHEX32((int)s->buffer,ERROR_PRINT);
 	println_E("\tBuffer size ");p_int_E((int)s->bufferSize);
 	println_E("\tBuffer count ");p_int_E((int)s->byteCount);
 	println_E("\tRead Pointer ");p_int_E((int)s->readPointer);
@@ -58,11 +59,12 @@ void printBufferState(BYTE_FIFO_STORAGE  * s){
 }
 
 BYTE_FIFO_STORAGE  * GetPICUSBFifo(void){
-	if(usb_fifo_my_store == NULL || usb_fifo_my_store!=last_my_store){
+	if(usb_fifo_my_store->buffer == NULL ){
 		setPrintLevelInfoPrint();
 		println_E("Usb storage changed!! was");printBufferState(last_my_store);
 		println_E("Is: ");printBufferState(usb_fifo_my_store);
-		while(1);
+                if(usb_fifo_my_store->buffer == NULL )
+                    while(1);
 	}
 	last_my_store=usb_fifo_my_store;
 	return usb_fifo_my_store;
@@ -82,7 +84,8 @@ void SetPICUSBFifo(BYTE_FIFO_STORAGE  * s){
 	last_my_store=s;
 	//printBufferState(GetPICUSBFifo());
 	setPrintLevel(l);
-
+        GetPICUSBFifo();
+        println_E("USB FIFO OK");
 }
 
 void usb_CDC_Serial_Init(char * DevStr,char * SerialStr,UINT16 vid,UINT16 pid){
@@ -99,9 +102,7 @@ void usb_CDC_Serial_Init(char * DevStr,char * SerialStr,UINT16 vid,UINT16 pid){
 		tris_self_power = INPUT_PIN;	// See HardwareProfile.h
 	#endif
 	USBDeviceInit();
-	//InitByteFifo(&store,privateRX,sizeof(privateRX));
-//	if(bufferSet==FALSE)
-//		usb_fifo_my_store=&store;
+
 	#if defined(USB_INTERRUPT)
         USBDeviceAttach();
     #endif
