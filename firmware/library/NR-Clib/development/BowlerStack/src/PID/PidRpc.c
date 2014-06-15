@@ -216,7 +216,7 @@ BOOL processPIDCrit(BowlerPacket * Packet){
 			getPidGroupDataTable(i)->config.Enabled = TRUE;
 			setOutput(i,0.0);
 			getPidGroupDataTable(i)->config.Enabled = FALSE;
-			getPidVelocityDataTable()[i].enabled=FALSE;
+			getPidVelocityDataTable(i)->enabled=FALSE;
 			getPidGroupDataTable(i)->Output=0.0;
 		}
 		READY(Packet,zone,0);

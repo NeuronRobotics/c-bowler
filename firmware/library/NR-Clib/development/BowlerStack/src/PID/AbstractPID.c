@@ -34,12 +34,12 @@ int getNumberOfPidChannels(){
 	return number_of_pid_groups;
 }
 
-PD_VEL  * getPidVelocityDataTable(){
+PD_VEL  * getPidVelocityDataTable(int group){
 	if(velData == NULL){
 		println_E("Velocity data table is null");
 		return NULL;
 	}
-	return velData;
+	return &velData[group];
 }
 
 AbsPID * getPidGroupDataTable(int group){
