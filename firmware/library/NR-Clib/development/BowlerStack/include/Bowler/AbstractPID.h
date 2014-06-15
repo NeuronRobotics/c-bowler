@@ -254,7 +254,7 @@ BOOL processPIDCrit(BowlerPacket * Packet);
 
 NAMESPACE_LIST * getBcsPidNamespace();
 
-AbsPID * getPidGroupDataTable();
+AbsPID * getPidGroupDataTable(int group);
 PD_VEL  * getPidVelocityDataTable();
 void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet));
 

@@ -1,4 +1,5 @@
 /**
+ * "getPidGroupDataTable(i)->"
  *
  * Copyright 2009 Neuron Robotics, LLC
  *
@@ -221,22 +222,22 @@ void printPIDvals(int i){
 
 	println("PID chan=",INFO_PRINT);
 	int chan =      i;
-	int enabled=    getPidGroupDataTable()[i].config.Enabled;
-	int polarity =  getPidGroupDataTable()[i].config.Polarity;
-	int set =       getPidGroupDataTable()[i].SetPoint;
-        float kp = getPidGroupDataTable()[i].config.K.P;
+	int enabled=    getPidGroupDataTable(i)->config.Enabled;
+	int polarity =  getPidGroupDataTable(i)->config.Polarity;
+	int set =       getPidGroupDataTable(i)->SetPoint;
+        float kp = getPidGroupDataTable(i)->config.K.P;
 	p_int(chan,INFO_PRINT);
 	print_nnl(" Enabled=",INFO_PRINT);     p_int(enabled,INFO_PRINT);
 	print_nnl(" Polarity=",INFO_PRINT);    p_int(polarity,INFO_PRINT);
 	print_nnl(" SET=",INFO_PRINT);    p_int(set,INFO_PRINT);
 	print_nnl(" Kp=",INFO_PRINT);    p_fl(kp,INFO_PRINT);
-	print_nnl(" Ki=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].config.K.I,INFO_PRINT);
-	print_nnl(" Kd=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].config.K.D,INFO_PRINT);
-	print_nnl("\t Setpoint=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].SetPoint,INFO_PRINT);
-	print_nnl("\t Current State=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].CurrentState,INFO_PRINT);
-        print_nnl("\t Offset=",INFO_PRINT);    p_fl(getPidGroupDataTable()[i].config.offset,INFO_PRINT);
-	print_nnl("\t Control Output: ",INFO_PRINT); p_fl(getPidGroupDataTable()[i].Output ,INFO_PRINT);
-        print_nnl("\t Output Set: ",INFO_PRINT); p_fl(getPidGroupDataTable()[i].OutputSet ,INFO_PRINT);
+	print_nnl(" Ki=",INFO_PRINT);    p_fl(getPidGroupDataTable(i)->config.K.I,INFO_PRINT);
+	print_nnl(" Kd=",INFO_PRINT);    p_fl(getPidGroupDataTable(i)->config.K.D,INFO_PRINT);
+	print_nnl("\t Setpoint=",INFO_PRINT);    p_fl(getPidGroupDataTable(i)->SetPoint,INFO_PRINT);
+	print_nnl("\t Current State=",INFO_PRINT);    p_fl(getPidGroupDataTable(i)->CurrentState,INFO_PRINT);
+        print_nnl("\t Offset=",INFO_PRINT);    p_fl(getPidGroupDataTable(i)->config.offset,INFO_PRINT);
+	print_nnl("\t Control Output: ",INFO_PRINT); p_fl(getPidGroupDataTable(i)->Output ,INFO_PRINT);
+        print_nnl("\t Output Set: ",INFO_PRINT); p_fl(getPidGroupDataTable(i)->OutputSet ,INFO_PRINT);
 
 }
 
