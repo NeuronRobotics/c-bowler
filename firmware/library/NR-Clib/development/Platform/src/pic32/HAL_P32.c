@@ -26,7 +26,7 @@ static enum {
   } _excep_code;
 
 
-void __attribute__((nomips16)) _general_exception_handler() {
+void  __attribute__((nomips16)) _general_exception_handler(){
         //static unsigned int _epc_code;
         static unsigned int _excep_addr;
         asm volatile("mfc0 %0,$13" : "=r" (_excep_code));
