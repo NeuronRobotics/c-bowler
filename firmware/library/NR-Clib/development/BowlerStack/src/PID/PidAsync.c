@@ -13,8 +13,8 @@ void updatePidAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacke
         int i;
         int update = FALSE;
         for (i=0;i<getNumberOfPidChannels();i++){
-                if(getPidGroupDataTable()[i].config.Async){
-                        if(getPidGroupDataTable()[i].CurrentState != getPidGroupDataTable()[i].lastPushedValue){
+                if(getPidGroupDataTable(i)->config.Async){
+                        if(getPidGroupDataTable(i)->CurrentState != getPidGroupDataTable(i)->lastPushedValue){
                             //println_E("Async because of ");p_int_E(i);
                                 update = TRUE;
                         }
@@ -29,7 +29,7 @@ void updatePidAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacke
 void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
 	//float time = getMs();
 //	for(i=0;i<getNumberOfPidChannels();i++){
-//		pushPID(i,getPidGroupDataTable()[i].CurrentState, time);
+//		pushPID(i,getPidGroupDataTable(i)->CurrentState, time);
 //	}
         INT32_UNION PID_Temp;
         LoadCorePacket(Packet);
@@ -37,7 +37,7 @@ void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(Bowler
         Packet->use.head.RPC = GetRPCValue("apid");
         int i;
         for(i=0;i<getNumberOfPidChannels();i++){
-                PID_Temp.Val=getPidGroupDataTable()[i].CurrentState;
+                PID_Temp.Val=getPidGroupDataTable(i)->CurrentState;
                 Packet->use.data[0+(i*4)]=PID_Temp.byte.FB;
                 Packet->use.data[1+(i*4)]=PID_Temp.byte.TB;
                 Packet->use.data[2+(i*4)]=PID_Temp.byte.SB;
@@ -58,10 +58,10 @@ void pushPIDLimitEvent(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPa
 	}
 	event->latchTickError=0;
 	if(event->type == INDEXEVENT){
-		if(getPidGroupDataTable()[event->group].config.useIndexLatch){
+		if(getPidGroupDataTable(event->group)->config.useIndexLatch){
 			event->latchTickError = event->value-GetPIDPosition(event->group);
-			event->value = getPidGroupDataTable()[event->group].config.IndexLatchValue;
-			if(getPidGroupDataTable()[event->group].config.stopOnIndex){
+			event->value = getPidGroupDataTable(event->group)->config.IndexLatchValue;
+			if(getPidGroupDataTable(event->group)->config.stopOnIndex){
 				pidReset(event->group,event->value);
 			}else{
 				event->value = pidResetNoStop(event->group,event->value);
@@ -75,7 +75,7 @@ void pushPIDLimitEvent(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPa
 		SetPID(event->group,event->value);
 	}
 
-	getPidGroupDataTable()[event->group].lastPushedValue=event->value;
+	getPidGroupDataTable(event->group)->lastPushedValue=event->value;
 
 	LoadCorePacket(Packet);
 	Packet->use.head.MessageID = 0;
@@ -129,8 +129,8 @@ void pushPID(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Pack
 	Packet->use.data[7]=tmp.byte.SB;
 	Packet->use.data[8]=tmp.byte.LB;
 
-	float diffTime = time-getPidGroupDataTable()[chan].lastPushedValue;
-	float diffVal  = value -getPidGroupDataTable()[chan].lastPushedTime;
+	float diffTime = time-getPidGroupDataTable(chan)->lastPushedValue;
+	float diffVal  = value -getPidGroupDataTable(chan)->lastPushedTime;
 
 	tmp.Val = (INT32) (diffVal/diffTime);
 	Packet->use.data[9]=tmp.byte.FB;
@@ -142,8 +142,8 @@ void pushPID(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Pack
     FixPacket(Packet);
     if(pidAsyncCallbackPtr !=NULL){
     	if(pidAsyncCallbackPtr(Packet)){
-            getPidGroupDataTable()[chan].lastPushedValue =value;
-            getPidGroupDataTable()[chan].lastPushedTime=time;
+            getPidGroupDataTable(chan)->lastPushedValue =value;
+            getPidGroupDataTable(chan)->lastPushedTime=time;
         }
     }
 }

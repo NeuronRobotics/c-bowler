@@ -34,30 +34,30 @@ int getNumberOfPidChannels(){
 	return number_of_pid_groups;
 }
 
-PD_VEL  * getPidVelocityDataTable(){
+PD_VEL  * getPidVelocityDataTable(int group){
 	if(velData == NULL){
 		println_E("Velocity data table is null");
 		return NULL;
 	}
-	return velData;
+	return &velData[group];
 }
 
-AbsPID * getPidGroupDataTable(){
+AbsPID * getPidGroupDataTable(int group){
 	if(pidGroupsInternal == NULL){
 		println_E("PID data table is null");
 		return NULL;
 	}
 
-	return pidGroupsInternal;
+	return &pidGroupsInternal[group];
 }
 
 BOOL isPidEnabled(BYTE i){
-    return getPidGroupDataTable()[i].config.Enabled;
+    return getPidGroupDataTable(i)->config.Enabled;
 }
 
 void SetPIDEnabled(BYTE index, BOOL enabled){
 
-    getPidGroupDataTable()[index].config.Enabled=enabled;
+    getPidGroupDataTable(index)->config.Enabled=enabled;
 }
 
 void SetControllerMath( void (*math)(AbsPID * ,float )){
@@ -95,20 +95,20 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
         int i;
 
         for(i=0;i<numberOfGroups;i++){
-            int enabled = getPidGroupDataTable()[i].config.Enabled;
+            int enabled = getPidGroupDataTable(i)->config.Enabled;
             pidReset(i,0);
-            getPidGroupDataTable()[i].config.Enabled = enabled ;
+            getPidGroupDataTable(i)->config.Enabled = enabled ;
         }
 }
 
 void SetPIDCalibrateionState(int group, PidCalibrationType state){
-    getPidGroupDataTable()[group].config.calibrationState=state;
+    getPidGroupDataTable(group)->config.calibrationState=state;
     //OnPidConfigure(group);
 }
 
 PidCalibrationType GetPIDCalibrateionState(int group){
 
-    return getPidGroupDataTable()[group].config.calibrationState;
+    return getPidGroupDataTable(group)->config.calibrationState;
 }
 
 
@@ -121,7 +121,7 @@ BYTE ZeroPID(BYTE chan){
 BYTE ClearPID(BYTE chan){
 	if (chan>=getNumberOfPidChannels())
 		return FALSE;
-	getPidGroupDataTable()[chan].config.Enabled=FALSE;
+	getPidGroupDataTable(chan)->config.Enabled=FALSE;
 	return TRUE;
 }
 
@@ -132,15 +132,15 @@ BYTE SetPIDTimed(BYTE chan,INT32 val,float ms){
 	if(ms<.01)
 		ms=0;
 	//local_groups[chan].config.Enabled=TRUE;
-	getPidGroupDataTable()[chan].interpolate.set=(float)val;
-	getPidGroupDataTable()[chan].interpolate.setTime=ms;
-	getPidGroupDataTable()[chan].interpolate.start=getPidGroupDataTable()[chan].SetPoint;
-	getPidGroupDataTable()[chan].interpolate.startTime=getMs();
+	getPidGroupDataTable(chan)->interpolate.set=(float)val;
+	getPidGroupDataTable(chan)->interpolate.setTime=ms;
+	getPidGroupDataTable(chan)->interpolate.start=getPidGroupDataTable(chan)->SetPoint;
+	getPidGroupDataTable(chan)->interpolate.startTime=getMs();
 	if(ms==0)
-		getPidGroupDataTable()[chan].SetPoint=(float)val;
-	//getPidGroupDataTable()[chan].config.Enabled=TRUE;
+		getPidGroupDataTable(chan)->SetPoint=(float)val;
+	//getPidGroupDataTable(chan)->config.Enabled=TRUE;
 	velData[chan].enabled=FALSE;
-	InitAbsPIDWithPosition(&getPidGroupDataTable()[chan],getPidGroupDataTable()[chan].config.K.P,getPidGroupDataTable()[chan].config.K.I,getPidGroupDataTable()[chan].config.K.D, getMs(),val);
+	InitAbsPIDWithPosition(getPidGroupDataTable(chan),getPidGroupDataTable(chan)->config.K.P,getPidGroupDataTable(chan)->config.K.I,getPidGroupDataTable(chan)->config.K.D, getMs(),val);
 	return TRUE;
 }
 BYTE SetPID(BYTE chan,INT32 val){
@@ -151,13 +151,13 @@ BYTE SetPID(BYTE chan,INT32 val){
 int GetPIDPosition(BYTE chan){
 	if (chan>=getNumberOfPidChannels())
 		return 0;
-	//getPidGroupDataTable()[chan].CurrentState=(int)getPosition(chan);
-	return getPidGroupDataTable()[chan].CurrentState;
+	//getPidGroupDataTable(chan)->CurrentState=(int)getPosition(chan);
+	return getPidGroupDataTable(chan)->CurrentState;
 }
 
 
 float pidResetNoStop(BYTE chan,INT32 val){
-    AbsPID * data = &getPidGroupDataTable()[chan];
+    AbsPID * data = getPidGroupDataTable(chan);
     //float value = (float)resetPosition(chan,val);
     float current=data->CurrentState;
     float raw =current+data->config.offset;
@@ -170,7 +170,7 @@ float pidResetNoStop(BYTE chan,INT32 val){
     print_E(" Raw: ");p_int_E(raw);
     float time = getMs();
     data->lastPushedValue=val;
-    InitAbsPIDWithPosition(&getPidGroupDataTable()[chan],data->config.K.P,data->config.K.I,data->config.K.D, time,val );
+    InitAbsPIDWithPosition(getPidGroupDataTable(chan),data->config.K.P,data->config.K.I,data->config.K.D, time,val );
     velData[chan].lastPosition=val;
     velData[chan].lastTime=time;
     return val;
@@ -178,7 +178,7 @@ float pidResetNoStop(BYTE chan,INT32 val){
 
 void pidReset(BYTE chan,INT32 val){
 	float value = pidResetNoStop(chan,val);
-        AbsPID * data = &getPidGroupDataTable()[chan];
+        AbsPID * data = getPidGroupDataTable(chan);
 	data->interpolate.set=value;
 	data->interpolate.setTime=0;
 	data->interpolate.start=value;
@@ -197,9 +197,9 @@ void InitAbsPID(AbsPID * state,float KP,float KI,float KD,float time){
 }
 
 void setPIDConstants(int group,float p,float i,float d){
-    getPidGroupDataTable()[group].config.K.P=p;
-    getPidGroupDataTable()[group].config.K.I=i;
-    getPidGroupDataTable()[group].config.K.D=d;
+    getPidGroupDataTable(group)->config.K.P=p;
+    getPidGroupDataTable(group)->config.K.I=i;
+    getPidGroupDataTable(group)->config.K.D=d;
 }
 
 /**
@@ -224,13 +224,13 @@ void InitAbsPIDWithPosition(AbsPID * state,float KP,float KI,float KD,float time
 
 
 BOOL isPIDInterpolating(int index){
-    return getPidGroupDataTable()[index].interpolate.setTime != 0;
+    return getPidGroupDataTable(index)->interpolate.setTime != 0;
 }
 
 BOOL isPIDArrivedAtSetpoint(int index, float plusOrMinus){
-    if(getPidGroupDataTable()[index].config.Enabled)
-        return bound( getPidGroupDataTable()[index].SetPoint,
-                        getPidGroupDataTable()[index].CurrentState,
+    if(getPidGroupDataTable(index)->config.Enabled)
+        return bound( getPidGroupDataTable(index)->SetPoint,
+                        getPidGroupDataTable(index)->CurrentState,
                         plusOrMinus,
                         plusOrMinus);
     return TRUE;
@@ -239,12 +239,12 @@ BOOL isPIDArrivedAtSetpoint(int index, float plusOrMinus){
 void RunPIDControl(){
     	int i;
 	for (i=0;i<getNumberOfPidChannels();i++){
-            getPidGroupDataTable()[i].CurrentState = getPosition(i) - getPidGroupDataTable()[i].config.offset;
-            if(getPidGroupDataTable()[i].config.Enabled){
-                getPidGroupDataTable()[i].SetPoint = interpolate((INTERPOLATE_DATA *)&getPidGroupDataTable()[i].interpolate,getMs());
-                MathCalculationPosition(& getPidGroupDataTable()[i],getMs());
+            getPidGroupDataTable(i)->CurrentState = getPosition(i) - getPidGroupDataTable(i)->config.offset;
+            if(getPidGroupDataTable(i)->config.Enabled){
+                getPidGroupDataTable(i)->SetPoint = interpolate((INTERPOLATE_DATA *)&getPidGroupDataTable(i)->interpolate,getMs());
+                MathCalculationPosition(getPidGroupDataTable(i),getMs());
                 if(GetPIDCalibrateionState(i)<=CALIBRARTION_DONE){
-                    setOutput(i,getPidGroupDataTable()[i].Output);
+                    setOutput(i,getPidGroupDataTable(i)->Output);
                 }else if(GetPIDCalibrateionState(i) == CALIBRARTION_hysteresis){
                     pidHysterisis( i );
                 }else if((GetPIDCalibrateionState(i) == CALIBRARTION_home_down) ||(GetPIDCalibrateionState(i) == CALIBRARTION_home_up)){
@@ -324,7 +324,7 @@ void setOutput(int group, float val){
         val = getLowerPidHistoresis(group);
 
 
-    getPidGroupDataTable()[group].OutputSet=val;
+    getPidGroupDataTable(group)->OutputSet=val;
     setOutputLocal(group,val);
 }
 

@@ -24,8 +24,8 @@
 void GetConfigPDVelocity(BowlerPacket * Packet){
 //   2700	      4	      8	   2712	    a98	output/o/PidRpc.o
 
-	set32bit(Packet,getPidGroupDataTable()[Packet->use.data[0]].config.V.P*100, 1);
-	set32bit(Packet,getPidGroupDataTable()[Packet->use.data[0]].config.V.D*100, 5);
+	set32bit(Packet,getPidGroupDataTable(Packet->use.data[0])->config.V.P*100, 1);
+	set32bit(Packet,getPidGroupDataTable(Packet->use.data[0])->config.V.D*100, 5);
 
 	Packet->use.head.DataLegnth=4+9;
 	Packet->use.head.Method=BOWLER_POST;
@@ -41,8 +41,8 @@ BYTE ConfigPDVelovity(BowlerPacket * Packet){
 	KP=(float)get32bit(Packet,1);
 	KD=(float)get32bit(Packet,5);
 
-	getPidGroupDataTable()[chan].config.V.P=KP/100.0;
-	getPidGroupDataTable()[chan].config.V.D=KD/100.0;
+	getPidGroupDataTable(chan)->config.V.P=KP/100.0;
+	getPidGroupDataTable(chan)->config.V.D=KD/100.0;
 
 	OnPidConfigure(chan);
 	return TRUE;
@@ -51,22 +51,22 @@ BYTE ConfigPDVelovity(BowlerPacket * Packet){
 
 void GetConfigPID(BowlerPacket * Packet){
 	BYTE chan = Packet->use.data[0];
-	Packet->use.data[1]=getPidGroupDataTable()[chan].config.Enabled;//  = ((Packet->use.data[1]==0)?0:1);
-	Packet->use.data[2]=getPidGroupDataTable()[chan].config.Polarity;// = ((Packet->use.data[2]==0)?0:1);
-	Packet->use.data[3]=getPidGroupDataTable()[chan].config.Async;//= ((Packet->use.data[3]==0)?0:1);
+	Packet->use.data[1]=getPidGroupDataTable(chan)->config.Enabled;//  = ((Packet->use.data[1]==0)?0:1);
+	Packet->use.data[2]=getPidGroupDataTable(chan)->config.Polarity;// = ((Packet->use.data[2]==0)?0:1);
+	Packet->use.data[3]=getPidGroupDataTable(chan)->config.Async;//= ((Packet->use.data[3]==0)?0:1);
 
-	set32bit(Packet,getPidGroupDataTable()[chan].config.K.P*100,4);
-	set32bit(Packet,getPidGroupDataTable()[chan].config.K.I*100,8);
-	set32bit(Packet,getPidGroupDataTable()[chan].config.K.D*100,12);
-	set32bit(Packet,getPidGroupDataTable()[chan].config.IndexLatchValue,16);
+	set32bit(Packet,getPidGroupDataTable(chan)->config.K.P*100,4);
+	set32bit(Packet,getPidGroupDataTable(chan)->config.K.I*100,8);
+	set32bit(Packet,getPidGroupDataTable(chan)->config.K.D*100,12);
+	set32bit(Packet,getPidGroupDataTable(chan)->config.IndexLatchValue,16);
 
 	//latching data
-	Packet->use.data[20]=getPidGroupDataTable()[chan].config.useIndexLatch;//
-	Packet->use.data[21]=getPidGroupDataTable()[chan].config.stopOnIndex;//
+	Packet->use.data[20]=getPidGroupDataTable(chan)->config.useIndexLatch;//
+	Packet->use.data[21]=getPidGroupDataTable(chan)->config.stopOnIndex;//
 
-        set32bit(Packet,getPidGroupDataTable()[chan].config.stop*1000,22);
-	set32bit(Packet,getPidGroupDataTable()[chan].config.upperHistoresis*1000,26);
-	set32bit(Packet,getPidGroupDataTable()[chan].config.lowerHistoresis*1000,30);
+        set32bit(Packet,getPidGroupDataTable(chan)->config.stop*1000,22);
+	set32bit(Packet,getPidGroupDataTable(chan)->config.upperHistoresis*1000,26);
+	set32bit(Packet,getPidGroupDataTable(chan)->config.lowerHistoresis*1000,30);
 
 	Packet->use.head.DataLegnth=4+22+(3*4);
 	Packet->use.head.Method=BOWLER_POST;
@@ -82,8 +82,8 @@ BYTE ConfigPID(BowlerPacket * Packet){
             printPIDvals(i);
         }
 
-	getPidGroupDataTable()[chan].config.Polarity = ((Packet->use.data[2]==0)?0:1);
-	getPidGroupDataTable()[chan].config.Async    = ((Packet->use.data[3]==0)?0:1);
+	getPidGroupDataTable(chan)->config.Polarity = ((Packet->use.data[2]==0)?0:1);
+	getPidGroupDataTable(chan)->config.Async    = ((Packet->use.data[3]==0)?0:1);
 
 
 	float KP=0;
@@ -99,31 +99,31 @@ BYTE ConfigPID(BowlerPacket * Packet){
 
 		temp=(float)get32bit(Packet,16);
 
-		getPidGroupDataTable()[chan].config.useIndexLatch= Packet->use.data[20];
-		getPidGroupDataTable()[chan].config.stopOnIndex = Packet->use.data[21];
-                getPidGroupDataTable()[chan].config.stop=(float)get32bit(Packet,22)/1000.0;
-                getPidGroupDataTable()[chan].config.upperHistoresis=(float)get32bit(Packet,26)/1000.0;
-                getPidGroupDataTable()[chan].config.lowerHistoresis=(float)get32bit(Packet,30)/1000.0;
+		getPidGroupDataTable(chan)->config.useIndexLatch= Packet->use.data[20];
+		getPidGroupDataTable(chan)->config.stopOnIndex = Packet->use.data[21];
+                getPidGroupDataTable(chan)->config.stop=(float)get32bit(Packet,22)/1000.0;
+                getPidGroupDataTable(chan)->config.upperHistoresis=(float)get32bit(Packet,26)/1000.0;
+                getPidGroupDataTable(chan)->config.lowerHistoresis=(float)get32bit(Packet,30)/1000.0;
         }else{
 		temp=0;
-		getPidGroupDataTable()[chan].config.useIndexLatch= TRUE;
-		getPidGroupDataTable()[chan].config.stopOnIndex = TRUE;
-                getPidGroupDataTable()[chan].config.stop=0;
-                getPidGroupDataTable()[chan].config.upperHistoresis=0;
-                getPidGroupDataTable()[chan].config.lowerHistoresis=0;
+		getPidGroupDataTable(chan)->config.useIndexLatch= TRUE;
+		getPidGroupDataTable(chan)->config.stopOnIndex = TRUE;
+                getPidGroupDataTable(chan)->config.stop=0;
+                getPidGroupDataTable(chan)->config.upperHistoresis=0;
+                getPidGroupDataTable(chan)->config.lowerHistoresis=0;
 	}
-	getPidGroupDataTable()[chan].config.IndexLatchValue=(float)temp;
+	getPidGroupDataTable(chan)->config.IndexLatchValue=(float)temp;
 
 
-	getPidGroupDataTable()[chan].config.K.P=KP/100;
-	getPidGroupDataTable()[chan].config.K.I=KI/100;
-	getPidGroupDataTable()[chan].config.K.D=KD/100;
+	getPidGroupDataTable(chan)->config.K.P=KP/100;
+	getPidGroupDataTable(chan)->config.K.I=KI/100;
+	getPidGroupDataTable(chan)->config.K.D=KD/100;
 	//println("Resetting PID channel from Config:",INFO_PRINT);printBowlerPacketDEBUG(Packet,INFO_PRINT);
-	//println("From Config Current setpoint:",INFO_PRINT);p_fl(getPidGroupDataTable()[chan].SetPoint,INFO_PRINT);
+	//println("From Config Current setpoint:",INFO_PRINT);p_fl(getPidGroupDataTable(chan)->SetPoint,INFO_PRINT);
 
 	OnPidConfigure(chan);
 
-	getPidGroupDataTable()[chan].config.Enabled  = ((Packet->use.data[1]==0)?0:1);
+	getPidGroupDataTable(chan)->config.Enabled  = ((Packet->use.data[1]==0)?0:1);
 
 	return TRUE;
 }
@@ -213,11 +213,11 @@ BOOL processPIDCrit(BowlerPacket * Packet){
 	switch (Packet->use.head.RPC){
 	case KPID:
 		for(i=0;i<getNumberOfPidChannels();i++){
-			getPidGroupDataTable()[i].config.Enabled = TRUE;
+			getPidGroupDataTable(i)->config.Enabled = TRUE;
 			setOutput(i,0.0);
-			getPidGroupDataTable()[i].config.Enabled = FALSE;
-			getPidVelocityDataTable()[i].enabled=FALSE;
-			getPidGroupDataTable()[i].Output=0.0;
+			getPidGroupDataTable(i)->config.Enabled = FALSE;
+			getPidVelocityDataTable(i)->enabled=FALSE;
+			getPidGroupDataTable(i)->Output=0.0;
 		}
 		READY(Packet,zone,0);
 		break;
