@@ -76,11 +76,11 @@ void GetConfigPID(BowlerPacket * Packet){
 BYTE ConfigPID(BowlerPacket * Packet){
 
 	BYTE chan = Packet->use.data[0];
-        int i;
-        println_W("Starting config");
-        for(i=0;i<getNumberOfPidChannels();i++){
-            printPIDvals(i);
-        }
+//        int i;
+//        println_W("Starting config");
+//        for(i=0;i<getNumberOfPidChannels();i++){
+//            printPIDvals(i);
+//        }
 
 	getPidGroupDataTable(chan)->config.Polarity = ((Packet->use.data[2]==0)?0:1);
 	getPidGroupDataTable(chan)->config.Async    = ((Packet->use.data[3]==0)?0:1);
