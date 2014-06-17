@@ -53,8 +53,8 @@ typedef struct  _PidLimitEvent{
 	int group;
 	PidLimitType type;
 	float time;
-	INT32 value;
-	INT32 latchTickError;
+	signed long int value;
+	signed long int latchTickError;
 //	BOOL stopOnIndex;
 }PidLimitEvent;
 
@@ -117,8 +117,8 @@ typedef struct _AbsPID
         float                   lastPushedTime;
         INTERPOLATE_DATA interpolate;
         struct{
-            BOOL calibrating;
-            BOOL calibrated;
+            unsigned char calibrating;
+            unsigned char calibrated;
             CAL_STATE state;
             //RunEveryData timer;
         }calibration;
@@ -147,7 +147,7 @@ typedef struct _PD_VEL
 {
         BOOL enabled;
         float unitsPerSeCond;
-        INT32 lastPosition;
+        signed long int lastPosition;
         float lastVelocity;
         float lastTime;
         float currentOutputVel;
