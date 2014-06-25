@@ -34,8 +34,15 @@ The FiFO can be checked for a packet by calling a GetBowlerPacket(), then proces
   if(GetBowlerPacket(&Packet,&store)){
     //Now the Packet struct contains the parsed packet data
     Process_Self_Packet(&Packet);
-    // The call backs for processing the packet have been called and the Packet struct now contains the data 
+    // The call backs for processing the packet have been called 
+    // and the Packet struct now contains the data 
     // to be sent back to the client as a response. 
+  }
+  
+  int i=0;
+  for(i=0;i< GetPacketLegnth(&Packet);i++){
+    //Grab the response packet one byte at a time and push it out the physical layer
+    writeToPyhsicalLayerImp(Packet.stream[i]);
   }
   
 ```
