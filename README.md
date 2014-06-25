@@ -40,6 +40,20 @@ The FiFO can be checked for a packet by calling a GetBowlerPacket(), then proces
   
 ```
 
+To add new RPC's to the stack, we create a linked list element called a Namespace. 
+
+For a detailed example of different types of functionality take a look at the PID namespace:
+
+https://github.com/NeuronRobotics/c-bowler/blob/master/firmware/library/NR-Clib/development/BowlerStack/src/PID/Namespace_bcs_pid.c
+
+To add a new namespace to the stack, call addNamespaceToList:
+
+```C
+
+  addNamespaceToList((NAMESPACE_LIST * ) getBcsPidNamespace());
+```
+
+This new namespace and its call backs will be added to the Process_Self_Packet function call. 
 
 
 # Compilers
