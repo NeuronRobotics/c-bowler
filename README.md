@@ -53,7 +53,7 @@ For a detailed example of different types of functionality take a look at the PI
 
 https://github.com/NeuronRobotics/c-bowler/blob/master/firmware/library/NR-Clib/development/BowlerStack/src/PID/Namespace_bcs_pid.c
 
-To add a new namespace to the stack, call addNamespaceToList:
+To add a standard namespace, such as PID, to the stack, call addNamespaceToList:
 
 ```C
 
@@ -61,6 +61,51 @@ To add a new namespace to the stack, call addNamespaceToList:
 ```
 
 This new namespace and its call backs will be added to the Process_Self_Packet function call. 
+
+To make a custom namespace, first you define the NAMESPACE_LIST linked list struct element. This also requires a call back function for asynchronus packets.
+
+
+```C
+BOOL pidAsyncEventCallbackLocal(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
+
+  //Run any cooperative tasks
+  //Pack and send any packets, more then one is ok
+}
+
+static NAMESPACE_LIST bcsPid ={	"bcs.pid.*;1.0;;",// The string defining the namespace
+                                NULL,// the first element in the RPC list
+                                &pidAsyncEventCallbackLocal,// async for this namespace
+                                NULL// no initial elements to the other namesapce field.
+};
+
+```
+
+Next you define an RPC struct element. This element includes the callback for processing the specified RPC packet. 
+
+```C
+
+
+static RPC_LIST bcsPid__PID={	BOWLER_GET,
+                                "_pid",
+                                &processPIDGet,
+                                ((const char [2]){	BOWLER_I08,//channel
+                                                    0}),// Response arguments
+                                BOWLER_POST,// response method
+                                ((const char [3]){	BOWLER_I08,//channel
+                                BOWLER_I32,//current position
+                                 0}),// Response arguments
+                                NULL //Termination
+};
+
+```
+
+Finally you add the new RPC's to the namespace and the new namespace to the processing stack:
+
+```C
+  addRpcToNamespace(&bcsPid,& bcsPid__PID);
+  addNamespaceToList(&bcsPid);
+
+```
 
 
 # Compilers
