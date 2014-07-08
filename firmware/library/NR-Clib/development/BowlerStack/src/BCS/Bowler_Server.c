@@ -85,6 +85,21 @@ void Process_Self_Packet(BowlerPacket * Packet){
 		if(rpc !=NULL){
                      //println_I("RPC found: ");print_I(rpc->rpc);
                      rpc->callback(Packet);
+                     Packet->use.head.DataLegnth=4;
+                     int argIndex=0;
+                     int dataIndex=0;
+                     int packetDataStart;
+                     while(rpc->responseArguments[argIndex]!=NULL){
+                         switch(rpc->responseArguments[argIndex]){
+                             case BOWLER_ASCII:
+                                 dataIndex=0;
+                                 packetDataStart = Packet->use.head.DataLegnth-4;
+                                 while(Packet->use.data[])
+                                 break;
+
+                         }
+                        argIndex++;
+                     }
 		}
 		Packet->use.head.MessageID = currentNamespaceIndexForPacket;
 		Packet->use.head.ResponseFlag=1;

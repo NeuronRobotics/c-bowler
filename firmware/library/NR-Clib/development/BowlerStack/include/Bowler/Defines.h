@@ -53,6 +53,9 @@
 #define BOWLER_ASCII    39// ASCII string, null terminated
 #define BOWLER_FIXED100    41// ASCII string, null terminated
 #define BOWLER_FIXED1K    42// ASCII string, null terminated
+#define BOWLER_BOOL    43// a boolean value
+#define BOWLER_FIXED1K_STR   44// first byte is number of values, next is floats
+
 #define B_TRUE 1
 #define B_FALSE 0
 typedef unsigned char			B_BOOL;
