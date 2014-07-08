@@ -45,16 +45,22 @@
 #define BOWLER_CRIT 	 				0x30
 #define BOWLER_ASYN 	 				0x40
 
+// 1 byte
 #define BOWLER_I08      8 // 8 bit integer
+#define BOWLER_BOOL    43// a boolean value
+//2 byte
 #define BOWLER_I16      16//16 bit integer
+//4 byte
 #define BOWLER_I32      32//32 bit integer
+#define BOWLER_FIXED100    41// float
+#define BOWLER_FIXED1K    42// float
+//streams
 #define BOWLER_STR      37// first byte is number of values, next is byte values
 #define BOWLER_I32STR   38// first byte is number of values, next is 32 bit values
-#define BOWLER_ASCII    39// ASCII string, null terminated
-#define BOWLER_FIXED100    41// ASCII string, null terminated
-#define BOWLER_FIXED1K    42// ASCII string, null terminated
-#define BOWLER_BOOL    43// a boolean value
 #define BOWLER_FIXED1K_STR   44// first byte is number of values, next is floats
+// ASCII
+#define BOWLER_ASCII    39// ASCII string, null terminated
+
 
 #define B_TRUE 1
 #define B_FALSE 0
