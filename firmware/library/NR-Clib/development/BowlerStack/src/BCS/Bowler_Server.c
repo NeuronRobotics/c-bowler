@@ -86,19 +86,44 @@ void Process_Self_Packet(BowlerPacket * Packet){
                      //println_I("RPC found: ");print_I(rpc->rpc);
                      rpc->callback(Packet);
                      Packet->use.head.DataLegnth=4;
-                     int argIndex=0;
-                     int dataIndex=0;
-                     int packetDataStart;
-                     while(rpc->responseArguments[argIndex]!=NULL){
-                         switch(rpc->responseArguments[argIndex]){
-                             case BOWLER_ASCII:
-                                 dataIndex=0;
-                                 packetDataStart = Packet->use.head.DataLegnth-4;
-                                 while(Packet->use.data[])
-                                 break;
-
+                     if(rpc->responseArguments!=0){
+                         int argIndex=0;
+                         int dataIndex=0;
+                         int packetDataStart;
+                         while(rpc->responseArguments[argIndex]!=0){
+                             switch(rpc->responseArguments[argIndex]){
+                                 case BOWLER_ASCII:
+                                     dataIndex=0;
+                                     packetDataStart = Packet->use.head.DataLegnth-4;
+                                     while(Packet->use.data[packetDataStart+dataIndex++]){
+                                         Packet->use.head.DataLegnth++;
+                                     }
+                                     Packet->use.head.DataLegnth++;// null terminator
+                                     break;
+                                 case BOWLER_BOOL:
+                                 case BOWLER_I08:
+                                     Packet->use.head.DataLegnth++;
+                                     break;
+                                 case BOWLER_I16:
+                                     Packet->use.head.DataLegnth+=2;
+                                     break;
+                                 case BOWLER_I32:
+                                 case BOWLER_FIXED100:
+                                 case BOWLER_FIXED1K:
+                                     Packet->use.head.DataLegnth+=4;
+                                     break;
+                                 case BOWLER_STR:
+                                     packetDataStart = Packet->use.head.DataLegnth-4;
+                                     Packet->use.head.DataLegnth+=Packet->use.data[packetDataStart]+1;
+                                     break;
+                                 case BOWLER_I32STR:
+                                 case BOWLER_FIXED1K_STR:
+                                     packetDataStart = Packet->use.head.DataLegnth-4;
+                                     Packet->use.head.DataLegnth+=Packet->use.data[packetDataStart]*4+1;
+                                     break;
+                             }
+                            argIndex++;
                          }
-                        argIndex++;
                      }
 		}
 		Packet->use.head.MessageID = currentNamespaceIndexForPacket;
