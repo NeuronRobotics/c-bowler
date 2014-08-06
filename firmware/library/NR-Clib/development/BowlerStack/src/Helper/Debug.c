@@ -20,7 +20,7 @@
 void sendStr(const char *str);
 Print_Level level=NO_PRINT;
 
-#define bufferSize 64
+#define bufferSize 10
 
 static BOOL DebugINIT = FALSE;
 const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
@@ -109,6 +109,7 @@ Print_Level setPrintLevel(Print_Level l){
 }
 
 BOOL okToprint(Print_Level l){
+
 	if(getPrintLevel()>=l){
 		if(DebugINIT == FALSE){
 			DebugINIT = TRUE;

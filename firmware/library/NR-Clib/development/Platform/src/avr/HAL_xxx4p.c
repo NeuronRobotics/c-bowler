@@ -17,6 +17,7 @@
  */
 
 #include "Bowler/Bowler.h"
+BOOL okToPrint(Print_Level l);
 //#if defined(__AVR_ATmega324P__)
 	#define comBuffSize (MiniPacketDataSize+4+BowlerHeaderSize)
 //#else
@@ -172,7 +173,7 @@ void EnableDebugTerminal(void){
 }
 
 void showString (PGM_P s,Print_Level l,char newLine) {
-	if(!okToPrint(l)){
+	if(!okToprint(l)){
 		return;
 	}
 	if(newLine){

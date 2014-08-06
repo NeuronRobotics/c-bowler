@@ -35,8 +35,9 @@ all: COMPILE
 	echo "Done!"
 clean:
 	rm -rf $(AVR_OFILES) $(PIC_OFILES) $(NATIVE_OFILES)
-	
-COMPILE: pic32MX440F128H AVR324p AVR644p  pic32MX460F512L pic32MX795F512L  Native 
+
+COMPILE: pic32MX440F128H AVR644p
+#COMPILE: pic32MX440F128H AVR324p AVR644p  pic32MX460F512L pic32MX795F512L  Native 
 #COMPILE: pic32MX440F128H 
 	echo OK
 	
@@ -51,7 +52,7 @@ Native:
 	make -C src/native/  clean
 
 AVR644p:
-	echo $(AVR_OFILES)
+	echo $(AVR_OFILES)AVR644p
 	mkdir -p $(LIBDIR)/AVR/atmega644p/
 	rm -f $(LIBDIR)/AVR/atmega644p/libNRLIB.a
 	rm -f  $(LIBDIR)/AVR/atmega644p/libNRLIB_debug.a
@@ -63,7 +64,7 @@ AVR644p:
 	$(ARAVR) rcs  $(LIBDIR)/AVR/atmega644p/libNRLIB_debug.a $(AVR_OFILES)
 	rm -rf o
 	mkdir o
-	cd o/;ar x ../$(LIBDIR)/AVR/atmega644p/libNRLIB_debug.a
+	cd o/;ar x ../$(LIBDIR)/AVR/atmega644p/libNRLIB.a
 	ls -al o/*
 	make -C ../BowlerStack/ clean
 	make -C src/avr/ clean
