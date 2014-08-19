@@ -125,25 +125,29 @@ uint8_t ClearPID(uint8_t chan){
 	return true; 
 }
 
-uint8_t SetPIDTimed(uint8_t chan,int32_t val,float ms){
+uint8_t SetPIDTimedPointer(AbsPID * conf,float val, float current,float ms){
+    	if(ms<.01)
+		ms=0;
+	//local_groups[chan].config.Enabled=true;
+	conf->interpolate.set=val;
+	conf->interpolate.setTime=ms;
+	conf->interpolate.start=conf->SetPoint;
+	conf->interpolate.startTime=getMs();
+	if(ms==0)
+		conf->SetPoint=val;
+	//conf->config.Enabled=true;
+	InitAbsPIDWithPosition(conf,conf->config.K.P,conf->config.K.I,conf->config.K.D, getMs(),current);
+	return true;
+}
+
+uint8_t SetPIDTimed(uint8_t chan,float val,float ms){
 	//println_I("@#@# PID channel Set chan=");p_int_I(chan);print_I(" setpoint=");p_int_I(val);print_I(" time=");p_fl_I(ms);
 	if (chan>=getNumberOfPidChannels())
-		return false; 
-	if(ms<.01)
-		ms=0;
-	//local_groups[chan].config.Enabled=true; 
-	getPidGroupDataTable(chan)->interpolate.set=(float)val;
-	getPidGroupDataTable(chan)->interpolate.setTime=ms;
-	getPidGroupDataTable(chan)->interpolate.start=getPidGroupDataTable(chan)->SetPoint;
-	getPidGroupDataTable(chan)->interpolate.startTime=getMs();
-	if(ms==0)
-		getPidGroupDataTable(chan)->SetPoint=(float)val;
-	//getPidGroupDataTable(chan)->config.Enabled=true; 
-	velData[chan].enabled=false; 
-	InitAbsPIDWithPosition(getPidGroupDataTable(chan),getPidGroupDataTable(chan)->config.K.P,getPidGroupDataTable(chan)->config.K.I,getPidGroupDataTable(chan)->config.K.D, getMs(),val);
-	return true; 
+		return false;
+        velData[chan].enabled=false;
+        return SetPIDTimedPointer(getPidGroupDataTable(chan),val, GetPIDPosition( chan),ms);
 }
-uint8_t SetPID(uint8_t chan,int32_t val){
+uint8_t SetPID(uint8_t chan,float val){
 	SetPIDTimed(chan, val,0);
 	return true; 
 }

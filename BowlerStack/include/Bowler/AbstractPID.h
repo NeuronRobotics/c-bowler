@@ -210,9 +210,9 @@ int getNumberOfPidChannels();
 void SetPIDEnabled(uint8_t index, boolean enabled);
 
 boolean isPidEnabled(uint8_t i);
-
-uint8_t SetPIDTimed(uint8_t chan, int32_t val, float ms);
-uint8_t SetPID(uint8_t chan, int32_t val);
+uint8_t SetPIDTimedPointer(AbsPID * conf,float val, float current,float ms);
+uint8_t SetPIDTimed(uint8_t chan, float val, float ms);
+uint8_t SetPID(uint8_t chan, float val);
 int GetPIDPosition(uint8_t chan);
 
 uint8_t ZeroPID(uint8_t chan);
@@ -230,7 +230,7 @@ void RunPIDComs(BowlerPacket *Packet, boolean (*pidAsyncCallbackPtr)(BowlerPacke
 void RunPIDControl();
 void RunPDVel(uint8_t chan);
 float runPdVelocityFromPointer(PD_VEL* vel, float currentState,float KP, float KD);
-void StartPDVel(uint8_t chan, int32_t unitsPerSeCond, float ms);
+void StartPDVel(uint8_t chan, float unitsPerSeCond, float ms);
 void pushPID(BowlerPacket *Packet, boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet), uint8_t chan, int32_t value, float time);
 void pushPIDLimitEvent(BowlerPacket *Packet, boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet), PidLimitEvent * event);
 

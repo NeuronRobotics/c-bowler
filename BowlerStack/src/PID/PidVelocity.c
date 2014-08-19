@@ -67,7 +67,7 @@ void RunPDVel(uint8_t chan){
 	}
 }
 
-void StartPDVel(uint8_t chan,int32_t unitsPerSeCond,float ms){
+void StartPDVel(uint8_t chan,float unitsPerSeCond,float ms){
 
         if(ms<.1){
             //println_I("Starting Velocity");
