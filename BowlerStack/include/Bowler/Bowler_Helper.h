@@ -42,14 +42,6 @@ unsigned char CheckCRC(BowlerPacket * Packet);
 void copyPacket(BowlerPacket * from,BowlerPacket * to);
 
 
-typedef struct _INTERPOLATE_DATA
-{
-	float set;
-	float start;
-	float setTime;
-	float startTime;
-} INTERPOLATE_DATA;
-
 float interpolate(INTERPOLATE_DATA * data, float currentTime);
 
 boolean bound(float target, float actual, float plus, float minus);
