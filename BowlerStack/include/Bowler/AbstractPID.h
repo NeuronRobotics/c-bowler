@@ -144,7 +144,7 @@ typedef struct __attribute__((__packed__)) _DYIO_PID {
 }
 DYIO_PID;
 
-typedef struct  _PD_VEL {
+typedef struct __attribute__((__packed__)) _PD_VEL {
     boolean enabled;
     float unitsPerSeCond;
     float lastPosition;
