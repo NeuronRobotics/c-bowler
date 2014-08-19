@@ -53,7 +53,7 @@ float runPdVelocityFromPointer(PD_VEL* vel, float currentState,float KP, float K
 
 void RunPDVel(uint8_t chan){
 	//println_I("Running PID vel");
-	if(getPidVelocityDataTable(chan)->enabled==TRUE){
+	if(getPidVelocityDataTable(chan)->enabled==true) {
          
 
 		getPidGroupDataTable(chan)->Output=runPdVelocityFromPointer(getPidVelocityDataTable(chan),
@@ -71,8 +71,8 @@ void StartPDVel(uint8_t chan,int32_t unitsPerSeCond,float ms){
 
         if(ms<.1){
             //println_I("Starting Velocity");
-            getPidVelocityDataTable(chan)->enabled=TRUE;
-            getPidGroupDataTable(chan)->config.Enabled=FALSE;
+            getPidVelocityDataTable(chan)->enabled=true; 
+            getPidGroupDataTable(chan)->config.Enabled=false; 
             getPidVelocityDataTable(chan)->lastPosition=GetPIDPosition(chan);
             getPidVelocityDataTable(chan)->lastTime=getMs();
             getPidVelocityDataTable(chan)->unitsPerSeCond=unitsPerSeCond;

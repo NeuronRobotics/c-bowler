@@ -16,7 +16,7 @@ boolean pidAsyncEventCallbackLocal(BowlerPacket *Packet,boolean (*pidAsyncCallba
 //    printPIDvals(0);
 
     RunPIDComs(Packet,pidAsyncCallbackPtr);
-    return FALSE;
+    return false; 
 }
 
 //Get RPC's
@@ -206,7 +206,7 @@ static NAMESPACE_LIST bcsPid ={	pidNSName,// The string defining the namespace
 
 
 
-static boolean namespcaedAdded = FALSE;
+static boolean namespcaedAdded = false; 
 
 NAMESPACE_LIST * getBcsPidNamespace(){
 	if(!namespcaedAdded){
@@ -227,7 +227,7 @@ NAMESPACE_LIST * getBcsPidNamespace(){
 		addRpcToNamespace(&bcsPid,& bcsPid_CPID_c);
 		addRpcToNamespace(&bcsPid,& bcsPid_CPDV_c);
                 addRpcToNamespace(&bcsPid,& bcsPid_ACAL);
-		namespcaedAdded =TRUE;
+		namespcaedAdded =true; 
 	}
 
 	return &bcsPid;

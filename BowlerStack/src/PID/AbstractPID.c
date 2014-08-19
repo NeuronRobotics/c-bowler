@@ -115,37 +115,37 @@ PidCalibrationType GetPIDCalibrateionState(int group){
 uint8_t ZeroPID(uint8_t chan){
 	//println("Resetting PID channel from zeroPID:",INFO_PRINT);
 	pidReset(chan,0);
-	return TRUE;
+	return true; 
 }
 
 uint8_t ClearPID(uint8_t chan){
 	if (chan>=getNumberOfPidChannels())
-		return FALSE;
-	getPidGroupDataTable(chan)->config.Enabled=FALSE;
-	return TRUE;
+		return false; 
+	getPidGroupDataTable(chan)->config.Enabled=false; 
+	return true; 
 }
 
 uint8_t SetPIDTimed(uint8_t chan,int32_t val,float ms){
 	//println_I("@#@# PID channel Set chan=");p_int_I(chan);print_I(" setpoint=");p_int_I(val);print_I(" time=");p_fl_I(ms);
 	if (chan>=getNumberOfPidChannels())
-		return FALSE;
+		return false; 
 	if(ms<.01)
 		ms=0;
-	//local_groups[chan].config.Enabled=TRUE;
+	//local_groups[chan].config.Enabled=true; 
 	getPidGroupDataTable(chan)->interpolate.set=(float)val;
 	getPidGroupDataTable(chan)->interpolate.setTime=ms;
 	getPidGroupDataTable(chan)->interpolate.start=getPidGroupDataTable(chan)->SetPoint;
 	getPidGroupDataTable(chan)->interpolate.startTime=getMs();
 	if(ms==0)
 		getPidGroupDataTable(chan)->SetPoint=(float)val;
-	//getPidGroupDataTable(chan)->config.Enabled=TRUE;
-	velData[chan].enabled=FALSE;
+	//getPidGroupDataTable(chan)->config.Enabled=true; 
+	velData[chan].enabled=false; 
 	InitAbsPIDWithPosition(getPidGroupDataTable(chan),getPidGroupDataTable(chan)->config.K.P,getPidGroupDataTable(chan)->config.K.I,getPidGroupDataTable(chan)->config.K.D, getMs(),val);
-	return TRUE;
+	return true; 
 }
 uint8_t SetPID(uint8_t chan,int32_t val){
 	SetPIDTimed(chan, val,0);
-	return TRUE;
+	return true; 
 }
 
 int GetPIDPosition(uint8_t chan){
@@ -185,7 +185,7 @@ void pidReset(uint8_t chan,int32_t val){
 	data->interpolate.startTime=getMs();
 	data->SetPoint=value;
         uint8_t enabled=data->config.Enabled;
-	data->config.Enabled=TRUE;//Ensures output enabled to stop motors
+	data->config.Enabled=true; //Ensures output enabled to stop motors
 	data->Output=0.0;
 	setOutput(chan,data->Output);
 	velData[chan].enabled=enabled;
@@ -233,7 +233,7 @@ boolean isPIDArrivedAtSetpoint(int index, float plusOrMinus){
                         getPidGroupDataTable(index)->CurrentState,
                         plusOrMinus,
                         plusOrMinus);
-    return TRUE;
+    return true; 
 }
 
 void RunPIDControl(){
@@ -242,7 +242,7 @@ void RunPIDControl(){
             getPidGroupDataTable(i)->CurrentState = getPosition(i) - getPidGroupDataTable(i)->config.offset;
             if(getPidGroupDataTable(i)->config.Enabled){
                 //TODO figure out the null pointer problem once and for all for fucks sake...
-                getPidGroupDataTable(i)->SetPoint = interpolate(&getPidGroupDataTable(i)->interpolate,getMs());
+                getPidGroupDataTable(i)->SetPoint = interpolate(&pidGroupsInternal[i].interpolate,getMs());
                 MathCalculationPosition(getPidGroupDataTable(i),getMs());
                 if(GetPIDCalibrateionState(i)<=CALIBRARTION_DONE){
                     setOutput(i,getPidGroupDataTable(i)->Output);

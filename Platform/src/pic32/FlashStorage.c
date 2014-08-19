@@ -71,7 +71,7 @@ void FlashSync(void){
 uint8_t FlashSetMac(uint8_t * mac){
 	FlashLoad();
 	if(flash.data.lock==LOCKBYTE){
-		return FALSE;
+		return false; 
 	}
 	int i;
 	for (i=0;i<6;i++){
@@ -79,7 +79,7 @@ uint8_t FlashSetMac(uint8_t * mac){
 	}
 	flash.data.lock=LOCKBYTE;
 	FlashSync();
-	return TRUE;
+	return true; 
 }
 
 void FlashSetName(char * name){
@@ -133,11 +133,11 @@ uint8_t FlashSetFwRev(uint8_t * mac){
 	FlashLoad();
 	//println("Loading fw  new data");
 	int i;
-	boolean sync=FALSE;
+	boolean sync=false; 
 	for (i=0;i<3;i++){
 		if(flash.data.fw[i]!=mac[i]){
 			flash.data.fw[i]=mac[i];
-			sync=TRUE;
+			sync=true; 
 		}
 	}
 	if(sync){
@@ -145,7 +145,7 @@ uint8_t FlashSetFwRev(uint8_t * mac){
 		FlashSync();
 		//println("Syncing fw  done");
 	}
-	return TRUE;
+	return true; 
 }
 
 uint8_t FlashSetBlRev(uint8_t * mac){
@@ -153,11 +153,11 @@ uint8_t FlashSetBlRev(uint8_t * mac){
 	FlashLoad();
 	//println("Loading bl  new data");
 	int i;
-	boolean sync=FALSE;
+	boolean sync=false; 
 	for (i=0;i<3;i++){
 		if(flash.data.bl[i]!=mac[i]){
 			flash.data.bl[i]=mac[i];
-			sync=TRUE;
+			sync=true; 
 		}
 	}
 	if(sync){
@@ -165,5 +165,5 @@ uint8_t FlashSetBlRev(uint8_t * mac){
 		FlashSync();
 		//println("Syncing bl  done");
 	}
-	return TRUE;
+	return true; 
 }

@@ -3,8 +3,8 @@
 #include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 
-boolean useUart2 = FALSE;
-boolean useUart1 = FALSE;
+boolean useUart2 = false; 
+boolean useUart1 = false; 
 
 #define delayUart 5000
 
@@ -16,11 +16,11 @@ boolean Write32UART2(uint8_t data)
                     INTClearFlag(INT_SOURCE_UART_ERROR(UART2));
                 }
 		if(tick--==0){
-			return FALSE;
+			return false; 
 		}
 	}
 	UARTSendDataByte(UART2, data);
-	return TRUE;
+	return true; 
 }
 
 
@@ -33,11 +33,11 @@ boolean Write32UART1(uint8_t  data)
 		INTClearFlag(INT_SOURCE_UART_ERROR(UART1));
             }
             if(tick--==0){
-                return FALSE;
+                return false; 
             }
 	}
 	UARTSendDataByte(UART1, data);
-	return TRUE;
+	return true; 
 }
 
 #endif	//STACK_USE_UART

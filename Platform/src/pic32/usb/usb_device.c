@@ -1387,7 +1387,7 @@ void USBCtrlTrfOutHandler(void)
 	    //USBCtrlEPServiceComplete().  If it was already prepared, do not want
 	    //to do anything to the BDT.
 		USBPrepareForNextSetupTrf();
-		if(BothEP0OutUOWNsSet == FALSE)
+		if(BothEP0OutUOWNsSet == false) 
 		{
 	        pBDTEntryEP0OutNext->CNT = USB_EP0_BUFF_SIZE;
 	        pBDTEntryEP0OutNext->ADR = ConvertToPhysicalAddress(&SetupPkt);
@@ -1395,7 +1395,7 @@ void USBCtrlTrfOutHandler(void)
 		}
 		else
 		{
-			BothEP0OutUOWNsSet = FALSE;
+			BothEP0OutUOWNsSet = false; 
 		}
     }
 }
@@ -1651,9 +1651,9 @@ void USBStdFeatureReqHandler(void)
     {
         inPipes[0].info.bits.busy = 1;
         if(SetupPkt.bRequest == USB_REQUEST_SET_FEATURE)
-            RemoteWakeup = TRUE;
+            RemoteWakeup = true; 
         else
-            RemoteWakeup = FALSE;
+            RemoteWakeup = false; 
     }//end if
 
     if((SetupPkt.bFeature == USB_FEATURE_ENDPOINT_HALT)&&
@@ -1825,7 +1825,7 @@ void USBStdGetStatusHandler(void)
                 CtrlTrfData[0]|=0x01;
             }
 
-            if(RemoteWakeup == TRUE)
+            if(RemoteWakeup == true) 
             {
                 CtrlTrfData[0]|=0x02;
             }
@@ -1972,13 +1972,13 @@ void USBCtrlEPServiceComplete(void)
 				pBDTEntryEP0OutNext->CNT = USB_EP0_BUFF_SIZE;
 				pBDTEntryEP0OutNext->ADR = ConvertToPhysicalAddress(&SetupPkt);
 				pBDTEntryEP0OutNext->STATUS.Val = _USIE;           // Note: DTSEN is 0
-				BothEP0OutUOWNsSet = FALSE;	//Indicator flag used in USBCtrlTrfOutHandler()
+				BothEP0OutUOWNsSet = false; 	//Indicator flag used in USBCtrlTrfOutHandler()
 
 				#if (USB_PING_PONG_MODE == USB_PING_PONG__EP0_OUT_ONLY) || (USB_PING_PONG_MODE == USB_PING_PONG__FULL_PING_PONG) 
 				pBDTEntryEP0OutCurrent->CNT = USB_EP0_BUFF_SIZE;
 				pBDTEntryEP0OutCurrent->ADR = ConvertToPhysicalAddress(&SetupPkt);
 				pBDTEntryEP0OutCurrent->STATUS.Val = _USIE|_BSTALL; //Prepare endpoint to accept a SETUP transaction
-				BothEP0OutUOWNsSet = TRUE;	//Indicator flag used in USBCtrlTrfOutHandler()
+				BothEP0OutUOWNsSet = true; 	//Indicator flag used in USBCtrlTrfOutHandler()
 				#endif
 
 				/*
@@ -2368,7 +2368,7 @@ void USBConfigureEndpoint(uint8_t EPNum, uint8_t direction)
                     * USB_IN_DISABLED disables the in direction
                     * USB_ALLOW_SETUP enables control transfers
                     * USB_DISALLOW_SETUP disables control transfers
-                    * USB_STALL_ENDPOint32_t STALLs this endpoint
+                    * USB_STALL_ENDPOINT STALLs this endpoint
   Return:
     None
   Remarks:

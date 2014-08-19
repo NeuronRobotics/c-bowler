@@ -22,7 +22,7 @@ Print_Level level=NO_PRINT;
 
 #define bufferSize 10
 
-static boolean DebugINIT = FALSE;
+static boolean DebugINIT = false; 
 const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 //#if !defined(NO_PRINTING)
 	//static const char  packet[] = "\tPacket = \t";
@@ -111,14 +111,14 @@ Print_Level setPrintLevel(Print_Level l){
 boolean okToprint(Print_Level l){
 
 	if(getPrintLevel()>=l){
-		if(DebugINIT == FALSE){
-			DebugINIT = TRUE;
+		if(DebugINIT == false) {
+			DebugINIT = true; 
 			EnableDebugTerminal();
 		}
-		return TRUE;
+		return true; 
 	}
         
-	return FALSE;
+	return false; 
 }
 //
 //void enableDebug(void){
@@ -344,7 +344,7 @@ void ultoaMINE(uint32_t Value, BYTE* Buffer)
 	uint8_t i;
 	uint32_t Digit;
 	uint32_t Divisor;
-	boolean Printed = FALSE;
+	boolean Printed = false; 
 
 	if(Value)
 	{
@@ -355,7 +355,7 @@ void ultoaMINE(uint32_t Value, BYTE* Buffer)
 			{
 				*Buffer++ = '0' + Digit;
 				Value -= Digit*Divisor;
-				Printed = TRUE;
+				Printed = true; 
 			}
 			Divisor /= 10;
 		}

@@ -23,20 +23,20 @@
 #else
 	#define comBuffSize (FullPacketDataSize+4+BowlerHeaderSize)
 #endif
-static BYTE privateRXCom[comBuffSize];
+static uint8_t privateRXCom[comBuffSize];
 static BYTE_FIFO_STORAGE store;
-static UINT32 TimerOFcount=0;
-static UINT32 TimerOFcountUpper=0;
+static uint32_t TimerOFcount=0;
+static uint32_t TimerOFcountUpper=0;
 
-BOOL GetBowlerPacket_arch(BowlerPacket * Packet){
+boolean GetBowlerPacket_arch(BowlerPacket * Packet){
 	return GetBowlerPacket(Packet,&store);
 }
 
 /**
  * send the array out the connection
  */
-UINT16 putStream(BYTE *packet,UINT16 size){
-	UINT16 i;
+uint16_t putStream(uint8_t *packet,uint16_t size){
+	uint16_t i;
 	for (i=0;i<size;i++){
 		WriteAVRUART0(packet[i]);
 	}
@@ -56,7 +56,7 @@ void EnableDebugTerminal(void);
 void putCharDebug(char c){
 	WriteAVRUART1(c);
 
-	//return TRUE;
+	//return true; 
 }
 /**
  * Start the scheduler
@@ -75,12 +75,12 @@ void serial_init(unsigned int bittimer);
 /**
  * Private helpers
  */
-UINT64 GetTimeTicks(void){
+uint64_t GetTimeTicks(void){
 	return (UINT64) (TimerOFcount+TCNT1);
 }
 
 ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
-	UINT32 before = TimerOFcount;
+	uint32_t before = TimerOFcount;
 	TimerOFcount+=0x10000;
 	if(TimerOFcount<before){
 		TimerOFcount=0;
@@ -106,14 +106,14 @@ void AVR_Bowler_HAL_Init(void){
 	InitFlagPins();
 	EndCritical();
 }
-void WriteAVRUART0(BYTE val){
+void WriteAVRUART0(uint8_t val){
 	while(FlagAsync  == 0 ); // Wait for controller to be ready
 	while ((UCSR0A & (1<<UDRE0)) == 0 );
 	UDR0 = val;
 	_delay_us(UARTDELAY);
 }
 
-void WriteAVRUART1(BYTE val){
+void WriteAVRUART1(uint8_t val){
 	if (UCSR1B == 0)
 		return;
 	while ((UCSR1A & (1<<UDRE1)) == 0 );
@@ -127,8 +127,8 @@ void WriteAVRUART1(BYTE val){
  */
 ISR(USART0_RX_vect){
 	StartCritical();
-	BYTE err;
-	BYTE b= UDR0;
+	uint8_t err;
+	uint8_t b= UDR0;
 	FifoAddByte(&store, b, &err);
 	EndCritical();
 	//print("Got [0x");prHEX8(b);print("]\n");

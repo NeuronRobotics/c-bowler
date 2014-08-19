@@ -149,13 +149,13 @@ boolean process(BowlerPacket * Packet){
 			println("Got:",INFO_PRINT);printPacket(Packet,INFO_PRINT);
 		}
 	//}
-	if ( (CheckAddress(MyMAC.v,Packet->use.head.MAC.v) == TRUE) || ((CheckAddress((uint8_t *)Broadcast.v,(uint8_t *)Packet->use.head.MAC.v) == TRUE) )) {
+	if ( (CheckAddress(MyMAC.v,Packet->use.head.MAC.v) == true)  || ((CheckAddress((uint8_t *)Broadcast.v,(uint8_t *)Packet->use.head.MAC.v) == true)  )) {
 		Process_Self_Packet(Packet);
 		for (i=0;i<6;i++){
 			Packet->use.head.MAC.v[i]=MyMAC.v[i];
 		}
 		SetCRC(Packet);
-		return TRUE;
+		return true; 
 	}else{
 
 		println("Packet not addressed to me: ",ERROR_PRINT);
@@ -164,7 +164,7 @@ boolean process(BowlerPacket * Packet){
 		printByteArray(MyMAC.v,6,ERROR_PRINT);
 
 	}
-	return FALSE;
+	return false; 
 }
 
 /**
@@ -178,7 +178,7 @@ uint8_t Bowler_Server_Static(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 		return process( Packet);;
 	}//Have a packet
 
-	return FALSE;
+	return false; 
 }
 
 uint8_t Bowler_Server(BowlerPacket * Packet, boolean debug){
@@ -196,11 +196,11 @@ uint8_t Bowler_Server(BowlerPacket * Packet, boolean debug){
 				println("Response:",INFO_PRINT);printPacket(Packet,INFO_PRINT);
 			}
 			SetColor(0,0,1);
-			return TRUE;
+			return true; 
 		}
 	}//Have a packet
 
-	return FALSE;
+	return false; 
 }
 
 

@@ -38,11 +38,11 @@ void allign(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 }
 
 boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean debug){
-	boolean PacketCheck=FALSE;
+	boolean PacketCheck=false; 
 	uint16_t PacketLegnth=0;
         Packet->stream[0]=0;
 	if (getNumBytes(fifo) == 0 ) {
-		return FALSE;//Not enough bytes to even be a header, try back later
+		return false; //Not enough bytes to even be a header, try back later
 	}
 
 	allign(Packet,fifo);
@@ -51,24 +51,24 @@ boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean
 		if(debug){
 			//println("Current num bytes: ",ERROR_PRINT);p_int(getNumBytes(fifo),ERROR_PRINT);
 		}
-		return FALSE;//Not enough bytes to even be a header, try back later
+		return false; //Not enough bytes to even be a header, try back later
 	}
 	FifoReadByteStream(Packet->stream,BowlerHeaderSize,fifo);
-	PacketCheck=FALSE;
-	while(PacketCheck==FALSE){
+	PacketCheck=false; 
+	while(PacketCheck==false) {
 		if( (Packet->use.head.ProtocolRevision != BOWLER_VERSION)
-				|| (CheckCRC(Packet)==FALSE)
+				|| (CheckCRC(Packet)==false) 
 
 		  ){
 			if(Packet->use.head.ProtocolRevision != BOWLER_VERSION){
 				println("###Bad first byte=",ERROR_PRINT);
-			}else if(CheckCRC(Packet)==FALSE){
+			}else if(CheckCRC(Packet)==false) {
 				println("###Bad crc check=",ERROR_PRINT);
 			}
 			prHEX8(Packet->use.head.ProtocolRevision,ERROR_PRINT);print_nnl(" Fifo Size=",ERROR_PRINT);p_int(calcByteCount(fifo),ERROR_PRINT);
 			uint8_t b;
 			if(getNumBytes(fifo)==0)
-				return FALSE;
+				return false; 
 			//StartCritical();
 			getStream(& b,1,fifo);//junk out one
 			//EndCritical();
@@ -77,12 +77,12 @@ boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean
 			if(debug){
 				//println("Got header");
 			}
-			PacketCheck=TRUE;
+			PacketCheck=true; 
 		}
 		if (getNumBytes(fifo) < minSize) {
 			println("##Failed to allign apacket",ERROR_PRINT);
 			allign(Packet,fifo);
-			return FALSE;//Not enough bytes to even be a header, try back later
+			return false; //Not enough bytes to even be a header, try back later
 		}
 	}
 	PacketLegnth  = Packet->use.head.DataLegnth;
@@ -101,19 +101,19 @@ boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean
 		//StartCritical();
 		getStream(Packet->stream,totalLen,fifo);
 		//EndCritical();
-		return  TRUE;
+		return  true; 
 	}
 	if(debug){
 		println("Header ready, but data is not. Need: ",INFO_PRINT);p_int(totalLen,INFO_PRINT);print_nnl(" have: ",INFO_PRINT);p_int(num ,INFO_PRINT);
 	}
-	return FALSE;
+	return false; 
 }
 boolean GetBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
-	return _getBowlerPacket(Packet,fifo, FALSE);
+	return _getBowlerPacket(Packet,fifo, false) ;
 }
 boolean GetBowlerPacketDebug(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 	//enableDebug();
-	return _getBowlerPacket( Packet, fifo, TRUE);
+	return _getBowlerPacket( Packet, fifo, true) ;
 }
 /**
  * @return returns the number of bytes in the fifo

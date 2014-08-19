@@ -442,7 +442,7 @@ boolean USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, uint16_t s
         default:
             break;
     }
-    return TRUE;
+    return true; 
 }
 
 #if defined(USB_CDC_SET_LINE_CODING_HANDLER)

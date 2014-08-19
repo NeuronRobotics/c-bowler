@@ -21,7 +21,7 @@ void calcCenter(int group){
 }
 
 void checkCalibration(int group){
-    if(getPidGroupDataTable(group)->calibration.calibrated != TRUE){
+    if(getPidGroupDataTable(group)->calibration.calibrated != true) {
        getPidGroupDataTable(group)->config.upperHistoresis=0;
        getPidGroupDataTable(group)->config.lowerHistoresis=0;
        getPidGroupDataTable(group)->config.stop=0;
@@ -47,14 +47,14 @@ boolean processRunAutoCal(BowlerPacket * Packet){
     runPidHysterisisCalibration(group);
 
     READY(Packet,0,0);
-    return TRUE;
+    return true; 
 }
 
 void runPidHysterisisCalibration(int group){
 
     if(!getPidGroupDataTable(group)->config.Enabled){
         println_E("Axis disabled for calibration #");p_int_E(group);
-        getPidGroupDataTable(group)->config.Enabled=TRUE;
+        getPidGroupDataTable(group)->config.Enabled=true; 
     }
     getPidGroupDataTable(group)->config.lowerHistoresis = 0;
     getPidGroupDataTable(group)->config.upperHistoresis = 0;
@@ -62,7 +62,7 @@ void runPidHysterisisCalibration(int group){
 //    println_I("\tReset PID");
     pidReset(group,0);// Zero encoder reading
  //   println_I("\tDisable PID Output");
-    SetPIDEnabled(group, TRUE);
+    SetPIDEnabled(group, true) ;
     SetPIDCalibrateionState(group, CALIBRARTION_hysteresis);
 
     getPidGroupDataTable(group)->calibration.state =  backward;

@@ -51,8 +51,8 @@
 
 #include "BowlerServerHardwareAbstraction.h"
 
-void UserInit(void);
-void UserRun(void);
-
+#define BOOL
+#define TRUE
+#define FALSE
 
 #endif /* WASP_H_ */

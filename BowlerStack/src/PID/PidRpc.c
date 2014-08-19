@@ -45,7 +45,7 @@ uint8_t ConfigPDVelovity(BowlerPacket * Packet){
 	getPidGroupDataTable(chan)->config.V.D=KD/100.0;
 
 	OnPidConfigure(chan);
-	return TRUE;
+	return true; 
 }
 
 
@@ -106,8 +106,8 @@ uint8_t ConfigPID(BowlerPacket * Packet){
                 getPidGroupDataTable(chan)->config.lowerHistoresis=(float)get32bit(Packet,30)/1000.0;
         }else{
 		temp=0;
-		getPidGroupDataTable(chan)->config.useIndexLatch= TRUE;
-		getPidGroupDataTable(chan)->config.stopOnIndex = TRUE;
+		getPidGroupDataTable(chan)->config.useIndexLatch= true; 
+		getPidGroupDataTable(chan)->config.stopOnIndex = true; 
                 getPidGroupDataTable(chan)->config.stop=0;
                 getPidGroupDataTable(chan)->config.upperHistoresis=0;
                 getPidGroupDataTable(chan)->config.lowerHistoresis=0;
@@ -125,7 +125,7 @@ uint8_t ConfigPID(BowlerPacket * Packet){
 
 	getPidGroupDataTable(chan)->config.Enabled  = ((Packet->use.data[1]==0)?0:1);
 
-	return TRUE;
+	return true; 
 }
 
 
@@ -160,9 +160,9 @@ boolean processPIDGet(BowlerPacket * Packet){
 		Packet->use.head.Method=BOWLER_POST;
 		break;
 	default:
-		return FALSE;
+		return false; 
 	}
-	return TRUE;
+	return true; 
 }
 
 boolean processPIDPost(BowlerPacket * Packet){
@@ -204,19 +204,19 @@ boolean processPIDPost(BowlerPacket * Packet){
 		READY(Packet,zone,6);
 		break;
         default:
-		return FALSE;
+		return false; 
 	}
-	return TRUE;
+	return true; 
 }
 boolean processPIDCrit(BowlerPacket * Packet){
 	uint8_t i=0;
 	switch (Packet->use.head.RPC){
 	case KPID:
 		for(i=0;i<getNumberOfPidChannels();i++){
-			getPidGroupDataTable(i)->config.Enabled = TRUE;
+			getPidGroupDataTable(i)->config.Enabled = true; 
 			setOutput(i,0.0);
-			getPidGroupDataTable(i)->config.Enabled = FALSE;
-			getPidVelocityDataTable(i)->enabled=FALSE;
+			getPidGroupDataTable(i)->config.Enabled = false; 
+			getPidVelocityDataTable(i)->enabled=false; 
 			getPidGroupDataTable(i)->Output=0.0;
 		}
 		READY(Packet,zone,0);
@@ -234,9 +234,9 @@ boolean processPIDCrit(BowlerPacket * Packet){
 			ERR(Packet,zone,1);
 		break;
 	default:
-		return FALSE;
+		return false; 
 	}
-	return TRUE;
+	return true; 
 }
 /**
  * Handle a PID packet.
@@ -251,7 +251,7 @@ boolean ProcessPIDPacket(BowlerPacket * Packet){
 	case BOWLER_CRIT:
 		return processPIDCrit(Packet);
 	default:
-		return FALSE;
+		return false; 
 	}
 }
 

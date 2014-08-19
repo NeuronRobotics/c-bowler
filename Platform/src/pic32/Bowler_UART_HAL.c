@@ -24,7 +24,7 @@
 //static uint8_t privateRX[BOWLER_PacketSize];
 //static BYTE_FIFO_STORAGE store;
 static BYTE_FIFO_STORAGE * my_store;
-static uint16_t gotData = FALSE;
+static uint16_t gotData = false; 
 
 boolean GotUARTData(void){
 	return gotData>0;

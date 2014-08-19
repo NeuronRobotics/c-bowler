@@ -65,12 +65,12 @@ static uint8_t privateRXUSB[BOWLER_PacketSize*2];
 static BYTE_FIFO_STORAGE storeUART;
 static uint8_t privateRXUART[BOWLER_PacketSize*2];
 
-static boolean init=FALSE;
+static boolean init=false; 
 
-static boolean usbComs = FALSE;
-static boolean uartComs = FALSE;
+static boolean usbComs = false; 
+static boolean uartComs = false; 
 
-static boolean disableSerial=FALSE;
+static boolean disableSerial=false; 
 
 void disableSerialComs(boolean state){
     disableSerial=state;
@@ -78,7 +78,7 @@ void disableSerialComs(boolean state){
 }
 void Pic32_Bowler_HAL_Init(void){
 
-	init=TRUE;
+	init=true; 
 
 	println_W("Init USB fifo");
 	InitByteFifo(&storeUSB,privateRXUSB,sizeof(privateRXUSB));
@@ -118,20 +118,20 @@ boolean Send_HAL_Packet(uint8_t * packet,uint16_t size){
         SendPacketUSB(packet,size);
     if(uartComs)
         Pic32UARTPutArray(packet,size);
-    return TRUE;
+    return true; 
 }
 uint16_t Get_HAL_Byte_Count(){
 #if defined(USB_POLLING)
         USBDeviceTasks();
 #endif
-	if( init==FALSE){
+	if( init==false) {
 		println_W("***Initializing the PIC hal***");
 		Pic32_Bowler_HAL_Init();
 	}
 	//println_I("Getting the USB bytes");
 
 	if(GetNumUSBBytes()>0){
-            usbComs=TRUE;
+            usbComs=true; 
             //println_I("Found USB bytes");
             return FifoGetByteCount(&storeUSB);
 	}
@@ -140,7 +140,7 @@ uint16_t Get_HAL_Byte_Count(){
 		if(Pic32Get_UART_Byte_Count()>0){
 			//println_I("Found the UART bytes");
 			if(!disableSerial)
-				uartComs=TRUE;
+				uartComs=true; 
 			return FifoGetByteCount(&storeUART);
 		}
 	}
@@ -153,11 +153,11 @@ boolean GetBowlerPacket_arch(BowlerPacket * Packet){
 	//println_I("Getting packet from HAL");
         if(usbComs)
             if(GetBowlerPacketDebug(Packet,&storeUSB))
-                return TRUE;
+                return true; 
         if (uartComs)
             if(GetBowlerPacketDebug(Packet,&storeUART))
-                return TRUE;
-	return FALSE;
+                return true; 
+	return false; 
 }
 
 
@@ -166,7 +166,7 @@ boolean GetBowlerPacket_arch(BowlerPacket * Packet){
  */
 uint16_t putStream(uint8_t *packet,uint16_t size){
 	Send_HAL_Packet(packet,size);
-	return TRUE;
+	return true; 
 }
 /**
  * get the time in ms

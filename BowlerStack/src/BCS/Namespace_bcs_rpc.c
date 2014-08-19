@@ -16,12 +16,12 @@ boolean _rpc(BowlerPacket * Packet){
         NAMESPACE_LIST * list = getNamespaceAtIndex(nsIndex);
         if(list == NULL){
             ERR(Packet,0,9);
-            return FALSE;
+            return false; 
         }
         RPC_LIST * rpc = getRpcByIndex(list,rpcIndex);
         if(rpc == NULL){
             ERR(Packet,0,10);
-            return FALSE;
+            return false; 
         }
         UINT32_UNION rpcValue;
         rpcValue.Val = GetRPCValue((char*)rpc->rpc);
@@ -31,7 +31,7 @@ boolean _rpc(BowlerPacket * Packet){
         }
         
         Packet->use.head.DataLegnth = 4+index;
-	return TRUE;
+	return true; 
 }
 boolean _rpcArgs(BowlerPacket * Packet){
 	Packet->use.head.Method = BOWLER_POST;
@@ -43,7 +43,7 @@ boolean _rpcArgs(BowlerPacket * Packet){
         RPC_LIST * rpc = getRpcByIndex(getNamespaceAtIndex(nsIndex),rpcIndex);
         if(rpc == NULL){
             ERR(Packet,0,10);
-            return FALSE;
+            return false; 
         }
         //UINT32_UNION rpcValue;
         //rpcValue.Val = GetRPCValue((char*)rpc->rpc);
@@ -75,7 +75,7 @@ boolean _rpcArgs(BowlerPacket * Packet){
         //Packet->use.data[(index++)] = 0;
 
         Packet->use.head.DataLegnth = 4+index;
-	return TRUE;
+	return true; 
 }
 //Get RPC's
 static RPC_LIST bcsRpc__RPC={	.bowlerMethod=BOWLER_GET,
@@ -119,14 +119,14 @@ static NAMESPACE_LIST bcsRpc ={	rpcNSName,// The string defining the namespace
 
 
 
-static boolean namespcaedAdded = FALSE;
+static boolean namespcaedAdded = false; 
 
 NAMESPACE_LIST * getBcsRpcNamespace(){
 	if(!namespcaedAdded){
 		//GET
 		addRpcToNamespace(&bcsRpc,& bcsRpc__RPC);
                 addRpcToNamespace(&bcsRpc,& bcsRpc_ARGS);
-		namespcaedAdded =TRUE;
+		namespcaedAdded =true; 
 	}
 
 	return &bcsRpc;

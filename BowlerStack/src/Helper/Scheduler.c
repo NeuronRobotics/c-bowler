@@ -24,13 +24,13 @@
 //uint8_t SchedulerGetStep(uint8_t chan){
 //	if(RunEvery(&sched[chan])>0){
 //		//sched[chan].MsTime=getMs();
-//		return TRUE;
+//		return true; 
 //	}
-//	return FALSE;
+//	return false; 
 //
 //}
 //uint8_t ClearForCom(void){
-//	return TRUE;
+//	return true; 
 //}
 /**
  * RunEvery

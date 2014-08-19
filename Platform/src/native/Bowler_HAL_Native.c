@@ -9,15 +9,15 @@
 
 static float start;
 
-BOOL GetBowlerPacket_arch(BowlerPacket * Packet){
-	return FALSE;
+boolean GetBowlerPacket_arch(BowlerPacket * Packet){
+	return false; 
 }
 
 /**
  * send the array out the connection
  */
-UINT16 putStream(BYTE *packet,UINT16 size){
-	return TRUE;
+uint16_t putStream(uint8_t *packet,uint16_t size){
+	return true; 
 }
 /**
  * get the time in ms

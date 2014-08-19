@@ -689,7 +689,7 @@ void putrsUSBUSART(const ROM char *data)
         {
             USBDeviceTasks();
             if((USBGetDeviceState() \< CONFIGURED_STATE) ||
-               (USBIsDeviceSuspended() == TRUE))
+               (USBIsDeviceSuspended() == true) )
             {
                 //Either the device is not configured or we are suspended
                 //  so we don't want to do execute any application code

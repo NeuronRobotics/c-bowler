@@ -11,12 +11,12 @@ static RunEveryData pid ={0,100};
 void updatePidAsync(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
     if(RunEvery(&pid)){
         int i;
-        int update = FALSE;
+        int update = false; 
         for (i=0;i<getNumberOfPidChannels();i++){
                 if(getPidGroupDataTable(i)->config.Async){
                         if(getPidGroupDataTable(i)->CurrentState != getPidGroupDataTable(i)->lastPushedValue){
                             //println_E("Async because of ");p_int_E(i);
-                                update = TRUE;
+                                update = true; 
                         }
                 }
         }

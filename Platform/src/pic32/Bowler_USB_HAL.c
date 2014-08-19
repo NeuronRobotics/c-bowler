@@ -19,12 +19,9 @@
 #include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 
-#define True TRUE
-#define False FALSE
-
 boolean GetPacketUSB(uint8_t * packet,uint16_t size){
 	USBGetArray(packet, size);
-	return True;
+	return true;
 }
 void SendPacketUSB(uint8_t * packet,uint16_t size){
 	if (USBPutArray(packet, size)){

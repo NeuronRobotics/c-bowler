@@ -48,8 +48,8 @@ uint8_t CalcCRC(BowlerPacket *Packet){
 uint8_t CheckCRC(BowlerPacket *Packet){
 	uint8_t v=CalcCRC(Packet);
 	if(Packet->use.head.CRC ==v)
-		return TRUE;
-	return FALSE;
+		return true; 
+	return false; 
 }
 void SetCRC(BowlerPacket * Packet){
 	uint8_t v=CalcCRC(Packet);
@@ -114,9 +114,9 @@ uint8_t CheckAddress(uint8_t * one,uint8_t * two){
 	int i;
 	for (i=0;i<6;i++){
 		if (one[i] != two[i])
-			return FALSE;
+			return false; 
 	}
-	return TRUE;
+	return true; 
 }
 
 float interpolate(INTERPOLATE_DATA * data, float currentTime){

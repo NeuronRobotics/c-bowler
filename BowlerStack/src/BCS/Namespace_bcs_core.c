@@ -88,7 +88,7 @@ boolean _png(BowlerPacket * Packet){
 	Packet->use.head.Method = BOWLER_POST;
 	Packet->use.head.RPC = GetRPCValue("_png");
 	Packet->use.head.DataLegnth = 4;
-	return TRUE;
+	return true; 
 }
 
 boolean _nms(BowlerPacket * Packet){
@@ -125,7 +125,7 @@ boolean _nms(BowlerPacket * Packet){
 	}else{
 		ERR(Packet,0,4);
 	}
-	return TRUE;
+	return true; 
 }
 
 void addRpcToNamespace(NAMESPACE_LIST * namespace,RPC_LIST * rpc ){
@@ -232,10 +232,10 @@ void RunNamespaceAsync(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(Bowle
     }
 }
 
-static boolean namespcaedAdded = FALSE;
+static boolean namespcaedAdded = false; 
 NAMESPACE_LIST * getBcsCoreNamespace(){
 	if(!namespcaedAdded){
-            namespcaedAdded =TRUE;
+            namespcaedAdded =true; 
             addRpcToNamespace(&bcsCore,& bcsCore_png);
             addRpcToNamespace(&bcsCore,& bcsCore_nms);
 	}

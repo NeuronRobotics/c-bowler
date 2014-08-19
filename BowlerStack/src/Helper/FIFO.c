@@ -27,18 +27,18 @@ void printFiFoState(BYTE_FIFO_STORAGE * fifo, uint8_t * buffer,Print_Level l){
 }
 
 boolean lockFifo(BYTE_FIFO_STORAGE * fifo){
-//	if(fifo->mutex != FALSE){
-//		return FALSE;
+//	if(fifo->mutex != false) {
+//		return false; 
 //	}
-//	fifo->mutex=TRUE;
+//	fifo->mutex=true; 
 	//StartCritical();
 
-	return TRUE;
+	return true; 
 }
 boolean unLockFifo(BYTE_FIFO_STORAGE * fifo){
-	//fifo->mutex=FALSE;
+	//fifo->mutex=false; 
 	//EndCritical();
-	return TRUE;
+	return true; 
 }
 void InitByteFifo(BYTE_FIFO_STORAGE * fifo,uint8_t * buff,uint32_t size){
 	if(fifo == 0 ||  buff == 0){
@@ -49,7 +49,7 @@ void InitByteFifo(BYTE_FIFO_STORAGE * fifo,uint8_t * buff,uint32_t size){
 	fifo->readPointer=0;
 	fifo->writePointer=0;
 	//fifo->byteCount=0;
-	fifo->mutex=FALSE;
+	fifo->mutex=false; 
 	clearByteFifo(fifo);
 	//println(fifoinit);p_int(size);
 }
@@ -90,7 +90,7 @@ uint32_t FifoAddByte(BYTE_FIFO_STORAGE * fifo,uint8_t b, uint8_t * errorCode){
 		errorCode[0]=FIFO_OVERFLOW;
 		return 0;
 	}
-	if(lockFifo(fifo)==FALSE){
+	if(lockFifo(fifo)==false) {
 		errorCode[0]=FIFO_FAILED_TO_SET;
 		//return 0;
 	}
@@ -113,7 +113,7 @@ uint32_t FifoAddByte(BYTE_FIFO_STORAGE * fifo,uint8_t b, uint8_t * errorCode){
 }
 
 uint8_t getByte(BYTE_FIFO_STORAGE * fifo, uint8_t * errorCode){
-	if(lockFifo(fifo)==FALSE){
+	if(lockFifo(fifo)==false) {
 		errorCode[0]=FIFO_FAILED_TO_GET;
 		return 0;
 	}
@@ -178,7 +178,7 @@ void InitPacketFifo(PACKET_FIFO_STORAGE * fifo,BowlerPacket * buff,uint32_t size
 	fifo->readPointer=0;
 	fifo->writePointer=0;
 	//fifo->byteCount=0;
-	fifo->mutex=FALSE;
+	fifo->mutex=false; 
 }
 
 uint32_t FifoAddPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * toBeAdded){
@@ -224,7 +224,7 @@ uint32_t FifoGetPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * retrived){
         if(FifoGetPacketCount(fifo)>0)
             copyPacket(&fifo->buffer[fifo->readPointer],retrived);
         else
-            return FALSE;
+            return false; 
 	fifo->readPointer++;
 	if (fifo->readPointer==fifo->bufferSize){
 		fifo->readPointer=0;
@@ -232,5 +232,5 @@ uint32_t FifoGetPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * retrived){
 
 	FifoGetPacketCount(fifo);
 	//EndCritical();
-	return TRUE;
+	return true; 
 }
