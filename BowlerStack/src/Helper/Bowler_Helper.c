@@ -21,11 +21,11 @@
 #else
 	extern MAC_ADDR MyMAC;
 #endif
-//static BYTE i;
+//static uint8_t i;
 
 void LoadCorePacket(BowlerPacket * Packet){
 	//SetColor(0,1,0);
-	BYTE i;
+	uint8_t i;
 	Packet->use.head.ProtocolRevision=BOWLER_VERSION;
 	for (i=0;i<6;i++){
 		Packet->use.head.MAC.v[i]=0;
@@ -37,22 +37,22 @@ void LoadCorePacket(BowlerPacket * Packet){
 	Packet->use.head.DataLegnth=4;
 }
 
-BYTE CalcCRC(BowlerPacket *Packet){
-	UINT16 v=0;
+uint8_t CalcCRC(BowlerPacket *Packet){
+	uint16_t v=0;
 	int i;
 	for (i=0;i<10;i++)
 		v+=Packet->stream[i];
 	return (v & 0x00ff);
 }
 
-BYTE CheckCRC(BowlerPacket *Packet){
-	BYTE v=CalcCRC(Packet);
+uint8_t CheckCRC(BowlerPacket *Packet){
+	uint8_t v=CalcCRC(Packet);
 	if(Packet->use.head.CRC ==v)
 		return TRUE;
 	return FALSE;
 }
 void SetCRC(BowlerPacket * Packet){
-	BYTE v=CalcCRC(Packet);
+	uint8_t v=CalcCRC(Packet);
 	Packet->use.head.CRC = v ;
 }
 
@@ -65,7 +65,7 @@ inline unsigned long GetRPCValue(char * data){
     return l.Val;
 }
 
-UINT16 READY(BowlerPacket *Packet,BYTE code,BYTE trace){
+uint16_t READY(BowlerPacket *Packet,uint8_t code,uint8_t trace){
 	Packet->use.head.Method = BOWLER_STATUS;
 	Packet->use.head.RPC = GetRPCValue("_rdy");
 	Packet->use.head.MessageID=0;
@@ -74,7 +74,7 @@ UINT16 READY(BowlerPacket *Packet,BYTE code,BYTE trace){
 	Packet->use.data[1]=trace;
 	return 6;
 }
-UINT16 ERR(BowlerPacket *Packet,BYTE code,BYTE trace){
+uint16_t ERR(BowlerPacket *Packet,uint8_t code,uint8_t trace){
 	Packet->use.head.Method = BOWLER_STATUS;
 	Packet->use.head.RPC = GetRPCValue("_err");
 	Packet->use.head.MessageID=0;
@@ -87,30 +87,30 @@ UINT16 ERR(BowlerPacket *Packet,BYTE code,BYTE trace){
 
 
 
-UINT16 SetPacketLegnth(BowlerPacket *Packet,BYTE len){
+uint16_t SetPacketLegnth(BowlerPacket *Packet,uint8_t len){
 	//Packet.stream[DataSizeIndex]=(BYTE)(len&0x00ff);
 	Packet->use.head.DataLegnth = len;
 	return len;
 }
-UINT16 GetPacketLegnth(BowlerPacket *Packet){
+uint16_t GetPacketLegnth(BowlerPacket *Packet){
 	return  BowlerHeaderSize + Packet->use.head.DataLegnth ;
 }
-UINT16 DataLegnthFromPacket(BowlerPacket *Packet){
+uint16_t DataLegnthFromPacket(BowlerPacket *Packet){
 	return  Packet->use.head.DataLegnth ;
 }
 void copyPacket(BowlerPacket * from,BowlerPacket * to){
-	BYTE i;
+	uint8_t i;
 	for(i=0;i<BowlerHeaderSize+from->use.head.DataLegnth;i++){
 		to->stream[i]=from->stream[i];
 	}
 }
 
-UINT32 Bytes2Int32(BYTE a,BYTE b,BYTE c,BYTE d){
+uint32_t Bytes2Int32(uint8_t a,uint8_t b,uint8_t c,uint8_t d){
 	return (   (((UINT32)a)<<24) + (((UINT32)b)<<16) + (((UINT32)c)<<8) + ((UINT32)d) );
 }
 
 
-BYTE CheckAddress(BYTE * one,BYTE * two){
+uint8_t CheckAddress(uint8_t * one,uint8_t * two){
 	int i;
 	for (i=0;i<6;i++){
 		if (one[i] != two[i])
@@ -168,20 +168,20 @@ float interpolate(INTERPOLATE_DATA * data, float currentTime){
 }
 
 
-BOOL bound(float target, float actual, float plus, float minus){
+boolean bound(float target, float actual, float plus, float minus){
     return ((actual)<(target+plus) && (actual)>(target-minus));
 }
 
-void set8bit(BowlerPacket * Packet,BYTE val, BYTE offset){
+void set8bit(BowlerPacket * Packet,uint8_t val, uint8_t offset){
 	Packet->use.data[0+offset]=val;
 }
-void set16bit(BowlerPacket * Packet,INT16 val, BYTE offset){
+void set16bit(BowlerPacket * Packet,int16_t val, uint8_t offset){
 	UINT16_UNION wval;
 	wval.Val=val;
 	Packet->use.data[0+offset]=wval.byte.SB;
 	Packet->use.data[1+offset]=wval.byte.LB;
 }
-void set32bit(BowlerPacket * Packet,INT32 val, BYTE offset){
+void set32bit(BowlerPacket * Packet,int32_t val, uint8_t offset){
 	INT32_UNION lval;
 	lval.Val=val;
 	Packet->use.data[0+offset]=lval.byte.FB;
@@ -189,7 +189,7 @@ void set32bit(BowlerPacket * Packet,INT32 val, BYTE offset){
 	Packet->use.data[2+offset]=lval.byte.SB;
 	Packet->use.data[3+offset]=lval.byte.LB;
 }
-INT32 get32bit(BowlerPacket * Packet, BYTE offset){
+int32_t get32bit(BowlerPacket * Packet, uint8_t offset){
 	INT32_UNION lval;
 	lval.byte.FB=Packet->use.data[0+offset];
 	lval.byte.TB=Packet->use.data[1+offset];
@@ -198,7 +198,7 @@ INT32 get32bit(BowlerPacket * Packet, BYTE offset){
 	return lval.Val;
 }
 
-INT32 get16bit(BowlerPacket * Packet, BYTE offset){
+int32_t get16bit(BowlerPacket * Packet, uint8_t offset){
 	UINT16_UNION wval;
 	wval.byte.SB=Packet->use.data[0+offset];
 	wval.byte.LB=Packet->use.data[1+offset];

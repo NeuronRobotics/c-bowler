@@ -20,7 +20,7 @@ int (*resetPosition)(int,int);
 void (*onPidConfigureLocal)(int);
 void (*MathCalculationPosition)(AbsPID * ,float );
 void (*MathCalculationVelocity)(AbsPID * ,float );
-PidLimitEvent* (*checkPIDLimitEvents)(BYTE group);
+PidLimitEvent* (*checkPIDLimitEvents)(uint8_t group);
 
 
 
@@ -51,11 +51,11 @@ AbsPID * getPidGroupDataTable(int group){
 	return &pidGroupsInternal[group];
 }
 
-BOOL isPidEnabled(BYTE i){
+boolean isPidEnabled(uint8_t i){
     return getPidGroupDataTable(i)->config.Enabled;
 }
 
-void SetPIDEnabled(BYTE index, BOOL enabled){
+void SetPIDEnabled(uint8_t index, boolean enabled){
 
     getPidGroupDataTable(index)->config.Enabled=enabled;
 }
@@ -72,7 +72,7 @@ void InitilizePidController(AbsPID * groups,PD_VEL * vel,int numberOfGroups,
 							void (*setOutputPtr)(int,float),
 							int (*resetPositionPtr)(int,int),
 							void (*onPidConfigurePtr)(int),
-							PidLimitEvent* (*checkPIDLimitEventsPtr)(BYTE group)){
+							PidLimitEvent* (*checkPIDLimitEventsPtr)(uint8_t group)){
 	if(groups ==0||
 		vel==0||
 		getPositionPtr==0||
@@ -112,20 +112,20 @@ PidCalibrationType GetPIDCalibrateionState(int group){
 }
 
 
-BYTE ZeroPID(BYTE chan){
+uint8_t ZeroPID(uint8_t chan){
 	//println("Resetting PID channel from zeroPID:",INFO_PRINT);
 	pidReset(chan,0);
 	return TRUE;
 }
 
-BYTE ClearPID(BYTE chan){
+uint8_t ClearPID(uint8_t chan){
 	if (chan>=getNumberOfPidChannels())
 		return FALSE;
 	getPidGroupDataTable(chan)->config.Enabled=FALSE;
 	return TRUE;
 }
 
-BYTE SetPIDTimed(BYTE chan,INT32 val,float ms){
+uint8_t SetPIDTimed(uint8_t chan,int32_t val,float ms){
 	//println_I("@#@# PID channel Set chan=");p_int_I(chan);print_I(" setpoint=");p_int_I(val);print_I(" time=");p_fl_I(ms);
 	if (chan>=getNumberOfPidChannels())
 		return FALSE;
@@ -143,12 +143,12 @@ BYTE SetPIDTimed(BYTE chan,INT32 val,float ms){
 	InitAbsPIDWithPosition(getPidGroupDataTable(chan),getPidGroupDataTable(chan)->config.K.P,getPidGroupDataTable(chan)->config.K.I,getPidGroupDataTable(chan)->config.K.D, getMs(),val);
 	return TRUE;
 }
-BYTE SetPID(BYTE chan,INT32 val){
+uint8_t SetPID(uint8_t chan,int32_t val){
 	SetPIDTimed(chan, val,0);
 	return TRUE;
 }
 
-int GetPIDPosition(BYTE chan){
+int GetPIDPosition(uint8_t chan){
 	if (chan>=getNumberOfPidChannels())
 		return 0;
 	//getPidGroupDataTable(chan)->CurrentState=(int)getPosition(chan);
@@ -156,7 +156,7 @@ int GetPIDPosition(BYTE chan){
 }
 
 
-float pidResetNoStop(BYTE chan,INT32 val){
+float pidResetNoStop(uint8_t chan,int32_t val){
     AbsPID * data = getPidGroupDataTable(chan);
     //float value = (float)resetPosition(chan,val);
     float current=data->CurrentState;
@@ -176,7 +176,7 @@ float pidResetNoStop(BYTE chan,INT32 val){
     return val;
 }
 
-void pidReset(BYTE chan,INT32 val){
+void pidReset(uint8_t chan,int32_t val){
 	float value = pidResetNoStop(chan,val);
         AbsPID * data = getPidGroupDataTable(chan);
 	data->interpolate.set=value;
@@ -184,7 +184,7 @@ void pidReset(BYTE chan,INT32 val){
 	data->interpolate.start=value;
 	data->interpolate.startTime=getMs();
 	data->SetPoint=value;
-        BYTE enabled=data->config.Enabled;
+        uint8_t enabled=data->config.Enabled;
 	data->config.Enabled=TRUE;//Ensures output enabled to stop motors
 	data->Output=0.0;
 	setOutput(chan,data->Output);
@@ -223,11 +223,11 @@ void InitAbsPIDWithPosition(AbsPID * state,float KP,float KI,float KD,float time
 
 
 
-BOOL isPIDInterpolating(int index){
+boolean isPIDInterpolating(int index){
     return getPidGroupDataTable(index)->interpolate.setTime != 0;
 }
 
-BOOL isPIDArrivedAtSetpoint(int index, float plusOrMinus){
+boolean isPIDArrivedAtSetpoint(int index, float plusOrMinus){
     if(getPidGroupDataTable(index)->config.Enabled)
         return bound( getPidGroupDataTable(index)->SetPoint,
                         getPidGroupDataTable(index)->CurrentState,
@@ -241,7 +241,8 @@ void RunPIDControl(){
 	for (i=0;i<getNumberOfPidChannels();i++){
             getPidGroupDataTable(i)->CurrentState = getPosition(i) - getPidGroupDataTable(i)->config.offset;
             if(getPidGroupDataTable(i)->config.Enabled){
-                getPidGroupDataTable(i)->SetPoint = interpolate((INTERPOLATE_DATA *)&getPidGroupDataTable(i)->interpolate,getMs());
+                //TODO figure out the null pointer problem once and for all for fucks sake...
+                getPidGroupDataTable(i)->SetPoint = interpolate(&getPidGroupDataTable(i)->interpolate,getMs());
                 MathCalculationPosition(getPidGroupDataTable(i),getMs());
                 if(GetPIDCalibrateionState(i)<=CALIBRARTION_DONE){
                     setOutput(i,getPidGroupDataTable(i)->Output);
@@ -255,7 +256,7 @@ void RunPIDControl(){
 	}
 }
 
-void RunPIDComs(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
+void RunPIDComs(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
     int i;
 	for (i=0;i<getNumberOfPidChannels();i++){
             pushPIDLimitEvent(Packet,pidAsyncCallbackPtr,checkPIDLimitEvents(i));
@@ -263,7 +264,7 @@ void RunPIDComs(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *P
 	updatePidAsync(Packet,pidAsyncCallbackPtr);
 }
 
-void RunPID(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
+void RunPID(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
     RunPIDControl();
     RunPIDComs(Packet,pidAsyncCallbackPtr);
 }

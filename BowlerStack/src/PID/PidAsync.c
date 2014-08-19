@@ -8,7 +8,7 @@
 
 static RunEveryData pid ={0,100};
 
-void updatePidAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
+void updatePidAsync(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
     if(RunEvery(&pid)){
         int i;
         int update = FALSE;
@@ -26,7 +26,7 @@ void updatePidAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacke
     }
 }
 
-void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
+void pushAllPIDPositions(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
 	//float time = getMs();
 //	for(i=0;i<getNumberOfPidChannels();i++){
 //		pushPID(i,getPidGroupDataTable(i)->CurrentState, time);
@@ -52,7 +52,7 @@ void pushAllPIDPositions(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(Bowler
 
 
 
-void pushPIDLimitEvent(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),PidLimitEvent * event){
+void pushPIDLimitEvent(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet),PidLimitEvent * event){
 	if(event->type == NO_LIMIT){
 		return;
 	}
@@ -110,7 +110,7 @@ void pushPIDLimitEvent(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPa
 		pidAsyncCallbackPtr(Packet);
 }
 
-void pushPID(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet),BYTE chan, INT32 value, float time){
+void pushPID(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet),uint8_t chan, int32_t value, float time){
 	LoadCorePacket(Packet);
 	Packet->use.head.Method=BOWLER_ASYN;
 	Packet->use.head.MessageID = 0;

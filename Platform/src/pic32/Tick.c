@@ -64,8 +64,8 @@
 	#define T1_TICK       		(SYS_FREQ/PB_DIV/PRESCALE/TOGGLES_PER_SEC)
 #endif
 // Internal counter to store Ticks.
-static DWORD dwInternalTicks = 0;
-static DWORD dwInternalTicksUpper = 0;
+static uint32_t dwInternalTicks = 0;
+static uint32_t dwInternalTicksUpper = 0;
 
 /*****************************************************************************
   Function:
@@ -98,7 +98,7 @@ void TickInit(void)
 
 /*****************************************************************************
   Function:
-	DWORD TickGet(void)
+	uint32_t TickGet(void)
 
   Summary:
 	Obtains the current Tick value.
@@ -120,22 +120,22 @@ void TickInit(void)
   Returns:
   	Lower 32 bits of the current Tick value.
   ***************************************************************************/
-DWORD TickGet(void)
+uint32_t TickGet(void)
 {
 	return (TickGetLower())+TMR1;
 }
-DWORD TickGetUpper()
+uint32_t TickGetUpper()
 {
 	return dwInternalTicksUpper;
 }
-DWORD TickGetLower()
+uint32_t TickGetLower()
 {
 	return dwInternalTicks;
 }
 
 /*****************************************************************************
   Function:
-	DWORD TickConvertToMilliseconds(DWORD dwTickValue)
+	uint32_t TickConvertToMilliseconds(uint32_t dwTickValue)
 
   Summary:
 	Converts a Tick value or difference to milliseconds.
@@ -203,7 +203,7 @@ void __ISR(_TIMER_1_VECTOR, ipl7) Timer1Handler(void)
 {
         //mPORTDToggleBits(BIT_3);
 	//StartCritical();
-	DWORD before = TickGetLower();
+	uint32_t before = TickGetLower();
 	dwInternalTicks+=TICKS_PER_SECOND/TOGGLES_PER_SEC;
 	if(TickGetLower()<before){
 		dwInternalTicks=0;

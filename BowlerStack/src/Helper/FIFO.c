@@ -7,11 +7,11 @@
 
 #include "Bowler/Bowler.h"
 void clearByteFifo(BYTE_FIFO_STORAGE * fifo);
-//static UINT32 i;
+//static uint32_t i;
 //const char * fifoinit = "Initializing FIFO, Buffer Size: ";
 //const char * error = "@##ERROR fifo is overflown! Size, buffer: ";
 
-void printFiFoState(BYTE_FIFO_STORAGE * fifo, BYTE * buffer,Print_Level l){
+void printFiFoState(BYTE_FIFO_STORAGE * fifo, uint8_t * buffer,Print_Level l){
 	int i;
 	print_nnl("\nFifo state: \tBytes:",l);
 	p_int(calcByteCount(fifo),l);
@@ -26,7 +26,7 @@ void printFiFoState(BYTE_FIFO_STORAGE * fifo, BYTE * buffer,Print_Level l){
 	print_nnl(" ]\n",l);
 }
 
-BOOL lockFifo(BYTE_FIFO_STORAGE * fifo){
+boolean lockFifo(BYTE_FIFO_STORAGE * fifo){
 //	if(fifo->mutex != FALSE){
 //		return FALSE;
 //	}
@@ -35,12 +35,12 @@ BOOL lockFifo(BYTE_FIFO_STORAGE * fifo){
 
 	return TRUE;
 }
-BOOL unLockFifo(BYTE_FIFO_STORAGE * fifo){
+boolean unLockFifo(BYTE_FIFO_STORAGE * fifo){
 	//fifo->mutex=FALSE;
 	//EndCritical();
 	return TRUE;
 }
-void InitByteFifo(BYTE_FIFO_STORAGE * fifo,BYTE * buff,UINT32 size){
+void InitByteFifo(BYTE_FIFO_STORAGE * fifo,uint8_t * buff,uint32_t size){
 	if(fifo == 0 ||  buff == 0){
 		println("@#@#FIFO FAILED TO INITIALIZE",ERROR_PRINT);p_int(size,ERROR_PRINT);
 	}
@@ -62,11 +62,11 @@ void clearByteFifo(BYTE_FIFO_STORAGE * fifo){
 	//EndCritical();
 }
 
-BYTE ReadFirstByte(BYTE_FIFO_STORAGE * fifo){
+uint8_t ReadFirstByte(BYTE_FIFO_STORAGE * fifo){
 	return fifo->buffer[fifo->readPointer];
 }
 
-UINT32 calcByteCount(BYTE_FIFO_STORAGE * fifo){
+uint32_t calcByteCount(BYTE_FIFO_STORAGE * fifo){
 	int w =fifo->writePointer;
 	int r = fifo->readPointer;
 	if(w>r){
@@ -79,12 +79,12 @@ UINT32 calcByteCount(BYTE_FIFO_STORAGE * fifo){
 	return fifo->byteCount;
 }
 
-UINT32 FifoGetByteCount(BYTE_FIFO_STORAGE * fifo){
+uint32_t FifoGetByteCount(BYTE_FIFO_STORAGE * fifo){
 	return calcByteCount(fifo);
 
 }
 
-UINT32 FifoAddByte(BYTE_FIFO_STORAGE * fifo,BYTE b, BYTE * errorCode){
+uint32_t FifoAddByte(BYTE_FIFO_STORAGE * fifo,uint8_t b, uint8_t * errorCode){
 	if(calcByteCount(fifo) >= (fifo->bufferSize-2)){
 		//println(error);p_int(fifo->bufferSize);print_nnl(",");p_int(fifo->byteCount);
 		errorCode[0]=FIFO_OVERFLOW;
@@ -112,12 +112,12 @@ UINT32 FifoAddByte(BYTE_FIFO_STORAGE * fifo,BYTE b, BYTE * errorCode){
 	return (calcByteCount(fifo)<=fifo->bufferSize);
 }
 
-BYTE getByte(BYTE_FIFO_STORAGE * fifo, BYTE * errorCode){
+uint8_t getByte(BYTE_FIFO_STORAGE * fifo, uint8_t * errorCode){
 	if(lockFifo(fifo)==FALSE){
 		errorCode[0]=FIFO_FAILED_TO_GET;
 		return 0;
 	}
-	BYTE b = fifo->buffer[fifo->readPointer];
+	uint8_t b = fifo->buffer[fifo->readPointer];
 	fifo->readPointer++;
 	if (fifo->readPointer==fifo->bufferSize){
 		fifo->readPointer=0;
@@ -128,15 +128,15 @@ BYTE getByte(BYTE_FIFO_STORAGE * fifo, BYTE * errorCode){
 	return b;
 }
 
-UINT32 FifoGetByteStream(BYTE_FIFO_STORAGE * fifo,BYTE *packet,UINT32 size){
-	BYTE err;
+uint32_t FifoGetByteStream(BYTE_FIFO_STORAGE * fifo,uint8_t *packet,uint32_t size){
+	uint8_t err;
 	int i;
 	int count = calcByteCount(fifo);
 	if(size>count)
 		size = count;
 	for (i=0;i<size;i++){
 		if(count > 0){
-			BYTE b;
+			uint8_t b;
 			do{
 				b = getByte(fifo,&err);
 			}while(err != FIFO_OK);
@@ -148,9 +148,9 @@ UINT32 FifoGetByteStream(BYTE_FIFO_STORAGE * fifo,BYTE *packet,UINT32 size){
 	return i;
 }
 
-UINT32 FifoReadByteStream(BYTE *packet,UINT32 size,BYTE_FIFO_STORAGE * fifo){
-	UINT32 read=fifo->readPointer;
-	UINT32  count = calcByteCount(fifo);
+uint32_t FifoReadByteStream(uint8_t *packet,uint32_t size,BYTE_FIFO_STORAGE * fifo){
+	uint32_t read=fifo->readPointer;
+	uint32_t  count = calcByteCount(fifo);
 	int i;
 	if(size>count)
 		size = count;
@@ -169,7 +169,7 @@ UINT32 FifoReadByteStream(BYTE *packet,UINT32 size,BYTE_FIFO_STORAGE * fifo){
 }
 
 
-void InitPacketFifo(PACKET_FIFO_STORAGE * fifo,BowlerPacket * buff,UINT32 size){
+void InitPacketFifo(PACKET_FIFO_STORAGE * fifo,BowlerPacket * buff,uint32_t size){
     	if(fifo == 0 ||  buff == 0){
 		println("@#@#FIFO FAILED TO INITIALIZE",ERROR_PRINT);p_int(size,ERROR_PRINT);
 	}
@@ -181,7 +181,7 @@ void InitPacketFifo(PACKET_FIFO_STORAGE * fifo,BowlerPacket * buff,UINT32 size){
 	fifo->mutex=FALSE;
 }
 
-UINT32 FifoAddPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * toBeAdded){
+uint32_t FifoAddPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * toBeAdded){
     	if(FifoGetPacketCount(fifo) >= (fifo->bufferSize)){
 		println_E("Packet FIFO overflow");p_int_E(fifo->bufferSize);print_E(",");p_int_E(fifo->byteCount);
 		return 0;
@@ -201,7 +201,7 @@ UINT32 FifoAddPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * toBeAdded){
 	return (FifoGetPacketCount(fifo)<=fifo->bufferSize);
 }
 
-UINT32 FifoGetPacketCount(PACKET_FIFO_STORAGE * fifo){
+uint32_t FifoGetPacketCount(PACKET_FIFO_STORAGE * fifo){
 	int w =fifo->writePointer;
 	int r = fifo->readPointer;
 	if(w>r){
@@ -214,11 +214,11 @@ UINT32 FifoGetPacketCount(PACKET_FIFO_STORAGE * fifo){
 	return fifo->byteCount;
 }
 
-UINT32 FifoGetPacketSpaceAvailible(PACKET_FIFO_STORAGE * fifo){
+uint32_t FifoGetPacketSpaceAvailible(PACKET_FIFO_STORAGE * fifo){
         return fifo->bufferSize - FifoGetPacketCount(fifo)-1;
 }
 
-UINT32 FifoGetPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * retrived){
+uint32_t FifoGetPacket(PACKET_FIFO_STORAGE * fifo,BowlerPacket * retrived){
         //StartCritical();
 
         if(FifoGetPacketCount(fifo)>0)

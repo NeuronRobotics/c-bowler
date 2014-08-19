@@ -77,7 +77,6 @@
 	#if !defined(__C32__)
 		#define __C32__
 	#endif
-	#include "Bowler/Defines.h"
 	#include "GenericTypeDefs.h"
 	#include <p32xxxx.h>
 	#include <plib.h>

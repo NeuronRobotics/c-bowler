@@ -25,7 +25,7 @@ void checkCalibration(int group){
        getPidGroupDataTable(group)->config.upperHistoresis=0;
        getPidGroupDataTable(group)->config.lowerHistoresis=0;
        getPidGroupDataTable(group)->config.stop=0;
-       getPidGroupDataTable(group)->calibration.calibrated = TRUE ;
+       getPidGroupDataTable(group)->calibration.calibrated = true ;
     }
 }
 
@@ -41,7 +41,7 @@ int getPidStop(int group){
     checkCalibration(group);
     return getPidGroupDataTable(group)->config.stop;
 }
-BOOL processRunAutoCal(BowlerPacket * Packet){
+boolean processRunAutoCal(BowlerPacket * Packet){
     int group = Packet->use.data[0];
 
     runPidHysterisisCalibration(group);
@@ -78,7 +78,7 @@ CAL_STATE pidHysterisis(int group){
     if(RunEvery(&getPidGroupDataTable(group)->timer)>0){
         Print_Level l = getPrintLevel();
         setPrintLevelInfoPrint();
-        float boundVal = 15.0;
+        float boundVal = 400.0;
         float extr=GetPIDPosition(group);
         if( bound(0, extr, boundVal, boundVal)){// check to see if the encoder has moved
             //we have not moved

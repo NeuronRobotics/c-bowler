@@ -8,13 +8,13 @@
 #include "Bowler/Bowler.h"
 FLASH_STORE flash;
 
-UINT32 * stream;
-UINT32 streamSize=0;
+uint32_t * stream;
+uint32_t streamSize=0;
 
-BYTE  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
+uint8_t  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
 
-UINT32 MEMORY_BASE =DefaultStartStorePhysical;
-UINT32 VirtualBase = DefaultStartStorePhysical+VirtualAddress;
+uint32_t MEMORY_BASE =DefaultStartStorePhysical;
+uint32_t VirtualBase = DefaultStartStorePhysical+VirtualAddress;
 
 void FlashSwitchMemoryToBootloader(){
     VirtualBase = BootloaderStartStorePhysical+VirtualAddress;
@@ -24,7 +24,7 @@ void FlashSwitchMemoryToBootloader(){
 
 
 
-void SetFlashData(UINT32 * s,UINT32 size){
+void SetFlashData(uint32_t * s,uint32_t size){
     if(((size*4)+FLASHSTORE) > FLASH_PAGE_SIZE ){
         println_E("This data page is too big for the flash page!");
         SoftReset();
@@ -37,28 +37,28 @@ void SetFlashData(UINT32 * s,UINT32 size){
 void FlashLoad(void){
 	int i;
 	for (i=0;i<FLASHSTORE;i++){
-		flash.stream[i]=*((UINT32 *)(VirtualBase +(i*4)));
+		flash.stream[i]=*((uint32_t *)(VirtualBase +(i*4)));
 	}
         for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
-		stream[i-FLASHSTORE]=*((UINT32 *)(VirtualBase +(i*4)));
+		stream[i-FLASHSTORE]=*((uint32_t *)(VirtualBase +(i*4)));
 	}
 }
 
 void FlashSync(void){
-	UINT32 i;
-        UINT32 data=0, read=0,addr=0;
+	uint32_t i;
+        uint32_t data=0, read=0,addr=0;
 
 	println_I("Erasing Storage page");
-	NVMErasePage( (DWORD*) MEMORY_BASE);
+	NVMErasePage( (uint32_t *) MEMORY_BASE);
 	println_I("Writing new data Storage page");
 	for (i=0;i<FLASHSTORE;i++){
-		NVMWriteWord((DWORD*)(VirtualBase +(i*4)), flash.stream[i]);
+		NVMWriteWord((uint32_t *)(VirtualBase +(i*4)), flash.stream[i]);
 	}
         for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
                 data = stream[i-FLASHSTORE];
                 addr = (VirtualBase +(i*4));
-                NVMWriteWord((DWORD*)(addr), data );
-                read=*((UINT32 *)(addr));
+                NVMWriteWord((uint32_t *)(addr), data );
+                read=*((uint32_t *)(addr));
                 if(data != read){
                     println_E("Data write failed! ");prHEX32(read,ERROR_PRINT);
                     print_E(" expected ");prHEX32(data,ERROR_PRINT);
@@ -68,7 +68,7 @@ void FlashSync(void){
 	println_I("Storage synced");
 }
 
-BYTE FlashSetMac(BYTE * mac){
+uint8_t FlashSetMac(uint8_t * mac){
 	FlashLoad();
 	if(flash.data.lock==LOCKBYTE){
 		return FALSE;
@@ -91,7 +91,7 @@ void FlashSetName(char * name){
 	FlashSync();
 }
 
-void FlashGetMac(BYTE * mac){
+void FlashGetMac(uint8_t * mac){
 	int i;
 	FlashLoad();
 	if(flash.data.lock == 0xff){
@@ -113,14 +113,14 @@ void FlashGetName(char * name){
 	}
 }
 
-void FlashGetBlRev(BYTE * mac){
+void FlashGetBlRev(uint8_t * mac){
 	int i;
 	FlashLoad();
 	for (i=0;i<3;i++){
 		mac[i]=flash.data.bl[i];
 	}
 }
-void FlashGetFwRev(BYTE * mac){
+void FlashGetFwRev(uint8_t * mac){
 	int i;
 	FlashLoad();
 	for (i=0;i<3;i++){
@@ -128,12 +128,12 @@ void FlashGetFwRev(BYTE * mac){
 	}
 }
 
-BYTE FlashSetFwRev(BYTE * mac){
+uint8_t FlashSetFwRev(uint8_t * mac){
 	//println("Loading fw from flash");
 	FlashLoad();
 	//println("Loading fw  new data");
 	int i;
-	BOOL sync=FALSE;
+	boolean sync=FALSE;
 	for (i=0;i<3;i++){
 		if(flash.data.fw[i]!=mac[i]){
 			flash.data.fw[i]=mac[i];
@@ -148,12 +148,12 @@ BYTE FlashSetFwRev(BYTE * mac){
 	return TRUE;
 }
 
-BYTE FlashSetBlRev(BYTE * mac){
+uint8_t FlashSetBlRev(uint8_t * mac){
 	//println("Loading bl flash page");
 	FlashLoad();
 	//println("Loading bl  new data");
 	int i;
-	BOOL sync=FALSE;
+	boolean sync=FALSE;
 	for (i=0;i<3;i++){
 		if(flash.data.bl[i]!=mac[i]){
 			flash.data.bl[i]=mac[i];

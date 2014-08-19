@@ -23,7 +23,7 @@ void allign(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 			first++;
 			print_nnl(" 0x",INFO_PRINT);
 			prHEX8(Packet->use.head.ProtocolRevision,INFO_PRINT);
-			BYTE b;
+			uint8_t b;
 			if(getNumBytes(fifo)==0)
 				return;
 			//StartCritical();
@@ -37,9 +37,9 @@ void allign(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 	}
 }
 
-BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug){
-	BOOL PacketCheck=FALSE;
-	UINT16 PacketLegnth=0;
+boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean debug){
+	boolean PacketCheck=FALSE;
+	uint16_t PacketLegnth=0;
         Packet->stream[0]=0;
 	if (getNumBytes(fifo) == 0 ) {
 		return FALSE;//Not enough bytes to even be a header, try back later
@@ -66,7 +66,7 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 				println("###Bad crc check=",ERROR_PRINT);
 			}
 			prHEX8(Packet->use.head.ProtocolRevision,ERROR_PRINT);print_nnl(" Fifo Size=",ERROR_PRINT);p_int(calcByteCount(fifo),ERROR_PRINT);
-			BYTE b;
+			uint8_t b;
 			if(getNumBytes(fifo)==0)
 				return FALSE;
 			//StartCritical();
@@ -91,9 +91,9 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 			println("#*#*Warning, packet has no RPC",WARN_PRINT);
 		}
 	}
-	UINT16 totalLen = PacketLegnth+BowlerHeaderSize;
+	uint16_t totalLen = PacketLegnth+BowlerHeaderSize;
 	// See if all the data has arived for this packet
-	INT32 num = getNumBytes(fifo);
+	int32_t num = getNumBytes(fifo);
 	if (num >=(totalLen) ){
 		if(debug){
 			//println("**Found packet, ");p_int(totalLen);//print_nnl(" Bytes, pulling out of buffer");
@@ -108,29 +108,29 @@ BOOL _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, BOOL debug
 	}
 	return FALSE;
 }
-BOOL GetBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
+boolean GetBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 	return _getBowlerPacket(Packet,fifo, FALSE);
 }
-BOOL GetBowlerPacketDebug(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
+boolean GetBowlerPacketDebug(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 	//enableDebug();
 	return _getBowlerPacket( Packet, fifo, TRUE);
 }
 /**
  * @return returns the number of bytes in the fifo
  */
-UINT16 getNumBytes(BYTE_FIFO_STORAGE * fifo){
+uint16_t getNumBytes(BYTE_FIFO_STORAGE * fifo){
 	return (UINT16)calcByteCount(fifo);
 }
 /**
  * get a stream of this length from the connection
  */
-UINT16 getStream(BYTE *packet,UINT16 size,BYTE_FIFO_STORAGE * fifo){
+uint16_t getStream(uint8_t *packet,uint16_t size,BYTE_FIFO_STORAGE * fifo){
 	return FifoGetByteStream(fifo,packet,size);
 }
 
 void FixPacket(BowlerPacket * Packet){
 	extern MAC_ADDR MyMAC;
-	BYTE i;
+	uint8_t i;
 	//Ensure the packet going upstream is valid
 	for (i=0;i<6;i++){
 		Packet->use.head.MAC.v[i]=MyMAC.v[i];
@@ -139,7 +139,7 @@ void FixPacket(BowlerPacket * Packet){
 	SetCRC(Packet);
 }
 
-BOOL PutBowlerPacket(BowlerPacket * Packet){
+boolean PutBowlerPacket(BowlerPacket * Packet){
 	Packet->use.head.ResponseFlag=1;
 	FixPacket(Packet);
 	return putStream(Packet->stream,GetPacketLegnth(Packet));

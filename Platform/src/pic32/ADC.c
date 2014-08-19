@@ -9,11 +9,11 @@
 
 #include "Bowler/Bowler.h"
 
-float getVoltage(BYTE chan);
+float getVoltage(uint8_t chan);
 
 int ADCMask = 0;
 
-void InitADCHardware(BYTE chan){
+void InitADCHardware(uint8_t chan){
 
         DDPCONbits.JTAGEN=0;
         AD1CHS = 0x0000;
@@ -95,7 +95,7 @@ void InitADCHardware(BYTE chan){
 	EnableADC10();
         //println_I("Initialized ADC chan ");p_int_I(chan);
 }
-int getAdcRaw(BYTE chan, int samples){
+int getAdcRaw(uint8_t chan, int samples){
     InitADCHardware( chan);
 
         int i=0;
@@ -118,7 +118,7 @@ int getAdcRaw(BYTE chan, int samples){
 
 #define ADC_TO_VOLTS 0.003145631
 
-float getAdcVoltage(BYTE chan, int samples){
+float getAdcVoltage(uint8_t chan, int samples){
          int back = getAdcRaw( chan,  samples);
          
 	return ((float)back)*ADC_TO_VOLTS;

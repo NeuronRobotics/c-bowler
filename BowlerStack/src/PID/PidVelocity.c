@@ -7,7 +7,7 @@
 #include "Bowler/Bowler.h"
 
 void RunVel(void){
-	BYTE i;
+	uint8_t i;
 	for (i=0;i<getNumberOfPidChannels();i++){
 		//println_I("Checking velocity on ");p_int_I(i);
 		if(!getPidGroupDataTable(i)->config.Enabled){
@@ -16,47 +16,58 @@ void RunVel(void){
 	}
 }
 
-void RunPDVel(BYTE chan){
+float runPdVelocityFromPointer(PD_VEL* vel, float currentState,float KP, float KD){
+
+    		float currentTime = getMs();
+		float timeMsDiff =  (currentTime -vel->lastTime);
+		float timeDiff =  timeMsDiff/1000;
+		float posDiff=currentState -vel->lastPosition;
+		float currentVelocity = posDiff/timeDiff;
+		//float velocityDiff = currentVelocity-vel->lastVelocity;
+		float velocityDiff=0;
+		float proportional =  currentVelocity-vel->unitsPerSeCond;
+		float set = (proportional*KP)+(velocityDiff*KD)*timeMsDiff;
+		vel->currentOutputVel-=(set);
+
+		if (vel->currentOutputVel>200){
+			vel->currentOutputVel=200;
+                }else if(vel->currentOutputVel<-200){
+			vel->currentOutputVel=-200;
+                }
+
+		println_I("\t Velocity: set=   ");p_fl_I(vel->unitsPerSeCond );print_I(" ticks/seCond" );
+                println_I("\t current state=   ");p_fl_I(currentState );print_I(" ticks" );
+                println_I("\t last state=      ");p_fl_I(vel->lastPosition );print_I(" ticks" );
+		println_I("\t position diff=   ");p_fl_I(posDiff );print_I(" ticks" );
+		println_I("\t MS diff=         ");p_fl_I(timeMsDiff );
+		println_I("\t current=         ");p_fl_I(currentVelocity );print_I(" ticks/seCond" );
+		println_I("\t Velocity offset= ");p_fl_I(set );
+		println_I("\t Velocity set=    ");p_fl_I(vel->currentOutputVel );
+
+		//cleanup
+		vel->lastPosition=currentState;
+		vel->lastVelocity=currentVelocity;
+		vel->lastTime=currentTime;
+                return vel->currentOutputVel;
+}
+
+void RunPDVel(uint8_t chan){
 	//println_I("Running PID vel");
 	if(getPidVelocityDataTable(chan)->enabled==TRUE){
          
-		float currentTime = getMs();
-		float timeMsDiff =  (currentTime -getPidVelocityDataTable(chan)->lastTime);
-		float timeDiff =  timeMsDiff/1000;
-		int posDiff=getPidGroupDataTable(chan)->CurrentState -getPidVelocityDataTable(chan)->lastPosition;
-		float currentVelocity = posDiff/timeDiff;
-		//float velocityDiff = currentVelocity-getPidVelocityDataTable(chan)->lastVelocity;
-		float velocityDiff=0;
-		float proportional =  currentVelocity-getPidVelocityDataTable(chan)->unitsPerSeCond;
-		float set = (getPidVelocityDataTable(chan)->currentOutputVel+(proportional*getPidGroupDataTable(chan)->config.V.P)+(velocityDiff*getPidGroupDataTable(chan)->config.V.D))/-10;
-		getPidVelocityDataTable(chan)->currentOutputVel+=set;
 
-		if (getPidVelocityDataTable(chan)->currentOutputVel>100)
-			getPidVelocityDataTable(chan)->currentOutputVel=100;
-		if(getPidVelocityDataTable(chan)->currentOutputVel<-100)
-			getPidVelocityDataTable(chan)->currentOutputVel=-100;
-
-		println("Velocity set=",INFO_PRINT);p_fl(getPidVelocityDataTable(chan)->unitsPerSeCond,INFO_PRINT);print_nnl(" ticks/seCond",INFO_PRINT);
-		println("Velocity position diff=",INFO_PRINT);p_int(posDiff,INFO_PRINT);print_nnl(" ticks",INFO_PRINT);
-		println("Velocity time diff=",INFO_PRINT);p_fl(timeDiff,INFO_PRINT);print_nnl(" seConds",INFO_PRINT);
-		println("Velocity time diff=",INFO_PRINT);p_fl(timeMsDiff,INFO_PRINT);print_nnl(" ms",INFO_PRINT);
-		println("Velocity current=",INFO_PRINT);p_fl(currentVelocity,INFO_PRINT);print_nnl(" ticks/seCond",INFO_PRINT);
-		println("Velocity offset=",INFO_PRINT);p_fl(set,INFO_PRINT);print_nnl("\n",INFO_PRINT);
-		println("Velocity set=",INFO_PRINT);p_fl(getPidVelocityDataTable(chan)->currentOutputVel,INFO_PRINT);print_nnl("\n",INFO_PRINT);
-
-		getPidGroupDataTable(chan)->Output=getPidVelocityDataTable(chan)->currentOutputVel;
+		getPidGroupDataTable(chan)->Output=runPdVelocityFromPointer(getPidVelocityDataTable(chan),
+                        getPidGroupDataTable(chan)->CurrentState,
+                        getPidGroupDataTable(chan)->config.V.P,
+                        getPidGroupDataTable(chan)->config.V.D
+                        );
 
                 if(GetPIDCalibrateionState(chan)<=CALIBRARTION_DONE)
                     setOutput(chan,getPidGroupDataTable(chan)->Output);
-
-		//cleanup
-		getPidVelocityDataTable(chan)->lastPosition=getPidGroupDataTable(chan)->CurrentState;
-		getPidVelocityDataTable(chan)->lastVelocity=currentVelocity;
-		getPidVelocityDataTable(chan)->lastTime=currentTime;
 	}
 }
 
-void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms){
+void StartPDVel(uint8_t chan,int32_t unitsPerSeCond,float ms){
 
         if(ms<.1){
             //println_I("Starting Velocity");
@@ -69,8 +80,8 @@ void StartPDVel(BYTE chan,INT32 unitsPerSeCond,float ms){
         }else{
             //println_I("Starting Velocity Timed");
             float seConds = ms/1000;
-            INT32 dist = (INT32)unitsPerSeCond*(INT32)seConds;
-            INT32 delt = ((INT32) (GetPIDPosition(chan))-dist);
+            int32_t dist = (INT32)unitsPerSeCond*(INT32)seConds;
+            int32_t delt = ((INT32) (GetPIDPosition(chan))-dist);
             SetPIDTimed(chan, delt, ms);
         }
 

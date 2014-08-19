@@ -38,7 +38,7 @@ Print_Level getPrintLevel();
 /**
  * Lets you set a custom printstream function pointer
  */
-void setPrintStream(int (*sendToStreamPtr)(BYTE * ,int));
+void setPrintStream(int (*sendToStreamPtr)(uint8_t * ,int));
 
 void EnableDebugTerminal(void);
 ///**
@@ -148,6 +148,11 @@ void EnableDebugTerminal(void);
 #define print_I(A) printfDEBUG_NNL(A,INFO_PRINT)
 
 /**
+ * Clears the print termainal 
+ */
+#define clearPrint() sendStr("\e[1;1H\e[2J")
+
+/**
  * print the null terminated string with a newline inserted at the begining of the string
  */
 #define println_I(A) printfDEBUG(A,INFO_PRINT)
@@ -172,12 +177,12 @@ void printfDEBUG_NNL(char *str,Print_Level l);
 /**
  * print the ascii of a signed long/int. No new line
  */
-void printfDEBUG_INT(long val,Print_Level l);
+void printfDEBUG_INT(int32_t val,Print_Level l);
 
 /**
  * convert a long into an ascii string and place the string into the Buffer
  */
-void ultoaMINE(unsigned long Value, unsigned char* Buffer);
+void ultoaMINE(uint32_t Value, unsigned char* Buffer);
 /**
  * print all the bytes in a byte array. The legnth of the array must be correct
  */
@@ -210,6 +215,6 @@ void printPIDvals(int i);
 	void printfDEBUG_BYTE(char b,Print_Level l);
 #endif
 
-	BOOL okToPrint(Print_Level l);
+	boolean okToPrint(Print_Level l);
 	void setColor(Print_Level l);
 #endif /* DEBUG_H_ */

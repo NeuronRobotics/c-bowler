@@ -21,7 +21,7 @@
 #define stepSize (schedSet/6.0)
 //RunEveryData sched[]={{0.0,schedSet},{stepSize,schedSet},{stepSize*2,schedSet},{stepSize*3,schedSet},{stepSize*4,schedSet},{stepSize*5,schedSet}};
 //
-//BYTE SchedulerGetStep(BYTE chan){
+//uint8_t SchedulerGetStep(uint8_t chan){
 //	if(RunEvery(&sched[chan])>0){
 //		//sched[chan].MsTime=getMs();
 //		return TRUE;
@@ -29,7 +29,7 @@
 //	return FALSE;
 //
 //}
-//BYTE ClearForCom(void){
+//uint8_t ClearForCom(void){
 //	return TRUE;
 //}
 /**

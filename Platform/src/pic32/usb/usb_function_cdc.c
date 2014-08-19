@@ -119,21 +119,21 @@ volatile unsigned char cdc_data_tx[CDC_DATA_IN_EP_SIZE];
 LINE_CODING line_coding;    // Buffer to store line coding information
 
 //#pragma udata
-UINT16 cdc_rx_len;            // total rx length
+uint16_t cdc_rx_len;            // total rx length
 
-BYTE cdc_trf_state;         // States are defined cdc.h
+uint8_t cdc_trf_state;         // States are defined cdc.h
 POINTER pCDCSrc;            // Dedicated source pointer
 POINTER pCDCDst;            // Dedicated destination pointer
-UINT16 cdc_tx_len;            // total tx length
-BYTE cdc_mem_type;          // _ROM, _RAM
+uint16_t cdc_tx_len;            // total tx length
+uint8_t cdc_mem_type;          // _ROM, _RAM
 
 USB_HANDLE CDCDataOutHandle;
 USB_HANDLE CDCDataInHandle;
 
 
 CONTROL_SIGNAL_BITMAP control_signal_bitmap;
-DWORD BaudRateGen;			// BRG value calculated from baudrate
-extern BYTE  i;
+uint32_t BaudRateGen;			// BRG value calculated from baudrate
+extern uint8_t  i;
 extern BYTE_VAL *pDst;
 
 /**************************************************************************
@@ -324,7 +324,7 @@ void CDCInitEP(void)
 
 /**********************************************************************************
   Function:
-        BYTE getsUSBUSART(char *buffer, BYTE len)
+        uint8_t getsUSBUSART(char *buffer, uint8_t len)
     
   Summary:
     getsUSBUSART copies a string of BYTEs received through USB CDC Bulk OUT
@@ -340,8 +340,8 @@ void CDCInitEP(void)
     
     Typical Usage:
     <code>
-        BYTE numBytes;
-        BYTE buffer[64]
+        uint8_t numBytes;
+        uint8_t buffer[64]
     
         numBytes = getsUSBUSART(buffer,sizeof(buffer)); //until the buffer is free.
         if(numBytes \> 0)
@@ -361,7 +361,7 @@ void CDCInitEP(void)
     len -     The number of BYTEs expected.
                                                                                    
   **********************************************************************************/
-BYTE getsUSBUSART(char *buffer, WORD len)
+uint8_t getsUSBUSART(char *buffer, uint16_t len)
 {
     cdc_rx_len = 0;
     
@@ -392,13 +392,13 @@ BYTE getsUSBUSART(char *buffer, WORD len)
     
 }//end getsUSBUSART
 
-BOOL USBUSARTRxIsReady(void){
+boolean USBUSARTRxIsReady(void){
 	return !USBHandleBusy(CDCDataOutHandle);
 }
 
 /******************************************************************************
   Function:
-	void putUSBUSART(char *data, BYTE length)
+	void putUSBUSART(char *data, uint8_t length)
 		
   Summary:
     putUSBUSART writes an array of data to the USB. Use this version, is
@@ -433,10 +433,10 @@ BOOL USBUSARTRxIsReady(void){
 
   Input:
     char *data - pointer to a RAM array of data to be transfered to the host
-    BYTE length - the number of bytes to be transfered (must be less than 255).
+    uint8_t length - the number of bytes to be transfered (must be less than 255).
 		
  *****************************************************************************/
-void putUSBUSART(char *data, WORD  length)
+void putUSBUSART(char *data, uint16_t  length)
 {
     /*
      * User should have checked that cdc_trf_state is in CDC_TX_READY state
@@ -513,7 +513,7 @@ void putUSBUSART(char *data, WORD  length)
  
 void putsUSBUSART(char *data)
 {
-    BYTE len;
+    uint8_t len;
     char *pData;
 
     /*
@@ -610,7 +610,7 @@ void putsUSBUSART(char *data)
   **************************************************************************/
 void putrsUSBUSART(const ROM char *data)
 {
-    BYTE len;
+    uint8_t len;
     const ROM char *pData;
 
     /*
@@ -715,8 +715,8 @@ void putrsUSBUSART(const ROM char *data)
 void CDCTxService(void)
 {
     USBDeviceTasksLocal();
-    UINT16 byte_to_send;
-    BYTE i;
+    uint16_t byte_to_send;
+    uint8_t i;
     
     USBMaskInterrupts();
     if(USBHandleBusy(CDCDataInHandle)) 

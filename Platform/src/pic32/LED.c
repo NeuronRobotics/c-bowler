@@ -11,19 +11,19 @@ void InitLEDS(void){
 	startLED();
 }
 
-void SetGreen(WORD Duty){
+void SetGreen(uint16_t Duty){
 	SET_GREEN(Duty);
 }
 
-void SetRed(WORD Duty){
+void SetRed(uint16_t Duty){
 	SET_RED(Duty);
 }
 
-void SetBlue(WORD Duty){
+void SetBlue(uint16_t Duty){
 	SET_BLUE(Duty);
 }
 
-void SetColor(WORD r,WORD g,WORD b){
+void SetColor(uint16_t r,uint16_t g,uint16_t b){
 	SetGreen(g);
 	SetRed(r);
 	SetBlue(b);

@@ -32,8 +32,8 @@ void GetConfigPDVelocity(BowlerPacket * Packet){
 
 }
 
-BYTE ConfigPDVelovity(BowlerPacket * Packet){
-	BYTE chan = Packet->use.data[0];
+uint8_t ConfigPDVelovity(BowlerPacket * Packet){
+	uint8_t chan = Packet->use.data[0];
 
 	float KP=0;
 	float KD=0;
@@ -50,7 +50,7 @@ BYTE ConfigPDVelovity(BowlerPacket * Packet){
 
 
 void GetConfigPID(BowlerPacket * Packet){
-	BYTE chan = Packet->use.data[0];
+	uint8_t chan = Packet->use.data[0];
 	Packet->use.data[1]=getPidGroupDataTable(chan)->config.Enabled;//  = ((Packet->use.data[1]==0)?0:1);
 	Packet->use.data[2]=getPidGroupDataTable(chan)->config.Polarity;// = ((Packet->use.data[2]==0)?0:1);
 	Packet->use.data[3]=getPidGroupDataTable(chan)->config.Async;//= ((Packet->use.data[3]==0)?0:1);
@@ -73,9 +73,9 @@ void GetConfigPID(BowlerPacket * Packet){
 
 }
 
-BYTE ConfigPID(BowlerPacket * Packet){
+uint8_t ConfigPID(BowlerPacket * Packet){
 
-	BYTE chan = Packet->use.data[0];
+	uint8_t chan = Packet->use.data[0];
 //        int i;
 //        println_W("Starting config");
 //        for(i=0;i<getNumberOfPidChannels();i++){
@@ -130,7 +130,7 @@ BYTE ConfigPID(BowlerPacket * Packet){
 
 
 int zone = 66;
-BOOL processPIDGet(BowlerPacket * Packet){
+boolean processPIDGet(BowlerPacket * Packet){
 	int i;
 	switch (Packet->use.head.RPC){
 	case APID:
@@ -165,14 +165,14 @@ BOOL processPIDGet(BowlerPacket * Packet){
 	return TRUE;
 }
 
-BOOL processPIDPost(BowlerPacket * Packet){
+boolean processPIDPost(BowlerPacket * Packet){
     int chan, val;
     float time;
 	switch (Packet->use.head.RPC){
 	case APID:
 
 		time = (float)get32bit(Packet,0);
-		BYTE i=0;
+		uint8_t i=0;
 		for(i=0;i<Packet->use.data[4];i++){
 
 			SetPIDTimed(i,get32bit(Packet,5+(i*4)),time);
@@ -208,8 +208,8 @@ BOOL processPIDPost(BowlerPacket * Packet){
 	}
 	return TRUE;
 }
-BOOL processPIDCrit(BowlerPacket * Packet){
-	BYTE i=0;
+boolean processPIDCrit(BowlerPacket * Packet){
+	uint8_t i=0;
 	switch (Packet->use.head.RPC){
 	case KPID:
 		for(i=0;i<getNumberOfPidChannels();i++){
@@ -242,7 +242,7 @@ BOOL processPIDCrit(BowlerPacket * Packet){
  * Handle a PID packet.
  * @return True if the packet was processed, False if it was not  PID packet
  */
-BOOL ProcessPIDPacket(BowlerPacket * Packet){
+boolean ProcessPIDPacket(BowlerPacket * Packet){
 	switch(Packet->use.head.Method){
 	case BOWLER_GET:
 		return processPIDGet(Packet);

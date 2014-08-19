@@ -22,7 +22,7 @@ Print_Level level=NO_PRINT;
 
 #define bufferSize 10
 
-static BOOL DebugINIT = FALSE;
+static boolean DebugINIT = FALSE;
 const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 //#if !defined(NO_PRINTING)
 	//static const char  packet[] = "\tPacket = \t";
@@ -44,11 +44,11 @@ const char AsciiHex[]={'0','1','2','3','4','5','6','7','8','9','A','B','C','D','
 //#endif
 
 const char errorColor[]="\033[31m";
-const char infoColor[]="\033[39m";
+const char infoColor[]="\033[94m";
 const char warningColor[]="\033[93m";
 //const char debugColor[]="\033[94m";
 const char clearErrorColor[]="\033[39m";
-static int (*sendToStream)(BYTE * ,int);
+static int (*sendToStream)(uint8_t * ,int);
 
 void setColor(Print_Level l){
 	switch (l){
@@ -68,7 +68,7 @@ void setColor(Print_Level l){
 	}
 }
 
-int sendToStreamMine(BYTE * data ,int num){
+int sendToStreamMine(uint8_t * data ,int num){
 	int i;
 	i=0;
 	if(num>=bufferSize){
@@ -81,14 +81,14 @@ int sendToStreamMine(BYTE * data ,int num){
 	return i;
 }
 
-void setPrintStream(int (*sendToStreamPtr)(BYTE * ,int)){
+void setPrintStream(int (*sendToStreamPtr)(uint8_t * ,int)){
 	if(sendToStreamPtr == 0){
 		sendToStreamPtr = &sendToStreamMine;
 	}
 	sendToStream = sendToStreamPtr;
 }
 
-void sendToStreamLocal(BYTE * data ,int num){
+void sendToStreamLocal(uint8_t * data ,int num){
 	if(sendToStream == 0){
 		sendToStream = &sendToStreamMine;
 	}
@@ -108,7 +108,7 @@ Print_Level setPrintLevel(Print_Level l){
 	return getPrintLevel();
 }
 
-BOOL okToprint(Print_Level l){
+boolean okToprint(Print_Level l){
 
 	if(getPrintLevel()>=l){
 		if(DebugINIT == FALSE){
@@ -130,10 +130,10 @@ BOOL okToprint(Print_Level l){
 
 
 
-char GetLowNib(BYTE b){
+char GetLowNib(uint8_t b){
 	return AsciiHex[b&0x0f];
 }
-char GetHighNib(BYTE b){
+char GetHighNib(uint8_t b){
 	return AsciiHex[((b&0xF0)>>4)];
 }
 
@@ -159,7 +159,7 @@ void printfDEBUG_BYTE(char b,Print_Level l){
 	}
 	setColor(l);
 	putCharDebug(b);
-	//sendToStreamLocal((BYTE *)&b,1);
+	//sendToStreamLocal((uint8_t *)&b,1);
 }
 
 void printfDEBUG_NNL(char *str,Print_Level l)
@@ -172,7 +172,7 @@ void printfDEBUG_NNL(char *str,Print_Level l)
 	//sendToStreamLocal(data,i);
 }
 
-void printfDEBUG_INT(INT32 val,Print_Level l){
+void printfDEBUG_INT(int32_t val,Print_Level l){
 	if(!okToprint(l)){
 		return;
 	}
@@ -183,7 +183,7 @@ void printfDEBUG_INT(INT32 val,Print_Level l){
 		val *=-1;
 		putCharDebug('-');
 	}
-	BYTE byteStr[12];
+	uint8_t byteStr[12];
 	ultoaMINE(val,byteStr);
 	while(byteStr[x] != '\0' ){
 		putCharDebug(byteStr[x++]);
@@ -201,12 +201,12 @@ void printfDEBUG_FL(float f,Print_Level l){
 	if(!okToprint(l)){
 		return;
 	}
-	INT32 upper = (INT32)f;// set up the upper section of the decimal by int casting to clip  off the decimal places
-	INT32 shift =(INT32)(f*1000.0f);//shift up the decaml places as a float 3 places
-	INT32 clip  = upper*1000;//clip off the upper section of the decimal
+	int32_t upper = (INT32)f;// set up the upper section of the decimal by int casting to clip  off the decimal places
+	int32_t shift =(INT32)(f*1000.0f);//shift up the decaml places as a float 3 places
+	int32_t clip  = upper*1000;//clip off the upper section of the decimal
 	printfDEBUG_INT(upper,l);
 	printfDEBUG_BYTE('.',l);
-	INT32 dec =shift-clip;
+	int32_t dec =shift-clip;
 	//make positive and print zeros
 	if (dec<0)
 		dec*=-1;
@@ -250,7 +250,7 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 		return;
 	}
 		int i;
-		BYTE s;
+		uint8_t s;
 		println("\tPacket = \t",l);
 		s = BowlerHeaderSize+Packet->stream[DataSizeIndex];
 		printfDEBUG_BYTE('[',l);
@@ -321,12 +321,12 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet,Print_Level l){
 }
 #endif
 
-void printByteArray(BYTE * stream,UINT16 len,Print_Level l){
+void printByteArray(uint8_t * stream,uint16_t len,Print_Level l){
 //#if !defined(NO_PRINTING)
 	if(!okToprint(l)){
 		return;
 	}
-	UINT16 i;
+	uint16_t i;
 	print_nnl(" Stream: size=",l);
 	p_int(len,l);
 	print_nnl(" [",l);
@@ -339,12 +339,12 @@ void printByteArray(BYTE * stream,UINT16 len,Print_Level l){
 //#endif
 }
 
-void ultoaMINE(UINT32 Value, BYTE* Buffer)
+void ultoaMINE(uint32_t Value, BYTE* Buffer)
 {
-	BYTE i;
-	UINT32 Digit;
-	UINT32 Divisor;
-	BOOL Printed = FALSE;
+	uint8_t i;
+	uint32_t Digit;
+	uint32_t Divisor;
+	boolean Printed = FALSE;
 
 	if(Value)
 	{

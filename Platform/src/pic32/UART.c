@@ -3,12 +3,12 @@
 #include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 
-BOOL useUart2 = FALSE;
-BOOL useUart1 = FALSE;
+boolean useUart2 = FALSE;
+boolean useUart1 = FALSE;
 
 #define delayUart 5000
 
-BOOL Write32UART2(BYTE data)
+boolean Write32UART2(uint8_t data)
 {
 	int tick =delayUart;
 	while (!UARTTransmitterIsReady(UART2)){
@@ -24,7 +24,7 @@ BOOL Write32UART2(BYTE data)
 }
 
 
-BOOL Write32UART1(BYTE  data)
+boolean Write32UART1(uint8_t  data)
 {
 
     int tick =delayUart;

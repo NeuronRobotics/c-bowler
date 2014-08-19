@@ -22,11 +22,11 @@
 #define True TRUE
 #define False FALSE
 
-BOOL GetPacketUSB(BYTE * packet,WORD size){
+boolean GetPacketUSB(uint8_t * packet,uint16_t size){
 	USBGetArray(packet, size);
 	return True;
 }
-void SendPacketUSB(BYTE * packet,WORD size){
+void SendPacketUSB(uint8_t * packet,uint16_t size){
 	if (USBPutArray(packet, size)){
 		//println_I("Sent to USB");
 	}else{
@@ -35,7 +35,7 @@ void SendPacketUSB(BYTE * packet,WORD size){
 }
 
 
-WORD Get_USB_Byte_Count(void){
+uint16_t Get_USB_Byte_Count(void){
 	return GetNumUSBBytes();
 }
 

@@ -53,7 +53,7 @@
 #include "Bowler/Bowler.h"
 
 
-void DelayMs(WORD ms)
+void DelayMs(uint32_t ms)
 {
     unsigned char i;
     while(ms--)
@@ -88,17 +88,17 @@ void DelayIncServo(void)
     //Nop();
 }
 
-void Delay10us(DWORD dwCount)
+void Delay10us(uint32_t dwCount)
 {
-	volatile DWORD _dcnt;
+	volatile uint32_t _dcnt;
 
-	_dcnt = dwCount*((DWORD)(0.000036/(3.0/GetInstructionClock())/10));
+	_dcnt = dwCount*((uint32_t )(0.000036/(3.0/GetInstructionClock())/10));
 	while(_dcnt--);
 }
 
-void Delay1us(DWORD dwCount)
+void Delay1us(uint32_t dwCount)
 {
-	volatile DWORD _dcnt;
-	_dcnt = dwCount*((DWORD)(0.00002/(3.0/GetInstructionClock())/20));
+	volatile uint32_t _dcnt;
+	_dcnt = dwCount*((uint32_t )(0.00002/(3.0/GetInstructionClock())/20));
 	while(_dcnt--);
 }

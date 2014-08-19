@@ -5,7 +5,7 @@
 static const char rpcNSName[]   = "bcs.rpc.*;0.3;;";
 
 
-BOOL _rpc(BowlerPacket * Packet){
+boolean _rpc(BowlerPacket * Packet){
 	Packet->use.head.Method = BOWLER_POST;
 	Packet->use.head.RPC = GetRPCValue("_rpc");
         int index = 0;
@@ -33,7 +33,7 @@ BOOL _rpc(BowlerPacket * Packet){
         Packet->use.head.DataLegnth = 4+index;
 	return TRUE;
 }
-BOOL _rpcArgs(BowlerPacket * Packet){
+boolean _rpcArgs(BowlerPacket * Packet){
 	Packet->use.head.Method = BOWLER_POST;
 	Packet->use.head.RPC = GetRPCValue("args");
         int index = 0;
@@ -119,7 +119,7 @@ static NAMESPACE_LIST bcsRpc ={	rpcNSName,// The string defining the namespace
 
 
 
-static BOOL namespcaedAdded = FALSE;
+static boolean namespcaedAdded = FALSE;
 
 NAMESPACE_LIST * getBcsRpcNamespace(){
 	if(!namespcaedAdded){

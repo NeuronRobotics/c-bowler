@@ -61,18 +61,18 @@ void  __attribute__((nomips16)) _general_exception_handler(){
 }
 
 static BYTE_FIFO_STORAGE storeUSB;
-static BYTE privateRXUSB[BOWLER_PacketSize*2];
+static uint8_t privateRXUSB[BOWLER_PacketSize*2];
 static BYTE_FIFO_STORAGE storeUART;
-static BYTE privateRXUART[BOWLER_PacketSize*2];
+static uint8_t privateRXUART[BOWLER_PacketSize*2];
 
-static BOOL init=FALSE;
+static boolean init=FALSE;
 
-static BOOL usbComs = FALSE;
-static BOOL uartComs = FALSE;
+static boolean usbComs = FALSE;
+static boolean uartComs = FALSE;
 
-static BOOL disableSerial=FALSE;
+static boolean disableSerial=FALSE;
 
-void disableSerialComs(BOOL state){
+void disableSerialComs(boolean state){
     disableSerial=state;
     uartComs = !state;
 }
@@ -98,7 +98,7 @@ void Pic32_Bowler_HAL_Init(void){
 
 //HAL init functions
 
-void Get_HAL_Packet(BYTE * packet,WORD size){
+void Get_HAL_Packet(uint8_t * packet,uint16_t size){
 
     if(usbComs){
         if(FifoGetByteStream(&storeUSB,packet,size) != 0)
@@ -112,7 +112,7 @@ void Get_HAL_Packet(BYTE * packet,WORD size){
     print_E("Hal reported error in retriving packet __FILE__");print_E(__FILE__);
 }
 
-BOOL Send_HAL_Packet(BYTE * packet,WORD size){
+boolean Send_HAL_Packet(uint8_t * packet,uint16_t size){
 
     if(usbComs)
         SendPacketUSB(packet,size);
@@ -120,7 +120,7 @@ BOOL Send_HAL_Packet(BYTE * packet,WORD size){
         Pic32UARTPutArray(packet,size);
     return TRUE;
 }
-WORD Get_HAL_Byte_Count(){
+uint16_t Get_HAL_Byte_Count(){
 #if defined(USB_POLLING)
         USBDeviceTasks();
 #endif
@@ -147,7 +147,7 @@ WORD Get_HAL_Byte_Count(){
 	return 0;
 }
 
-BOOL GetBowlerPacket_arch(BowlerPacket * Packet){
+boolean GetBowlerPacket_arch(BowlerPacket * Packet){
 	//println_I("Checking packet from HAL");
 	Get_HAL_Byte_Count();//This runs other update tasks for the HAL
 	//println_I("Getting packet from HAL");
@@ -164,7 +164,7 @@ BOOL GetBowlerPacket_arch(BowlerPacket * Packet){
 /**
  * send the array out the connection
  */
-UINT16 putStream(BYTE *packet,UINT16 size){
+uint16_t putStream(uint8_t *packet,uint16_t size){
 	Send_HAL_Packet(packet,size);
 	return TRUE;
 }

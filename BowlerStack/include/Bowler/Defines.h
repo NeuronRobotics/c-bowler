@@ -19,6 +19,7 @@
 #define DEFINES_H_
 
 #include <stddef.h>
+#include <stdint.h>
 #define BOWLER_VERSION			3
 #define BowlerHeaderSize		11
 #define CRCIndex				10
@@ -45,85 +46,83 @@
 #define BOWLER_CRIT 	 				0x30
 #define BOWLER_ASYN 	 				0x40
 
-// 1 byte
+// 1 uint8_t
 #define BOWLER_I08      8 // 8 bit integer
 #define BOWLER_BOOL    43// a boolean value
-//2 byte
+//2 uint8_t
 #define BOWLER_I16      16//16 bit integer
-//4 byte
+//4 uint8_t
 #define BOWLER_I32      32//32 bit integer
 #define BOWLER_FIXED100    41// float
 #define BOWLER_FIXED1K    42// float
 //streams
-#define BOWLER_STR      37// first byte is number of values, next is byte values
-#define BOWLER_I32STR   38// first byte is number of values, next is 32 bit values
-#define BOWLER_FIXED1K_STR   44// first byte is number of values, next is floats
+#define BOWLER_STR      37// first uint8_t  is number of values, next is uint8_t  values
+#define BOWLER_I32STR   38// first uint8_t  is number of values, next is 32 bit values
+#define BOWLER_FIXED1K_STR   44// first uint8_t  is number of values, next is floats
 // ASCII
 #define BOWLER_ASCII    39// ASCII string, null terminated
 
+#define true 1
+#define false 0
+typedef uint8_t			boolean;
+//#if !defined(__GENERIC_TYPE_DEFS_H_)
+////#define B_B_true 1
+////#define B_B_false 0
+////	typedef unsigned char			BOOL;
+//        typedef enum _boolean { B_B_false = 0, B_B_true } BOOL;    /* Undefined size */
+//	typedef unsigned char			uint8_t ;
+//	typedef signed int          	INT;
+//	typedef signed char         	INT8;
+//	typedef signed short int    	INT16;
+//	typedef signed long int     	INT32;
+//	typedef signed long long    	INT64;
+//
+//	typedef unsigned int        	UINT;
+//	typedef unsigned char       	UINT8;
+//	typedef unsigned short int  	UINT16;
+//	typedef unsigned long int   	UINT32;
+//	typedef unsigned long long  	UINT64;
+//#endif
 
-#define B_TRUE 1
-#define B_FALSE 0
-typedef unsigned char			B_BOOL;
-#if !defined(__GENERIC_TYPE_DEFS_H_)
-//#define TRUE 1
-//#define FALSE 0
-//	typedef unsigned char			BOOL;
-        typedef enum _BOOL { FALSE = 0, TRUE } BOOL;    /* Undefined size */
-	typedef unsigned char			BYTE;
-	typedef signed int          	INT;
-	typedef signed char         	INT8;
-	typedef signed short int    	INT16;
-	typedef signed long int     	INT32;
-	typedef signed long long    	INT64;
+typedef union _INT16_UNION {
+    int16_t Val;
+    uint8_t v[2];
 
-	typedef unsigned int        	UINT;
-	typedef unsigned char       	UINT8;
-	typedef unsigned short int  	UINT16;
-	typedef unsigned long int   	UINT32;
-	typedef unsigned long long  	UINT64;
-#endif
-typedef union _INT16_UNION
-{
-	INT16 Val;
-    BYTE v[2];
-    struct
-    {
-        BYTE LB;
-        BYTE SB;
+    struct {
+        uint8_t LB;
+        uint8_t SB;
     } byte;
 } INT16_UNION;
 
-typedef union _UINT16_UNION
-{
-	UINT16 Val;
-    BYTE v[2];
-    struct
-    {
-        BYTE LB;
-        BYTE SB;
+typedef union _UINT16_UNION {
+    uint16_t Val;
+    uint8_t v[2];
+
+    struct {
+        uint8_t LB;
+        uint8_t SB;
     } byte;
 } UINT16_UNION;
 
-typedef union _INT32_UNION
-{
-	INT32 Val;
-    BYTE v[4];
-    struct
-    {
-        BYTE LB;
-        BYTE SB;
-        BYTE TB;
-        BYTE FB;
+typedef union _INT32_UNION {
+    int32_t Val;
+    uint8_t v[4];
+
+    struct {
+        uint8_t LB;
+        uint8_t SB;
+        uint8_t TB;
+        uint8_t FB;
     } byte;
     float f;
 
 } INT32_UNION;
+
 /*
 typedef union _UINT64_UNION_DOUBLE
 {
-    UINT64 Val;
-    BYTE v[8];
+    uint64_t Val;
+    uint8_t  v[8];
     struct
     {
         UINT32_UNION LI;
@@ -134,21 +133,20 @@ typedef union _UINT64_UNION_DOUBLE
 
 } UINT64_UNION_DOUBLE;*/
 
-typedef union _UINT32_UNION
-{
-	UINT32 Val;
-    BYTE v[4];
-    struct
-    {
-        BYTE LB;
-        BYTE SB;
-        BYTE TB;
-        BYTE FB;
+typedef union _UINT32_UNION {
+    uint32_t Val;
+    uint8_t v[4];
+
+    struct {
+        uint8_t LB;
+        uint8_t SB;
+        uint8_t TB;
+        uint8_t FB;
     } byte;
 
 } UINT32_UNION;
 #if !defined(NULL)
-	#define NULL 0
+#define NULL 0
 #endif
 
 #endif /* DEFINES_H_ */

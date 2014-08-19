@@ -4,8 +4,8 @@
  * Initializes core and returns a pointer to the namespace list
  */
 
-BOOL _nms(BowlerPacket * Packet);
-BOOL _png(BowlerPacket * Packet);
+boolean _nms(BowlerPacket * Packet);
+boolean _png(BowlerPacket * Packet);
 
 #define USE_LINKED_LIST_NAMESPACE
 
@@ -41,7 +41,7 @@ static NAMESPACE_LIST bcsCore ={	coreName,// The string defining the namespace
 
 
 
-BYTE getNumberOfNamespaces(){
+uint8_t getNumberOfNamespaces(){
 	int i=1;
 	NAMESPACE_LIST * tmp = getBcsCoreNamespace();
 
@@ -52,7 +52,7 @@ BYTE getNumberOfNamespaces(){
 	return i;
 }
 
-BYTE getNumberOfRpcs(int namespaceIndex){
+uint8_t getNumberOfRpcs(int namespaceIndex){
 	int i=1;
 	RPC_LIST * tmp = getNamespaceAtIndex(namespaceIndex)->rpcSet;
         if(tmp == NULL){
@@ -84,14 +84,14 @@ NAMESPACE_LIST * getNamespaceAtIndex(int index){
 }
 
 
-BOOL _png(BowlerPacket * Packet){
+boolean _png(BowlerPacket * Packet){
 	Packet->use.head.Method = BOWLER_POST;
 	Packet->use.head.RPC = GetRPCValue("_png");
 	Packet->use.head.DataLegnth = 4;
 	return TRUE;
 }
 
-BOOL _nms(BowlerPacket * Packet){
+boolean _nms(BowlerPacket * Packet){
 	if(Packet->use.head.DataLegnth==4){
 		Packet->use.head.DataLegnth=5;
 		Packet->use.head.Method = BOWLER_POST;
@@ -175,7 +175,7 @@ void addNamespaceToList(NAMESPACE_LIST * newNs){
 }
 
 
-RPC_LIST * getRpcByID(NAMESPACE_LIST * namespace,unsigned long  rpcId, BYTE bowlerMethod){
+RPC_LIST * getRpcByID(NAMESPACE_LIST * namespace,unsigned long  rpcId, uint8_t bowlerMethod){
 	if(namespace == NULL)
 		return NULL;
 	RPC_LIST * rpc =  namespace->rpcSet;
@@ -195,7 +195,7 @@ RPC_LIST * getRpcByID(NAMESPACE_LIST * namespace,unsigned long  rpcId, BYTE bowl
 	return NULL;
 }
 
-RPC_LIST * getRpcByIndex(NAMESPACE_LIST * namespace,BYTE index){
+RPC_LIST * getRpcByIndex(NAMESPACE_LIST * namespace,uint8_t index){
 	if(namespace == NULL)
 		return NULL;
 	RPC_LIST * rpc =  namespace->rpcSet;
@@ -215,7 +215,7 @@ RPC_LIST * getRpcByIndex(NAMESPACE_LIST * namespace,BYTE index){
 	return NULL;
 }
 
-void RunNamespaceAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
+void RunNamespaceAsync(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
     if(pidAsyncCallbackPtr != NULL){
         NAMESPACE_LIST * tmp = getBcsCoreNamespace();
         if(tmp == NULL)
@@ -232,7 +232,7 @@ void RunNamespaceAsync(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPa
     }
 }
 
-static BOOL namespcaedAdded = FALSE;
+static boolean namespcaedAdded = FALSE;
 NAMESPACE_LIST * getBcsCoreNamespace(){
 	if(!namespcaedAdded){
             namespcaedAdded =TRUE;

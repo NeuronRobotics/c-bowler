@@ -10,7 +10,7 @@
 static const char pidNSName[]   = "bcs.pid.*;1.0;;";
 
 
-BOOL pidAsyncEventCallbackLocal(BowlerPacket *Packet,BOOL (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
+boolean pidAsyncEventCallbackLocal(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
 
 //    println_I("\n");
 //    printPIDvals(0);
@@ -206,7 +206,7 @@ static NAMESPACE_LIST bcsPid ={	pidNSName,// The string defining the namespace
 
 
 
-static BOOL namespcaedAdded = FALSE;
+static boolean namespcaedAdded = FALSE;
 
 NAMESPACE_LIST * getBcsPidNamespace(){
 	if(!namespcaedAdded){

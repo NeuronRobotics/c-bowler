@@ -140,7 +140,7 @@ void Bowler_Init(void){
     addNamespaceToList((NAMESPACE_LIST * ) getBcsRpcNamespace());
 }
 
-BOOL process(BowlerPacket * Packet){
+boolean process(BowlerPacket * Packet){
 	int i;
 	//if(debug){
 		if(	Packet->use.head.RPC != GetRPCValue("_pwr") &&
@@ -149,7 +149,7 @@ BOOL process(BowlerPacket * Packet){
 			println("Got:",INFO_PRINT);printPacket(Packet,INFO_PRINT);
 		}
 	//}
-	if ( (CheckAddress(MyMAC.v,Packet->use.head.MAC.v) == TRUE) || ((CheckAddress((BYTE *)Broadcast.v,(BYTE *)Packet->use.head.MAC.v) == TRUE) )) {
+	if ( (CheckAddress(MyMAC.v,Packet->use.head.MAC.v) == TRUE) || ((CheckAddress((uint8_t *)Broadcast.v,(uint8_t *)Packet->use.head.MAC.v) == TRUE) )) {
 		Process_Self_Packet(Packet);
 		for (i=0;i<6;i++){
 			Packet->use.head.MAC.v[i]=MyMAC.v[i];
@@ -170,9 +170,9 @@ BOOL process(BowlerPacket * Packet){
 /**
  * Run an instance of the server. THis uses static memory
  */
-BYTE Bowler_Server_Static(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
+uint8_t Bowler_Server_Static(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 
-	BOOL back = GetBowlerPacket(Packet, fifo);
+	boolean back = GetBowlerPacket(Packet, fifo);
 
 	if (back){
 		return process( Packet);;
@@ -181,9 +181,9 @@ BYTE Bowler_Server_Static(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 	return FALSE;
 }
 
-BYTE Bowler_Server(BowlerPacket * Packet, BOOL debug){
+uint8_t Bowler_Server(BowlerPacket * Packet, boolean debug){
 
-	BOOL back = GetBowlerPacket_arch(Packet);
+	boolean back = GetBowlerPacket_arch(Packet);
 
 	if (back){
 		SetColor(0,1,0);
