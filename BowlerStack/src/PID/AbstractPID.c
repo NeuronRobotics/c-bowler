@@ -243,7 +243,7 @@ void RunPIDControl(){
 	for (i=0;i<getNumberOfPidChannels();i++){
             getPidGroupDataTable(i)->CurrentState = getPosition(i) - getPidGroupDataTable(i)->config.offset;
             if(getPidGroupDataTable(i)->config.Enabled){
-                
+                getPidGroupDataTable(i)->SetPoint = interpolate(&pidGroupsInternal[i].interpolate,getMs());
                 MathCalculationPosition(getPidGroupDataTable(i),getMs());
                 if(GetPIDCalibrateionState(i)<=CALIBRARTION_DONE){
                     setOutput(i,getPidGroupDataTable(i)->Output);
@@ -283,7 +283,7 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 	float error;
 	float derivative;
 
-        state->SetPoint = interpolate(&state->interpolate,getMs());
+        
 
 	//calculate set error
 	error = state->SetPoint- state->CurrentState;

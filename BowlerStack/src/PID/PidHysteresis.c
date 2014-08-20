@@ -65,7 +65,7 @@ void runPidHysterisisCalibration(int group){
     SetPIDEnabled(group, true) ;
     SetPIDCalibrateionState(group, CALIBRARTION_hysteresis);
 
-    getPidGroupDataTable(group)->calibration.state =  backward;
+    getPidGroupDataTable(group)->calibration.state =  forward;
   //  println_I("\tSetting slow move");
     setOutput(group, -1.0f);
     getPidGroupDataTable(group)->timer.setPoint=2000;
@@ -103,9 +103,9 @@ CAL_STATE pidHysterisis(int group){
             pidReset(group,0);
             setOutput(group, 0);
             println_E("Moved ");p_fl_E(extr);
-            if(getPidGroupDataTable(group)->calibration.state == backward){
+            if(getPidGroupDataTable(group)->calibration.state == forward){
                 println_I("Backward Calibrated for link# ");p_int_I(group);
-                getPidGroupDataTable(group)->calibration.state = forward;
+                getPidGroupDataTable(group)->calibration.state = backward;
             }else{
                 println_I("Calibration done for link# ");p_int_I(group);
                 getPidGroupDataTable(group)->calibration.state = done;
