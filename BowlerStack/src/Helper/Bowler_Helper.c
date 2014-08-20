@@ -17,46 +17,47 @@
  */
 #include "Bowler/Bowler.h"
 #if defined(__PIC32MX__)
-	extern MAC_ADDR MyMAC __attribute__ ((section (".scs_global_var")));
+extern MAC_ADDR MyMAC __attribute__((section(".scs_global_var")));
 #else
-	extern MAC_ADDR MyMAC;
+extern MAC_ADDR MyMAC;
 #endif
 //static uint8_t i;
 
-void LoadCorePacket(BowlerPacket * Packet){
-	//SetColor(0,1,0);
-	uint8_t i;
-	Packet->use.head.ProtocolRevision=BOWLER_VERSION;
-	for (i=0;i<6;i++){
-		Packet->use.head.MAC.v[i]=0;
-	}
-	Packet->use.head.MessageID=1;
-	Packet->use.head.ResponseFlag=1;
-	Packet->use.head.Method=BOWLER_STATUS;
-	Packet->use.head.RPC=GetRPCValue("****");
-	Packet->use.head.DataLegnth=4;
+void LoadCorePacket(BowlerPacket * Packet) {
+    //SetColor(0,1,0);
+    uint8_t i;
+    Packet->use.head.ProtocolRevision = BOWLER_VERSION;
+    for (i = 0; i < 6; i++) {
+        Packet->use.head.MAC.v[i] = 0;
+    }
+    Packet->use.head.MessageID = 1;
+    Packet->use.head.ResponseFlag = 1;
+    Packet->use.head.Method = BOWLER_STATUS;
+    Packet->use.head.RPC = GetRPCValue("****");
+    Packet->use.head.DataLegnth = 4;
 }
 
-uint8_t CalcCRC(BowlerPacket *Packet){
-	uint16_t v=0;
-	int i;
-	for (i=0;i<10;i++)
-		v+=Packet->stream[i];
-	return (v & 0x00ff);
+uint8_t CalcCRC(BowlerPacket *Packet) {
+    uint16_t v = 0;
+    int i;
+    for (i = 0; i < 10; i++)
+        v += Packet->stream[i];
+    return (v & 0x00ff);
 }
 
-uint8_t CheckCRC(BowlerPacket *Packet){
-	uint8_t v=CalcCRC(Packet);
-	if(Packet->use.head.CRC ==v)
-		return true; 
-	return false; 
-}
-void SetCRC(BowlerPacket * Packet){
-	uint8_t v=CalcCRC(Packet);
-	Packet->use.head.CRC = v ;
+uint8_t CheckCRC(BowlerPacket *Packet) {
+    uint8_t v = CalcCRC(Packet);
+    if (Packet->use.head.CRC == v)
+        return true;
+    return false;
 }
 
-inline unsigned long GetRPCValue(char * data){
+void SetCRC(BowlerPacket * Packet) {
+    uint8_t v = CalcCRC(Packet);
+    Packet->use.head.CRC = v;
+}
+
+inline unsigned long GetRPCValue(char * data) {
     UINT32_UNION l;
     l.byte.FB = data[3];
     l.byte.TB = data[2];
@@ -65,142 +66,121 @@ inline unsigned long GetRPCValue(char * data){
     return l.Val;
 }
 
-uint16_t READY(BowlerPacket *Packet,uint8_t code,uint8_t trace){
-	Packet->use.head.Method = BOWLER_STATUS;
-	Packet->use.head.RPC = GetRPCValue("_rdy");
-	Packet->use.head.MessageID=0;
-	Packet->use.head.DataLegnth = 6;
-	Packet->use.data[0]=code;
-	Packet->use.data[1]=trace;
-	return 6;
-}
-uint16_t ERR(BowlerPacket *Packet,uint8_t code,uint8_t trace){
-	Packet->use.head.Method = BOWLER_STATUS;
-	Packet->use.head.RPC = GetRPCValue("_err");
-	Packet->use.head.MessageID=0;
-	Packet->use.head.DataLegnth = 6;
-	Packet->use.data[0]=code;
-	Packet->use.data[1]=trace;
-	return 6;
+uint16_t READY(BowlerPacket *Packet, uint8_t code, uint8_t trace) {
+    Packet->use.head.Method = BOWLER_STATUS;
+    Packet->use.head.RPC = GetRPCValue("_rdy");
+    Packet->use.head.MessageID = 0;
+    Packet->use.head.DataLegnth = 6;
+    Packet->use.data[0] = code;
+    Packet->use.data[1] = trace;
+    return 6;
 }
 
-
-
-
-uint16_t SetPacketLegnth(BowlerPacket *Packet,uint8_t len){
-	//Packet.stream[DataSizeIndex]=(BYTE)(len&0x00ff);
-	Packet->use.head.DataLegnth = len;
-	return len;
-}
-uint16_t GetPacketLegnth(BowlerPacket *Packet){
-	return  BowlerHeaderSize + Packet->use.head.DataLegnth ;
-}
-uint16_t DataLegnthFromPacket(BowlerPacket *Packet){
-	return  Packet->use.head.DataLegnth ;
-}
-void copyPacket(BowlerPacket * from,BowlerPacket * to){
-	uint8_t i;
-	for(i=0;i<BowlerHeaderSize+from->use.head.DataLegnth;i++){
-		to->stream[i]=from->stream[i];
-	}
+uint16_t ERR(BowlerPacket *Packet, uint8_t code, uint8_t trace) {
+    Packet->use.head.Method = BOWLER_STATUS;
+    Packet->use.head.RPC = GetRPCValue("_err");
+    Packet->use.head.MessageID = 0;
+    Packet->use.head.DataLegnth = 6;
+    Packet->use.data[0] = code;
+    Packet->use.data[1] = trace;
+    return 6;
 }
 
-uint32_t Bytes2Int32(uint8_t a,uint8_t b,uint8_t c,uint8_t d){
-	return (   (((UINT32)a)<<24) + (((UINT32)b)<<16) + (((UINT32)c)<<8) + ((UINT32)d) );
+uint16_t SetPacketLegnth(BowlerPacket *Packet, uint8_t len) {
+    //Packet.stream[DataSizeIndex]=(BYTE)(len&0x00ff);
+    Packet->use.head.DataLegnth = len;
+    return len;
 }
 
-
-uint8_t CheckAddress(uint8_t * one,uint8_t * two){
-	int i;
-	for (i=0;i<6;i++){
-		if (one[i] != two[i])
-			return false; 
-	}
-	return true; 
+uint16_t GetPacketLegnth(BowlerPacket *Packet) {
+    return BowlerHeaderSize + Packet->use.head.DataLegnth;
 }
 
-float interpolate(INTERPOLATE_DATA * data, float currentTime){
-	float back;
-	float diffTime, timeToSet,totalDistance;
-
-
-	if(data->setTime >= 0){
-                if(data->setTime<.01){
-                    data->setTime=.01;
-                }
-		diffTime = currentTime-data->startTime;
-                timeToSet = data->setTime-diffTime;
-                totalDistance=data->set-data->start;
-		if((diffTime>0)){
-                    if((timeToSet>0) ){
-			float elapsed = 1-((timeToSet)/data->setTime);
-                        if(elapsed<0)
-                           elapsed=0;
-                        if(elapsed>1)
-                           elapsed=1;
-			float tmp=(data->start+(totalDistance*elapsed));
-
-			if(data->set > data->start){
-				if((tmp>data->set)||(tmp<data->start))
-					tmp=data->set;
-			}else{
-				if((tmp<data->set) || (tmp>data->start))
-					tmp=data->set;
-			}
-			back=tmp;
-                    }else{
-                        //time out case
-                        if(timeToSet*-1>data->setTime*.1){
-                            //println_E("Interpolation ran over time by more then 10%");
-                        }
-                        back=data->set;
-                    }
-		}else{
-                    println_E("Timer roll over, !");
-                    // Fixes the overflow case
-                    back=data->set;
-		}
-	}else{
-            println_E("Error: Interpolation can not be negative! ");p_fl_E(data->setTime );
-            back=data->set;
-	}
-	return back;
+uint16_t DataLegnthFromPacket(BowlerPacket *Packet) {
+    return Packet->use.head.DataLegnth;
 }
 
-
-boolean bound(float target, float actual, float plus, float minus){
-    return ((actual)<(target+plus) && (actual)>(target-minus));
+void copyPacket(BowlerPacket * from, BowlerPacket * to) {
+    uint8_t i;
+    for (i = 0; i < BowlerHeaderSize + from->use.head.DataLegnth; i++) {
+        to->stream[i] = from->stream[i];
+    }
 }
 
-void set8bit(BowlerPacket * Packet,uint8_t val, uint8_t offset){
-	Packet->use.data[0+offset]=val;
-}
-void set16bit(BowlerPacket * Packet,int16_t val, uint8_t offset){
-	UINT16_UNION wval;
-	wval.Val=val;
-	Packet->use.data[0+offset]=wval.byte.SB;
-	Packet->use.data[1+offset]=wval.byte.LB;
-}
-void set32bit(BowlerPacket * Packet,int32_t val, uint8_t offset){
-	INT32_UNION lval;
-	lval.Val=val;
-	Packet->use.data[0+offset]=lval.byte.FB;
-	Packet->use.data[1+offset]=lval.byte.TB;
-	Packet->use.data[2+offset]=lval.byte.SB;
-	Packet->use.data[3+offset]=lval.byte.LB;
-}
-int32_t get32bit(BowlerPacket * Packet, uint8_t offset){
-	INT32_UNION lval;
-	lval.byte.FB=Packet->use.data[0+offset];
-	lval.byte.TB=Packet->use.data[1+offset];
-	lval.byte.SB=Packet->use.data[2+offset];
-	lval.byte.LB=Packet->use.data[3+offset];
-	return lval.Val;
+uint32_t Bytes2Int32(uint8_t a, uint8_t b, uint8_t c, uint8_t d) {
+    return ( (((UINT32) a) << 24) + (((UINT32) b) << 16) + (((UINT32) c) << 8) + ((UINT32) d));
 }
 
-int32_t get16bit(BowlerPacket * Packet, uint8_t offset){
-	UINT16_UNION wval;
-	wval.byte.SB=Packet->use.data[0+offset];
-	wval.byte.LB=Packet->use.data[1+offset];
-	return wval.Val;
+uint8_t CheckAddress(uint8_t * one, uint8_t * two) {
+    int i;
+    for (i = 0; i < 6; i++) {
+        if (one[i] != two[i])
+            return false;
+    }
+    return true;
+}
+
+float interpolate(INTERPOLATE_DATA * data, float currentTime) {
+    float  totalDistance=0, elapsed=0,currentDistance=0, currentLocation=0;
+    float set = data->set;
+    float start = data->start;
+    float setTime = data->setTime;
+    float startTime = data->startTime;
+
+    elapsed =currentTime- (startTime);
+    //interpolation is done
+    if(elapsed >= setTime)
+        return set;
+
+    totalDistance = set-start;
+
+    // elapsed must always be greater than the set time, current distance will be lower then
+    // total distance
+    currentDistance = totalDistance * (elapsed/setTime);
+    
+    // location will be an offset from the start
+    currentLocation = currentDistance+start;
+
+    return currentLocation;
+
+}
+
+boolean bound(float target, float actual, float plus, float minus) {
+    return ((actual)<(target + plus) && (actual)>(target - minus));
+}
+
+void set8bit(BowlerPacket * Packet, uint8_t val, uint8_t offset) {
+    Packet->use.data[0 + offset] = val;
+}
+
+void set16bit(BowlerPacket * Packet, int16_t val, uint8_t offset) {
+    UINT16_UNION wval;
+    wval.Val = val;
+    Packet->use.data[0 + offset] = wval.byte.SB;
+    Packet->use.data[1 + offset] = wval.byte.LB;
+}
+
+void set32bit(BowlerPacket * Packet, int32_t val, uint8_t offset) {
+    INT32_UNION lval;
+    lval.Val = val;
+    Packet->use.data[0 + offset] = lval.byte.FB;
+    Packet->use.data[1 + offset] = lval.byte.TB;
+    Packet->use.data[2 + offset] = lval.byte.SB;
+    Packet->use.data[3 + offset] = lval.byte.LB;
+}
+
+int32_t get32bit(BowlerPacket * Packet, uint8_t offset) {
+    INT32_UNION lval;
+    lval.byte.FB = Packet->use.data[0 + offset];
+    lval.byte.TB = Packet->use.data[1 + offset];
+    lval.byte.SB = Packet->use.data[2 + offset];
+    lval.byte.LB = Packet->use.data[3 + offset];
+    return lval.Val;
+}
+
+int32_t get16bit(BowlerPacket * Packet, uint8_t offset) {
+    UINT16_UNION wval;
+    wval.byte.SB = Packet->use.data[0 + offset];
+    wval.byte.LB = Packet->use.data[1 + offset];
+    return wval.Val;
 }

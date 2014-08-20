@@ -19,6 +19,7 @@
 #ifndef DEBUG_H_
 #define DEBUG_H_
 #include "Defines.h"
+#include "AbstractPID.h"
 typedef enum _Print_Level{
 	NO_PRINT=0,
 	ERROR_PRINT=1,
@@ -206,7 +207,7 @@ char GetLowNib(unsigned char b);
 char GetHighNib(unsigned char b);
 
 void printPIDvals(int i);
-
+void printPIDvalsPointer(AbsPID * conf);
 
 //Bowler Stack Specific:
 #if defined(BOWLERSTRUCTDEF_H_)

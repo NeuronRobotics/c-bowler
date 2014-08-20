@@ -131,10 +131,9 @@ uint8_t SetPIDTimedPointer(AbsPID * conf,float val, float current,float ms){
 	//local_groups[chan].config.Enabled=true;
 	conf->interpolate.set=val;
 	conf->interpolate.setTime=ms;
-	conf->interpolate.start=conf->SetPoint;
+	conf->interpolate.start=current;
 	conf->interpolate.startTime=getMs();
-	if(ms==0)
-		conf->SetPoint=val;
+	conf->SetPoint=val;
 	//conf->config.Enabled=true;
 	InitAbsPIDWithPosition(conf,conf->config.K.P,conf->config.K.I,conf->config.K.D, getMs(),current);
 	return true;
@@ -219,7 +218,6 @@ void InitAbsPIDWithPosition(AbsPID * state,float KP,float KI,float KD,float time
 	state->integralTotal = 0.0;
         state->integralSize  = 20.0;
 	state->SetPoint = currentPosition;
-        state->interpolate.set=state->SetPoint;
 	state->PreviousError=0;
 	state->Output=0.0;
 	state->PreviousTime=time;
@@ -245,8 +243,7 @@ void RunPIDControl(){
 	for (i=0;i<getNumberOfPidChannels();i++){
             getPidGroupDataTable(i)->CurrentState = getPosition(i) - getPidGroupDataTable(i)->config.offset;
             if(getPidGroupDataTable(i)->config.Enabled){
-                //TODO figure out the null pointer problem once and for all for fucks sake...
-                getPidGroupDataTable(i)->SetPoint = interpolate(&pidGroupsInternal[i].interpolate,getMs());
+                
                 MathCalculationPosition(getPidGroupDataTable(i),getMs());
                 if(GetPIDCalibrateionState(i)<=CALIBRARTION_DONE){
                     setOutput(i,getPidGroupDataTable(i)->Output);
@@ -285,6 +282,9 @@ void RunPID(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Pa
 void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 	float error;
 	float derivative;
+
+        state->SetPoint = interpolate(&state->interpolate,getMs());
+
 	//calculate set error
 	error = state->SetPoint- state->CurrentState;
 
