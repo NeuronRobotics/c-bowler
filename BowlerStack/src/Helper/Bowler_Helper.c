@@ -154,9 +154,9 @@ float interpolate(INTERPOLATE_DATA * data, float currentTime) {
     // location will be an offset from the start
     currentLocation = currentDistance+start;
 
-    print_W(" elapsedTime = ");p_fl_W(elapsed);
-    print_W(" incremental distance = ");p_fl_W(currentDistance);
-    print_W(" Target = ");p_fl_W(currentLocation);
+//    print_W(" elapsedTime = ");p_fl_W(elapsed);
+//    print_W(" incremental distance = ");p_fl_W(currentDistance);
+//    print_W(" Target = ");p_fl_W(currentLocation);
 
     return currentLocation;
 
