@@ -311,7 +311,7 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
                             (state->config.K.I*state->integralTotal)
                         );
 
-        if(!state->config.Polarity)
+        if(state->config.Polarity==false)
             state->Output *=-1.0;
 	//Store the current time for next iterations previous time
 	state->PreviousTime=CurrentTime;
