@@ -109,9 +109,10 @@ CAL_STATE pidHysterisis(int group){
             }else{
                 println_I("Calibration done for link# ");p_int_I(group);
                 getPidGroupDataTable(group)->calibration.state = done;
-               
-                getPidGroupDataTable(group)->config.lowerHistoresis *=.7;
-                getPidGroupDataTable(group)->config.upperHistoresis *=.7;
+
+                float offset = 1;
+                getPidGroupDataTable(group)->config.lowerHistoresis *=offset;
+                getPidGroupDataTable(group)->config.upperHistoresis *=offset;
                 calcCenter( group);
             }
 
