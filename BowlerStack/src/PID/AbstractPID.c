@@ -249,7 +249,7 @@ void RunPIDControl(){
                     setOutput(i,getPidGroupDataTable(i)->Output);
                 }else if(GetPIDCalibrateionState(i) == CALIBRARTION_hysteresis){
                     pidHysterisis( i );
-                }else if((GetPIDCalibrateionState(i) == CALIBRARTION_home_down) ||(GetPIDCalibrateionState(i) == CALIBRARTION_home_up)){
+                }else if((GetPIDCalibrateionState(i) == CALIBRARTION_home_down) ||(GetPIDCalibrateionState(i) == CALIBRARTION_home_up)||(GetPIDCalibrateionState(i) == CALIBRARTION_home_velocity)){
                     checkLinkHomingStatus(i);
                 }
             }
@@ -321,14 +321,12 @@ void RunAbstractPIDCalc(AbsPID * state,float CurrentTime){
 
 
 void setOutput(int group, float val){
+    val*=getPidGroupDataTable(group)->config.tipsScale;
     val += getPidStop(group);
-
     if(val>getPidStop(group) && val<getUpperPidHistoresis(group))
         val = getUpperPidHistoresis(group);
     if(val<getPidStop(group) && val>getLowerPidHistoresis(group))
         val = getLowerPidHistoresis(group);
-
-
     getPidGroupDataTable(group)->OutputSet=val;
     setOutputLocal(group,val);
 }

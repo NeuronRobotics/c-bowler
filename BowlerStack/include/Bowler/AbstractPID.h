@@ -43,7 +43,9 @@ typedef enum _PidCalibrationType {
     CALIBRARTION_DONE = (1),
     CALIBRARTION_hysteresis = (2),
     CALIBRARTION_home_up = (3),
-    CALIBRARTION_home_down = (4)
+    CALIBRARTION_home_down = (4),
+    CALIBRARTION_home_velocity = (5)
+
 } PidCalibrationType;
 
 typedef struct __attribute__((__packed__)) _PidLimitEvent {
@@ -97,6 +99,7 @@ typedef struct __attribute__((__packed__)) _AbsPID_Config {
     int stop;
     PidCalibrationType calibrationState;
     float offset;
+    float tipsScale;
 
 }
 AbsPID_Config;
@@ -128,6 +131,8 @@ typedef struct __attribute__((__packed__)) _AbsPID {
         //RunEveryData timer;
         float homingStallBound;
         float previousValue;
+        float lastTime;
+
     } homing;
     RunEveryData timer;
     AbsPID_Config config;
