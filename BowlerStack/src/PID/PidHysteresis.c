@@ -138,7 +138,7 @@ CAL_STATE pidHysterisis(int group) {
     return getPidGroupDataTable(group)->calibration.state;
 }
 
-void startHomingLink(int group, PidCalibrationType type) {
+void startHomingLink(int group, PidCalibrationType type, float homedValue) {
     float speed = 20.0;
     if (type == CALIBRARTION_home_up)
         speed *= 1.0;
@@ -156,7 +156,8 @@ void startHomingLink(int group, PidCalibrationType type) {
     getPidGroupDataTable(group)->homing.homingStallBound = 20;
     getPidGroupDataTable(group)->homing.previousValue = GetPIDPosition(group);
     getPidGroupDataTable(group)->homing.lastTime = getMs();
-    
+    getPidGroupDataTable(group)->homing.homedValue = homedValue;
+    SetPIDEnabled(group,true);
 }
 
 void checkLinkHomingStatus(int group) {
@@ -170,6 +171,7 @@ void checkLinkHomingStatus(int group) {
     float current = GetPIDPosition(group);
     float currentTime = getMs();
     if (RunEvery(&getPidGroupDataTable(group)->timer) > 0) {
+        println_W("Check Homing ");
         if (GetPIDCalibrateionState(group) != CALIBRARTION_home_velocity) {
             float boundVal = getPidGroupDataTable(group)->homing.homingStallBound;
 
@@ -179,11 +181,17 @@ void checkLinkHomingStatus(int group) {
                     boundVal
                     )
                     ) {
-                pidReset(group, 0);
-
+                pidReset(group, getPidGroupDataTable(group)->homing.homedValue);
+                //after reset the current value will have changed
+                current = GetPIDPosition(group);
+                getPidGroupDataTable(group)->config.tipsScale = 1;
                 println_W("Homing Velocity for group ");
                 p_int_W(group);
-                
+                print_W(" To value ");
+                p_fl_W(getPidGroupDataTable(group)->homing.homedValue);
+                print_W(" current ");
+                p_fl_W(current);
+
                 float speed = -20.0;
                 if (GetPIDCalibrateionState(group) == CALIBRARTION_home_up)
                     speed *= 1.0;
@@ -194,24 +202,21 @@ void checkLinkHomingStatus(int group) {
                     return;
                 }
                 setOutput(group, speed);
-                getPidGroupDataTable(group)->homing.lastTime = currentTime;
-                getPidGroupDataTable(group)->homing.previousValue = current;
-                SetPIDCalibrateionState(group, CALIBRARTION_home_velocity);
-            } else {
-                getPidGroupDataTable(group)->homing.lastTime = currentTime;
-                getPidGroupDataTable(group)->homing.previousValue = current;
 
+                SetPIDCalibrateionState(group, CALIBRARTION_home_velocity);
             }
-        }else{
-            float posDiff = current - getPidGroupDataTable(group)->homing.previousValue;//ticks
-            float timeDiff = (current - getPidGroupDataTable(group)->homing.lastTime)/1000.0;//
+            getPidGroupDataTable(group)->homing.lastTime = currentTime;
+            getPidGroupDataTable(group)->homing.previousValue = current;
+        } else {
+            float posDiff = current - getPidGroupDataTable(group)->homing.previousValue; //ticks
+            float timeDiff = (current - getPidGroupDataTable(group)->homing.lastTime) / 1000.0; //
             float tps = (posDiff / timeDiff);
-            getPidGroupDataTable(group)->config.tipsScale = -20/tps;
+            getPidGroupDataTable(group)->config.tipsScale = -20 / tps;
 
             println_E("New scale factor: ");
             p_fl_E(getPidGroupDataTable(group)->config.tipsScale);
             print_E(" speed ");
-             p_fl_E(tps);
+            p_fl_E(tps);
             print_E(" on ");
             p_int_E(group);
             OnPidConfigure(group);

@@ -132,7 +132,7 @@ typedef struct __attribute__((__packed__)) _AbsPID {
         float homingStallBound;
         float previousValue;
         float lastTime;
-
+        float homedValue;
     } homing;
     RunEveryData timer;
     AbsPID_Config config;
@@ -280,7 +280,7 @@ float pidResetNoStop(uint8_t chan, int32_t val);
 void pushAllPIDPositions(BowlerPacket *Packet, boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet));
 
 CAL_STATE pidHysterisis(int group);
-void startHomingLink(int group, PidCalibrationType type);
+void startHomingLink(int group, PidCalibrationType type,float homedValue);
 void runPidHysterisisCalibration(int group);
 boolean processRunAutoCal(BowlerPacket * Packet);
 
