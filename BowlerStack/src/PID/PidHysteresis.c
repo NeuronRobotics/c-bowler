@@ -148,6 +148,7 @@ void startHomingLink(int group, PidCalibrationType type) {
         println_E("Invalid homing type");
         return;
     }
+    getPidGroupDataTable(group)->config.tipsScale = 1;
     SetPIDCalibrateionState(group, type);
     setOutput(group, speed);
     getPidGroupDataTable(group)->timer.MsTime = getMs();
@@ -155,8 +156,7 @@ void startHomingLink(int group, PidCalibrationType type) {
     getPidGroupDataTable(group)->homing.homingStallBound = 20;
     getPidGroupDataTable(group)->homing.previousValue = GetPIDPosition(group);
     getPidGroupDataTable(group)->homing.lastTime = getMs();
-    getPidGroupDataTable(group)->config.tipsScale = 1;
-
+    
 }
 
 void checkLinkHomingStatus(int group) {
