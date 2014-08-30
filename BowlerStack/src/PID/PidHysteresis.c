@@ -171,7 +171,7 @@ void checkLinkHomingStatus(int group) {
     float current = GetPIDPosition(group);
     float currentTime = getMs();
     if (RunEvery(&getPidGroupDataTable(group)->timer) > 0) {
-        println_W("Check Homing ");
+        //println_W("Check Homing ");
         if (GetPIDCalibrateionState(group) != CALIBRARTION_home_velocity) {
             float boundVal = getPidGroupDataTable(group)->homing.homingStallBound;
 
@@ -187,7 +187,7 @@ void checkLinkHomingStatus(int group) {
                 getPidGroupDataTable(group)->config.tipsScale = 1;
                 println_W("Homing Velocity for group ");
                 p_int_W(group);
-                print_W(" To value ");
+                print_W(", Resetting position to: ");
                 p_fl_W(getPidGroupDataTable(group)->homing.homedValue);
                 print_W(" current ");
                 p_fl_W(current);
@@ -201,15 +201,19 @@ void checkLinkHomingStatus(int group) {
                     println_E("Invalid homing type");
                     return;
                 }
+                Print_Level l = getPrintLevel();
+                setPrintLevelInfoPrint();
                 setOutput(group, speed);
-
+                setPrintLevel(l);
+                getPidGroupDataTable(group)->timer.MsTime = getMs();
+                getPidGroupDataTable(group)->timer.setPoint = 2000;
                 SetPIDCalibrateionState(group, CALIBRARTION_home_velocity);
-            }
-            getPidGroupDataTable(group)->homing.lastTime = currentTime;
-            getPidGroupDataTable(group)->homing.previousValue = current;
+                getPidGroupDataTable(group)->homing.lastTime = currentTime;
+            }           
         } else {
+            current = GetPIDPosition(group);
             float posDiff = current - getPidGroupDataTable(group)->homing.previousValue; //ticks
-            float timeDiff = (current - getPidGroupDataTable(group)->homing.lastTime) / 1000.0; //
+            float timeDiff = (currentTime - getPidGroupDataTable(group)->homing.lastTime) / 1000.0; //
             float tps = (posDiff / timeDiff);
             getPidGroupDataTable(group)->config.tipsScale = -20 / tps;
 
@@ -219,8 +223,15 @@ void checkLinkHomingStatus(int group) {
             p_fl_E(tps);
             print_E(" on ");
             p_int_E(group);
+            print_E(" Position difference ");
+            p_fl_E(posDiff);
+            print_E(" time difference ");
+            p_int_E(timeDiff);
+
+
             OnPidConfigure(group);
             SetPIDCalibrateionState(group, CALIBRARTION_DONE);
         }
+        getPidGroupDataTable(group)->homing.previousValue = current;
     }
 }
