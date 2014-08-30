@@ -215,7 +215,7 @@ void checkLinkHomingStatus(int group) {
             float posDiff = current - getPidGroupDataTable(group)->homing.previousValue; //ticks
             float timeDiff = (currentTime - getPidGroupDataTable(group)->homing.lastTime) / 1000.0; //
             float tps = (posDiff / timeDiff);
-            getPidGroupDataTable(group)->config.tipsScale = -20 / tps;
+            getPidGroupDataTable(group)->config.tipsScale = 20 / tps;
 
             println_E("New scale factor: ");
             p_fl_E(getPidGroupDataTable(group)->config.tipsScale);
@@ -226,7 +226,7 @@ void checkLinkHomingStatus(int group) {
             print_E(" Position difference ");
             p_fl_E(posDiff);
             print_E(" time difference ");
-            p_int_E(timeDiff);
+            p_fl_E(timeDiff);
 
 
             OnPidConfigure(group);
