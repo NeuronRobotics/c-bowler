@@ -13,12 +13,12 @@ void updatePidAsync(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPa
         int i;
         int update = false; 
         for (i=0;i<getNumberOfPidChannels();i++){
-                if(getPidGroupDataTable(i)->config.Async){
+                //if(getPidGroupDataTable(i)->config.Async){
                         if(getPidGroupDataTable(i)->CurrentState != getPidGroupDataTable(i)->lastPushedValue){
                             //println_E("Async because of ");p_int_E(i);
                                 update = true; 
                         }
-                }
+               // }
         }
         if(update){
                 pushAllPIDPositions(Packet,pidAsyncCallbackPtr);
