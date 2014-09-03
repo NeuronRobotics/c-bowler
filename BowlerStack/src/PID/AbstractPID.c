@@ -242,7 +242,7 @@ void RunPIDControl() {
     int i;
     for (i = 0; i < getNumberOfPidChannels(); i++) {
         getPidGroupDataTable(i)->CurrentState = getPosition(i) - getPidGroupDataTable(i)->config.offset;
-        if (getPidGroupDataTable(i)->config.Enabled) {
+        if (getPidGroupDataTable(i)->config.Enabled == true) {
             getPidGroupDataTable(i)->SetPoint = interpolate(&pidGroupsInternal[i].interpolate, getMs());
             MathCalculationPosition(getPidGroupDataTable(i), getMs());
             if (GetPIDCalibrateionState(i) <= CALIBRARTION_DONE) {

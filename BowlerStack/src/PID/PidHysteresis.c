@@ -119,7 +119,7 @@ CAL_STATE pidHysterisis(int group) {
                 p_int_I(group);
                 getPidGroupDataTable(group)->calibration.state = done;
 
-                float offset = .5;
+                float offset = .9;
                 getPidGroupDataTable(group)->config.lowerHistoresis *= offset;
                 getPidGroupDataTable(group)->config.upperHistoresis *= offset;
                 calcCenter(group);
