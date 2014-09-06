@@ -79,7 +79,10 @@ void disableSerialComs(boolean state){
 void Pic32_Bowler_HAL_Init(void){
 
 	init=true; 
-
+        println_W("Init ADC");
+        int i=0;
+        for(i=0; i<16; i++) InitADCHardware(i);
+        measureAdcOffset();
 	println_W("Init USB fifo");
 	InitByteFifo(&storeUSB,privateRXUSB,sizeof(privateRXUSB));
 	println_W("Init UART fifo");

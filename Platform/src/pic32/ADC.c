@@ -12,6 +12,7 @@
 float getVoltage(uint8_t chan);
 
 int ADCMask = 0;
+int ADCOffset = 0;
 
 void InitADCHardware(uint8_t chan){
 
@@ -95,8 +96,11 @@ void InitADCHardware(uint8_t chan){
 	EnableADC10();
         //println_I("Initialized ADC chan ");p_int_I(chan);
 }
+
+
+
 int getAdcRaw(uint8_t chan, int samples){
-    InitADCHardware( chan);
+    //InitADCHardware( chan);
 
         int i=0;
         int back = 0;
@@ -109,17 +113,37 @@ int getAdcRaw(uint8_t chan, int samples){
                     // Wait for ADC to finish
             }
             AD1CHS =0;
-            back= back + ADC1BUF0;
+            back= back + (ADC1BUF0-ADCOffset);
         }while(i++<samples);
 
         back = back/(i);
         return back;
 }
 
-#define ADC_TO_VOLTS 0.003145631
-
+//#define ADC_TO_VOLTS 0.003145631
+#define ADC_TO_VOLTS 0.00322265625 // AC: this shouldn't be here
 float getAdcVoltage(uint8_t chan, int samples){
          int back = getAdcRaw( chan,  samples);
          
 	return ((float)back)*ADC_TO_VOLTS;
+}
+
+void measureAdcOffset(){
+    AD1CON2bits.OFFCAL=1; // enable ofsset detection mode
+    AD1CHSbits.CH0SA = 0;
+    AD1CON1bits.SAMP = 1;
+    Delay10us(5);
+    AD1CON1bits.SAMP = 0;
+    while (AD1CON1bits.DONE == 0);
+    AD1CHS =0;
+    ADCOffset = ADC1BUF0;
+    AD1CON2bits.OFFCAL=0; // disable ofsset detection mode
+            Print_Level l = getPrintLevel();
+            setPrintLevelInfoPrint();
+    println_I("Measured ADC Offset as: ");p_int_I(ADCOffset);
+            setPrintLevel(l);
+}
+
+int getAdcOffset(){
+    return ADCOffset;
 }

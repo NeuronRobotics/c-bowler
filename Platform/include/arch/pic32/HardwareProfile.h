@@ -294,3 +294,5 @@
 void InitADCHardware(BYTE chan);
 float getAdcVoltage(BYTE chan, int samples);
 int getAdcRaw(BYTE chan, int samples);
+void measureAdcOffset();
+int getAdcOffset();
