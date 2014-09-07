@@ -55,6 +55,7 @@ void SetFlashData(uint32_t * s,uint32_t size);
 void FlashLoad(void);
 
 void setPicIOPin(boolean state,char port,int pin);
+boolean getPicIOPin(char port,int pin);
 
 
 #define     ioPortB(s,p)  if(s){PORTBSET=(1<<p);}else{ PORTBCLR=(1<<p);}

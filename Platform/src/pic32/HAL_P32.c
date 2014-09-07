@@ -112,6 +112,26 @@ void Pic32_Bowler_HAL_Init(void) {
     println_W("Pic32 is initialized...");
 }
 
+boolean getPicIOPin(char port,int pin){
+    switch (port) {
+        case 'B':
+            return  PORTB & (1<<pin)?1:0;
+        case 'C':
+            return  PORTC & (1<<pin)?1:0;
+        case 'D':
+            return  PORTD & (1<<pin)?1:0;
+        case 'E':
+            return  PORTE & (1<<pin)?1:0;
+        case 'F':
+            return  PORTF & (1<<pin)?1:0;
+        case 'G':
+            return  PORTG & (1<<pin)?1:0;
+        default:
+            println_E("INVALID PIN ID");
+            while(1);
+    }
+}
+
 void setPicIOPin(boolean state, char port, int pin) {
     switch (port) {
         case 'B':
