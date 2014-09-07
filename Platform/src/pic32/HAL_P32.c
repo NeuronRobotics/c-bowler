@@ -112,6 +112,38 @@ void Pic32_Bowler_HAL_Init(void) {
     println_W("Pic32 is initialized...");
 }
 
+void setPicIOTristateInput(char port,int pin){
+    setPicIOTristate( INPUT, port, pin);
+}
+void setPicIOTristateOutput(char port,int pin){
+    setPicIOTristate( OUTPUT, port, pin);
+}
+void setPicIOTristate(boolean state,char port,int pin){
+    switch (port) {
+        case 'B':
+            if(state){TRISBSET=(1<<pin);}else{ TRISBCLR=(1<<pin);}
+            break;
+        case 'C':
+            if(state){TRISCSET=(1<<pin);}else{ TRISCCLR=(1<<pin);}
+            break;
+        case 'D':
+            if(state){TRISDSET=(1<<pin);}else{ TRISDCLR=(1<<pin);}
+            break;
+        case 'E':
+            if(state){TRISESET=(1<<pin);}else{ TRISECLR=(1<<pin);}
+            break;
+        case 'F':
+            if(state){TRISFSET=(1<<pin);}else{ TRISFCLR=(1<<pin);}
+            break;
+        case 'G':
+            if(state){TRISGSET=(1<<pin);}else{ TRISGCLR=(1<<pin);}
+            break;
+        default:
+            println_E("INVALID PIN ID");
+            while(1);
+    }
+}
+
 boolean getPicIOPin(char port,int pin){
     switch (port) {
         case 'B':

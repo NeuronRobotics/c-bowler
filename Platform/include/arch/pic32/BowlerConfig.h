@@ -54,6 +54,10 @@ void FlashSync(void);
 void SetFlashData(uint32_t * s,uint32_t size);
 void FlashLoad(void);
 
+void setPicIOTristateInput(char port,int pin);
+void setPicIOTristateOutput(char port,int pin);
+void setPicIOTristate(boolean state,char port,int pin);
+
 void setPicIOPin(boolean state,char port,int pin);
 boolean getPicIOPin(char port,int pin);
 
