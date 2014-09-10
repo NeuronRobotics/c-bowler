@@ -328,7 +328,7 @@ void setOutput(int group, float val) {
     if (val < getPidStop(group) && val > getLowerPidHistoresis(group))
         val = getLowerPidHistoresis(group);
     getPidGroupDataTable(group)->OutputSet = val;
-    println_I("Setting output value=");p_fl_I(val);
+    //
     setOutputLocal(group, val);
 }
 
