@@ -82,7 +82,7 @@ CAL_STATE pidHysterisis(int group) {
     if (RunEvery(&getPidGroupDataTable(group)->timer) > 0) {
         Print_Level l = getPrintLevel();
         setPrintLevelInfoPrint();
-        float boundVal = 400.0;
+        float boundVal = 150.0;
         float extr = GetPIDPosition(group);
         if (bound(0, extr, boundVal, boundVal)) {// check to see if the encoder has moved
             //we have not moved
