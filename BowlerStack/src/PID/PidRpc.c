@@ -104,6 +104,7 @@ uint8_t ConfigPID(BowlerPacket * Packet){
                 getPidGroupDataTable(chan)->config.stop=(float)get32bit(Packet,22)/1000.0;
                 getPidGroupDataTable(chan)->config.upperHistoresis=(float)get32bit(Packet,26)/1000.0;
                 getPidGroupDataTable(chan)->config.lowerHistoresis=(float)get32bit(Packet,30)/1000.0;
+                getPidGroupDataTable(chan)->config.calibrationState =  CALIBRARTION_DONE;
         }else{
 		temp=0;
 		getPidGroupDataTable(chan)->config.useIndexLatch= true; 
