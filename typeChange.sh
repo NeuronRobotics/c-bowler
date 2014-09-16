@@ -11,7 +11,7 @@ find $1 -type f -exec sed -i 's/B_BOOL /boolean /g' {} \;
 find $1 -type f -exec sed -i 's/B_TRUE /true /g' {} \;
 find $1 -type f -exec sed -i 's/B_FALSE /false /g' {} \;
 
-
+find $1 -type f -exec sed -i 's/BOOL(/boolean(/g' {} \;
 find $1 -type f -exec sed -i 's/BOOL /boolean /g' {} \;
 find $1 -type f -exec sed -i 's/TRUE /true /g' {} \;
 find $1 -type f -exec sed -i 's/FALSE /false /g' {} \;
@@ -36,3 +36,5 @@ find $1 -type f -exec sed -i 's/INT8 /int8_t /g' {} \;
 find $1 -type f -exec sed -i 's/INT16 /int16_t /g' {} \;
 find $1 -type f -exec sed -i 's/INT32 /int32_t /g' {} \;
 find $1 -type f -exec sed -i 's/INT64 /int64_t /g' {} \;
+find $1 -type f -exec sed -i 's/LONG /int64_t /g' {} \;
+
