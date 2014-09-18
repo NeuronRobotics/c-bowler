@@ -76,7 +76,7 @@ void serial_init(unsigned int bittimer);
  * Private helpers
  */
 uint64_t GetTimeTicks(void){
-	return (UINT64) (TimerOFcount+TCNT1);
+	return (uint64_t) (TimerOFcount+TCNT1);
 }
 
 ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt

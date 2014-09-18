@@ -80,8 +80,8 @@ void StartPDVel(uint8_t chan,float unitsPerSeCond,float ms){
         }else{
             //println_I("Starting Velocity Timed");
             float seConds = ms/1000;
-            int32_t dist = (INT32)unitsPerSeCond*(INT32)seConds;
-            int32_t delt = ((INT32) (GetPIDPosition(chan))-dist);
+            int32_t dist = (int32_t) unitsPerSeCond*(int32_t) seConds;
+            int32_t delt = ((int32_t) (GetPIDPosition(chan))-dist);
             SetPIDTimed(chan, delt, ms);
         }
 

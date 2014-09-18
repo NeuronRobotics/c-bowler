@@ -132,7 +132,7 @@ void pushPID(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *P
 	float diffTime = time-getPidGroupDataTable(chan)->lastPushedValue;
 	float diffVal  = value -getPidGroupDataTable(chan)->lastPushedTime;
 
-	tmp.Val = (INT32) (diffVal/diffTime);
+	tmp.Val = (int32_t) (diffVal/diffTime);
 	Packet->use.data[9]=tmp.byte.FB;
 	Packet->use.data[10]=tmp.byte.TB;
 	Packet->use.data[11]=tmp.byte.SB;

@@ -119,7 +119,7 @@ boolean GetBowlerPacketDebug(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
  * @return returns the number of bytes in the fifo
  */
 uint16_t getNumBytes(BYTE_FIFO_STORAGE * fifo){
-	return (UINT16)calcByteCount(fifo);
+	return (uint16_t)calcByteCount(fifo);
 }
 /**
  * get a stream of this length from the connection
