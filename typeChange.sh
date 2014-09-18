@@ -25,16 +25,24 @@ find $1 -type f -exec sed -i 's/QWORD /uint64_t /g' {} \;
 find $1 -type f -exec sed -i 's/DWORD /uint32_t /g' {} \;
 find $1 -type f -exec sed -i 's/WORD /uint16_t /g' {} \;
 
+find $1 -type f -exec sed -i 's/Ptr)uint8_t/Ptr)(uint8_t /g' {} \;
+find $1 -type f -exec sed -i 's/ocal)uint8_t/ocal)(uint8_t /g' {} \;
 find $1 -type f -exec sed -i 's/BYTE /uint8_t /g' {} \;
+find $1 -type f -exec sed -i 's/(BYTE/(uint8_t /g' {} \;
+find $1 -type f -exec sed -i 's/(BYTE)/(uint8_t) /g' {} \;
+
+find $1 -type f -exec sed -i 's/BYTE,/uint8_t,/g' {} \;
 find $1 -type f -exec sed -i 's/UINT /uint32_t /g' {} \;
 find $1 -type f -exec sed -i 's/UINT8 /uint8_t /g' {} \;
 find $1 -type f -exec sed -i 's/UINT16 /uint16_t /g' {} \;
+find $1 -type f -exec sed -i 's/(UINT16)/(uint16_t)/g' {} \;
 find $1 -type f -exec sed -i 's/UINT32 /uint32_t /g' {} \;
 find $1 -type f -exec sed -i 's/UINT64 /uint64_t /g' {} \;
 
 find $1 -type f -exec sed -i 's/INT8 /int8_t /g' {} \;
 find $1 -type f -exec sed -i 's/INT16 /int16_t /g' {} \;
 find $1 -type f -exec sed -i 's/INT32 /int32_t /g' {} \;
+find $1 -type f -exec sed -i 's/(INT32)/(int32_t)/g' {} \;
 find $1 -type f -exec sed -i 's/INT64 /int64_t /g' {} \;
 find $1 -type f -exec sed -i 's/LONG /int64_t /g' {} \;
 
