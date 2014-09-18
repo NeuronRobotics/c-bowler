@@ -458,22 +458,22 @@ void USBDeviceTasksLocal(void);
 //#pragma udata
 
 USB_VOLATILE USB_DEVICE_STATE USBDeviceState;
-USB_VOLATILE uint8_t USBActiveConfiguration;
-USB_VOLATILE uint8_t USBAlternateInterface[USB_MAX_NUM_INT];
+USB_VOLATILE BYTE USBActiveConfiguration;
+USB_VOLATILE BYTE USBAlternateInterface[USB_MAX_NUM_INT];
 volatile BDT_ENTRY *pBDTEntryEP0OutCurrent;
 volatile BDT_ENTRY *pBDTEntryEP0OutNext;
 volatile BDT_ENTRY *pBDTEntryOut[USB_MAX_EP_NUMBER+1];
 volatile BDT_ENTRY *pBDTEntryIn[USB_MAX_EP_NUMBER+1];
-USB_VOLATILE uint8_t shortPacketStatus;
-USB_VOLATILE uint8_t controlTransferState;
+USB_VOLATILE BYTE shortPacketStatus;
+USB_VOLATILE BYTE controlTransferState;
 USB_VOLATILE IN_PIPE inPipes[1];
 USB_VOLATILE OUT_PIPE outPipes[1];
-USB_VOLATILE uint8_t *pDst;
+USB_VOLATILE BYTE *pDst;
 USB_VOLATILE boolean RemoteWakeup;
-USB_VOLATILE uint8_t USTATcopy;
+USB_VOLATILE BYTE USTATcopy;
 USB_VOLATILE boolean BothEP0OutUOWNsSet;
-USB_VOLATILE uint16_t USBInMaxPacketSize[USB_MAX_EP_NUMBER]; 
-USB_VOLATILE uint8_t *USBInData[USB_MAX_EP_NUMBER];
+USB_VOLATILE WORD USBInMaxPacketSize[USB_MAX_EP_NUMBER]; 
+USB_VOLATILE BYTE *USBInData[USB_MAX_EP_NUMBER];
 
 /** USB FIXED LOCATION VARIABLES ***********************************/
 #if defined(__18CXX)
@@ -508,7 +508,7 @@ USB_VOLATILE uint8_t *USBInData[USB_MAX_EP_NUMBER];
  * Section B: EP0 Buffer Space
  *******************************************************************/
 volatile CTRL_TRF_SETUP SetupPkt;           // 8-byte only
-volatile uint8_t CtrlTrfData[USB_EP0_BUFF_SIZE];
+volatile BYTE CtrlTrfData[USB_EP0_BUFF_SIZE];
 
 /********************************************************************
  * Section C: non-EP0 Buffer Space
@@ -545,12 +545,12 @@ volatile uint8_t CtrlTrfData[USB_EP0_BUFF_SIZE];
 
 #if !defined(USB_USER_CONFIG_DESCRIPTOR)
     //Array of configuration descriptors
-    extern ROM uint8_t *ROM USB_CD_Ptr[];
+    extern ROM BYTE *ROM USB_CD_Ptr[];
 #else
     USB_USER_CONFIG_DESCRIPTOR_INCLUDE;
 #endif
 
-extern ROM uint8_t *ROM USB_SD_Ptr[];
+extern ROM BYTE *ROM USB_SD_Ptr[];
 
 /** DECLARATIONS ***************************************************/
 //#pragma code
@@ -617,7 +617,7 @@ extern ROM uint8_t *ROM USB_SD_Ptr[];
 /** Function Prototypes ********************************************/
 //External
 //This is the prototype for the required user event handler
-boolean USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, uint16_t size);
+boolean USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, WORD size);
 
 //Internal
 void USBCtrlEPService(void);
@@ -633,17 +633,17 @@ void USBStdSetCfgHandler(void);
 void USBStdGetStatusHandler(void);
 void USBStdFeatureReqHandler(void);
 void USBCtrlTrfOutHandler(void);
-boolean USBIsTxBusy(uint8_t EPNumber);
-void USBPut(uint8_t EPNum, uint8_t Data);
+boolean USBIsTxBusy(BYTE EPNumber);
+void USBPut(BYTE EPNum, BYTE Data);
 void USBEPService(void);
-void USBConfigureEndpoint(uint8_t EPNum, uint8_t direction);
+void USBConfigureEndpoint(BYTE EPNum, BYTE direction);
 
 void USBProtocolResetHandler(void);
 void USBWakeFromSuspend(void);
 void USBSuspend(void);
 void USBStallHandler(void);
-USB_HANDLE USBTransferOnePacket(uint8_t ep, uint8_t dir, BYTE* data, uint16_t len);
-void USBEnableEndpoint(uint8_t ep,uint8_t options);
+USB_HANDLE USBTransferOnePacket(BYTE ep, BYTE dir, BYTE* data, UINT16 len);
+void USBEnableEndpoint(BYTE ep,BYTE options);
 
 //DOM-IGNORE-BEGIN
 /****************************************************************************
@@ -671,7 +671,7 @@ void USBEnableEndpoint(uint8_t ep,uint8_t options);
 //DOM-IGNORE-END
 void USBDeviceInit(void)
 {
-    uint8_t i;
+    BYTE i;
 
     USBDisableInterrupts();
 
@@ -1387,7 +1387,7 @@ void USBCtrlTrfOutHandler(void)
 	    //USBCtrlEPServiceComplete().  If it was already prepared, do not want
 	    //to do anything to the BDT.
 		USBPrepareForNextSetupTrf();
-		if(BothEP0OutUOWNsSet == false) 
+		if(BothEP0OutUOWNsSet == false)
 		{
 	        pBDTEntryEP0OutNext->CNT = USB_EP0_BUFF_SIZE;
 	        pBDTEntryEP0OutNext->ADR = ConvertToPhysicalAddress(&SetupPkt);
@@ -1395,7 +1395,7 @@ void USBCtrlTrfOutHandler(void)
 		}
 		else
 		{
-			BothEP0OutUOWNsSet = false; 
+			BothEP0OutUOWNsSet = false;
 		}
     }
 }
@@ -1425,7 +1425,7 @@ void USBCtrlTrfOutHandler(void)
  *****************************************************************************/
 void USBCtrlTrfInHandler(void)
 {
-    uint8_t lastDTS;
+    BYTE lastDTS;
 
     lastDTS = pBDTEntryIn[0]->STATUS.DTS;
 
@@ -1610,7 +1610,7 @@ void USBStdFeatureReqHandler(void)
 {
     BDT_ENTRY *p;
     #if defined(__C32__)
-        uint32_t * pUEP;
+        DWORD* pUEP;
     #else
         unsigned char* pUEP;             
     #endif
@@ -1651,9 +1651,9 @@ void USBStdFeatureReqHandler(void)
     {
         inPipes[0].info.bits.busy = 1;
         if(SetupPkt.bRequest == USB_REQUEST_SET_FEATURE)
-            RemoteWakeup = true; 
+            RemoteWakeup = true;
         else
-            RemoteWakeup = false; 
+            RemoteWakeup = false;
     }//end if
 
     if((SetupPkt.bFeature == USB_FEATURE_ENDPOINT_HALT)&&
@@ -1683,7 +1683,7 @@ void USBStdFeatureReqHandler(void)
 			//If it was not a SET_FEATURE
 			//point to the appropriate UEP register
             #if defined(__C32__)
-                pUEP = (uint32_t *)(&U1EP0);
+                pUEP = (DWORD*)(&U1EP0);
                 pUEP += (SetupPkt.EPNum*4);
             #else
                 pUEP = (unsigned char*)(&U1EP0+SetupPkt.EPNum);
@@ -1825,7 +1825,7 @@ void USBStdGetStatusHandler(void)
                 CtrlTrfData[0]|=0x01;
             }
 
-            if(RemoteWakeup == true) 
+            if(RemoteWakeup == true)
             {
                 CtrlTrfData[0]|=0x02;
             }
@@ -1972,13 +1972,13 @@ void USBCtrlEPServiceComplete(void)
 				pBDTEntryEP0OutNext->CNT = USB_EP0_BUFF_SIZE;
 				pBDTEntryEP0OutNext->ADR = ConvertToPhysicalAddress(&SetupPkt);
 				pBDTEntryEP0OutNext->STATUS.Val = _USIE;           // Note: DTSEN is 0
-				BothEP0OutUOWNsSet = false; 	//Indicator flag used in USBCtrlTrfOutHandler()
+				BothEP0OutUOWNsSet = false;	//Indicator flag used in USBCtrlTrfOutHandler()
 
 				#if (USB_PING_PONG_MODE == USB_PING_PONG__EP0_OUT_ONLY) || (USB_PING_PONG_MODE == USB_PING_PONG__FULL_PING_PONG) 
 				pBDTEntryEP0OutCurrent->CNT = USB_EP0_BUFF_SIZE;
 				pBDTEntryEP0OutCurrent->ADR = ConvertToPhysicalAddress(&SetupPkt);
 				pBDTEntryEP0OutCurrent->STATUS.Val = _USIE|_BSTALL; //Prepare endpoint to accept a SETUP transaction
-				BothEP0OutUOWNsSet = true; 	//Indicator flag used in USBCtrlTrfOutHandler()
+				BothEP0OutUOWNsSet = true;	//Indicator flag used in USBCtrlTrfOutHandler()
 				#endif
 
 				/*
@@ -2136,8 +2136,8 @@ void USBCtrlTrfTxService(void)
  *****************************************************************************/
 void USBCtrlTrfRxService(void)
 {
-    uint8_t byteToRead;
-    uint8_t i;
+    BYTE byteToRead;
+    BYTE i;
 
     byteToRead = pBDTEntryEP0OutCurrent->CNT;
 
@@ -2219,7 +2219,7 @@ void USBCtrlTrfRxService(void)
  *******************************************************************/
 void USBStdSetCfgHandler(void)
 {
-    uint8_t i;
+    BYTE i;
 
     // This will generate a zero length packet
     inPipes[0].info.bits.busy = 1;            
@@ -2270,12 +2270,12 @@ void USBStdSetCfgHandler(void)
 }//end USBStdSetCfgHandler
 
 /********************************************************************
- * Function:        void USBConfigureEndpoint(uint8_t EPNum, uint8_t direction)
+ * Function:        void USBConfigureEndpoint(BYTE EPNum, BYTE direction)
  *
  * PreCondition:    None
  *
- * Input:           uint8_t EPNum - the endpoint to be configured
- *                  uint8_t direction - the direction to be configured
+ * Input:           BYTE EPNum - the endpoint to be configured
+ *                  BYTE direction - the direction to be configured
  *
  * Output:          None
  *
@@ -2286,7 +2286,7 @@ void USBStdSetCfgHandler(void)
  *
  * Note:            None
  *******************************************************************/
-void USBConfigureEndpoint(uint8_t EPNum, uint8_t direction)
+void USBConfigureEndpoint(BYTE EPNum, BYTE direction)
 {
     volatile BDT_ENTRY* handle;
 
@@ -2327,7 +2327,7 @@ void USBConfigureEndpoint(uint8_t EPNum, uint8_t direction)
 
 /*****************************************************************************************************************
   Function:
-        void USBEnableEndpoint(uint8_t ep, uint8_t options)
+        void USBEnableEndpoint(BYTE ep, BYTE options)
     
   Summary:
     This function will enable the specified endpoint with the specified
@@ -2352,8 +2352,8 @@ void USBConfigureEndpoint(uint8_t EPNum, uint8_t direction)
   Conditions:
     None
   Input:
-    uint8_t ep -       the endpoint to be configured
-    uint8_t options -  optional settings for the endpoint. The options should
+    BYTE ep -       the endpoint to be configured
+    BYTE options -  optional settings for the endpoint. The options should
                     be ORed together to form a single options string. The
                     available optional settings for the endpoint. The
                     options should be ORed together to form a single options
@@ -2374,7 +2374,7 @@ void USBConfigureEndpoint(uint8_t EPNum, uint8_t direction)
   Remarks:
     None                                                                                                          
   *****************************************************************************************************************/
-void USBEnableEndpoint(uint8_t ep, uint8_t options)
+void USBEnableEndpoint(BYTE ep, BYTE options)
 {
     //Set the options to the appropriate endpoint control register
     //*((unsigned char*)(&U1EP0+ep)) = options;
@@ -2400,13 +2400,13 @@ void USBEnableEndpoint(uint8_t ep, uint8_t options)
 }
 
 /********************************************************************
- * Function:        void USBStallEndpoint(uint8_t ep, uint8_t dir)
+ * Function:        void USBStallEndpoint(BYTE ep, BYTE dir)
  *
  * PreCondition:    None
  *
  * Input:
- *   uint8_t ep - the endpoint the data will be transmitted on
- *   uint8_t dir - the direction of the transfer
+ *   BYTE ep - the endpoint the data will be transmitted on
+ *   BYTE dir - the direction of the transfer
  *
  * Output:          None
  *
@@ -2416,7 +2416,7 @@ void USBEnableEndpoint(uint8_t ep, uint8_t options)
  *
  * Note:            None
  *******************************************************************/
-void USBStallEndpoint(uint8_t ep, uint8_t dir)
+void USBStallEndpoint(BYTE ep, BYTE dir)
 {
     BDT_ENTRY *p;
 
@@ -2451,10 +2451,10 @@ void USBStallEndpoint(uint8_t ep, uint8_t dir)
 
 /********************************************************************
  * Function:        USB_HANDLE USBTransferOnePacket(
- *                      uint8_t ep, 
- *                      uint8_t dir, 
+ *                      BYTE ep, 
+ *                      BYTE dir, 
  *                      BYTE* data, 
- *                      uint8_t len)
+ *                      BYTE len)
  *
  * PreCondition:    The pBDTEntryIn[] or pBDTEntryOut[] pointer to 
  *					the endpoint that will be used must have been 
@@ -2475,15 +2475,15 @@ void USBStallEndpoint(uint8_t ep, uint8_t dir)
  *					and initialized by the USBEnableEndpoint() function first.
  *
  * Input:
- *   uint8_t ep - the endpoint number that the data will be transmitted or 
+ *   BYTE ep - the endpoint number that the data will be transmitted or 
  *				received on
- *   uint8_t dir - the direction of the transfer
+ *   BYTE dir - the direction of the transfer
  *              This value is either OUT_FROM_HOST or IN_TO_HOST
  *   BYTE* data - For IN transactions: pointer to the RAM buffer containing 
  *				  the data to be sent to the host.
  *				  For OUT transactions: pointer to the RAM buffer that the
  *				  received data should get written to.
- *   uint8_t len - length of the data needing to be sent (for IN transactions).
+ *   BYTE len - length of the data needing to be sent (for IN transactions).
  *				For OUT transactions, the len parameter should normally be set
  *				to the endpoint size specified in the endpoint descriptor.
  *
@@ -2523,7 +2523,7 @@ void USBStallEndpoint(uint8_t ep, uint8_t dir)
  * Note:            None
  *******************************************************************/
 //static volatile BDT_ENTRY* handle;
-USB_HANDLE USBTransferOnePacket(uint8_t ep,uint8_t dir,BYTE* data,uint16_t len)
+USB_HANDLE USBTransferOnePacket(BYTE ep,BYTE dir,BYTE* data,UINT16 len)
 {
     volatile BDT_ENTRY* handle;
 
@@ -2578,7 +2578,7 @@ USB_HANDLE USBTransferOnePacket(uint8_t ep,uint8_t dir,BYTE* data,uint16_t len)
 
 /**************************************************************************
     Function:
-        void USBCancelIO(uint8_t endpoint)
+        void USBCancelIO(BYTE endpoint)
     
     Description:
         This function cancels the transfers pending on the specified endpoint.
@@ -2590,7 +2590,7 @@ USB_HANDLE USBTransferOnePacket(uint8_t ep,uint8_t dir,BYTE* data,uint16_t len)
     Precondition:
   
     Parameters:
-        uint8_t endpoint - the endpoint number you wish to cancel the transfers for
+        BYTE endpoint - the endpoint number you wish to cancel the transfers for
      
     Return Values:
         None
@@ -2599,7 +2599,7 @@ USB_HANDLE USBTransferOnePacket(uint8_t ep,uint8_t dir,BYTE* data,uint16_t len)
         None
                                                           
   **************************************************************************/
-void USBCancelIO(uint8_t endpoint)
+void USBCancelIO(BYTE endpoint)
 {
     if(USBPacketDisable == 1)
     {

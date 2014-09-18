@@ -5,7 +5,6 @@
  *      Author: hephaestus
  */
 #include "arch/pic32/USB/usb_fifo.h"
-#include <Bowler/Defines.h>
 // ******************************************************************************************************
 // ************** USB Callback Functions ****************************************************************
 // ******************************************************************************************************
@@ -347,7 +346,7 @@ void USBCBInitEP(void)
  *******************************************************************/
 void USBCBSendResume(void)
 {
-    static uint16_t delay_count;
+    static WORD delay_count;
 
     USBResumeControl = 1;                // Start RESUME signaling
 
@@ -391,14 +390,14 @@ void USBCBEP0DataReceived(void)
 #endif
 
 /*******************************************************************
- * Function:        boolean USER_USB_CALLBACK_EVENT_HANDLER(
- *                        USB_EVENT event, void *pdata, uint16_t size)
+ * Function:        BOOL USER_USB_CALLBACK_EVENT_HANDLER(
+ *                        USB_EVENT event, void *pdata, WORD size)
  *
  * PreCondition:    None
  *
  * Input:           USB_EVENT event - the type of event
  *                  void *pdata - pointer to the event data
- *                  uint16_t size - size of the event data
+ *                  WORD size - size of the event data
  *
  * Output:          None
  *
@@ -411,7 +410,7 @@ void USBCBEP0DataReceived(void)
  *
  * Note:            None
  *******************************************************************/
-boolean USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, uint16_t size)
+BYTE USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, WORD size)
 {
     switch((int)event)
     {
@@ -442,7 +441,7 @@ boolean USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, uint16_t s
         default:
             break;
     }
-    return true; 
+    return 1;
 }
 
 #if defined(USB_CDC_SET_LINE_CODING_HANDLER)

@@ -44,7 +44,7 @@ needs to be the correct length for the data type of the entry.
 
 [Configuration Descriptors]
 The configuration descriptor was changed in v2.x from a structure
-to a uint8_t array.  Given that the configuration is now a byte array
+to a BYTE array.  Given that the configuration is now a byte array
 each byte of multi-byte fields must be listed individually.  This
 means that for fields like the total size of the configuration where
 the field is a 16-bit value "64,0," is the correct entry for a
@@ -60,7 +60,7 @@ _RWU tells the USB host that this device supports Remote Wakeup.
 
 [Endpoint Descriptors]
 Like the configuration descriptor, the endpoint descriptors were 
-changed in v2.x of the stack from a structure to a uint8_t array.  As
+changed in v2.x of the stack from a structure to a BYTE array.  As
 endpoint descriptors also has a field that are multi-byte entities,
 please be sure to specify both bytes of the field.  For example, for
 the endpoint size an endpoint that is 64 bytes needs to have the size
@@ -181,7 +181,7 @@ USB_DEVICE_DESCRIPTOR device_dsc=
 };
 
 /* Configuration 1 Descriptor */
-uint8_t configDescriptor1[]={
+BYTE configDescriptor1[]={
     /* Configuration Descriptor */
     0x09,//sizeof(USB_CFG_DSC),    // Size of this descriptor in bytes
     USB_DESCRIPTOR_CONFIGURATION,                // CONFIGURATION descriptor type
@@ -267,53 +267,53 @@ uint8_t configDescriptor1[]={
 
 
 //Language code string descriptor
-struct{	uint8_t bLength;
-			uint8_t bDscType;
-			uint16_t string[1];
+struct{	BYTE bLength;
+			BYTE bDscType;
+			WORD string[1];
 }sd000={sizeof(sd000),
 		USB_DESCRIPTOR_STRING,
 		{0x0409}};
 
 //Manufacturer string descriptor
-struct{	uint8_t bLength;
-		uint8_t bDscType;
-		uint16_t string[25];
+struct{	BYTE bLength;
+		BYTE bDscType;
+		WORD string[25];
 }sd001={sizeof(sd001),
 		USB_DESCRIPTOR_STRING,
 		{'N','e','u','r','o','n',' ','R','o','b','o','t','i','c','s',' ','L','L','C'}};
 
 //Product string descriptor
-struct{	uint8_t bLength;
-		uint8_t bDscType;
-		uint16_t string[25];
+struct{	BYTE bLength;
+		BYTE bDscType;
+		WORD string[25];
 }sd002={sizeof(sd002),
 		USB_DESCRIPTOR_STRING,
 		{'D','y','I','O',' ','v','.','3'}};
 
 //Product serial number
-struct{	uint8_t bLength;
-		uint8_t bDscType;
-		uint16_t string[25];
+struct{	BYTE bLength;
+		BYTE bDscType;
+		WORD string[25];
 }sd003={sizeof(sd003),
 		USB_DESCRIPTOR_STRING,
 		{'0','0','0','0','0','0','0','0','0','0','0','0'}};
 
 //Array of configuration descriptors
-uint8_t * USB_CD_Ptr[]=
+BYTE * USB_CD_Ptr[]=
 {
-    (uint8_t *)&configDescriptor1
+    (BYTE *)&configDescriptor1
 };
 //Array of string descriptors
-uint8_t * USB_SD_Ptr[]=
+BYTE * USB_SD_Ptr[]=
 {
-    (uint8_t *)&sd000,
-    (uint8_t *)&sd001,
-    (uint8_t *)&sd002,
-    (uint8_t *)&sd003
+    (BYTE *)&sd000,
+    (BYTE *)&sd001,
+    (BYTE *)&sd002,
+    (BYTE *)&sd003
 };
 
 void WriteUSBSerialNumber(char * b){
-	uint8_t i;
+	BYTE i;
 	for (i=0;i<25;i++){
 		if (b[i]==0)
 			return;
@@ -321,13 +321,13 @@ void WriteUSBSerialNumber(char * b){
 	}
 }
 
-void SetUSB_VID_PID(uint16_t vid,uint16_t pid){
+void SetUSB_VID_PID(WORD vid,WORD pid){
 	device_dsc.idVendor=vid;
 	device_dsc.idProduct=pid;
 }
 
 void WriteUSBDeviceString(char * b){
-	uint8_t i;
+	BYTE i;
 	for (i=0;i<25;i++){
 		if (b[i]==0)
 			return;
