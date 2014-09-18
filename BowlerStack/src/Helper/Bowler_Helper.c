@@ -108,7 +108,7 @@ void copyPacket(BowlerPacket * from, BowlerPacket * to) {
 }
 
 uint32_t Bytes2Int32(uint8_t a, uint8_t b, uint8_t c, uint8_t d) {
-    return ( (((UINT32) a) << 24) + (((UINT32) b) << 16) + (((UINT32) c) << 8) + ((UINT32) d));
+    return ( (((uint32_t) a) << 24) + (((uint32_t) b) << 16) + (((uint32_t) c) << 8) + ((uint32_t) d));
 }
 
 uint8_t CheckAddress(uint8_t * one, uint8_t * two) {

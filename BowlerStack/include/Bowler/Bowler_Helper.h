@@ -19,13 +19,13 @@
 #define BOWLER_HELPER_H_
 #include "Defines.h"
 #include "Bowler_Struct_Def.h"
-unsigned short int READY(BowlerPacket * Packet,uint8_t code,uint8_t trace);
-unsigned short int ERR(BowlerPacket * Packet,uint8_t code,uint8_t trace);
+uint16_t READY(BowlerPacket * Packet,uint8_t code,uint8_t trace);
+uint16_t ERR(BowlerPacket * Packet,uint8_t code,uint8_t trace);
 
-unsigned short int GetDataLegnth(uint8_t *buffer);
+uint16_t GetDataLegnth(uint8_t *buffer);
 
-unsigned short int SetPacketLegnth(BowlerPacket * Packet,uint8_t len);
-unsigned short int GetPacketLegnth(BowlerPacket * Packet);
+uint16_t SetPacketLegnth(BowlerPacket * Packet,uint8_t len);
+uint16_t GetPacketLegnth(BowlerPacket * Packet);
 
 
 uint32_t Bytes2Int32(uint8_t a,uint8_t b,uint8_t c,uint8_t d);

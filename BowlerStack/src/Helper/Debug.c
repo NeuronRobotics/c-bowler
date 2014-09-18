@@ -201,8 +201,8 @@ void printfDEBUG_FL(float f, Print_Level l) {
     if (!okToprint(l)) {
         return;
     }
-    int32_t upper = (INT32) f; // set up the upper section of the decimal by int casting to clip  off the decimal places
-    int32_t shift = (INT32) (f * 1000.0f); //shift up the decaml places as a float 3 places
+    int32_t upper = (int32_t) f; // set up the upper section of the decimal by int casting to clip  off the decimal places
+    int32_t shift = (int32_t) (f * 1000.0f); //shift up the decaml places as a float 3 places
     int32_t clip = upper * 1000; //clip off the upper section of the decimal
     printfDEBUG_INT(upper, l);
     printfDEBUG_BYTE('.', l);
@@ -347,7 +347,7 @@ void printByteArray(uint8_t * stream, uint16_t len, Print_Level l) {
     //#endif
 }
 
-void ultoaMINE(uint32_t Value, BYTE* Buffer) {
+void ultoaMINE(uint32_t Value, uint8_t* Buffer) {
     uint8_t i;
     uint32_t Digit;
     uint32_t Divisor;

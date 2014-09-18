@@ -16,10 +16,10 @@ uint8_t  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
 uint32_t MEMORY_BASE =DefaultStartStorePhysical;
 uint32_t VirtualBase = DefaultStartStorePhysical+VirtualAddress;
 
-void FlashSwitchMemoryToBootloader(){
-    VirtualBase = BootloaderStartStorePhysical+VirtualAddress;
-    MEMORY_BASE = BootloaderStartStorePhysical;
-}
+//void FlashSwitchMemoryToBootloader(){
+//    VirtualBase = BootloaderStartStorePhysical+VirtualAddress;
+//    MEMORY_BASE = BootloaderStartStorePhysical;
+//}
 
 
 
