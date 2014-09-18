@@ -13,6 +13,8 @@
 #define VirtualAddress                      (0x80000000)
 #define DefaultStartStorePhysical            0x1D01F000//end of the chip
 
+//#define StartAppVectVirtual (BootloaderStartStorePhysical | VirtualAddress)
+
 #define LOCKBYTE					37
 
 #define FLASHSTORE					20

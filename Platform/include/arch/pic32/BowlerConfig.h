@@ -29,6 +29,7 @@
 
 	#include "USB/usb_fifo.h"
 	#include <plib.h>
+        #include "bootloader/Namespace_bcs_bootloader.h"
 
 
 	#define StartCritical()  INTDisableInterrupts();
