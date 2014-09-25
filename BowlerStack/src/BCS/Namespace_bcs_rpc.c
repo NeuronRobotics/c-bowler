@@ -119,14 +119,14 @@ NAMESPACE_LIST bcsRpc ={	rpcNSName,// The string defining the namespace
 
 
 
-boolean namespcaedAdded = false;
+boolean BcsRpcnamespcaedAdded = false;
 
 NAMESPACE_LIST * getBcsRpcNamespace(){
-	if(!namespcaedAdded){
+	if(!BcsRpcnamespcaedAdded){
 		//GET
 		addRpcToNamespace(&bcsRpc,& bcsRpc__RPC);
                 addRpcToNamespace(&bcsRpc,& bcsRpc_ARGS);
-		namespcaedAdded =true; 
+		BcsRpcnamespcaedAdded =true;
 	}
 
 	return &bcsRpc;

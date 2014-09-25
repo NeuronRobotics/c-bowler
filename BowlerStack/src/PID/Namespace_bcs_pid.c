@@ -206,10 +206,10 @@ NAMESPACE_LIST bcsPid ={	pidNSName,// The string defining the namespace
 
 
 
-boolean namespcaedAdded = false;
+boolean bcsPidnamespcaedAdded = false;
 
 NAMESPACE_LIST * getBcsPidNamespace(){
-	if(!namespcaedAdded){
+	if(!bcsPidnamespcaedAdded){
 		//GET
 		addRpcToNamespace(&bcsPid,& bcsPid_APID);
 		addRpcToNamespace(&bcsPid,& bcsPid__PID);
@@ -227,7 +227,7 @@ NAMESPACE_LIST * getBcsPidNamespace(){
 		addRpcToNamespace(&bcsPid,& bcsPid_CPID_c);
 		addRpcToNamespace(&bcsPid,& bcsPid_CPDV_c);
                 addRpcToNamespace(&bcsPid,& bcsPid_ACAL);
-		namespcaedAdded =true; 
+		bcsPidnamespcaedAdded =true;
 	}
 
 	return &bcsPid;

@@ -232,10 +232,10 @@ void RunNamespaceAsync(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(Bowle
     }
 }
 
-boolean namespcaedAdded = false;
+boolean BcsCorenamespcaedAdded = false;
 NAMESPACE_LIST * getBcsCoreNamespace(){
-	if(!namespcaedAdded){
-            namespcaedAdded =true; 
+	if(!BcsCorenamespcaedAdded){
+            BcsCorenamespcaedAdded =true;
             addRpcToNamespace(&bcsCore,& bcsCore_png);
             addRpcToNamespace(&bcsCore,& bcsCore_nms);
 	}

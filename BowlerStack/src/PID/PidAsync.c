@@ -6,10 +6,10 @@
  */
 #include "Bowler/Bowler.h"
 
-RunEveryData pid ={0,100};
+RunEveryData pidAsyncTimer ={0,100};
 
 void updatePidAsync(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
-    if(RunEvery(&pid)){
+    if(RunEvery(&pidAsyncTimer)){
         int i;
         int update = false; 
         for (i=0;i<getNumberOfPidChannels();i++){
