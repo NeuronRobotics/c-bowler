@@ -410,7 +410,7 @@ void USBCBEP0DataReceived(void)
  *
  * Note:            None
  *******************************************************************/
-BYTE USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, WORD size)
+BOOL USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, WORD size)
 {
     switch((int)event)
     {
@@ -441,7 +441,7 @@ BYTE USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, WORD size)
         default:
             break;
     }
-    return 1;
+    return TRUE;
 }
 
 #if defined(USB_CDC_SET_LINE_CODING_HANDLER)

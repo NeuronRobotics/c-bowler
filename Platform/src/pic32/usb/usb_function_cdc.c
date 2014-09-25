@@ -392,7 +392,7 @@ BYTE getsUSBUSART(char *buffer, WORD len)
     
 }//end getsUSBUSART
 
-BYTE USBUSARTRxIsReady(void){
+BOOL USBUSARTRxIsReady(void){
 	return !USBHandleBusy(CDCDataOutHandle);
 }
 
@@ -714,7 +714,7 @@ void putrsUSBUSART(const ROM char *data)
  
 void CDCTxService(void)
 {
-    USBDeviceTasksLocal();
+	USBDeviceTasksLocal();
     UINT16 byte_to_send;
     BYTE i;
     

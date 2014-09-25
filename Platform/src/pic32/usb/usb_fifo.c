@@ -22,7 +22,7 @@
  * limitations under the License.
  *
  */
-#include "arch/pic32/USB/usb.h"
+
 #include "arch/pic32/USB/usb_fifo.h"
 #include "Bowler/Bowler.h"
 
@@ -33,7 +33,7 @@ static BYTE RxTmpBuffer[BOWLER_PacketSize];
 //static BYTE privateRX[BOWLER_PacketSize];
 static BYTE TxBuffer[TxPrivateSize+1 ];
 static UINT16 gotData = 0;
-static boolean bufferSet=false;
+static BOOL bufferSet=FALSE;
 
 static WORD     txSize;
 
@@ -42,16 +42,15 @@ static WORD     txSize;
 static BYTE_FIFO_STORAGE * usb_fifo_my_store=NULL;
 static BYTE_FIFO_STORAGE * last_my_store=NULL;
 
-static boolean usbActive = true;
+static BOOL usbActive = TRUE;
 
-boolean GotUSBData(void){
+BOOL GotUSBData(void){
 	return gotData>0;
 }
 
 void printBufferState(BYTE_FIFO_STORAGE  * s){
-	println_E("\tFIFO state 0x");prHEX32((int)s,ERROR_PRINT);
-        println_E("\tTo  0x");prHEX32(((int)s+sizeof(BYTE_FIFO_STORAGE)),ERROR_PRINT);
-	println_E("\tBuffer state 0x");prHEX32((int)s->buffer,ERROR_PRINT);
+	println_E("\tFIFO state ");p_int_E((int)s);
+	println_E("\tBuffer state ");p_int_E((int)s->buffer);
 	println_E("\tBuffer size ");p_int_E((int)s->bufferSize);
 	println_E("\tBuffer count ");p_int_E((int)s->byteCount);
 	println_E("\tRead Pointer ");p_int_E((int)s->readPointer);
@@ -59,12 +58,11 @@ void printBufferState(BYTE_FIFO_STORAGE  * s){
 }
 
 BYTE_FIFO_STORAGE  * GetPICUSBFifo(void){
-	if(usb_fifo_my_store->buffer == NULL ){
+	if(usb_fifo_my_store == NULL || usb_fifo_my_store!=last_my_store){
 		setPrintLevelInfoPrint();
 		println_E("Usb storage changed!! was");printBufferState(last_my_store);
 		println_E("Is: ");printBufferState(usb_fifo_my_store);
-                if(usb_fifo_my_store->buffer == NULL )
-                    while(1);
+		while(1);
 	}
 	last_my_store=usb_fifo_my_store;
 	return usb_fifo_my_store;
@@ -76,16 +74,15 @@ void SetPICUSBFifo(BYTE_FIFO_STORAGE  * s){
 	Print_Level l = getPrintLevel();
 	setPrintLevelInfoPrint();
 	println_E("Starting To set FIFO ");
-	if(bufferSet==true)
+	if(bufferSet==TRUE)
 		return;
-	bufferSet=true;
+	bufferSet=TRUE;
 	//printBufferState(s);
 	usb_fifo_my_store=s;
 	last_my_store=s;
 	//printBufferState(GetPICUSBFifo());
 	setPrintLevel(l);
-        GetPICUSBFifo();
-        println_E("USB FIFO OK");
+
 }
 
 void usb_CDC_Serial_Init(char * DevStr,char * SerialStr,UINT16 vid,UINT16 pid){
@@ -102,7 +99,9 @@ void usb_CDC_Serial_Init(char * DevStr,char * SerialStr,UINT16 vid,UINT16 pid){
 		tris_self_power = INPUT_PIN;	// See HardwareProfile.h
 	#endif
 	USBDeviceInit();
-
+	//InitByteFifo(&store,privateRX,sizeof(privateRX));
+//	if(bufferSet==FALSE)
+//		usb_fifo_my_store=&store;
 	#if defined(USB_INTERRUPT)
         USBDeviceAttach();
     #endif
@@ -133,12 +132,12 @@ void waitForTxToBeFree(){
 	while(isUSBTxBlocked()){
 		if(RunEvery(&timeout)>0){
 			println_E("#*#*USB timeout before transmit");
-			usbActive=false;
+			usbActive=FALSE;
                         break;
 		}
 		if(USBNotOk){
 			println_E("#*#*USB Not ok");
-                        usbActive=false;
+                        usbActive=FALSE;
                         break;
 		}
 		CDCTxService();
@@ -176,11 +175,11 @@ BYTE isUSBActave(){
 }
 
 void forceOpenUSB(){
-    usbActive=true;
+    usbActive=TRUE;
 }
 
 int USBPutArray(BYTE* stream, int num){
-	if(isUSBActave()==false){
+	if(isUSBActave()==FALSE){
 		//println_I("USB inactive, bailing out");
 		return 0;
 	}
@@ -188,7 +187,7 @@ int USBPutArray(BYTE* stream, int num){
 
 	usb_Buffer_Update();
 	if(USBNotOk){
-		usbActive=false;
+		usbActive=FALSE;
 		return  0;
 	}else{
 		int packetLen = num;
@@ -222,7 +221,7 @@ int USBPutArray(BYTE* stream, int num){
 			flush();
 		}
 	}
-	return true;
+	return TRUE;
 }
 
 
@@ -240,7 +239,7 @@ WORD GetNumUSBBytes(void){
 
 void usb_Buffer_Update(void){
 	if(USBNotOk){
-		usbActive=false;
+		usbActive=FALSE;
 		return ;
 	}
 	WORD i;
@@ -252,7 +251,7 @@ void usb_Buffer_Update(void){
 				FifoAddByte(GetPICUSBFifo(),RxTmpBuffer[i], & err);
 			}while(err != FIFO_OK );
 			gotData++;
-			usbActive = true;
+			usbActive = TRUE;
 		}
 	}
 

@@ -113,7 +113,7 @@
 /** INCLUDES *******************************************************/
 #include "arch/pic32/USB/usb_fifo.h"
 
-void USBDeviceTasksLocal(void);
+
 #if defined(USB_USE_MSD)
     #include "./USB/usb_function_msd.h"
 #endif
@@ -469,9 +469,9 @@ USB_VOLATILE BYTE controlTransferState;
 USB_VOLATILE IN_PIPE inPipes[1];
 USB_VOLATILE OUT_PIPE outPipes[1];
 USB_VOLATILE BYTE *pDst;
-USB_VOLATILE boolean RemoteWakeup;
+USB_VOLATILE BOOL RemoteWakeup;
 USB_VOLATILE BYTE USTATcopy;
-USB_VOLATILE boolean BothEP0OutUOWNsSet;
+USB_VOLATILE BOOL BothEP0OutUOWNsSet;
 USB_VOLATILE WORD USBInMaxPacketSize[USB_MAX_EP_NUMBER]; 
 USB_VOLATILE BYTE *USBInData[USB_MAX_EP_NUMBER];
 
@@ -617,7 +617,7 @@ extern ROM BYTE *ROM USB_SD_Ptr[];
 /** Function Prototypes ********************************************/
 //External
 //This is the prototype for the required user event handler
-boolean USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, WORD size);
+BOOL USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, WORD size);
 
 //Internal
 void USBCtrlEPService(void);
@@ -633,7 +633,7 @@ void USBStdSetCfgHandler(void);
 void USBStdGetStatusHandler(void);
 void USBStdFeatureReqHandler(void);
 void USBCtrlTrfOutHandler(void);
-boolean USBIsTxBusy(BYTE EPNumber);
+BOOL USBIsTxBusy(BYTE EPNumber);
 void USBPut(BYTE EPNum, BYTE Data);
 void USBEPService(void);
 void USBConfigureEndpoint(BYTE EPNum, BYTE direction);
@@ -742,7 +742,64 @@ void USBDeviceInit(void)
     USBDeviceState = DETACHED_STATE;
 }
 
+//DOM-IGNORE-BEGIN
+/****************************************************************************
+  Function:
+    void USBDeviceTasks(void)
 
+  Description:
+    This function is the main state machine of the
+    USB device side stack.  This function should be
+    called periodically to receive and transmit
+    packets through the stack.  This function should
+    be called  preferably once every 100us
+    during the enumeration process.  After the
+    enumeration process this function still needs to
+    be called periodically to respond to various
+    situations on the bus but is more relaxed in its
+    time requirements.  This function should also
+    be called at least as fast as the OUT data
+    expected from the PC.
+
+  Precondition:
+    None
+
+  Parameters:
+    None
+
+  Return Values:
+    None
+
+  Remarks:
+    None
+  ***************************************************************************/
+
+//DOM-IGNORE-END
+#if !defined(__PIC32MX__)
+//#define __PIC32MX__
+#endif
+#if defined(USB_INTERRUPT)
+  #if defined(__18CXX)
+    void USBDeviceTasks(void)
+  #elif defined(__C30__)
+    //void __attribute__((interrupt,auto_psv,address(0xA800))) _USB1Interrupt()
+    void __attribute__((interrupt,auto_psv,nomips16)) _USB1Interrupt()
+  #elif defined(__PIC32MX__)
+
+    #pragma interrupt _USB1Interrupt ipl4 vector 45
+    void __attribute__((nomips16)) _USB1Interrupt( void )
+   //void __ISR(_USB_1_VECTOR, ipl5) USB1_ISR(void)
+  #endif
+#else
+#warning compiling USB Polling
+void USBDeviceTasks(void)
+
+#endif
+{
+    //StartCritical();
+    USBDeviceTasksLocal();
+    //EndCritical();
+}
 void USBDeviceTasksLocal(void){
     //INTDisableInterrupts();
     unsigned char i;
@@ -1387,7 +1444,7 @@ void USBCtrlTrfOutHandler(void)
 	    //USBCtrlEPServiceComplete().  If it was already prepared, do not want
 	    //to do anything to the BDT.
 		USBPrepareForNextSetupTrf();
-		if(BothEP0OutUOWNsSet == false)
+		if(BothEP0OutUOWNsSet == FALSE)
 		{
 	        pBDTEntryEP0OutNext->CNT = USB_EP0_BUFF_SIZE;
 	        pBDTEntryEP0OutNext->ADR = ConvertToPhysicalAddress(&SetupPkt);
@@ -1395,7 +1452,7 @@ void USBCtrlTrfOutHandler(void)
 		}
 		else
 		{
-			BothEP0OutUOWNsSet = false;
+			BothEP0OutUOWNsSet = FALSE;
 		}
     }
 }
@@ -1651,9 +1708,9 @@ void USBStdFeatureReqHandler(void)
     {
         inPipes[0].info.bits.busy = 1;
         if(SetupPkt.bRequest == USB_REQUEST_SET_FEATURE)
-            RemoteWakeup = true;
+            RemoteWakeup = TRUE;
         else
-            RemoteWakeup = false;
+            RemoteWakeup = FALSE;
     }//end if
 
     if((SetupPkt.bFeature == USB_FEATURE_ENDPOINT_HALT)&&
@@ -1825,7 +1882,7 @@ void USBStdGetStatusHandler(void)
                 CtrlTrfData[0]|=0x01;
             }
 
-            if(RemoteWakeup == true)
+            if(RemoteWakeup == TRUE)
             {
                 CtrlTrfData[0]|=0x02;
             }
@@ -1972,13 +2029,13 @@ void USBCtrlEPServiceComplete(void)
 				pBDTEntryEP0OutNext->CNT = USB_EP0_BUFF_SIZE;
 				pBDTEntryEP0OutNext->ADR = ConvertToPhysicalAddress(&SetupPkt);
 				pBDTEntryEP0OutNext->STATUS.Val = _USIE;           // Note: DTSEN is 0
-				BothEP0OutUOWNsSet = false;	//Indicator flag used in USBCtrlTrfOutHandler()
+				BothEP0OutUOWNsSet = FALSE;	//Indicator flag used in USBCtrlTrfOutHandler()
 
 				#if (USB_PING_PONG_MODE == USB_PING_PONG__EP0_OUT_ONLY) || (USB_PING_PONG_MODE == USB_PING_PONG__FULL_PING_PONG) 
 				pBDTEntryEP0OutCurrent->CNT = USB_EP0_BUFF_SIZE;
 				pBDTEntryEP0OutCurrent->ADR = ConvertToPhysicalAddress(&SetupPkt);
 				pBDTEntryEP0OutCurrent->STATUS.Val = _USIE|_BSTALL; //Prepare endpoint to accept a SETUP transaction
-				BothEP0OutUOWNsSet = true;	//Indicator flag used in USBCtrlTrfOutHandler()
+				BothEP0OutUOWNsSet = TRUE;	//Indicator flag used in USBCtrlTrfOutHandler()
 				#endif
 
 				/*
@@ -2766,63 +2823,3 @@ void USBDeviceAttach(void)
 }
 #endif  //#if defined(USB_INTERRUPT)
 /** EOF USBDevice.c *****************************************************/
-
-
-//DOM-IGNORE-BEGIN
-/****************************************************************************
-  Function:
-    void USBDeviceTasks(void)
-
-  Description:
-    This function is the main state machine of the
-    USB device side stack.  This function should be
-    called periodically to receive and transmit
-    packets through the stack.  This function should
-    be called  preferably once every 100us
-    during the enumeration process.  After the
-    enumeration process this function still needs to
-    be called periodically to respond to various
-    situations on the bus but is more relaxed in its
-    time requirements.  This function should also
-    be called at least as fast as the OUT data
-    expected from the PC.
-
-  Precondition:
-    None
-
-  Parameters:
-    None
-
-  Return Values:
-    None
-
-  Remarks:
-    None
-  ***************************************************************************/
-
-//DOM-IGNORE-END
-#if !defined(__PIC32MX__)
-//#define __PIC32MX__
-#endif
-#if defined(USB_INTERRUPT)
-  #if defined(__18CXX)
-    void USBDeviceTasks(void)
-  #elif defined(__C30__)
-    //void __attribute__((interrupt,auto_psv,address(0xA800))) _USB1Interrupt()
-    void __attribute__((interrupt,auto_psv,nomips16)) _USB1Interrupt()
-  #elif defined(__PIC32MX__)
-
-    #pragma interrupt _USB1Interrupt ipl5 vector 45
-    void __attribute__((nomips16)) _USB1Interrupt( void )
-   //void __ISR(_USB_1_VECTOR, ipl5) USB1_ISR(void)
-  #endif
-#else
-//                                                           #warning compiling USB Polling
-void USBDeviceTasks(void)
-
-#endif
-{
-    //StartCritical();
-    USBDeviceTasksLocal();
-    //EndCritical();
-}
