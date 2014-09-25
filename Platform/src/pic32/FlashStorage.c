@@ -6,6 +6,7 @@
  */
 #include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
+//#include <stddef.h>
 FLASH_STORE flash;
 
 uint32_t * stream;
@@ -16,10 +17,10 @@ uint8_t  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
 uint32_t MEMORY_BASE =DefaultStartStorePhysical;
 uint32_t VirtualBase = DefaultStartStorePhysical+VirtualAddress;
 
-//void FlashSwitchMemoryToBootloader(){
-//    VirtualBase = BootloaderStartStorePhysical+VirtualAddress;
-//    MEMORY_BASE = BootloaderStartStorePhysical;
-//}
+void FlashSwitchMemoryToBootloader(){
+    VirtualBase = BootloaderStartStorePhysical+VirtualAddress;
+    MEMORY_BASE = BootloaderStartStorePhysical;
+}
 
 
 
@@ -35,6 +36,7 @@ void SetFlashData(uint32_t * s,uint32_t size){
 }
 
 void FlashLoad(void){
+	return;
 	int i;
 	for (i=0;i<FLASHSTORE;i++){
 		flash.stream[i]=*((uint32_t *)(VirtualBase +(i*4)));
@@ -45,8 +47,9 @@ void FlashLoad(void){
 }
 
 void FlashSync(void){
+	return;
 	uint32_t i;
-        uint32_t data=0, read=0,addr=0;
+    uint32_t data=0, read=0,addr=0;
 
 	println_I("Erasing Storage page");
 	NVMErasePage( (uint32_t *) MEMORY_BASE);
