@@ -24,7 +24,7 @@ MAC_ADDR MyMAC ={{0x74,0xf7,0x26,0x01,0x01,0x01}} ;
 
 NAMESPACE_LIST * getBcsRpcNamespace();
 
-static float lastPacketTime;
+float lastPacketTime;
 
 float getLastPacketTime(){
 	if(lastPacketTime > getMs())

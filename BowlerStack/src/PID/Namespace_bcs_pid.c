@@ -7,7 +7,7 @@
 
 #include "Bowler/Bowler.h"
 
-static const char pidNSName[]   = "bcs.pid.*;1.0;;";
+const char pidNSName[]   = "bcs.pid.*;1.0;;";
 
 
 boolean pidAsyncEventCallbackLocal(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
@@ -20,7 +20,7 @@ boolean pidAsyncEventCallbackLocal(BowlerPacket *Packet,boolean (*pidAsyncCallba
 }
 
 //Get RPC's
-static RPC_LIST bcsPid_APID={	BOWLER_GET,
+RPC_LIST bcsPid_APID={	BOWLER_GET,
                                 "apid",
                                 &processPIDGet,
                                 NULL,// Calling arguments
@@ -29,7 +29,7 @@ static RPC_LIST bcsPid_APID={	BOWLER_GET,
 													0}),// Response arguments
                                 NULL //Termination
 };
-static RPC_LIST bcsPid__PID={	BOWLER_GET,
+RPC_LIST bcsPid__PID={	BOWLER_GET,
                                 "_pid",
                                 &processPIDGet,
                                 ((const char [2]){	BOWLER_I08,//channel
@@ -40,7 +40,7 @@ static RPC_LIST bcsPid__PID={	BOWLER_GET,
                                 			0}),// Response arguments
                                 NULL //Termination
 };
-static RPC_LIST bcsPid_CPID={	BOWLER_GET,
+RPC_LIST bcsPid_CPID={	BOWLER_GET,
                                 "cpid",
                                 &processPIDGet,
                                 ((const char [2]){	BOWLER_I08,//channel
@@ -62,7 +62,7 @@ static RPC_LIST bcsPid_CPID={	BOWLER_GET,
                                                    0}),// Response arguments
                                 NULL //Termination
 };
-static RPC_LIST bcsPid_CPDV={	BOWLER_GET,
+RPC_LIST bcsPid_CPDV={	BOWLER_GET,
                                 "cpdv",
                                 &processPIDGet,
                                 ((const char [2]){	BOWLER_I08,//channel
@@ -74,7 +74,7 @@ static RPC_LIST bcsPid_CPDV={	BOWLER_GET,
                                                    0}),// Response arguments
                                 NULL //Termination
 };
-static RPC_LIST bcsPid_GPDC={	BOWLER_GET,
+RPC_LIST bcsPid_GPDC={	BOWLER_GET,
                                 "gpdc",
                                 &processPIDGet,
                                 NULL,// Calling arguments
@@ -85,7 +85,7 @@ static RPC_LIST bcsPid_GPDC={	BOWLER_GET,
 };
 
 //Post RPC's
-static RPC_LIST bcsPid_APID_p={	BOWLER_POST,
+RPC_LIST bcsPid_APID_p={	BOWLER_POST,
                                 "apid",
                                 &processPIDPost,
                                 ( (const char [3]){	BOWLER_I32,//Time in ms for transition to take
@@ -97,7 +97,7 @@ static RPC_LIST bcsPid_APID_p={	BOWLER_POST,
 							0}),// Response arguments,// Response arguments
                                 NULL //Termination
 };
-static RPC_LIST bcsPid__PID_p={	BOWLER_POST,
+RPC_LIST bcsPid__PID_p={	BOWLER_POST,
                                 "_pid",
                                 &processPIDPost,
                                 ( (const char [4]){	BOWLER_I08,//channel
@@ -110,7 +110,7 @@ static RPC_LIST bcsPid__PID_p={	BOWLER_POST,
 							0}),// Response arguments,// Response arguments
                                 NULL //Termination
 };
-static RPC_LIST bcsPid__VPD={	BOWLER_POST,
+RPC_LIST bcsPid__VPD={	BOWLER_POST,
                                 "_vpd",
                                 &processPIDPost,
                                 ( (const char [4]){	BOWLER_I08,//channel
@@ -123,7 +123,7 @@ static RPC_LIST bcsPid__VPD={	BOWLER_POST,
 							0}),// Response arguments,// Response arguments
                                 NULL //Termination
 };
-static RPC_LIST bcsPid_RPID={	BOWLER_POST,
+RPC_LIST bcsPid_RPID={	BOWLER_POST,
                                 "rpid",
                                 &processPIDPost,
                                 ( (const char [3]){	BOWLER_I08,//channel
@@ -136,7 +136,7 @@ static RPC_LIST bcsPid_RPID={	BOWLER_POST,
                                 NULL //Termination
 };
 
-static RPC_LIST bcsPid_ACAL={	BOWLER_CRIT,
+RPC_LIST bcsPid_ACAL={	BOWLER_CRIT,
                                 "acal",
                                 &processRunAutoCal,
                                 ( (const char [2]){	BOWLER_I08,//group
@@ -149,7 +149,7 @@ static RPC_LIST bcsPid_ACAL={	BOWLER_CRIT,
 };
 
 //Critical
-static RPC_LIST bcsPid_KPID={	BOWLER_CRIT,
+RPC_LIST bcsPid_KPID={	BOWLER_CRIT,
                                 "kpid",
                                 &processPIDCrit,
                                 NULL,// no arguments, kills all PID's
@@ -159,7 +159,7 @@ static RPC_LIST bcsPid_KPID={	BOWLER_CRIT,
 							0}),// Response arguments,// Response arguments
                                 NULL //Termination
 };
-static RPC_LIST bcsPid_CPID_c={	BOWLER_CRIT,
+RPC_LIST bcsPid_CPID_c={	BOWLER_CRIT,
                                 "cpid",
                                 &processPIDCrit,
                                 ((const char [14]){	BOWLER_I08,//channel
@@ -182,7 +182,7 @@ static RPC_LIST bcsPid_CPID_c={	BOWLER_CRIT,
 							0}),// Response arguments,// Response arguments
                                 NULL //Termination
 };
-static RPC_LIST bcsPid_CPDV_c={	BOWLER_CRIT,
+RPC_LIST bcsPid_CPDV_c={	BOWLER_CRIT,
                                 "cpdv",
                                 &processPIDCrit,
                                 ((const char [4]){	BOWLER_I08,//channel
@@ -198,7 +198,7 @@ static RPC_LIST bcsPid_CPDV_c={	BOWLER_CRIT,
 
 
 
-static NAMESPACE_LIST bcsPid ={	pidNSName,// The string defining the namespace
+NAMESPACE_LIST bcsPid ={	pidNSName,// The string defining the namespace
                                 NULL,// the first element in the RPC list
                                 &pidAsyncEventCallbackLocal,// async for this namespace
                                 NULL// no initial elements to the other namesapce field.
@@ -206,7 +206,7 @@ static NAMESPACE_LIST bcsPid ={	pidNSName,// The string defining the namespace
 
 
 
-static boolean namespcaedAdded = false; 
+boolean namespcaedAdded = false;
 
 NAMESPACE_LIST * getBcsPidNamespace(){
 	if(!namespcaedAdded){

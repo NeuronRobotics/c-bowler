@@ -21,7 +21,6 @@ extern MAC_ADDR MyMAC __attribute__((section(".scs_global_var")));
 #else
 extern MAC_ADDR MyMAC;
 #endif
-//static uint8_t i;
 
 void LoadCorePacket(BowlerPacket * Packet) {
     //SetColor(0,1,0);

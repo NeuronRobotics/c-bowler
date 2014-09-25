@@ -7,7 +7,7 @@
 
 #include "Bowler/Bowler.h"
 void clearByteFifo(BYTE_FIFO_STORAGE * fifo);
-//static uint32_t i;
+
 //const char * fifoinit = "Initializing FIFO, Buffer Size: ";
 //const char * error = "@##ERROR fifo is overflown! Size, buffer: ";
 

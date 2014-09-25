@@ -6,7 +6,7 @@
  */
 #include "Bowler/Bowler.h"
 
-static RunEveryData pid ={0,100};
+RunEveryData pid ={0,100};
 
 void updatePidAsync(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
     if(RunEvery(&pid)){

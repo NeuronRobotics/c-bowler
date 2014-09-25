@@ -22,25 +22,25 @@ Print_Level level = NO_PRINT;
 
 #define bufferSize 10
 
-static boolean DebugINIT = false;
+boolean DebugINIT = false;
 const char AsciiHex[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 //#if !defined(NO_PRINTING)
-//static const char  packet[] = "\tPacket = \t";
-//static const char get[] = "Get";
-//static const char post[]="Post ";
-//static const char stat[]= "Status";
-//static const char crit[]="Critical";
-//static const char unknown[] = "Unknown ";
-//static const char ver[] ="\tVersion = \t";
-//static const char mac[] = "\tMAC = \t\t";
-//static const char meth[] = "\tMethod = \t";
-//static const char id[] = "\tNamespace Index = \t";
-//static const char dataSise[] ="\tData Size = \t";
-//static const char crcval []= "\tCRC Value = \t";
-//	static const char dval[] = "\tData = \t\t";
-//	static const char rpc []="\tRPC code = \t";
-//	static const char nodata[] = " no data";
-//static const char streamsize[] = " Stream: size=";
+//const char  packet[] = "\tPacket = \t";
+//const char get[] = "Get";
+//const char post[]="Post ";
+//const char stat[]= "Status";
+//const char crit[]="Critical";
+//const char unknown[] = "Unknown ";
+//const char ver[] ="\tVersion = \t";
+//const char mac[] = "\tMAC = \t\t";
+//const char meth[] = "\tMethod = \t";
+//const char id[] = "\tNamespace Index = \t";
+//const char dataSise[] ="\tData Size = \t";
+//const char crcval []= "\tCRC Value = \t";
+//	const char dval[] = "\tData = \t\t";
+//	const char rpc []="\tRPC code = \t";
+//	const char nodata[] = " no data";
+//const char streamsize[] = " Stream: size=";
 //#endif
 
 const char errorColor[] = "\033[31m";
@@ -48,7 +48,7 @@ const char infoColor[] = "\033[94m";
 const char warningColor[] = "\033[93m";
 //const char debugColor[]="\033[94m";
 const char clearErrorColor[] = "\033[39m";
-static int (*sendToStream)(uint8_t *, int);
+int (*sendToStream)(uint8_t *, int);
 
 void setColor(Print_Level l) {
     switch (l) {

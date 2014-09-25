@@ -89,9 +89,9 @@ void usb_CDC_Serial_Init(char * DevStr,char * SerialStr,UINT16 vid,UINT16 pid){
 
 	//unsigned char i;
 	DelayMs(100);
-	SetUSB_VID_PID(vid,pid);
-	WriteUSBSerialNumber(SerialStr);
-	WriteUSBDeviceString(DevStr);
+	//SetUSB_VID_PID(vid,pid);
+	//WriteUSBSerialNumber(SerialStr);
+	//WriteUSBDeviceString(DevStr);
 	#if defined(USE_USB_BUS_SENSE_IO)
 		tris_usb_bus_sense = INPUT_PIN; // See HardwareProfile.h
 	#endif

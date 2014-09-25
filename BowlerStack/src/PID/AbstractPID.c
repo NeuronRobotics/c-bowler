@@ -10,8 +10,8 @@
 
 int number_of_pid_groups = 0;
 
-static AbsPID * pidGroupsInternal = NULL;
-static PD_VEL * velData = NULL;
+AbsPID * pidGroupsInternal = NULL;
+PD_VEL * velData = NULL;
 
 float (*getPosition)(int);
 void (*setOutputLocal)(int, float);
@@ -24,7 +24,7 @@ PidLimitEvent* (*checkPIDLimitEvents)(uint8_t group);
 
 
 
-//static BowlerPacket packetTemp;
+//BowlerPacket packetTemp;
 
 void OnPidConfigure(int v) {
     onPidConfigureLocal(v);

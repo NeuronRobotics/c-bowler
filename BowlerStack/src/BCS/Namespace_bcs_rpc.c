@@ -2,7 +2,7 @@
 #if !defined(NULL)
 	#define NULL 0
 #endif
-static const char rpcNSName[]   = "bcs.rpc.*;0.3;;";
+const char rpcNSName[]   = "bcs.rpc.*;0.3;;";
 
 
 boolean _rpc(BowlerPacket * Packet){
@@ -78,7 +78,7 @@ boolean _rpcArgs(BowlerPacket * Packet){
 	return true; 
 }
 //Get RPC's
-static RPC_LIST bcsRpc__RPC={	.bowlerMethod=BOWLER_GET,
+RPC_LIST bcsRpc__RPC={	.bowlerMethod=BOWLER_GET,
                                 .rpc="_rpc",
                                 .callback=&_rpc,
                                 .arguments=((const char [3]){BOWLER_I08,
@@ -93,7 +93,7 @@ static RPC_LIST bcsRpc__RPC={	.bowlerMethod=BOWLER_GET,
                                 .next = NULL //Termination
 };
 //Get RPC's
-static RPC_LIST bcsRpc_ARGS={	.bowlerMethod=BOWLER_GET,
+RPC_LIST bcsRpc_ARGS={	.bowlerMethod=BOWLER_GET,
                                 .rpc="args",
                                 .callback=&_rpcArgs,
                                 .arguments=((const char [3]){BOWLER_I08,//namespace index
@@ -111,7 +111,7 @@ static RPC_LIST bcsRpc_ARGS={	.bowlerMethod=BOWLER_GET,
 };
 
 
-static NAMESPACE_LIST bcsRpc ={	rpcNSName,// The string defining the namespace
+NAMESPACE_LIST bcsRpc ={	rpcNSName,// The string defining the namespace
                                 NULL,// the first element in the RPC list
                                 NULL,// async for this namespace
                                 NULL// no initial elements to the other namesapce field.
@@ -119,7 +119,7 @@ static NAMESPACE_LIST bcsRpc ={	rpcNSName,// The string defining the namespace
 
 
 
-static boolean namespcaedAdded = false; 
+boolean namespcaedAdded = false;
 
 NAMESPACE_LIST * getBcsRpcNamespace(){
 	if(!namespcaedAdded){

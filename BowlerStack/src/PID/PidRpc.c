@@ -17,9 +17,6 @@
 #include "Bowler/Bowler.h"
 //#include "arch/pic32/BowlerConfig.h"
 
-//static INT32_UNION PID_Temp;
-//static float time;
-
 
 void GetConfigPDVelocity(BowlerPacket * Packet){
 //   2700	      4	      8	   2712	    a98	output/o/PidRpc.o
