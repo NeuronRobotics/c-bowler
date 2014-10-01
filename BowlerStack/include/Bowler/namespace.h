@@ -17,15 +17,15 @@ typedef struct  _RPC_LIST{
 	//This is the bowler method for this RPC
 	uint8_t bowlerMethod;
 	//This is the 4 byte code for of the RPC
-	const char * rpc;
+	const char  rpc[4];
 	//This is the callback function pointer for execution of the method
 	packetEventCallback * callback;
         //This is the array of argument data types
-	const char * arguments;
+	const char  arguments [20 ];
         //This is the bowler method for this RPC
 	uint8_t responseMethod;
         //This is the array of argument data types
-	const char * responseArguments;
+	const char responseArguments[20 ];
         
 	//This is the linked list field
 	struct _RPC_LIST * next;

@@ -16,20 +16,20 @@ char coreName[] = "bcs.core.*;0.3;;";
 RPC_LIST bcsCore_nms={	BOWLER_GET,
                                 "_nms",
                                 &_nms,
-                                ((const char [2]){  BOWLER_I08,
-                                                    0}),// Calling arguments
+                                {  BOWLER_I08,
+                                                    0},// Calling arguments
                                 BOWLER_POST,// response method
-                                ((const char [3]){  BOWLER_ASCII,
+                               {  BOWLER_ASCII,
                                                     BOWLER_I08,
-                                                    0}),// Response arguments
+                                                    0},// Response arguments
                                 NULL //Termination
 };
 RPC_LIST bcsCore_png={	BOWLER_GET,
                                 "_png",
                                 &_png,
-                                NULL,// Calling arguments
+                                {0},// Calling arguments
                                 BOWLER_POST,// response method
-                                NULL,// Response arguments
+                                {0},// Response arguments
                                 NULL //Termination
 };
 
