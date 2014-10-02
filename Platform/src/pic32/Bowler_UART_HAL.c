@@ -46,7 +46,7 @@ void newByteUartHal(){
 	
 }
 
-void __ISR(_UART_1_VECTOR, ipl7) U1_ISR(void){
+void __ISR(_UART_1_VECTOR, IPL7AUTO) U1_ISR(void){
 	//StartCritical();
 	//int tick =8;
 	if (INTGetFlag(INT_SOURCE_UART_RX(UART1))){

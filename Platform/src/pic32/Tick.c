@@ -199,7 +199,7 @@ float TickGetMS(void)
 
 
 //void __ISR(_TIMER_1_VECTOR, TICKIPL) Timer1Handler(void)
-void __ISR(_TIMER_1_VECTOR, ipl7) Timer1Handler(void)
+void __ISR(_TIMER_1_VECTOR, IPL7AUTO) Timer1Handler(void)
 {
         //mPORTDToggleBits(BIT_3);
 	//StartCritical();

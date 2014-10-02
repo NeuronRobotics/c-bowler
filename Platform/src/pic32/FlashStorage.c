@@ -36,7 +36,7 @@ void SetFlashData(uint32_t * s,uint32_t size){
 }
 
 void FlashLoad(void){
-	return;
+	//return;
 	int i;
 	for (i=0;i<FLASHSTORE;i++){
 		flash.stream[i]=*((uint32_t *)(VirtualBase +(i*4)));
@@ -47,9 +47,9 @@ void FlashLoad(void){
 }
 
 void FlashSync(void){
-	return;
+	//return;
 	uint32_t i;
-    uint32_t data=0, read=0,addr=0;
+        uint32_t data=0, read=0,addr=0;
 
 	println_I("Erasing Storage page");
 	NVMErasePage( (uint32_t *) MEMORY_BASE);
