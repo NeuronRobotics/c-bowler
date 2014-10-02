@@ -11,7 +11,7 @@
 int number_of_pid_groups = 0;
 
 AbsPID * pidGroupsInternal = NULL;
-PD_VEL * velData = NULL;
+
 
 float (*getPosition)(int);
 void (*setOutputLocal)(int, float);
@@ -34,20 +34,30 @@ int getNumberOfPidChannels() {
     return number_of_pid_groups;
 }
 
-PD_VEL * getPidVelocityDataTable(int group) {
-    if (velData == NULL) {
+INTERPOLATE_DATA * getPidInterpolationDataTable(int group) {
+    if (pidGroupsInternal == NULL|| group<0 || group >= number_of_pid_groups) {
         println_E("Velocity data table is null");
-        return NULL;
+        while(1);
     }
-    return &velData[group];
+    return &pidGroupsInternal[group].interpolate;
+}
+
+PD_VEL * getPidVelocityDataTable(int group) {
+    if (pidGroupsInternal == NULL|| group<0 || group >= number_of_pid_groups) {
+        println_E("Velocity data table is null");
+        while(1);
+    }
+    return &pidGroupsInternal[group].vel;
 }
 
 AbsPID * getPidGroupDataTable(int group) {
-    if (pidGroupsInternal == NULL) {
+    if (pidGroupsInternal == NULL || group<0 || group >= number_of_pid_groups) {
         println_E("PID data table is null");
-        return NULL;
+        while(1);
     }
-
+    // Internal reference stores the address of the base of the array
+    // Add to that the size of the struct times the index. THis should create
+    // a pointer to the address of this specific array address
     return &pidGroupsInternal[group];
 }
 
@@ -56,8 +66,8 @@ boolean isPidEnabled(uint8_t i) {
 }
 
 void SetPIDEnabled(uint8_t index, boolean enabled) {
-
-    getPidGroupDataTable(index)->config.Enabled = enabled;
+    AbsPID * tmp = getPidGroupDataTable(index);
+    tmp->config.Enabled = enabled;
 }
 
 void SetControllerMath(void (*math)(AbsPID *, float)) {
@@ -67,14 +77,13 @@ void SetControllerMath(void (*math)(AbsPID *, float)) {
         MathCalculationPosition = &RunAbstractPIDCalc;
 }
 
-void InitilizePidController(AbsPID * groups, PD_VEL * vel, int numberOfGroups,
+void InitilizePidController(AbsPID * groups, int numberOfGroups,
         float (*getPositionPtr)(int),
         void (*setOutputPtr)(int, float),
         int (*resetPositionPtr)(int, int),
         void (*onPidConfigurePtr)(int),
         PidLimitEvent* (*checkPIDLimitEventsPtr)(uint8_t group)) {
     if (groups == 0 ||
-            vel == 0 ||
             getPositionPtr == 0 ||
             setOutputPtr == 0 ||
             resetPositionPtr == 0 ||
@@ -83,21 +92,22 @@ void InitilizePidController(AbsPID * groups, PD_VEL * vel, int numberOfGroups,
         println("Null pointer exception in PID Configure", ERROR_PRINT);
         while (1);
     }
-    pidGroupsInternal = groups;
+    pidGroupsInternal =groups;
     number_of_pid_groups = numberOfGroups;
     getPosition = getPositionPtr;
     setOutputLocal = setOutputPtr;
     resetPosition = resetPositionPtr;
     onPidConfigureLocal = onPidConfigurePtr;
     checkPIDLimitEvents = checkPIDLimitEventsPtr;
-    velData = vel;
     SetControllerMath(&RunAbstractPIDCalc);
     int i;
 
     for (i = 0; i < numberOfGroups; i++) {
         int enabled = getPidGroupDataTable(i)->config.Enabled;
         pidReset(i, 0);
-        getPidGroupDataTable(i)->config.Enabled = enabled;
+        //getPidGroupDataTable(i)->config.Enabled = enabled;
+        SetPIDEnabled(i, enabled);
+        println_I("PID ");p_int_I(i);print_I(" enabled");
     }
 }
 
@@ -142,7 +152,7 @@ uint8_t SetPIDTimed(uint8_t chan, float val, float ms) {
     //println_I("@#@# PID channel Set chan=");p_int_I(chan);print_I(" setpoint=");p_int_I(val);print_I(" time=");p_fl_I(ms);
     if (chan >= getNumberOfPidChannels())
         return false;
-    velData[chan].enabled = false;
+    getPidVelocityDataTable(chan)->enabled = false;
     return SetPIDTimedPointer(getPidGroupDataTable(chan), val, GetPIDPosition(chan), ms);
 }
 
@@ -177,8 +187,8 @@ float pidResetNoStop(uint8_t chan, int32_t val) {
     float time = getMs();
     data->lastPushedValue = val;
     InitAbsPIDWithPosition(getPidGroupDataTable(chan), data->config.K.P, data->config.K.I, data->config.K.D, time, val);
-    velData[chan].lastPosition = val;
-    velData[chan].lastTime = time;
+    getPidVelocityDataTable(chan)->lastPosition = val;
+    getPidVelocityDataTable(chan)->lastTime = time;
     return val;
 }
 
@@ -194,7 +204,7 @@ void pidReset(uint8_t chan, int32_t val) {
     data->config.Enabled = true; //Ensures output enabled to stop motors
     data->Output = 0.0;
     setOutput(chan, data->Output);
-    velData[chan].enabled = enabled;
+    getPidVelocityDataTable(chan)->enabled = enabled;
 }
 
 void InitAbsPID(AbsPID * state, float KP, float KI, float KD, float time) {
@@ -243,7 +253,7 @@ void RunPIDControl() {
     for (i = 0; i < getNumberOfPidChannels(); i++) {
         getPidGroupDataTable(i)->CurrentState = getPosition(i) - getPidGroupDataTable(i)->config.offset;
         if (getPidGroupDataTable(i)->config.Enabled == true) {
-            getPidGroupDataTable(i)->SetPoint = interpolate(&pidGroupsInternal[i].interpolate, getMs());
+            getPidGroupDataTable(i)->SetPoint = interpolate(getPidInterpolationDataTable(i), getMs());
             MathCalculationPosition(getPidGroupDataTable(i), getMs());
             if (GetPIDCalibrateionState(i) <= CALIBRARTION_DONE) {
                 setOutput(i, getPidGroupDataTable(i)->Output);
