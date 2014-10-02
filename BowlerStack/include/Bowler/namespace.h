@@ -58,14 +58,5 @@ void RunNamespaceAsync(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(Bowle
 //bcs.safe
 #define SAFE					0x65666173 // 'safe'  Get/Set the safe-mode parameters
 
-typedef struct  _NAMESPACE{
-		unsigned char len;
-		const unsigned char * name;
-} NAMESPACE;
-
-typedef struct  _NAMESPACE_SET{
-		unsigned char numNamespaces;
-		NAMESPACE  names[8];
-} NAMESPACE_SET;
 
 #endif /* NAMESPACE_H_ */
