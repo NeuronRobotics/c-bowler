@@ -73,9 +73,9 @@ void __attribute__((nomips16)) _general_exception_handler() {
 }
 
 static BYTE_FIFO_STORAGE storeUSB;
-static uint8_t privateRXUSB[BOWLER_PacketSize * 2];
-static BYTE_FIFO_STORAGE storeUART;
-static uint8_t privateRXUART[BOWLER_PacketSize * 2];
+static uint8_t privateRXUSB[BOWLER_PacketSize ];
+//static BYTE_FIFO_STORAGE storeUART;
+//static uint8_t privateRXUART[BOWLER_PacketSize * 2];
 
 static boolean init = false;
 
@@ -92,21 +92,21 @@ void disableSerialComs(boolean state) {
 void Pic32_Bowler_HAL_Init(void) {
 
     init = true;
-    println_W("Init ADC");
-    int i = 0;
-    for (i = 0; i < 16; i++) InitADCHardware(i);
-    measureAdcOffset();
+//    println_W("Init ADC");
+//    int i = 0;
+//    for (i = 0; i < 16; i++) InitADCHardware(i);
+//    measureAdcOffset();
     println_W("Init USB fifo");
     InitByteFifo(&storeUSB, privateRXUSB, sizeof (privateRXUSB));
-    println_W("Init UART fifo");
-    InitByteFifo(&storeUART, privateRXUART, sizeof (privateRXUART));
-    println_W("Setting Serial FIFO buffer");
-    SetPICUARTFifo(&storeUART);
+    //println_W("Init UART fifo");
+    //InitByteFifo(&storeUART, privateRXUART, sizeof (privateRXUART));
+    //println_W("Setting Serial FIFO buffer");
+   // SetPICUARTFifo(&storeUART);
     println_W("Setting USB FIFO buffer");
     SetPICUSBFifo(&storeUSB);
 
-    println_W("Init UART hal");
-    Pic32UART_HAL_INIT(PRINT_BAUD);
+    //println_W("Init UART hal");
+    //Pic32UART_HAL_INIT(PRINT_BAUD);
     TickInit();
 
     println_W("Pic32 is initialized...");
@@ -199,10 +199,10 @@ void Get_HAL_Packet(uint8_t * packet, uint16_t size) {
             return;
     }
 
-    if (uartComs) {
-        if (FifoGetByteStream(&storeUART, packet, size) != 0)
-            return;
-    }
+//    if (uartComs) {
+//        if (FifoGetByteStream(&storeUART, packet, size) != 0)
+//            return;
+//    }
     print_E("Hal reported error in retriving packet __FILE__");
     print_E(__FILE__);
 }
@@ -232,12 +232,12 @@ uint16_t Get_HAL_Byte_Count() {
         return FifoGetByteCount(&storeUSB);
     } else {
         //println_I("Getting the UART bytes");
-        if (Pic32Get_UART_Byte_Count() > 0) {
-            //println_I("Found the UART bytes");
-            if (!disableSerial)
-                uartComs = true;
-            return FifoGetByteCount(&storeUART);
-        }
+//        if (Pic32Get_UART_Byte_Count() > 0) {
+//            //println_I("Found the UART bytes");
+//            if (!disableSerial)
+//                uartComs = true;
+//            return FifoGetByteCount(&storeUART);
+//        }
     }
     return 0;
 }
@@ -249,9 +249,9 @@ boolean GetBowlerPacket_arch(BowlerPacket * Packet) {
     if (usbComs)
         if (GetBowlerPacketDebug(Packet, &storeUSB))
             return true;
-    if (uartComs)
-        if (GetBowlerPacketDebug(Packet, &storeUART))
-            return true;
+//    if (uartComs)
+//        if (GetBowlerPacketDebug(Packet, &storeUART))
+//            return true;
     return false;
 }
 

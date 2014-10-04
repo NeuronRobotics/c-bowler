@@ -5,8 +5,8 @@
 //static void setHeartBeatState(boolean hb, int time);
 static boolean resetFlag=false;
 static char safeNSName[] = "bcs.bootloader.*;0.3;;";
-uint8_t core0str[]="\npic32mx440f128h";
-uint8_t core1str[]="\navr_atmegaXX4p_";
+uint8_t core0str[]="pic32mx440f128h";
+uint8_t core1str[]="avr_atmegaXX4p_";
 static uint8_t avrID[7];
 
 void callBootloaderReset(){

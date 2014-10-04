@@ -105,13 +105,13 @@ void avrSPIProg(BowlerPacket * Packet){
 
 uint8_t avrID[]={0,0,0};
 uint8_t getVendorCode(void){
-#if defined(DYIO)
+//#if defined(DYIO)
 	if(avrID[0]!=0x1E)
 		avrID[0]= getCommand(readVendorCode);
 	return avrID[0];
-#else
-	return 0x1E;
-#endif
+//#else
+//	return 0x1E;
+//#endif
 }
 
 
