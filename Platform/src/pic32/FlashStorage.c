@@ -17,6 +17,10 @@ uint8_t  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
 uint32_t MEMORY_BASE =DefaultStartStorePhysical;
 uint32_t VirtualBase = DefaultStartStorePhysical+VirtualAddress;
 
+boolean disableFlash =false;
+
+
+
 void FlashSwitchMemoryToBootloader(){
     VirtualBase = BootloaderStartStorePhysical+VirtualAddress;
     MEMORY_BASE = BootloaderStartStorePhysical;
@@ -36,14 +40,15 @@ void SetFlashData(uint32_t * s,uint32_t size){
 }
 
 void FlashLoad(void){
-	//return;
-	int i;
-	for (i=0;i<FLASHSTORE;i++){
-		flash.stream[i]=*((uint32_t *)(VirtualBase +(i*4)));
-	}
-        for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
-		stream[i-FLASHSTORE]=*((uint32_t *)(VirtualBase +(i*4)));
-	}
+    if(disableFlash == true)
+	return;
+    int i;
+    for (i=0;i<FLASHSTORE;i++){
+            flash.stream[i]=*((uint32_t *)(VirtualBase +(i*4)));
+    }
+    for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
+            stream[i-FLASHSTORE]=*((uint32_t *)(VirtualBase +(i*4)));
+    }
 }
 
 void FlashSync(void){
@@ -52,20 +57,24 @@ void FlashSync(void){
         uint32_t data=0, read=0,addr=0;
 
 	println_I("Erasing Storage page");
-	NVMErasePage( (uint32_t *) MEMORY_BASE);
+        if(disableFlash==false)
+            NVMErasePage( (uint32_t *) MEMORY_BASE);
 	println_I("Writing new data Storage page");
 	for (i=0;i<FLASHSTORE;i++){
+            if(disableFlash==false)
 		NVMWriteWord((uint32_t *)(VirtualBase +(i*4)), flash.stream[i]);
 	}
         for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
                 data = stream[i-FLASHSTORE];
                 addr = (VirtualBase +(i*4));
-                NVMWriteWord((uint32_t *)(addr), data );
-                read=*((uint32_t *)(addr));
-                if(data != read){
-                    println_E("Data write failed! ");prHEX32(read,ERROR_PRINT);
-                    print_E(" expected ");prHEX32(data,ERROR_PRINT);
-                    print_E(" at ");prHEX32(addr,ERROR_PRINT);
+                if(disableFlash==false){
+                    NVMWriteWord((uint32_t *)(addr), data );
+                    read=*((uint32_t *)(addr));
+                    if(data != read){
+                        println_E("Data write failed! ");prHEX32(read,ERROR_PRINT);
+                        print_E(" expected ");prHEX32(data,ERROR_PRINT);
+                        print_E(" at ");prHEX32(addr,ERROR_PRINT);
+                    }
                 }
         }
 	println_I("Storage synced");
