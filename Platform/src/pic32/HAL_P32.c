@@ -7,7 +7,7 @@
 #include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 
-static enum {
+enum {
     EXCEP_IRQ = 0, // interrupt
     EXCEP_AdEL = 4, // address error exception (load or ifetch)
     EXCEP_AdES, // address error exception (store)
@@ -72,26 +72,26 @@ void __attribute__((nomips16)) _general_exception_handler() {
     Reset();
 }
 
-static BYTE_FIFO_STORAGE storeUSB;
-static uint8_t privateRXUSB[BOWLER_PacketSize ];
+BYTE_FIFO_STORAGE storeUSB;
+uint8_t privateRXUSB[BOWLER_PacketSize ];
 //static BYTE_FIFO_STORAGE storeUART;
 //static uint8_t privateRXUART[BOWLER_PacketSize * 2];
 
-static boolean init = false;
+boolean isPic32Initialized = false;
 
-static boolean usbComs = false;
-static boolean uartComs = false;
-
-static boolean disableSerial = false;
+ boolean usbComs = false;
+//static boolean uartComs = false;
+//
+//static boolean disableSerial = true;
 
 void disableSerialComs(boolean state) {
-    disableSerial = state;
-    uartComs = !state;
+//    disableSerial = state;
+//    uartComs = !state;
 }
 
 void Pic32_Bowler_HAL_Init(void) {
 
-    init = true;
+    isPic32Initialized = true;
 //    println_W("Init ADC");
 //    int i = 0;
 //    for (i = 0; i < 16; i++) InitADCHardware(i);
@@ -211,8 +211,8 @@ boolean Send_HAL_Packet(uint8_t * packet, uint16_t size) {
 
     if (usbComs)
         SendPacketUSB(packet, size);
-    if (uartComs)
-        Pic32UARTPutArray(packet, size);
+//    if (uartComs)
+//        Pic32UARTPutArray(packet, size);
     return true;
 }
 
@@ -220,7 +220,7 @@ uint16_t Get_HAL_Byte_Count() {
 #if defined(USB_POLLING)
     USBDeviceTasks();
 #endif
-    if (init == false) {
+    if (isPic32Initialized == false) {
         println_W("***Initializing the PIC hal***");
         Pic32_Bowler_HAL_Init();
     }

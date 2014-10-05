@@ -20,9 +20,11 @@
 #define __WASP2_C
 
 const MAC_ADDR Broadcast = {
-    {0, 0, 0, 0, 0, 0}};
+    {0, 0, 0, 0, 0, 0}
+};
 MAC_ADDR MyMAC = {
-    {0x74, 0xf7, 0x26, 0x01, 0x01, 0x01}};
+    {0x74, 0xf7, 0x26, 0x01, 0x01, 0x01}
+};
 
 NAMESPACE_LIST * getBcsRpcNamespace();
 
@@ -144,11 +146,11 @@ void Bowler_Init(void) {
 boolean process(BowlerPacket * Packet) {
     int i;
     //if(debug){
-    if (    Packet->use.head.RPC != GetRPCValue("_pwr") &&
-            Packet->use.head.RPC != GetRPCValue("_png") &&
+    if (Packet->use.head.RPC != GetRPCValue("_pwr") &&
+            Packet->use.head.RPC != GetRPCValue("_png") //&&
             //Packet->use.head.RPC != GetRPCValue("_rpc") &&
-            Packet->use.head.RPC != GetRPCValue("_nms") &&
-            Packet->use.head.RPC != GetRPCValue("args")
+            //            Packet->use.head.RPC != GetRPCValue("_nms") &&
+            //            Packet->use.head.RPC != GetRPCValue("args")
             ) {//Ignore Power Packet
         println("Got:", INFO_PRINT);
         printPacket(Packet, INFO_PRINT);
@@ -196,11 +198,11 @@ uint8_t Bowler_Server(BowlerPacket * Packet, boolean debug) {
         if (process(Packet)) {
             //Packet found, sending
             PutBowlerPacket(Packet);
-            if (    Packet->use.head.RPC != GetRPCValue("_pwr") &&
-                    Packet->use.head.RPC != GetRPCValue("_png") &&
+            if (Packet->use.head.RPC != GetRPCValue("_pwr") &&
+                    Packet->use.head.RPC != GetRPCValue("_png")// &&
                     //Packet->use.head.RPC != GetRPCValue("_rpc") &&
-                    Packet->use.head.RPC != GetRPCValue("_nms") &&
-                    Packet->use.head.RPC != GetRPCValue("args")
+                    //                    Packet->use.head.RPC != GetRPCValue("_nms") &&
+                    //                    Packet->use.head.RPC != GetRPCValue("args")
                     ) {//Ignore Power Packet
                 println("Response:", INFO_PRINT);
                 printPacket(Packet, INFO_PRINT);
