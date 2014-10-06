@@ -152,12 +152,12 @@ uint8_t getCommand(uint8_t * b){
 }
 
 void HoldAVRReset(void){
-	AVR_RST_IO=0;
+	AVR_RST_IO(0);
 	DelayMs(5);
 }
 
 void ReleaseAVRReset(void){
-	AVR_RST_IO=1;
+	AVR_RST_IO(1);
 	//DelayMs(70);
 }
 
@@ -241,6 +241,7 @@ void InitSPI(void){
 	//printfDEBUG("Initializing SPI interface");
 	mPORTGOpenDrainOpen(BIT_6);// Clock is output
 	mPORTGOpenDrainOpen(BIT_8);// Data Out is an output
+        mPORTEOpenDrainOpen(BIT_3);// AVR SS pin
 	OpenSPI2(SPI_MODE8_ON|ENABLE_SDO_PIN|SLAVE_ENABLE_OFF|SPI_CKE_ON|MASTER_ENABLE_ON|SEC_PRESCAL_8_1|PRI_PRESCAL_64_1, SPI_ENABLE);
 }
 

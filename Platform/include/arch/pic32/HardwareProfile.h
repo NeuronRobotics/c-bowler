@@ -253,10 +253,10 @@
 	#define FLAG_ASYNC				(_RD7)
 	#define Init_FLAG_BUSY_ASYNC()	FLAG_ASYNC_TRIS=INPUT;FLAG_BUSY_TRIS=INPUT;
 
-
-	#define AVR_RST_TRIS		(_TRISE3)
-	#define AVR_RST_IO			(_RE3)
-	#define InitAVR_RST()	  	 mPORTEOpenDrainOpen(BIT_3);AVR_RST_TRIS=OUTPUT;AVR_RST_IO=0;
+//
+//	#define AVR_RST_TRIS		(_TRISE3)
+	#define AVR_RST_IO(a)		setPicIOPin(a, 'E', 3)
+	#define InitAVR_RST()	  	 mPORTEOpenDrainOpen(BIT_3);setPicIOTristateOutput('E',3);AVR_RST_IO(0);
 	//#define InitAVR_RST()	  	 mPORTEOpenDrainOpen(BIT_3);AVR_RST_IO=1;
 
 	#define SPI_SCK_IO			(_RG6)
