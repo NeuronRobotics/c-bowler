@@ -2,12 +2,12 @@
 
 //static int getHeartBeatTime();
 //static boolean getHeartBeatLock();
-//static void setHeartBeatState(boolean hb, int time);
-static boolean resetFlag=false;
-static char safeNSName[] = "bcs.bootloader.*;0.3;;";
+//void setHeartBeatState(boolean hb, int time);
+boolean resetFlag=false;
+//char safeNSName[] = "bcs.bootloader.*;0.3;;";
 uint8_t core0str[]="pic32mx440f128h";
 uint8_t core1str[]="avr_atmegaXX4p_";
-static uint8_t avrID[7];
+uint8_t avrID[7];
 
 void callBootloaderReset(){
     resetFlag = true;
@@ -101,7 +101,7 @@ uint8_t bcsBootloaderProcessor_c(BowlerPacket *Packet){
 }
 
 
-static RPC_LIST bcsBootloader_safe_g = {BOWLER_GET, // Method
+RPC_LIST bcsBootloader_safe_g = {BOWLER_GET, // Method
     "safe", //RPC as string
     &bcsBootloaderProcessor_g, //function pointer to a packet parsinf function
      {
@@ -116,7 +116,7 @@ static RPC_LIST bcsBootloader_safe_g = {BOWLER_GET, // Method
     NULL //Termination
 };
 
-static RPC_LIST bcsBootloader_safe_c = {BOWLER_POST, // Method
+RPC_LIST bcsBootloader_safe_c = {BOWLER_POST, // Method
     "safe", //RPC as string
     &bcsBootloaderProcessor_c, //function pointer to a packet parsinf function
      {
@@ -135,22 +135,22 @@ static RPC_LIST bcsBootloader_safe_c = {BOWLER_POST, // Method
 
 
 
-static NAMESPACE_LIST bcsBootloader = {safeNSName, // The string defining the namespace
+NAMESPACE_LIST bcsBootloader = {"bcs.bootloader.*;0.3;;", // The string defining the namespace
     NULL, // the first element in the RPC list
     &bcsBootloaderAsyncEventCallback, // async for this namespace
     NULL// no initial elements to the other namesapce field.
 };
 
-static boolean namespcaedAdded = false;
+boolean BootloadernamespcaedAdded = false;
 
 NAMESPACE_LIST * get_bcsBootloaderNamespace() {
-    if (!namespcaedAdded) {
+    if (!BootloadernamespcaedAdded) {
         //POST
         //Add the RPC structs to the namespace
         addRpcToNamespace(&bcsBootloader, & bcsBootloader_safe_g);
         addRpcToNamespace(&bcsBootloader, & bcsBootloader_safe_c);
 
-        namespcaedAdded = true;
+        BootloadernamespcaedAdded = true;
     }
 
     return &bcsBootloader; //Return pointer to the struct

@@ -29,23 +29,22 @@
 #define USBNotOk	(USBDeviceState < CONFIGURED_STATE)||(USBSuspendControl==1)
 
 #define TxPrivateSize 64
-static BYTE RxTmpBuffer[BOWLER_PacketSize];
-//static BYTE privateRX[BOWLER_PacketSize];
-static BYTE TxBuffer[TxPrivateSize + 1 ];
-static UINT16 gotData = 0;
-static BOOL bufferSet = FALSE;
+BYTE USBRxTmpBuffer[BOWLER_PacketSize];
+BYTE USBTxBuffer[TxPrivateSize + 1 ];
+UINT16 gotDataUSB = 0;
+BOOL bufferSetUSB = FALSE;
 
-static WORD txSize;
+WORD txSizeUSB;
 
 
 //static BYTE_FIFO_STORAGE store;
-static BYTE_FIFO_STORAGE * usb_fifo_my_store = NULL;
-static BYTE_FIFO_STORAGE * last_my_store = NULL;
+BYTE_FIFO_STORAGE * usb_fifo_my_store = NULL;
+BYTE_FIFO_STORAGE * last_my_store = NULL;
 
-static BOOL usbActive = TRUE;
+BOOL usbActive = TRUE;
 
 BOOL GotUSBData(void) {
-    return gotData > 0;
+    return gotDataUSB > 0;
 }
 
 void printBufferState(BYTE_FIFO_STORAGE * s) {
@@ -80,9 +79,9 @@ void SetPICUSBFifo(BYTE_FIFO_STORAGE * s) {
     Print_Level l = getPrintLevel();
     setPrintLevelInfoPrint();
     println_E("Starting To set FIFO ");
-    if (bufferSet == TRUE)
+    if (bufferSetUSB == TRUE)
         return;
-    bufferSet = TRUE;
+    bufferSetUSB = TRUE;
     //printBufferState(s);
     usb_fifo_my_store = s;
     last_my_store = s;
@@ -134,7 +133,7 @@ WORD USBGetArray(BYTE* stream, WORD num) {
         return 0;
     }
     usb_Buffer_Update();
-    gotData -= num;
+    gotDataUSB -= num;
 
     BYTE n = FifoGetByteStream(GetPICUSBFifo(), stream, num);
     return n;
@@ -148,6 +147,7 @@ extern USB_HANDLE CDCDataInHandle;
 void waitForTxToBeFree() {
     RunEveryData timeout = {getMs(), 200};
     while (isUSBTxBlocked()) {
+    	//println_I("USB blocked");
         if (RunEvery(&timeout) > 0) {
             println_E("#*#*USB timeout before transmit");
             usbActive = FALSE;
@@ -174,10 +174,10 @@ void flush() {
     start = getMs();
 
 
-    if (txSize > 0) {
-        putUSBUSART((char *) TxBuffer, txSize);
+    if (txSizeUSB > 0) {
+        putUSBUSART((char *) USBTxBuffer, txSizeUSB);
         //DelayMs(2);
-        txSize = 0;
+        txSizeUSB = 0;
     } else {
         //println_I("Zero length packet to send, ignoring");
     }
@@ -216,26 +216,26 @@ int USBPutArray(BYTE* stream, int num) {
             //println_I("Packet too large for USB buffer");
             while (packetLen > TxPrivateSize) {
                 for (i = 0; i < TxPrivateSize; i++) {
-                    TxBuffer[i] = stream[packetIndex++];
+                    USBTxBuffer[i] = stream[packetIndex++];
                     packetLen--;
                 }
                 //println_I("Sending chunk ");printStream_I(TxBuffer,i);
-                txSize = i;
+                txSizeUSB = i;
                 flush();
             }
             for (i = 0; i < packetLen; i++) {
-                TxBuffer[i] = stream[packetIndex++];
+                USBTxBuffer[i] = stream[packetIndex++];
             }
             //println_I("Sending chunk ");printStream_I(TxBuffer,i);
-            txSize = i;
+            txSizeUSB = i;
             flush();
         } else {
             //println_I("Packet small enough for USB buffer");
             for (i = 0; i < num; i++) {
-                TxBuffer[i] = stream[i];
+                USBTxBuffer[i] = stream[i];
             }
             //println_I("Sending all ");printStream_I(TxBuffer,num);
-            txSize = i;
+            txSizeUSB = i;
             flush();
         }
     }
@@ -259,14 +259,14 @@ void usb_Buffer_Update(void) {
         return;
     }
     WORD i;
-    WORD gSize = getsUSBUSART((char *) RxTmpBuffer, USB_BUFFER_SIZE);
+    WORD gSize = getsUSBUSART((char *) USBRxTmpBuffer, USB_BUFFER_SIZE);
     BYTE err;
     if (gSize > 0) {
         for (i = 0; i < gSize; i++) {
             do {
-                FifoAddByte(GetPICUSBFifo(), RxTmpBuffer[i], & err);
+                FifoAddByte(GetPICUSBFifo(), USBRxTmpBuffer[i], & err);
             } while (err != FIFO_OK);
-            gotData++;
+            gotDataUSB++;
             usbActive = TRUE;
         }
     }

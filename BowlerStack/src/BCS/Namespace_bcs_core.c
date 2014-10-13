@@ -10,7 +10,7 @@ boolean _png(BowlerPacket * Packet);
 #define USE_LINKED_LIST_NAMESPACE
 
 #if defined(USE_LINKED_LIST_NAMESPACE)
-char coreName[] = "bcs.core.*;0.3;;";
+//char coreName[] = "bcs.core.*;0.3;;";
 
 
 RPC_LIST bcsCore_nms={	BOWLER_GET,
@@ -33,7 +33,7 @@ RPC_LIST bcsCore_png={	BOWLER_GET,
                                 NULL //Termination
 };
 
-NAMESPACE_LIST bcsCore ={	coreName,// The string defining the namespace
+NAMESPACE_LIST bcsCore ={	"bcs.core.*;0.3;;",// The string defining the namespace
                                         NULL,// the first element in the RPC string
                                         NULL,// no async for this namespace
                                         NULL// no initial elements to the other namesapce field.

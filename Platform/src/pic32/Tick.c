@@ -64,8 +64,8 @@
 	#define T1_TICK       		(SYS_FREQ/PB_DIV/PRESCALE/TOGGLES_PER_SEC)
 #endif
 // Internal counter to store Ticks.
-static uint32_t dwInternalTicks = 0;
-static uint32_t dwInternalTicksUpper = 0;
+uint32_t dwInternalTicks = 0;
+uint32_t dwInternalTicksUpper = 0;
 
 /*****************************************************************************
   Function:

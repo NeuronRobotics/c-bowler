@@ -33,7 +33,7 @@ typedef struct  _RPC_LIST{
 
 typedef struct _NAMESPACE_LIST{
 	//This is the string that identifies the names pace
-	const char *  namespaceString;
+	char  namespaceString[35];
 	//This is the linked list of the RPC's
 	RPC_LIST * rpcSet;
 	//This is the callback function pointer for checking for async.

@@ -26,7 +26,7 @@ MAC_ADDR MyMAC = {
     {0x74, 0xf7, 0x26, 0x01, 0x01, 0x01}
 };
 
-NAMESPACE_LIST * getBcsRpcNamespace();
+
 
 float lastPacketTime;
 
@@ -139,8 +139,8 @@ void Process_Self_Packet(BowlerPacket * Packet) {
 }//finish processing the Packet
 
 void Bowler_Init(void) {
-    addNamespaceToList((NAMESPACE_LIST *) getBcsCoreNamespace());
-    addNamespaceToList((NAMESPACE_LIST *) getBcsRpcNamespace());
+    addNamespaceToList( getBcsCoreNamespace());
+    addNamespaceToList( getBcsRpcNamespace());
 }
 
 boolean process(BowlerPacket * Packet) {

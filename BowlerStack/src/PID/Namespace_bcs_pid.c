@@ -7,7 +7,7 @@
 
 #include "Bowler/Bowler.h"
 
-const char pidNSName[]   = "bcs.pid.*;1.0;;";
+//const char pidNSName[]   = "bcs.pid.*;1.0;;";
 
 
 boolean pidAsyncEventCallbackLocal(BowlerPacket *Packet,boolean (*pidAsyncCallbackPtr)(BowlerPacket *Packet)){
@@ -198,7 +198,7 @@ RPC_LIST bcsPid_CPDV_c={	BOWLER_CRIT,
 
 
 
-NAMESPACE_LIST bcsPid ={	pidNSName,// The string defining the namespace
+NAMESPACE_LIST bcsPid ={	"bcs.pid.*;1.0;;",// The string defining the namespace
                                 NULL,// the first element in the RPC list
                                 &pidAsyncEventCallbackLocal,// async for this namespace
                                 NULL// no initial elements to the other namesapce field.

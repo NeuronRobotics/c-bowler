@@ -43,8 +43,9 @@ void FlashLoad(void){
     if(disableFlash == true)
     	return;
     int i;
+    uint32_t * stream = (uint32_t *) &flash;
     for (i=0;i<FLASHSTORE;i++){
-            flash.stream[i]=*((uint32_t *)(VirtualBase +(i*4)));
+            stream[i]=*((uint32_t *)(VirtualBase +(i*4)));
     }
     if(stream != 0 && streamSize!=0){
 		for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
@@ -64,9 +65,10 @@ void FlashSync(void){
         if(disableFlash==false)
             NVMErasePage( (uint32_t *) MEMORY_BASE);
 	println_I("Writing new data Storage page");
+        uint32_t * stream = (uint32_t *) &flash;
 	for (i=0;i<FLASHSTORE;i++){
             if(disableFlash==false)
-		NVMWriteWord((uint32_t *)(VirtualBase +(i*4)), flash.stream[i]);
+		NVMWriteWord((uint32_t *)(VirtualBase +(i*4)), stream[i]);
 	}
 	if(stream != 0 && streamSize!=0){
         for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
@@ -88,23 +90,23 @@ void FlashSync(void){
 
 uint8_t FlashSetMac(uint8_t * mac){
 	FlashLoad();
-	if(flash.data.lock==LOCKBYTE){
+	if(flash.lock==LOCKBYTE){
 		return false; 
 	}
 	int i;
 	for (i=0;i<6;i++){
-		flash.data.mac[i]=mac[i];
+		flash.mac[i]=mac[i];
 	}
-	flash.data.lock=LOCKBYTE;
+	flash.lock=LOCKBYTE;
 	FlashSync();
 	return true; 
 }
 
-void FlashSetName(char * name){
+void FlashSetName(uint8_t * name){
 	FlashLoad();
 	int i;
 	for (i=0;i<17;i++){
-		flash.data.name[i]=name[i];
+		flash.name[i]=name[i];
 	}
 	FlashSync();
 }
@@ -112,22 +114,22 @@ void FlashSetName(char * name){
 void FlashGetMac(uint8_t * mac){
 	int i;
 	FlashLoad();
-	if(flash.data.lock == 0xff){
+	if(flash.lock == 0xff){
 		for (i=0;i<6;i++){
 			mac[i]=defMac[i];
 		}
 		return;
 	}
 	for (i=0;i<6;i++){
-		mac[i]=flash.data.mac[i];
+		mac[i]=flash.mac[i];
 	}
 }
 
-void FlashGetName(char * name){
+void FlashGetName(uint8_t * name){
 	FlashLoad();
 	int i;
 	for (i=0;i<17;i++){
-		name[i]=flash.data.name[i];
+		name[i]=flash.name[i];
 	}
 }
 
@@ -135,14 +137,14 @@ void FlashGetBlRev(uint8_t * mac){
 	int i;
 	FlashLoad();
 	for (i=0;i<3;i++){
-		mac[i]=flash.data.bl[i];
+		mac[i]=flash.bl[i];
 	}
 }
 void FlashGetFwRev(uint8_t * mac){
 	int i;
 	FlashLoad();
 	for (i=0;i<3;i++){
-		mac[i]=flash.data.fw[i];
+		mac[i]=flash.fw[i];
 	}
 }
 
@@ -153,8 +155,8 @@ uint8_t FlashSetFwRev(uint8_t * mac){
 	int i;
 	boolean sync=false; 
 	for (i=0;i<3;i++){
-		if(flash.data.fw[i]!=mac[i]){
-			flash.data.fw[i]=mac[i];
+		if(flash.fw[i]!=mac[i]){
+			flash.fw[i]=mac[i];
 			sync=true; 
 		}
 	}
@@ -173,8 +175,8 @@ uint8_t FlashSetBlRev(uint8_t * mac){
 	int i;
 	boolean sync=false; 
 	for (i=0;i<3;i++){
-		if(flash.data.bl[i]!=mac[i]){
-			flash.data.bl[i]=mac[i];
+		if(flash.bl[i]!=mac[i]){
+			flash.bl[i]=mac[i];
 			sync=true; 
 		}
 	}
