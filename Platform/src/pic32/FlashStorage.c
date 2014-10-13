@@ -9,7 +9,7 @@
 //#include <stddef.h>
 FLASH_STORE flash;
 
-uint32_t * stream;
+uint32_t * stream=0;
 uint32_t streamSize=0;
 
 uint8_t  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
@@ -17,7 +17,7 @@ uint8_t  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
 uint32_t MEMORY_BASE =DefaultStartStorePhysical;
 uint32_t VirtualBase = DefaultStartStorePhysical+VirtualAddress;
 
-boolean disableFlash =false;
+boolean disableFlash =true;
 
 
 
@@ -36,22 +36,26 @@ void SetFlashData(uint32_t * s,uint32_t size){
     }
     streamSize=size;
     stream=s;
-    
+    println_W("Setting external flash data ");p_int_W(size);
 }
 
 void FlashLoad(void){
     if(disableFlash == true)
-	return;
+    	return;
     int i;
     for (i=0;i<FLASHSTORE;i++){
             flash.stream[i]=*((uint32_t *)(VirtualBase +(i*4)));
     }
-    for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
-            stream[i-FLASHSTORE]=*((uint32_t *)(VirtualBase +(i*4)));
+    if(stream != 0 && streamSize!=0){
+		for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
+				stream[i-FLASHSTORE]=*((uint32_t *)(VirtualBase +(i*4)));
+		}
     }
 }
 
 void FlashSync(void){
+	if(disableFlash == true)
+	    	return;
 	//return;
 	uint32_t i;
         uint32_t data=0, read=0,addr=0;
@@ -64,6 +68,7 @@ void FlashSync(void){
             if(disableFlash==false)
 		NVMWriteWord((uint32_t *)(VirtualBase +(i*4)), flash.stream[i]);
 	}
+	if(stream != 0 && streamSize!=0){
         for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
                 data = stream[i-FLASHSTORE];
                 addr = (VirtualBase +(i*4));
@@ -77,6 +82,7 @@ void FlashSync(void){
                     }
                 }
         }
+	}
 	println_I("Storage synced");
 }
 
