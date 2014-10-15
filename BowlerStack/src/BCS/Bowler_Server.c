@@ -194,7 +194,7 @@ uint8_t Bowler_Server(BowlerPacket * Packet, boolean debug) {
     boolean back = GetBowlerPacket_arch(Packet);
 
     if (back) {
-        SetColor(0, 1, 0);
+        //SetColor(0, 1, 0);
         if (process(Packet)) {
             //Packet found, sending
             PutBowlerPacket(Packet);
@@ -207,7 +207,7 @@ uint8_t Bowler_Server(BowlerPacket * Packet, boolean debug) {
                 println("Response:", INFO_PRINT);
                 printPacket(Packet, INFO_PRINT);
             }
-            SetColor(0, 0, 1);
+            //SetColor(0, 0, 1);
             return true;
         }
     }//Have a packet
