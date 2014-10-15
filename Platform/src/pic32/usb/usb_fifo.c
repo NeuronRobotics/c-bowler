@@ -226,7 +226,7 @@ int USBPutArray(uint8_t* stream, int num) {
         int packetIndex = 0;
         int i;
         //if(num>(TxPrivateSize)) {
-        ///print_E("\r\nAttempting");printStream_E(stream,num);
+        //print_E("\r\nAttempting");printStream_E(stream,num);
         if (num > TxPrivateSize) {
             //println_I("Packet too large for USB buffer");
             while (packetLen > TxPrivateSize) {
