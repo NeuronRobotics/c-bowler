@@ -28,20 +28,26 @@
 
 #define USBNotOk	(USBDeviceState < CONFIGURED_STATE)||(USBSuspendControl==1)
 
-#define TxPrivateSize 64
-BYTE USBRxTmpBuffer[BOWLER_PacketSize];
-BYTE USBTxBuffer[TxPrivateSize + 1 ];
-UINT16 gotDataUSB = 0;
-BOOL bufferSetUSB = FALSE;
+#define TxPrivateSize CDC_DATA_OUT_EP_SIZE
+uint8_t USBRxTmpBuffer[BOWLER_PacketSize];
+uint8_t USBTxBuffer[TxPrivateSize];
+uint16_t gotDataUSB = 0;
+boolean bufferSetUSB = false;
 
-WORD txSizeUSB;
+uint16_t txSizeUSB;
 
 
 //static BYTE_FIFO_STORAGE store;
 BYTE_FIFO_STORAGE * usb_fifo_my_store = NULL;
 BYTE_FIFO_STORAGE * last_my_store = NULL;
 
-BOOL usbActive = TRUE;
+boolean usbActive = true;
+
+//static BYTE tmp [64];
+//extern BYTE cdc_trf_state;
+//extern USB_HANDLE CDCDataInHandle;
+
+
 
 BOOL GotUSBData(void) {
     return gotDataUSB > 0;
@@ -79,9 +85,9 @@ void SetPICUSBFifo(BYTE_FIFO_STORAGE * s) {
     Print_Level l = getPrintLevel();
     setPrintLevelInfoPrint();
     println_E("Starting To set FIFO ");
-    if (bufferSetUSB == TRUE)
+    if (bufferSetUSB == true)
         return;
-    bufferSetUSB = TRUE;
+    bufferSetUSB = true;
     //printBufferState(s);
     usb_fifo_my_store = s;
     last_my_store = s;
@@ -90,7 +96,7 @@ void SetPICUSBFifo(BYTE_FIFO_STORAGE * s) {
 
 }
 
-void usb_CDC_Serial_Init(char * DevStr, char * SerialStr, UINT16 vid, UINT16 pid) {
+void usb_CDC_Serial_Init(char * DevStr, char * SerialStr, uint16_t vid, uint16_t pid) {
 
     if (usb_fifo_my_store == NULL) {
         println_E("USB fifo is null, can not initialize");
@@ -126,9 +132,20 @@ void usb_CDC_Serial_Init(char * DevStr, char * SerialStr, UINT16 vid, UINT16 pid
     prHEX16(vid, INFO_PRINT);
     print_I(":");
     prHEX16(pid, INFO_PRINT);
+    int i;
+    int j='a';
+    for(i=0;i<TxPrivateSize;i++){
+
+       USBTxBuffer[i] = j;// write the alphabet into the buffer
+       j++;
+       if(j>'z')
+           j='a';
+    }
+    print_E("\r\nData dumped");
+
 }
 
-WORD USBGetArray(BYTE* stream, WORD num) {
+uint16_t USBGetArray(uint8_t* stream, uint16_t num) {
     if (USBNotOk) {
         return 0;
     }
@@ -138,11 +155,7 @@ WORD USBGetArray(BYTE* stream, WORD num) {
     BYTE n = FifoGetByteStream(GetPICUSBFifo(), stream, num);
     return n;
 }
-//static BYTE tmp [64];
-extern BYTE cdc_trf_state;
-extern USB_HANDLE CDCDataInHandle;
 
-#define isUSBTxBlocked() ((cdc_trf_state != CDC_TX_READY)  || (USBHandleBusy(CDCDataInHandle)!=0))
 
 void waitForTxToBeFree() {
     RunEveryData timeout = {getMs(), 200};
@@ -150,12 +163,12 @@ void waitForTxToBeFree() {
     	//println_I("USB blocked");
         if (RunEvery(&timeout) > 0) {
             println_E("#*#*USB timeout before transmit");
-            usbActive = FALSE;
+            usbActive = false;
             break;
         }
         if (USBNotOk) {
             println_E("#*#*USB Not ok");
-            usbActive = FALSE;
+            usbActive = false;
             break;
         }
         CDCTxService();
@@ -166,6 +179,7 @@ void waitForTxToBeFree() {
 void flush() {
 
     float start = getMs();
+
 
     waitForTxToBeFree();
 
@@ -188,67 +202,67 @@ void flush() {
     //println_I("USB Flushed OK, took:");p_fl_I(end);
 }
 
-BYTE isUSBActave() {
+boolean isUSBActave() {
     return usbActive;
 }
 
 void forceOpenUSB() {
-    usbActive = TRUE;
+    usbActive = true;
 }
 
-int USBPutArray(BYTE* stream, int num) {
-    if (isUSBActave() == FALSE) {
+int USBPutArray(uint8_t* stream, int num) {
+    if (isUSBActave() == false) {
         //println_I("USB inactive, bailing out");
         return 0;
     }
-    //UINT16 i;
+    //uint16_t i;
 
     usb_Buffer_Update();
     if (USBNotOk) {
-        usbActive = FALSE;
+        usbActive = false;
         return 0;
     } else {
         int packetLen = num;
         int packetIndex = 0;
         int i;
         //if(num>(TxPrivateSize)) {
-        if (num > 255) {
+        ///print_E("\r\nAttempting");printStream_E(stream,num);
+        if (num > TxPrivateSize) {
             //println_I("Packet too large for USB buffer");
             while (packetLen > TxPrivateSize) {
                 for (i = 0; i < TxPrivateSize; i++) {
                     USBTxBuffer[i] = stream[packetIndex++];
                     packetLen--;
                 }
-                //println_I("Sending chunk ");printStream_I(TxBuffer,i);
+                //println_I("Sending chunk ");printStream_I(USBTxBuffer,i);
                 txSizeUSB = i;
                 flush();
             }
             for (i = 0; i < packetLen; i++) {
                 USBTxBuffer[i] = stream[packetIndex++];
             }
-            //println_I("Sending chunk ");printStream_I(TxBuffer,i);
+            //println_I("Sending chunk ");printStream_I(USBTxBuffer,i);
             txSizeUSB = i;
-            flush();
         } else {
             //println_I("Packet small enough for USB buffer");
             for (i = 0; i < num; i++) {
                 USBTxBuffer[i] = stream[i];
             }
-            //println_I("Sending all ");printStream_I(TxBuffer,num);
+            //println_I("Sending all ");printStream_I(USBTxBuffer,num);
             txSizeUSB = i;
-            flush();
         }
     }
+    flush();
     return TRUE;
 }
 
-WORD GetNumUSBBytes(void) {
+uint16_t GetNumUSBBytes(void) {
     usb_Buffer_Update();
     //printBufferState(GetPICUSBFifo());
     //println_I("Update Buffer = ");
     //	BYTE_FIFO_STORAGE* fifo = GetPICUSBFifo();
 
-    WORD data = FifoGetByteCount(GetPICUSBFifo());
+    uint16_t data = FifoGetByteCount(GetPICUSBFifo());
     //p_int_I(data);
     return data;
 }
@@ -258,8 +272,8 @@ void usb_Buffer_Update(void) {
         usbActive = FALSE;
         return;
     }
-    WORD i;
-    WORD gSize = getsUSBUSART((char *) USBRxTmpBuffer, USB_BUFFER_SIZE);
+    uint16_t i;
+    uint16_t gSize = getsUSBUSART((char *) USBRxTmpBuffer, USB_BUFFER_SIZE);
     BYTE err;
     if (gSize > 0) {
         for (i = 0; i < gSize; i++) {

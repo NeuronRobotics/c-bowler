@@ -101,41 +101,54 @@ uint8_t bcsBootloaderProcessor_c(BowlerPacket *Packet){
 }
 
 
-RPC_LIST bcsBootloader_safe_g = {BOWLER_GET, // Method
-    "safe", //RPC as string
+RPC_LIST bcsBootloader_blid_g = {BOWLER_GET, // Method
+    "blid", //RPC as string
     &bcsBootloaderProcessor_g, //function pointer to a packet parsinf function
-     {
-        0
-    }, // Response arguments
+     {0}, // Response arguments
     BOWLER_POST, // response method
-    {
-        BOWLER_I08,// heartbeat lockout
-        BOWLER_I16,// heartbeet time
-        0
-    }, // Response arguments
+    {0}, // Response arguments
     NULL //Termination
 };
 
-RPC_LIST bcsBootloader_safe_c = {BOWLER_POST, // Method
-    "safe", //RPC as string
+RPC_LIST bcsBootloader__rev_g = {BOWLER_GET, // Method
+    "_rev", //RPC as string
+    &bcsBootloaderProcessor_g, //function pointer to a packet parsinf function
+     {0}, // Response arguments
+    BOWLER_POST, // response method
+    {0}, // Response arguments
+    NULL //Termination
+};
+
+RPC_LIST bcsBootloader_prog_c = {BOWLER_POST, // Method
+    "prog", //RPC as string
     &bcsBootloaderProcessor_c, //function pointer to a packet parsinf function
-     {
-        BOWLER_I08,// heartbeat lockout
-        BOWLER_I16,// heartbeet time
-        0
-    }, // Response arguments
+     {0}, // Response arguments
     BOWLER_POST, // response method
-     {
-        BOWLER_I08, // code
-        BOWLER_I08, // trace
-        0
-    }, // Response arguments
+     {0}, // Response arguments
+    NULL //Termination
+};
+
+RPC_LIST bcsBootloader_erfl_c = {BOWLER_POST, // Method
+    "erfl", //RPC as string
+    &bcsBootloaderProcessor_c, //function pointer to a packet parsinf function
+     {0}, // Response arguments
+    BOWLER_POST, // response method
+     {0}, // Response arguments
+    NULL //Termination
+};
+RPC_LIST bcsBootloader_rest_c = {BOWLER_POST, // Method
+    "rest", //RPC as string
+    &bcsBootloaderProcessor_c, //function pointer to a packet parsinf function
+     {0}, // Response arguments
+    BOWLER_POST, // response method
+     {0}, // Response arguments
     NULL //Termination
 };
 
 
 
-NAMESPACE_LIST bcsBootloader = {"bcs.bootloader.*;0.3;;", // The string defining the namespace
+
+NAMESPACE_LIST bcsBootloader = {"neuronrobotics.bootloader.*;0.3;;", // The string defining the namespace
     NULL, // the first element in the RPC list
     &bcsBootloaderAsyncEventCallback, // async for this namespace
     NULL// no initial elements to the other namesapce field.
@@ -147,9 +160,11 @@ NAMESPACE_LIST * get_bcsBootloaderNamespace() {
     if (!BootloadernamespcaedAdded) {
         //POST
         //Add the RPC structs to the namespace
-        addRpcToNamespace(&bcsBootloader, & bcsBootloader_safe_g);
-        addRpcToNamespace(&bcsBootloader, & bcsBootloader_safe_c);
-
+        addRpcToNamespace(&bcsBootloader, & bcsBootloader_blid_g);
+        addRpcToNamespace(&bcsBootloader, & bcsBootloader__rev_g);
+        addRpcToNamespace(&bcsBootloader, & bcsBootloader_prog_c);
+        addRpcToNamespace(&bcsBootloader, & bcsBootloader_erfl_c);
+        addRpcToNamespace(&bcsBootloader, & bcsBootloader_rest_c);
         BootloadernamespcaedAdded = true;
     }
 

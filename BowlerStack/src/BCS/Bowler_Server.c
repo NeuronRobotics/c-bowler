@@ -147,10 +147,10 @@ boolean process(BowlerPacket * Packet) {
     int i;
     //if(debug){
     if (Packet->use.head.RPC != GetRPCValue("_pwr") &&
-            Packet->use.head.RPC != GetRPCValue("_png") //&&
-            //Packet->use.head.RPC != GetRPCValue("_rpc") &&
-            //            Packet->use.head.RPC != GetRPCValue("_nms") &&
-            //            Packet->use.head.RPC != GetRPCValue("args")
+            Packet->use.head.RPC != GetRPCValue("_png") &&
+            Packet->use.head.RPC != GetRPCValue("_rpc") &&
+                        Packet->use.head.RPC != GetRPCValue("_nms") &&
+                        Packet->use.head.RPC != GetRPCValue("args")
             ) {//Ignore Power Packet
         println("Got:", INFO_PRINT);
         printPacket(Packet, INFO_PRINT);
@@ -199,10 +199,10 @@ uint8_t Bowler_Server(BowlerPacket * Packet, boolean debug) {
             //Packet found, sending
             PutBowlerPacket(Packet);
             if (Packet->use.head.RPC != GetRPCValue("_pwr") &&
-                    Packet->use.head.RPC != GetRPCValue("_png")// &&
-                    //Packet->use.head.RPC != GetRPCValue("_rpc") &&
-                    //                    Packet->use.head.RPC != GetRPCValue("_nms") &&
-                    //                    Packet->use.head.RPC != GetRPCValue("args")
+                    Packet->use.head.RPC != GetRPCValue("_png")&&
+                    Packet->use.head.RPC != GetRPCValue("_rpc") &&
+                                        Packet->use.head.RPC != GetRPCValue("_nms") &&
+                                        Packet->use.head.RPC != GetRPCValue("args")
                     ) {//Ignore Power Packet
                 println("Response:", INFO_PRINT);
                 printPacket(Packet, INFO_PRINT);

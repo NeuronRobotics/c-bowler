@@ -102,7 +102,7 @@ uint8_t FlashSetMac(uint8_t * mac){
 	return true; 
 }
 
-void FlashSetName(uint8_t * name){
+void FlashSetName(char * name){
 	FlashLoad();
 	int i;
 	for (i=0;i<17;i++){
@@ -125,7 +125,7 @@ void FlashGetMac(uint8_t * mac){
 	}
 }
 
-void FlashGetName(uint8_t * name){
+void FlashGetName(char * name){
 	FlashLoad();
 	int i;
 	for (i=0;i<17;i++){

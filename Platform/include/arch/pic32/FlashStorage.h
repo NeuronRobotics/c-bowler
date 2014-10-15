@@ -30,9 +30,9 @@ typedef struct __attribute__((__packed__)) _FLASH_STORE{
 	}FLASH_STORE;
 #define FLASHSTORE			sizeof(FLASH_STORE)
 uint8_t FlashSetMac(uint8_t * mac);
-void FlashSetName(uint8_t * name);
+void FlashSetName(char * name);
 void FlashGetMac(uint8_t * mac);
-void FlashGetName(uint8_t * name);
+void FlashGetName(char * name);
 
 uint8_t FlashSetBlRev(uint8_t * mac);
 void FlashGetBlRev(uint8_t * mac);

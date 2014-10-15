@@ -151,6 +151,16 @@ uint8_t getCommand(uint8_t * b){
 	return back;
 }
 
+void PowerCycleAVR(){
+	println_I("Power cycling the AVR");
+	HoldAVRReset();
+//	getCommand(progmode);
+//	writeLowFuse();
+//	writeHighFuse();
+//	writeExtendedFuse();
+	ReleaseAVRReset();
+}
+
 void HoldAVRReset(void){
 	AVR_RST_IO(0);
 	DelayMs(5);
