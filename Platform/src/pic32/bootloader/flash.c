@@ -30,11 +30,13 @@ void writeWordFlash(uint32_t address,uint32_t data){
 	if (address >= StartAppVectPhysical && (address < EndAppVectPhysical)){
 		NVMWriteWord((uint32_t*)address, data);
 		if ((*(int *)(address|0x80000000)) != data){
-			//printfDEBUG("##Write FAILED!!");
+                    println_E("FAULT read did not match write on address: ");prHEX32(address,ERROR_PRINT);
 			eraseFlash();
 			callBootloaderReset();
 		}
-	}
+	}else{
+            println_E("FAULT can not reach address: ");prHEX32(address,ERROR_PRINT);
+        }
 
 }
 
