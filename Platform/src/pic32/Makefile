@@ -1,7 +1,7 @@
 #@ Author Kevin Harrington
 SHELL := /bin/bash -e
 
-CFILES := $(wildcard *.c) $(wildcard usb/*.c) 
+CFILES := $(wildcard *.c) $(wildcard */*.c) 
 OFILES := $(CFILES:%.c=%.o)
 
 all:clean $(OFILES)

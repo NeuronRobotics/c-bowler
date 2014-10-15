@@ -25,7 +25,7 @@ AVR_FILTERED:=$(filter-out ../BowlerStack/src/Namespace_bcs_pid.c, $(AVR_CFILES)
 AVR_OFILES := $(AVR_FILTERED:%.c=%.o)
 
 
-PIC_CFILES :=$(wildcard src/pic32/*.c) $(wildcard src/pic32/usb/*.c) $(wildcard ../BowlerStack/src/*.c) $(wildcard ../BowlerStack/src/*/*.c)
+PIC_CFILES :=$(wildcard src/pic32/*.c) $(wildcard src/pic32/*/*.c) $(wildcard ../BowlerStack/src/*.c) $(wildcard ../BowlerStack/src/*/*.c)
 PIC_OFILES := $(PIC_CFILES:%.c=%.o)
 
 NATIVE_CFILES :=$(wildcard src/native/*.c) $(wildcard ../BowlerStack/src/*.c) $(wildcard ../BowlerStack/src/*/*.c)
