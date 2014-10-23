@@ -104,7 +104,7 @@ boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean
 		return  true; 
 	}
 	if(debug){
-		println("Header ready, but data is not. Need: ",INFO_PRINT);p_int(totalLen,INFO_PRINT);print_nnl(" have: ",INFO_PRINT);p_int(num ,INFO_PRINT);
+		//println("Header ready, but data is not. Need: ",INFO_PRINT);p_int(totalLen,INFO_PRINT);print_nnl(" have: ",INFO_PRINT);p_int(num ,INFO_PRINT);
 	}
 	return false; 
 }

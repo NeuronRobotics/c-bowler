@@ -141,7 +141,7 @@ void usb_CDC_Serial_Init(char * DevStr, char * SerialStr, uint16_t vid, uint16_t
        if(j>'z')
            j='a';
     }
-    print_E("\r\nData dumped");
+    //print_E("\r\nData dumped");
 
 }
 

@@ -107,7 +107,7 @@ void InitilizePidController(AbsPID * groups, int numberOfGroups,
         pidReset(i, 0);
         //getPidGroupDataTable(i)->config.Enabled = enabled;
         SetPIDEnabled(i, enabled);
-        println_I("PID ");p_int_I(i);print_I(" enabled");
+        //println_I("PID ");p_int_I(i);print_I(" enabled");
     }
 }
 
@@ -176,14 +176,14 @@ float pidResetNoStop(uint8_t chan, int32_t val) {
     float value = (float) val;
     data->config.offset = (raw - value);
     data->CurrentState = raw - data->config.offset;
-    println_E("From pidReset Current State: ");
-    p_fl_E(current);
-    print_E(" Target value: ");
-    p_fl_E(value);
-    print_E(" Offset: ");
-    p_int_E(data->config.offset);
-    print_E(" Raw: ");
-    p_int_E(raw);
+//    println_E("From pidReset Current State: ");
+//    p_fl_E(current);
+//    print_E(" Target value: ");
+//    p_fl_E(value);
+//    print_E(" Offset: ");
+//    p_int_E(data->config.offset);
+//    print_E(" Raw: ");
+//    p_int_E(raw);
     float time = getMs();
     data->lastPushedValue = val;
     InitAbsPIDWithPosition(getPidGroupDataTable(chan), data->config.K.P, data->config.K.I, data->config.K.D, time, val);

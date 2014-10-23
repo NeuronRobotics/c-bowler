@@ -33,37 +33,37 @@ void __attribute__((nomips16)) _general_exception_handler() {
 
     setPrintLevelInfoPrint();
 
-    print_E("\r\n\r\n\r\nException handeler!! ");
-    switch (_excep_code) {
-        case EXCEP_IRQ: print_E("interrupt");
-            break;
-        case EXCEP_AdEL: print_E("address error exception (load or ifetch)");
-            break;
-        case EXCEP_AdES: print_E("address error exception (store)");
-            break;
-        case EXCEP_IBE: print_E("bus error (ifetch)");
-            break;
-        case EXCEP_DBE: print_E("bus error (load/store)");
-            break;
-        case EXCEP_Sys: print_E("syscall");
-            break;
-        case EXCEP_Bp: print_E("breakpoint");
-            break;
-        case EXCEP_RI: print_E("reserved instruction");
-            break;
-        case EXCEP_CpU: print_E("coprocessor unusable");
-            break;
-        case EXCEP_Overflow: print_E("arithmetic overflow");
-            break;
-        case EXCEP_Trap: print_E("trap (possible divide by zero)");
-            break;
-        case EXCEP_IS1: print_E("implementation specfic 1");
-            break;
-        case EXCEP_CEU: print_E("CorExtend Unuseable");
-            break;
-        case EXCEP_C2E: print_E("coprocessor 2");
-            break;
-    }
+    print_E("\r\nException ");
+//    switch (_excep_code) {
+//        case EXCEP_IRQ: print_E("interrupt");
+//            break;
+//        case EXCEP_AdEL: print_E("address error exception (load or ifetch)");
+//            break;
+//        case EXCEP_AdES: print_E("address error exception (store)");
+//            break;
+//        case EXCEP_IBE: print_E("bus error (ifetch)");
+//            break;
+//        case EXCEP_DBE: print_E("bus error (load/store)");
+//            break;
+//        case EXCEP_Sys: print_E("syscall");
+//            break;
+//        case EXCEP_Bp: print_E("breakpoint");
+//            break;
+//        case EXCEP_RI: print_E("reserved instruction");
+//            break;
+//        case EXCEP_CpU: print_E("coprocessor unusable");
+//            break;
+//        case EXCEP_Overflow: print_E("arithmetic overflow");
+//            break;
+//        case EXCEP_Trap: print_E("trap (possible divide by zero)");
+//            break;
+//        case EXCEP_IS1: print_E("implementation specfic 1");
+//            break;
+//        case EXCEP_CEU: print_E("CorExtend Unuseable");
+//            break;
+//        case EXCEP_C2E: print_E("coprocessor 2");
+//            break;
+//    }
     print_E(" at 0x");
     prHEX32(_excep_addr, ERROR_PRINT);
     print_E("\r\n");
@@ -74,19 +74,19 @@ void __attribute__((nomips16)) _general_exception_handler() {
 
 BYTE_FIFO_STORAGE storeUSB;
 uint8_t privateRXUSB[BOWLER_PacketSize ];
-//static BYTE_FIFO_STORAGE storeUART;
-//static uint8_t privateRXUART[BOWLER_PacketSize * 2];
+static BYTE_FIFO_STORAGE storeUART;
+static uint8_t privateRXUART[BOWLER_PacketSize];
 
 boolean isPic32Initialized = false;
 
  boolean usbComs = false;
-//static boolean uartComs = false;
-//
-//static boolean disableSerial = true;
+static boolean uartComs = false;
+
+static boolean disableSerial = true;
 
 void disableSerialComs(boolean state) {
-//    disableSerial = state;
-//    uartComs = !state;
+    disableSerial = state;
+    uartComs = !state;
 }
 
 void Pic32_Bowler_HAL_Init(void) {
@@ -96,20 +96,20 @@ void Pic32_Bowler_HAL_Init(void) {
 //    int i = 0;
 //    for (i = 0; i < 16; i++) InitADCHardware(i);
 //    measureAdcOffset();
-    println_W("Init USB fifo");
+    //println_W("Init USB fifo");
     InitByteFifo(&storeUSB, privateRXUSB, sizeof (privateRXUSB));
-    //println_W("Init UART fifo");
-    //InitByteFifo(&storeUART, privateRXUART, sizeof (privateRXUART));
-    //println_W("Setting Serial FIFO buffer");
-   // SetPICUARTFifo(&storeUART);
-    println_W("Setting USB FIFO buffer");
+//    println_W("Init UART fifo");
+    InitByteFifo(&storeUART, privateRXUART, sizeof (privateRXUART));
+//  println_W("Setting Serial FIFO buffer");
+    SetPICUARTFifo(&storeUART);
+//    println_W("Setting USB FIFO buffer");
     SetPICUSBFifo(&storeUSB);
 
     //println_W("Init UART hal");
     //Pic32UART_HAL_INIT(PRINT_BAUD);
     TickInit();
 
-    println_W("Pic32 is initialized...");
+    //println_W("Pic32 is initialized...");
 }
 
 void setPicIOTristateInput(char port,int pin){
@@ -199,20 +199,19 @@ void Get_HAL_Packet(uint8_t * packet, uint16_t size) {
             return;
     }
 
-//    if (uartComs) {
-//        if (FifoGetByteStream(&storeUART, packet, size) != 0)
-//            return;
-//    }
-    print_E("Hal reported error in retriving packet __FILE__");
-    print_E(__FILE__);
+    if (uartComs) {
+        if (FifoGetByteStream(&storeUART, packet, size) != 0)
+            return;
+    }
+
 }
 
 boolean Send_HAL_Packet(uint8_t * packet, uint16_t size) {
 
     if (usbComs)
         SendPacketUSB(packet, size);
-//    if (uartComs)
-//        Pic32UARTPutArray(packet, size);
+    if (uartComs)
+        Pic32UARTPutArray(packet, size);
     return true;
 }
 
@@ -221,7 +220,7 @@ uint16_t Get_HAL_Byte_Count() {
     USBDeviceTasks();
 #endif
     if (isPic32Initialized == false) {
-        println_W("***Initializing the PIC hal***");
+        //println_W("***Initializing the PIC hal***");
         Pic32_Bowler_HAL_Init();
     }
     //println_I("Getting the USB bytes");
@@ -232,12 +231,12 @@ uint16_t Get_HAL_Byte_Count() {
         return FifoGetByteCount(&storeUSB);
     } else {
         //println_I("Getting the UART bytes");
-//        if (Pic32Get_UART_Byte_Count() > 0) {
-//            //println_I("Found the UART bytes");
-//            if (!disableSerial)
-//                uartComs = true;
-//            return FifoGetByteCount(&storeUART);
-//        }
+        if (Pic32Get_UART_Byte_Count() > 0) {
+            //println_I("Found the UART bytes");
+            if (!disableSerial)
+                uartComs = true;
+            return FifoGetByteCount(&storeUART);
+        }
     }
     return 0;
 }
@@ -249,9 +248,9 @@ boolean GetBowlerPacket_arch(BowlerPacket * Packet) {
     if (usbComs)
         if (GetBowlerPacketDebug(Packet, &storeUSB))
             return true;
-//    if (uartComs)
-//        if (GetBowlerPacketDebug(Packet, &storeUART))
-//            return true;
+    if (uartComs)
+        if (GetBowlerPacketDebug(Packet, &storeUART))
+            return true;
     return false;
 }
 
