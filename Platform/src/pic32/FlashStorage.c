@@ -19,6 +19,9 @@ uint32_t VirtualBase = DefaultStartStorePhysical+VirtualAddress;
 
 boolean disableFlash =true;
 
+void enableFlashStorage(boolean enabled){
+	disableFlash = enabled?false:true;
+}
 
 
 void FlashSwitchMemoryToBootloader(){

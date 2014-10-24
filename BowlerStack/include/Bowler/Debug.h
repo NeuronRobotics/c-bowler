@@ -34,6 +34,7 @@ typedef enum _Print_Level{
 #define setPrintLevelInfoPrint() setPrintLevel(INFO_PRINT)
 
 Print_Level setPrintLevel(Print_Level l);
+boolean okToprint(Print_Level l);
 
 Print_Level getPrintLevel();
 /**
