@@ -346,7 +346,7 @@ void USBCBInitEP(void)
  *******************************************************************/
 void USBCBSendResume(void)
 {
-    WORD delay_count;
+     static WORD delay_count;
 
     USBResumeControl = 1;                // Start RESUME signaling
 
