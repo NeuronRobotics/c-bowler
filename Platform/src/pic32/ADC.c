@@ -100,7 +100,7 @@ void InitADCHardware(uint8_t chan){
 
 
 int getAdcRaw(uint8_t chan, int samples){
-    //InitADCHardware( chan);
+    InitADCHardware( chan);
 
         int i=0;
         int back = 0;

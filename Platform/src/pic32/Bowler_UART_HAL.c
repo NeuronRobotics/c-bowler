@@ -23,30 +23,30 @@
 
 //static uint8_t privateRX[BOWLER_PacketSize];
 //static BYTE_FIFO_STORAGE store;
-BYTE_FIFO_STORAGE * my_storeUART;
-uint16_t gotDataUART = false;
+static BYTE_FIFO_STORAGE * my_store;
+static uint16_t gotData = false; 
 
 boolean GotUARTData(void){
-	return gotDataUART>0;
+	return gotData>0;
 }
 
 
 BYTE_FIFO_STORAGE * GetPICUARTFifo(){
-	return my_storeUART;
+	return my_store;
 }
 
 void SetPICUARTFifo(BYTE_FIFO_STORAGE * s){
-	my_storeUART=s;
+	my_store=s;
 }
 void newByteUartHal(){
 	//int timeout =0;
 	uint8_t err;
 	if(DataRdyUART1())
-		FifoAddByte(my_storeUART,UARTGetDataByte(UART1),&err);
+		FifoAddByte(my_store,UARTGetDataByte(UART1),&err);
 	
 }
 
-void __ISR(_UART_1_VECTOR, IPL7AUTO) U1_ISR(void){
+void __ISR(_UART_1_VECTOR, ipl7) U1_ISR(void){
 	//StartCritical();
 	//int tick =8;
 	if (INTGetFlag(INT_SOURCE_UART_RX(UART1))){
@@ -117,12 +117,12 @@ void Pic32UART_HAL_INIT(int BAUDRATE){
 }
 
 void Pic32UARTGetArray(uint8_t *packet,uint16_t size){
-	gotDataUART-=size;
-	FifoGetByteStream(my_storeUART,packet,size);
+	gotData-=size;
+	FifoGetByteStream(my_store,packet,size);
 }
 
 uint16_t Pic32Get_UART_Byte_Count(void){
-	return FifoGetByteCount(my_storeUART);
+	return FifoGetByteCount(my_store);
 }
 
 void Pic32UARTPutArray(uint8_t *packet,uint16_t size){
