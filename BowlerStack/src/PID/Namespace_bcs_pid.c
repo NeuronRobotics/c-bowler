@@ -19,7 +19,7 @@ boolean pidAsyncEventCallbackLocal(BowlerPacket *Packet, boolean(*pidAsyncCallba
 }
 
 //Get RPC's
-RPC_LIST bcsPid_APID = {BOWLER_GET,
+static RPC_LIST bcsPid_APID = {BOWLER_GET,
     "apid",
     &processPIDGet,
     ((const char []) {0}),// Calling arguments
@@ -28,7 +28,7 @@ RPC_LIST bcsPid_APID = {BOWLER_GET,
         0}),// response arguments
     NULL //Termination
 };
-RPC_LIST bcsPid__PID = {BOWLER_GET,
+static RPC_LIST bcsPid__PID = {BOWLER_GET,
     "_pid",
     &processPIDGet,
     ((const char []) { BOWLER_I08, //channel
@@ -39,7 +39,7 @@ RPC_LIST bcsPid__PID = {BOWLER_GET,
         0}),// response arguments
     NULL //Termination
 };
-RPC_LIST bcsPid_CPID = {BOWLER_GET,
+static RPC_LIST bcsPid_CPID = {BOWLER_GET,
     "cpid",
     &processPIDGet,
     ((const char []) { BOWLER_I08, //channel
@@ -61,7 +61,7 @@ RPC_LIST bcsPid_CPID = {BOWLER_GET,
         0}),// response arguments
     NULL //Termination
 };
-RPC_LIST bcsPid_CPDV = {BOWLER_GET,
+static RPC_LIST bcsPid_CPDV = {BOWLER_GET,
     "cpdv",
     &processPIDGet,
     ((const char []) { BOWLER_I08, //channel
@@ -73,7 +73,7 @@ RPC_LIST bcsPid_CPDV = {BOWLER_GET,
         0}),// response arguments
     NULL //Termination
 };
-RPC_LIST bcsPid_GPDC = {BOWLER_GET,
+static RPC_LIST bcsPid_GPDC = {BOWLER_GET,
     "gpdc",
     &processPIDGet,
     ((const char []) {0}),// Calling arguments
@@ -84,7 +84,7 @@ RPC_LIST bcsPid_GPDC = {BOWLER_GET,
 };
 
 //Post RPC's
-RPC_LIST bcsPid_APID_p = {BOWLER_POST,
+static RPC_LIST bcsPid_APID_p = {BOWLER_POST,
     "apid",
     &processPIDPost,
     ((const char []) { BOWLER_I32, //Time in ms for transition to take
@@ -96,7 +96,7 @@ RPC_LIST bcsPid_APID_p = {BOWLER_POST,
         0}),// response arguments),// response arguments
     NULL //Termination
 };
-RPC_LIST bcsPid__PID_p = {BOWLER_POST,
+static RPC_LIST bcsPid__PID_p = {BOWLER_POST,
     "_pid",
     &processPIDPost,
     ((const char []) { BOWLER_I08, //channel
@@ -109,7 +109,7 @@ RPC_LIST bcsPid__PID_p = {BOWLER_POST,
         0}),// response arguments),// response arguments
     NULL //Termination
 };
-RPC_LIST bcsPid__VPD = {BOWLER_POST,
+static RPC_LIST bcsPid__VPD = {BOWLER_POST,
     "_vpd",
     &processPIDPost,
     ((const char []) { BOWLER_I08, //channel
@@ -122,7 +122,7 @@ RPC_LIST bcsPid__VPD = {BOWLER_POST,
         0}),// response arguments),// response arguments
     NULL //Termination
 };
-RPC_LIST bcsPid_RPID = {BOWLER_POST,
+static RPC_LIST bcsPid_RPID = {BOWLER_POST,
     "rpid",
     &processPIDPost,
     ((const char []) { BOWLER_I08, //channel
@@ -135,7 +135,7 @@ RPC_LIST bcsPid_RPID = {BOWLER_POST,
     NULL //Termination
 };
 
-RPC_LIST bcsPid_ACAL = {BOWLER_CRIT,
+static RPC_LIST bcsPid_ACAL = {BOWLER_CRIT,
     "acal",
     &processRunAutoCal,
     ((const char []) { BOWLER_I08, //group
@@ -148,7 +148,7 @@ RPC_LIST bcsPid_ACAL = {BOWLER_CRIT,
 };
 
 //Critical
-RPC_LIST bcsPid_KPID = {BOWLER_CRIT,
+static RPC_LIST bcsPid_KPID = {BOWLER_CRIT,
     "kpid",
     &processPIDCrit,
     ((const char []) {0}), // no arguments, kills all PID's
@@ -158,7 +158,7 @@ RPC_LIST bcsPid_KPID = {BOWLER_CRIT,
         0}),// response arguments),// response arguments
     NULL //Termination
 };
-RPC_LIST bcsPid_CPID_c = {BOWLER_CRIT,
+static RPC_LIST bcsPid_CPID_c = {BOWLER_CRIT,
     "cpid",
     &processPIDCrit,
     ((const char []) { BOWLER_I08, //channel
@@ -181,7 +181,7 @@ RPC_LIST bcsPid_CPID_c = {BOWLER_CRIT,
         0}),// response arguments),// response arguments
     NULL //Termination
 };
-RPC_LIST bcsPid_CPDV_c = {BOWLER_CRIT,
+static RPC_LIST bcsPid_CPDV_c = {BOWLER_CRIT,
     "cpdv",
     &processPIDCrit,
     ((const char []) { BOWLER_I08, //channel
@@ -197,7 +197,7 @@ RPC_LIST bcsPid_CPDV_c = {BOWLER_CRIT,
 
 
 
-NAMESPACE_LIST bcsPid = {"bcs.pid.*;1.0;;", // The string defining the namespace
+static NAMESPACE_LIST bcsPid = {"bcs.pid.*;1.0;;", // The string defining the namespace
     NULL, // the first element in the RPC list
     &pidAsyncEventCallbackLocal, // async for this namespace
     NULL// no initial elements to the other namesapce field.
@@ -205,7 +205,7 @@ NAMESPACE_LIST bcsPid = {"bcs.pid.*;1.0;;", // The string defining the namespace
 
 
 
-boolean bcsPidnamespcaedAdded = false;
+static boolean bcsPidnamespcaedAdded = false;
 
 NAMESPACE_LIST * getBcsPidNamespace() {
     if (!bcsPidnamespcaedAdded) {
