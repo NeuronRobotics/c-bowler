@@ -113,8 +113,6 @@
     //#pragma udata
 #endif
 
-
-
 volatile  CDC_NOTICE cdc_notice;
 volatile unsigned char cdc_data_rx[CDC_DATA_OUT_EP_SIZE];
 volatile unsigned char cdc_data_tx[CDC_DATA_IN_EP_SIZE];
@@ -131,7 +129,6 @@ BYTE cdc_mem_type;          // _ROM, _RAM
 
 USB_HANDLE CDCDataOutHandle;
 USB_HANDLE CDCDataInHandle;
-
 
 
 CONTROL_SIGNAL_BITMAP control_signal_bitmap;
@@ -154,10 +151,6 @@ CTRL_TRF_RETURN USB_CDC_SET_LINE_CODING_HANDLER(CTRL_TRF_PARAMS);
 
 /** P R I V A T E  P R O T O T Y P E S ***************************************/
 void USBCDCSetLineCoding(void);
-
-BYTE isUSBTxBlocked(){
-    return ((cdc_trf_state != CDC_TX_READY)  || (USBHandleBusy(CDCDataInHandle)!=0));
-}
 
 /** D E C L A R A T I O N S **************************************************/
 //#pragma code
@@ -471,7 +464,6 @@ void putUSBUSART(char *data, WORD  length)
     USBMaskInterrupts();
     if(cdc_trf_state == CDC_TX_READY)
     {
-        //print_E("\r\nSetting");printStream_E((uint8_t*)data,length);
         mUSBUSARTTxRam((BYTE*)data, length);     // See cdc.h
     }else{
     	println_E("#*#*#cdc_trf_state is not CDC_TX_READY, buffer dumped and ignored!!");
@@ -781,14 +773,13 @@ void CDCTxService(void)
     	cdc_tx_len = cdc_tx_len - byte_to_send;
     	  
         pCDCDst.bRam = (BYTE*)&cdc_data_tx; // Set destination pointer
-        //print_E("\r\nTo be loaded");printStream_E((uint8_t*)pCDCSrc.bRom,byte_to_send);
+        
         i = byte_to_send;
         if(cdc_mem_type == USB_EP0_ROM)            // Determine type of memory source
         {
             while(i)
             {
                 *pCDCDst.bRam = *pCDCSrc.bRom;
-
                 pCDCDst.bRam++;
                 pCDCSrc.bRom++;
                 i--;
@@ -816,7 +807,6 @@ void CDCTxService(void)
             else
                 cdc_trf_state = CDC_TX_COMPLETING;
         }//end if(cdc_tx_len...)
-        //print_E("\r\nFinally");printStream_E((BYTE*)&cdc_data_tx,byte_to_send);
         CDCDataInHandle = USBTxOnePacket(CDC_DATA_EP,(BYTE*)&cdc_data_tx,byte_to_send);
 
     }//end if(cdc_tx_sate == CDC_TX_BUSY)

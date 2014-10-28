@@ -29,20 +29,20 @@
 #define USBNotOk	(USBDeviceState < CONFIGURED_STATE)||(USBSuspendControl==1)
 
 #define TxPrivateSize 64
-static BYTE RxTmpBuffer[BOWLER_PacketSize];
+BYTE RxTmpBuffer[BOWLER_PacketSize];
 //static BYTE privateRX[BOWLER_PacketSize];
-static BYTE TxBuffer[TxPrivateSize+1 ];
-static UINT16 gotData = 0;
+BYTE TxBuffer[TxPrivateSize+1 ];
+UINT16 gotData = 0;
 static BOOL bufferSet=FALSE;
 
 static WORD     txSize;
 
 
 //static BYTE_FIFO_STORAGE store;
-static BYTE_FIFO_STORAGE * usb_fifo_my_store=NULL;
-static BYTE_FIFO_STORAGE * last_my_store=NULL;
+BYTE_FIFO_STORAGE * usb_fifo_my_store=NULL;
+BYTE_FIFO_STORAGE * last_my_store=NULL;
 
-static BOOL usbActive = TRUE;
+BOOL usbActive = TRUE;
 
 BOOL GotUSBData(void){
 	return gotData>0;

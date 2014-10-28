@@ -24,7 +24,7 @@ void SetBlue(uint16_t Duty){
 }
 
 void SetColor(uint16_t r,uint16_t g,uint16_t b){
-    startLED();
+    //startLED();
 	SetGreen(g);
 	SetRed(r);
 	SetBlue(b);
