@@ -103,10 +103,10 @@ uint8_t bcsBootloaderProcessor_c(BowlerPacket *Packet) {
 static RPC_LIST bcsBootloader_blid_g = {BOWLER_GET, // Method
     "blid", //RPC as string
     &bcsBootloaderProcessor_g, //function pointer to a packet parsinf function
-    ((const char []) {
+    ((const char [1]) {
         0}), // Calling arguments
     BOWLER_POST, // response method
-    ((const char []) {
+    ((const char [9]) {
         BOWLER_ASCII,
         BOWLER_ASCII,
         BOWLER_I08,
@@ -122,10 +122,10 @@ static RPC_LIST bcsBootloader_blid_g = {BOWLER_GET, // Method
 static RPC_LIST bcsBootloader__rev_g = {BOWLER_GET, // Method
     "_rev", //RPC as string
     &bcsBootloaderProcessor_g, //function pointer to a packet parsinf function
-    ((const char []) {
+    ((const char [1]) {
         0}), // Calling arguments
     BOWLER_POST, // response method
-    ((const char []) {
+    ((const char [7]) {
         BOWLER_I08,
         BOWLER_I08,
         BOWLER_I08,
@@ -139,10 +139,10 @@ static RPC_LIST bcsBootloader__rev_g = {BOWLER_GET, // Method
 static RPC_LIST bcsBootloader_prog_c = {BOWLER_CRIT, // Method
     "prog", //RPC as string
     &bcsBootloaderProcessor_c, //function pointer to a packet parsinf function
-    ((const char []) {
+    ((const char [1]) {
         0}), // Calling arguments
     BOWLER_POST, // response method
-    ((const char []) {
+    ((const char [1]) {
         0}), // Calling arguments
     NULL //Termination
 };
@@ -150,10 +150,10 @@ static RPC_LIST bcsBootloader_prog_c = {BOWLER_CRIT, // Method
 static RPC_LIST bcsBootloader_erfl_c = {BOWLER_CRIT, // Method
     "erfl", //RPC as string
     &bcsBootloaderProcessor_c, //function pointer to a packet parsinf function
-    ((const char []) {
+    ((const char [1]) {
         0}), // Calling arguments
     BOWLER_POST, // response method
-    ((const char []) {
+    ((const char [1]) {
         0}), // Calling arguments
     NULL //Termination
 };
@@ -161,10 +161,10 @@ static RPC_LIST bcsBootloader_erfl_c = {BOWLER_CRIT, // Method
 static RPC_LIST bcsBootloader_rest_c = {BOWLER_CRIT, // Method
     "rest", //RPC as string
     &bcsBootloaderProcessor_c, //function pointer to a packet parsinf function
-    ((const char []) {
+    ((const char [1]) {
         0}), // Calling arguments
     BOWLER_POST, // response method
-    ((const char []) {
+    ((const char [1]) {
         0}), // Calling arguments
     NULL //Termination
 };

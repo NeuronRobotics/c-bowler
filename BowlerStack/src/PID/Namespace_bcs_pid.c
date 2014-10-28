@@ -22,19 +22,19 @@ boolean pidAsyncEventCallbackLocal(BowlerPacket *Packet, boolean(*pidAsyncCallba
 static RPC_LIST bcsPid_APID = {BOWLER_GET,
     "apid",
     &processPIDGet,
-    ((const char []) {0}),// Calling arguments
+    ((const char [1]) {0}),// Calling arguments
     BOWLER_POST, // response method
-    ((const char []) { BOWLER_I32STR, //All current values
+    ((const char [2]) { BOWLER_I32STR, //All current values
         0}),// response arguments
     NULL //Termination
 };
 static RPC_LIST bcsPid__PID = {BOWLER_GET,
     "_pid",
     &processPIDGet,
-    ((const char []) { BOWLER_I08, //channel
+    ((const char [2]) { BOWLER_I08, //channel
         0}),// response arguments
     BOWLER_POST, // response method
-    ((const char []) { BOWLER_I08, //channel
+    ((const char [3]) { BOWLER_I08, //channel
         BOWLER_I32, //current position
         0}),// response arguments
     NULL //Termination
@@ -42,10 +42,10 @@ static RPC_LIST bcsPid__PID = {BOWLER_GET,
 static RPC_LIST bcsPid_CPID = {BOWLER_GET,
     "cpid",
     &processPIDGet,
-    ((const char []) { BOWLER_I08, //channel
+    ((const char [2]) { BOWLER_I08, //channel
         0}),// response arguments
     BOWLER_POST, // response method
-    ((const char []) { BOWLER_I08, //channel
+    ((const char [14]) { BOWLER_I08, //channel
         BOWLER_I08, //enabled
         BOWLER_I08, //Polarity
         BOWLER_I08, //async
@@ -64,10 +64,10 @@ static RPC_LIST bcsPid_CPID = {BOWLER_GET,
 static RPC_LIST bcsPid_CPDV = {BOWLER_GET,
     "cpdv",
     &processPIDGet,
-    ((const char []) { BOWLER_I08, //channel
+    ((const char [2]) { BOWLER_I08, //channel
         0}),// response arguments
     BOWLER_POST, // response method
-    ((const char []) { BOWLER_I08, //channel
+    ((const char [4]) { BOWLER_I08, //channel
         BOWLER_FIXED100, //Kp
         BOWLER_FIXED100, //Kd
         0}),// response arguments
@@ -76,9 +76,9 @@ static RPC_LIST bcsPid_CPDV = {BOWLER_GET,
 static RPC_LIST bcsPid_GPDC = {BOWLER_GET,
     "gpdc",
     &processPIDGet,
-    ((const char []) {0}),// Calling arguments
+    ((const char [1]) {0}),// Calling arguments
     BOWLER_POST, // response method
-    ((const char []) { BOWLER_I32, //channel
+    ((const char [2]) { BOWLER_I32, //channel
         0}),// response arguments
     NULL //Termination
 };
@@ -87,11 +87,11 @@ static RPC_LIST bcsPid_GPDC = {BOWLER_GET,
 static RPC_LIST bcsPid_APID_p = {BOWLER_POST,
     "apid",
     &processPIDPost,
-    ((const char []) { BOWLER_I32, //Time in ms for transition to take
+    ((const char [3]) { BOWLER_I32, //Time in ms for transition to take
         BOWLER_I32STR, //All current set point values
         0}),// response arguments
     BOWLER_STATUS, // response method
-    ((const char []) { BOWLER_I08, //location
+    ((const char [3]) { BOWLER_I08, //location
         BOWLER_I08, //trace
         0}),// response arguments),// response arguments
     NULL //Termination
@@ -99,12 +99,12 @@ static RPC_LIST bcsPid_APID_p = {BOWLER_POST,
 static RPC_LIST bcsPid__PID_p = {BOWLER_POST,
     "_pid",
     &processPIDPost,
-    ((const char []) { BOWLER_I08, //channel
+    ((const char [4]) { BOWLER_I08, //channel
         BOWLER_I32, //set point value
         BOWLER_I32, //Time in ms for transition to take
         0}),// response arguments),// response arguments
     BOWLER_STATUS, // response method
-    ((const char []) { BOWLER_I08, //location
+    ((const char [3]) { BOWLER_I08, //location
         BOWLER_I08, //trace
         0}),// response arguments),// response arguments
     NULL //Termination
@@ -112,12 +112,12 @@ static RPC_LIST bcsPid__PID_p = {BOWLER_POST,
 static RPC_LIST bcsPid__VPD = {BOWLER_POST,
     "_vpd",
     &processPIDPost,
-    ((const char []) { BOWLER_I08, //channel
+    ((const char [4]) { BOWLER_I08, //channel
         BOWLER_I32, //velocity set point value
         BOWLER_I32, //Time in ms for transition to take
         0}),// response arguments),// response arguments
     BOWLER_STATUS, // response method
-    ((const char []) { BOWLER_I08, //location
+    ((const char [3]) { BOWLER_I08, //location
         BOWLER_I08, //trace
         0}),// response arguments),// response arguments
     NULL //Termination
@@ -125,11 +125,11 @@ static RPC_LIST bcsPid__VPD = {BOWLER_POST,
 static RPC_LIST bcsPid_RPID = {BOWLER_POST,
     "rpid",
     &processPIDPost,
-    ((const char []) { BOWLER_I08, //channel
+    ((const char [3]) { BOWLER_I08, //channel
         BOWLER_I32, //value to reset encoding to
         0}),// response arguments),// response arguments
     BOWLER_STATUS, // response method
-    ((const char []) { BOWLER_I08, //location
+    ((const char [3]) { BOWLER_I08, //location
         BOWLER_I08, //trace
         0}),// response arguments),// response arguments
     NULL //Termination
@@ -138,10 +138,10 @@ static RPC_LIST bcsPid_RPID = {BOWLER_POST,
 static RPC_LIST bcsPid_ACAL = {BOWLER_CRIT,
     "acal",
     &processRunAutoCal,
-    ((const char []) { BOWLER_I08, //group
+    ((const char [2]) { BOWLER_I08, //group
         0}), // no arguments, kills all PID's
     BOWLER_STATUS, // response method
-    ((const char []) { BOWLER_I08, //location
+    ((const char [3]) { BOWLER_I08, //location
         BOWLER_I08, //trace
         0}),// response arguments
     NULL //Termination
@@ -151,9 +151,9 @@ static RPC_LIST bcsPid_ACAL = {BOWLER_CRIT,
 static RPC_LIST bcsPid_KPID = {BOWLER_CRIT,
     "kpid",
     &processPIDCrit,
-    ((const char []) {0}), // no arguments, kills all PID's
+    ((const char [1]) {0}), // no arguments, kills all PID's
     BOWLER_STATUS, // response method
-    ((const char []) { BOWLER_I08, //location
+    ((const char [3]) { BOWLER_I08, //location
         BOWLER_I08, //trace
         0}),// response arguments),// response arguments
     NULL //Termination
@@ -161,7 +161,7 @@ static RPC_LIST bcsPid_KPID = {BOWLER_CRIT,
 static RPC_LIST bcsPid_CPID_c = {BOWLER_CRIT,
     "cpid",
     &processPIDCrit,
-    ((const char []) { BOWLER_I08, //channel
+    ((const char [14]) { BOWLER_I08, //channel
         BOWLER_I08, //enabled
         BOWLER_I08, //Polarity
         BOWLER_I08, //async
@@ -176,7 +176,7 @@ static RPC_LIST bcsPid_CPID_c = {BOWLER_CRIT,
         BOWLER_FIXED1K, //lower
         0}),// response arguments
     BOWLER_STATUS, // response method
-    ((const char []) { BOWLER_I08, //location
+    ((const char [3]) { BOWLER_I08, //location
         BOWLER_I08, //trace
         0}),// response arguments),// response arguments
     NULL //Termination
@@ -184,12 +184,12 @@ static RPC_LIST bcsPid_CPID_c = {BOWLER_CRIT,
 static RPC_LIST bcsPid_CPDV_c = {BOWLER_CRIT,
     "cpdv",
     &processPIDCrit,
-    ((const char []) { BOWLER_I08, //channel
+    ((const char [4]) { BOWLER_I08, //channel
         BOWLER_FIXED100, //Kp
         BOWLER_FIXED100, //Kd
         0}),// response arguments
     BOWLER_STATUS, // response method
-    ((const char []) { BOWLER_I08, //location
+    ((const char [3]) { BOWLER_I08, //location
         BOWLER_I08, //trace
         0}),// response arguments),// response arguments
     NULL //Termination

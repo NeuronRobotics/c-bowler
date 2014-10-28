@@ -81,11 +81,11 @@ boolean _rpcArgs(BowlerPacket * Packet) {
 static RPC_LIST bcsRpc__RPC = {BOWLER_GET,
     "_rpc",
     &_rpc,
-    ((const char []){   BOWLER_I08,
+    ((const char [3]){   BOWLER_I08,
         BOWLER_I08,
         0}), // Calling arguments
     BOWLER_POST, // response method
-    ((const char []){   BOWLER_I08,
+    ((const char [5]){   BOWLER_I08,
         BOWLER_I08,
         BOWLER_I08,
         BOWLER_ASCII,
@@ -96,11 +96,11 @@ static RPC_LIST bcsRpc__RPC = {BOWLER_GET,
 static RPC_LIST bcsRpc_ARGS = {BOWLER_GET,
     "args",
     &_rpcArgs,
-    ((const char []){BOWLER_I08, //namespace index
+    ((const char [3]){BOWLER_I08, //namespace index
         BOWLER_I08, //rpc index
         0}), // Calling arguments
     BOWLER_POST, // response method
-   ((const char []) { BOWLER_I08, //namespace index
+   ((const char [7]) { BOWLER_I08, //namespace index
         BOWLER_I08, //rpc index
         BOWLER_I08, //Downstream method
         BOWLER_STR, //downstream arguments
