@@ -225,33 +225,33 @@ void printfDEBUG_FL(float f, Print_Level l) {
 void printPIDvalsPointer(AbsPID * conf) {
 
 
-//    print_nnl(" Enabled=", INFO_PRINT);
-//    p_int(conf->config.Enabled, INFO_PRINT);
-//    print_nnl(" Polarity=", INFO_PRINT);
-//    p_int(conf->config.Polarity, INFO_PRINT);
-//    print_nnl(" SET=", INFO_PRINT);
-//    p_int(conf->SetPoint, INFO_PRINT);
-//    print_nnl(" Kp=", INFO_PRINT);
-//    p_fl(conf->config.K.P, INFO_PRINT);
-//    print_nnl(" Ki=", INFO_PRINT);
-//    p_fl(conf->config.K.I, INFO_PRINT);
-//    print_nnl(" Kd=", INFO_PRINT);
-//    p_fl(conf->config.K.D, INFO_PRINT);
-//    print_nnl("\t Setpoint=", INFO_PRINT);
-//    p_fl(conf->SetPoint, INFO_PRINT);
-//    print_nnl("\t Current State=", INFO_PRINT);
-//    p_fl(conf->CurrentState, INFO_PRINT);
-//    print_nnl("\t Offset=", INFO_PRINT);
-//    p_fl(conf->config.offset, INFO_PRINT);
-//    print_nnl("\t Control Output: ", INFO_PRINT);
-//    p_fl(conf->Output, INFO_PRINT);
-    //print_nnl("\t Output Set: ",INFO_PRINT); p_fl(conf->OutputSet ,INFO_PRINT);
+    print_nnl(" Enabled=", INFO_PRINT);
+    p_int(conf->config.Enabled, INFO_PRINT);
+    print_nnl(" Polarity=", INFO_PRINT);
+    p_int(conf->config.Polarity, INFO_PRINT);
+    print_nnl(" SET=", INFO_PRINT);
+    p_int(conf->SetPoint, INFO_PRINT);
+    print_nnl(" Kp=", INFO_PRINT);
+    p_fl(conf->config.K.P, INFO_PRINT);
+    print_nnl(" Ki=", INFO_PRINT);
+    p_fl(conf->config.K.I, INFO_PRINT);
+    print_nnl(" Kd=", INFO_PRINT);
+    p_fl(conf->config.K.D, INFO_PRINT);
+    print_nnl("\t Setpoint=", INFO_PRINT);
+    p_fl(conf->SetPoint, INFO_PRINT);
+    print_nnl("\t Current State=", INFO_PRINT);
+    p_fl(conf->CurrentState, INFO_PRINT);
+    print_nnl("\t Offset=", INFO_PRINT);
+    p_fl(conf->config.offset, INFO_PRINT);
+    print_nnl("\t Control Output: ", INFO_PRINT);
+    p_fl(conf->Output, INFO_PRINT);
+    print_nnl("\t Output Set: ",INFO_PRINT); p_fl(conf->OutputSet ,INFO_PRINT);
 
 }
 
 void printPIDvals(int i) {
-//    println("PID chan=", INFO_PRINT);
-//    p_int(i, INFO_PRINT);
+    println("PID chan=", INFO_PRINT);
+    p_int(i, INFO_PRINT);
     printPIDvalsPointer(getPidGroupDataTable(i));
 }
 

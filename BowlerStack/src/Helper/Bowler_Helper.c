@@ -126,18 +126,18 @@ float interpolate(INTERPOLATE_DATA * data, float currentTime) {
     float setTime = data->setTime;
     float startTime = data->startTime;
 
-    println_I("Time= ");p_fl_I(currentTime);
-    println_I("Interpolate data: ");
-    print_I(" Set= ");p_fl_I(set);
-    print_I(" start= ");p_fl_I(start);
-    print_I(" setTime= ");p_fl_I(setTime);
-    print_I(" startTime= ");p_fl_I(startTime);
-    println_I("From struct:      ");
-    print_I(" Set= ");p_fl_I(data->set);
-    print_I(" start= ");p_fl_I(data->start);
-    print_I(" setTime= ");p_fl_I(data->setTime);
-    print_I(" startTime= ");p_fl_I(data->startTime);
-    
+//    println_I("Time= ");p_fl_I(currentTime);
+//    println_I("Interpolate data: ");
+//    print_I(" Set= ");p_fl_I(set);
+//    print_I(" start= ");p_fl_I(start);
+//    print_I(" setTime= ");p_fl_I(setTime);
+//    print_I(" startTime= ");p_fl_I(startTime);
+//    println_I("From struct:      ");
+//    print_I(" Set= ");p_fl_I(data->set);
+//    print_I(" start= ");p_fl_I(data->start);
+//    print_I(" setTime= ");p_fl_I(data->setTime);
+//    print_I(" startTime= ");p_fl_I(data->startTime);
+//
 
     elapsed =currentTime- (startTime);
     //interpolation is done
