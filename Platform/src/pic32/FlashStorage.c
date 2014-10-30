@@ -7,17 +7,17 @@
 #include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 //#include <stddef.h>
-FLASH_STORE flash;
+static FLASH_STORE flash;
 
-uint32_t * stream=0;
-uint32_t streamSize=0;
+static uint32_t * externalStream=0;
+static uint32_t streamSize=0;
 
-uint8_t  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
+static uint8_t  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
 
-uint32_t MEMORY_BASE =DefaultStartStorePhysical;
-uint32_t VirtualBase = DefaultStartStorePhysical+VirtualAddress;
+static uint32_t MEMORY_BASE =DefaultStartStorePhysical;
+static uint32_t VirtualBase = DefaultStartStorePhysical+VirtualAddress;
 
-boolean disableFlash =true;
+static boolean disableFlash =true;
 
 void enableFlashStorage(boolean enabled){
 	disableFlash = enabled?false:true;
@@ -38,7 +38,7 @@ void SetFlashData(uint32_t * s,uint32_t size){
         SoftReset();
     }
     streamSize=size;
-    stream=s;
+    externalStream=s;
     println_W("Setting external flash data ");p_int_W(size);
 }
 
@@ -50,10 +50,12 @@ void FlashLoad(void){
     for (i=0;i<FLASHSTORE;i++){
             stream[i]=*((uint32_t *)(VirtualBase +(i*4)));
     }
-    if(stream != 0 && streamSize!=0){
+    if(externalStream != 0 && streamSize!=0){
 		for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
-				stream[i-FLASHSTORE]=*((uint32_t *)(VirtualBase +(i*4)));
+				externalStream[i-FLASHSTORE]=*((uint32_t *)(VirtualBase +(i*4)));
 		}
+    }else{
+           println_E("External storage not availible!"); 
     }
 }
 
@@ -73,21 +75,23 @@ void FlashSync(void){
             if(disableFlash==false)
 		NVMWriteWord((uint32_t *)(VirtualBase +(i*4)), stream[i]);
 	}
-	if(stream != 0 && streamSize!=0){
-        for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
-                data = stream[i-FLASHSTORE];
-                addr = (VirtualBase +(i*4));
-                if(disableFlash==false){
-                    NVMWriteWord((uint32_t *)(addr), data );
-                    read=*((uint32_t *)(addr));
-                    if(data != read){
-                        println_E("Data write failed! ");prHEX32(read,ERROR_PRINT);
-                        print_E(" expected ");prHEX32(data,ERROR_PRINT);
-                        print_E(" at ");prHEX32(addr,ERROR_PRINT);
+	if(externalStream != 0 && streamSize!=0){
+            for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
+                    data = externalStream[i-FLASHSTORE];
+                    addr = (VirtualBase +(i*4));
+                    if(disableFlash==false){
+                        NVMWriteWord((uint32_t *)(addr), data );
+                        read=*((uint32_t *)(addr));
+                        if(data != read){
+                            println_E("Data write failed! ");prHEX32(read,ERROR_PRINT);
+                            print_E(" expected ");prHEX32(data,ERROR_PRINT);
+                            print_E(" at ");prHEX32(addr,ERROR_PRINT);
+                        }
                     }
-                }
+            }
+	}else{
+          println_E("External storage not availible!");
         }
-	}
 	println_I("Storage synced");
 }
 
