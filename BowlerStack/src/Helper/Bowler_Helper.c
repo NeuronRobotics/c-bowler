@@ -185,6 +185,19 @@ void set32bit(BowlerPacket * Packet, int32_t val, uint8_t offset) {
     Packet->use.data[3 + offset] = lval.byte.LB;
 }
 
+void setString(BowlerPacket * Packet, char * val, uint8_t offset) {
+    int i=0;
+    while(val[i]){
+        Packet->use.data[offset + i] = val[i];
+        i++;
+        if(i+offset>=sizeof(BowlerPacket)){
+            println_E("Writing over the size of the packet!!");
+            return;
+        }
+    }
+    Packet->use.data[offset + i] = 0;
+}
+
 int32_t get32bit(BowlerPacket * Packet, uint8_t offset) {
     INT32_UNION lval;
     lval.byte.FB = Packet->use.data[0 + offset];
