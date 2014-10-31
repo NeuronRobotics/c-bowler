@@ -26,9 +26,9 @@ typedef struct __attribute__((__packed__)) _FLASH_STORE{
 		uint8_t   blSet;
 		uint8_t   fwSet;
 		uint8_t   bl[3];
-		uint8_t   fw[3];
-	}FLASH_STORE;
-#define FLASHSTORE			sizeof(FLASH_STORE)
+		uint8_t   fw[4];
+	}FlashStorageStruct;
+#define FLASHSTORE			sizeof(FlashStorageStruct)
 uint8_t FlashSetMac(uint8_t * mac);
 void FlashSetName(char * name);
 void FlashGetMac(uint8_t * mac);

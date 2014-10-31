@@ -7,10 +7,11 @@
 #include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 //#include <stddef.h>
-static FLASH_STORE flash;
+static FlashStorageStruct flash;
 
 static uint32_t * externalStream=0;
 static uint32_t streamSize=0;
+static uint32_t * stream;
 
 static uint8_t  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
 
@@ -45,14 +46,21 @@ void SetFlashData(uint32_t * s,uint32_t size){
 void FlashLoad(void){
     if(disableFlash == true)
     	return;
+
+    
+    if (FLASHSTORE % 4) {
+        println_E("BAD FLASH size = ");
+        p_int_W(FLASHSTORE % 4);
+        while (1);
+    }
     int i;
-    uint32_t * stream = (uint32_t *) &flash;
+    stream = (uint32_t *) &flash;
     for (i=0;i<FLASHSTORE;i++){
             stream[i]=*((uint32_t *)(VirtualBase +(i*4)));
     }
     if(externalStream != 0 && streamSize!=0){
-		for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
-				externalStream[i-FLASHSTORE]=*((uint32_t *)(VirtualBase +(i*4)));
+		for (i=0;i<streamSize;i++){
+				externalStream[i]=*((uint32_t *)(VirtualBase +((i+FLASHSTORE)*4)));
 		}
     }else{
            println_E("External storage not availible!"); 
@@ -70,15 +78,15 @@ void FlashSync(void){
         if(disableFlash==false)
             NVMErasePage( (uint32_t *) MEMORY_BASE);
 	println_I("Writing new data Storage page");
-        uint32_t * stream = (uint32_t *) &flash;
+        stream = (uint32_t *) &flash;
 	for (i=0;i<FLASHSTORE;i++){
             if(disableFlash==false)
 		NVMWriteWord((uint32_t *)(VirtualBase +(i*4)), stream[i]);
 	}
 	if(externalStream != 0 && streamSize!=0){
-            for (i=FLASHSTORE;i<FLASHSTORE+streamSize;i++){
-                    data = externalStream[i-FLASHSTORE];
-                    addr = (VirtualBase +(i*4));
+            for (i=0;i<streamSize;i++){
+                    data = externalStream[i];
+                    addr = (VirtualBase +((i+FLASHSTORE)*4));
                     if(disableFlash==false){
                         NVMWriteWord((uint32_t *)(addr), data );
                         read=*((uint32_t *)(addr));
