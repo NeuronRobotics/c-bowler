@@ -15,25 +15,21 @@ boolean _png(BowlerPacket * Packet);
 static RPC_LIST bcsCore_nms = {BOWLER_GET,
     "_nms",
     &_nms,
-    ((const char [2]) {
-        BOWLER_I08,
-        0}), // Calling arguments
+     {  BOWLER_I08,
+        0}, // Calling arguments
     BOWLER_POST, // response method
-    ((const char [3]) {
-        BOWLER_ASCII,
+     {  BOWLER_ASCII,
         BOWLER_I08,
-        0}), // response arguments
+        0}, // Calling arguments
     NULL //Termination
 };
 
 static RPC_LIST bcsCore_png = {BOWLER_GET,
     "_png",
     &_png,
-    ((const char [1]) {
-        0}), // Calling arguments
+     {0}, // Calling arguments
     BOWLER_POST, // response method
-    ((const char [1]) {
-        0}), // response arguments
+     {0}, // Calling arguments
     NULL //Termination
 };
 
