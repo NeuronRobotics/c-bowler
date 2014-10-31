@@ -1,7 +1,7 @@
 #include "Bowler/Bowler.h"
 #define DYIO
-//static int getHeartBeatTime();
-//static boolean getHeartBeatLock();
+//  int getHeartBeatTime();
+//  boolean getHeartBeatLock();
 //void setHeartBeatState(boolean hb, int time);
 boolean resetFlag = false;
 //char safeNSName[] = "bcs.bootloader.*;0.3;;";
@@ -100,7 +100,7 @@ uint8_t bcsBootloaderProcessor_c(BowlerPacket *Packet) {
     return true;
 }
 
-static RPC_LIST bcsBootloader_blid_g = {BOWLER_GET, // Method
+  RPC_LIST bcsBootloader_blid_g = {BOWLER_GET, // Method
     "blid", //RPC as string
     &bcsBootloaderProcessor_g, //function pointer to a packet parsinf function
      {0}, // Calling arguments
@@ -118,7 +118,7 @@ static RPC_LIST bcsBootloader_blid_g = {BOWLER_GET, // Method
     NULL //Termination
 };
 
-static RPC_LIST bcsBootloader__rev_g = {BOWLER_GET, // Method
+  RPC_LIST bcsBootloader__rev_g = {BOWLER_GET, // Method
     "_rev", //RPC as string
     &bcsBootloaderProcessor_g, //function pointer to a packet parsinf function
      {0}, // Calling arguments
@@ -134,7 +134,7 @@ static RPC_LIST bcsBootloader__rev_g = {BOWLER_GET, // Method
     NULL //Termination
 };
 
-static RPC_LIST bcsBootloader_prog_c = {BOWLER_CRIT, // Method
+  RPC_LIST bcsBootloader_prog_c = {BOWLER_CRIT, // Method
     "prog", //RPC as string
     &bcsBootloaderProcessor_c, //function pointer to a packet parsinf function
      {0}, // Calling arguments
@@ -143,7 +143,7 @@ static RPC_LIST bcsBootloader_prog_c = {BOWLER_CRIT, // Method
     NULL //Termination
 };
 
-static RPC_LIST bcsBootloader_erfl_c = {BOWLER_CRIT, // Method
+  RPC_LIST bcsBootloader_erfl_c = {BOWLER_CRIT, // Method
     "erfl", //RPC as string
     &bcsBootloaderProcessor_c, //function pointer to a packet parsinf function
      {0}, // Calling arguments
@@ -152,7 +152,7 @@ static RPC_LIST bcsBootloader_erfl_c = {BOWLER_CRIT, // Method
     NULL //Termination
 };
 
-static RPC_LIST bcsBootloader_rest_c = {BOWLER_CRIT, // Method
+  RPC_LIST bcsBootloader_rest_c = {BOWLER_CRIT, // Method
     "rest", //RPC as string
     &bcsBootloaderProcessor_c, //function pointer to a packet parsinf function
     {0}, // Calling arguments
@@ -164,13 +164,13 @@ static RPC_LIST bcsBootloader_rest_c = {BOWLER_CRIT, // Method
 
 
 
-static NAMESPACE_LIST bcsBootloader = {"bcs.bootloader.*;0.3;;", // The string defining the namespace
+  NAMESPACE_LIST bcsBootloader = {"bcs.bootloader.*;0.3;;", // The string defining the namespace
     NULL, // the first element in the RPC list
     &bcsBootloaderAsyncEventCallback, // async for this namespace
     NULL// no initial elements to the other namesapce field.
 };
 
-static boolean BootloadernamespcaedAdded = false;
+  boolean BootloadernamespcaedAdded = false;
 
 NAMESPACE_LIST * get_bcsBootloaderNamespace() {
     if (!BootloadernamespcaedAdded) {

@@ -21,13 +21,13 @@
 
 
 
-//static uint8_t privateRX[BOWLER_PacketSize];
-//static BYTE_FIFO_STORAGE store;
-static BYTE_FIFO_STORAGE * my_store;
-static uint16_t gotData = false; 
+//  uint8_t privateRX[BOWLER_PacketSize];
+//  BYTE_FIFO_STORAGE store;
+  BYTE_FIFO_STORAGE * my_store;
+  uint16_t gotDataUart = false;
 
 boolean GotUARTData(void){
-	return gotData>0;
+	return gotDataUart>0;
 }
 
 
@@ -117,7 +117,7 @@ void Pic32UART_HAL_INIT(int BAUDRATE){
 }
 
 void Pic32UARTGetArray(uint8_t *packet,uint16_t size){
-	gotData-=size;
+	gotDataUart-=size;
 	FifoGetByteStream(my_store,packet,size);
 }
 

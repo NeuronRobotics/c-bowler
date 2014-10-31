@@ -27,17 +27,17 @@ void getCmd(uint8_t comand, uint8_t addrHigh, uint8_t addrLow, uint8_t data) {
 	cmd[3] = GetByteSPI(data);
 }
 
-static uint8_t progmode []						={0xAC,0x53,0x00,0x00};
-static uint8_t readVendorCode []				={0x30,0x00,0x00,0x00};
-static uint8_t readPartFamilyandFlashSize []	={0x30,0x00,0x01,0x00};
-static uint8_t readPartNumber []				={0x30,0x00,0x02,0x00};
-static uint8_t eraseChip []					={0xAC,0x80,0x00,0x00};
+  uint8_t progmode []						={0xAC,0x53,0x00,0x00};
+  uint8_t readVendorCode []				={0x30,0x00,0x00,0x00};
+  uint8_t readPartFamilyandFlashSize []	={0x30,0x00,0x01,0x00};
+  uint8_t readPartNumber []				={0x30,0x00,0x02,0x00};
+  uint8_t eraseChip []					={0xAC,0x80,0x00,0x00};
 
 #define BytesAtATime 2
 
-//static float pageTime;
-static boolean programing=false; 
-static boolean initialized=false; 
+//  float pageTime;
+  boolean programing=false;
+  boolean initialized=false;
 
 uint8_t getCommand(uint8_t * b);
 

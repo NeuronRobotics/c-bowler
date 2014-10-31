@@ -29,20 +29,20 @@
 #define USBNotOk	(USBDeviceState < CONFIGURED_STATE)||(USBSuspendControl==1)
 
 #define TxPrivateSize 64
-static BYTE RxTmpBuffer[BOWLER_PacketSize];
-//static BYTE privateRX[BOWLER_PacketSize];
-static BYTE TxBuffer[TxPrivateSize+1 ];
-static UINT16 gotData = 0;
-static BOOL bufferSet=FALSE;
+BYTE RxTmpBuffer[BOWLER_PacketSize];
+//BYTE privateRX[BOWLER_PacketSize];
+BYTE TxBuffer[TxPrivateSize+1 ];
+UINT16 gotData = 0;
+BOOL bufferSet=FALSE;
 
-static WORD     txSize;
+WORD     txSize;
 
 
-//static BYTE_FIFO_STORAGE store;
-static BYTE_FIFO_STORAGE * usb_fifo_my_store=NULL;
-static BYTE_FIFO_STORAGE * last_my_store=NULL;
+//BYTE_FIFO_STORAGE store;
+BYTE_FIFO_STORAGE * usb_fifo_my_store=NULL;
+BYTE_FIFO_STORAGE * last_my_store=NULL;
 
-static BOOL usbActive = TRUE;
+BOOL usbActive = TRUE;
 
 BOOL GotUSBData(void){
 	return gotData>0;
@@ -121,7 +121,7 @@ WORD USBGetArray(BYTE* stream, WORD num){
 	BYTE n = FifoGetByteStream(GetPICUSBFifo(),stream,num);
 	return n;
 }
-//static BYTE tmp [64];
+//BYTE tmp [64];
 extern BYTE cdc_trf_state;
 extern USB_HANDLE CDCDataInHandle;
 

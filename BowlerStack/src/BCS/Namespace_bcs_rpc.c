@@ -78,7 +78,7 @@ boolean _rpcArgs(BowlerPacket * Packet) {
     return true;
 }
 //Get RPC's
-static RPC_LIST bcsRpc__RPC = {BOWLER_GET,
+  RPC_LIST bcsRpc__RPC = {BOWLER_GET,
     "_rpc",
     &_rpc,
     {   BOWLER_I08,
@@ -93,7 +93,7 @@ static RPC_LIST bcsRpc__RPC = {BOWLER_GET,
     NULL //Termination
 };
 //Get RPC's
-static RPC_LIST bcsRpc_ARGS = {BOWLER_GET,
+  RPC_LIST bcsRpc_ARGS = {BOWLER_GET,
     "args",
     &_rpcArgs,
     {BOWLER_I08, //namespace index
@@ -111,7 +111,7 @@ static RPC_LIST bcsRpc_ARGS = {BOWLER_GET,
 };
 
 
-static NAMESPACE_LIST bcsRpc = {"bcs.rpc.*;0.3;;", // The string defining the namespace
+  NAMESPACE_LIST bcsRpc = {"bcs.rpc.*;0.3;;", // The string defining the namespace
     NULL, // the first element in the RPC list
     NULL, // async for this namespace
     NULL// no initial elements to the other namesapce field.
@@ -119,7 +119,7 @@ static NAMESPACE_LIST bcsRpc = {"bcs.rpc.*;0.3;;", // The string defining the na
 
 
 
-static boolean BcsRpcnamespcaedAdded = false;
+  boolean BcsRpcnamespcaedAdded = false;
 
 NAMESPACE_LIST * getBcsRpcNamespace() {
     if (!BcsRpcnamespcaedAdded) {

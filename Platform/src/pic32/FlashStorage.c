@@ -7,18 +7,18 @@
 #include "arch/pic32/BowlerConfig.h"
 #include "Bowler/Bowler.h"
 //#include <stddef.h>
-static FlashStorageStruct flash;
+  FlashStorageStruct flash;
 
-static uint32_t * externalStream=0;
-static uint32_t streamSize=0;
-static uint32_t * stream;
+  uint32_t * externalStream=0;
+  uint32_t streamSize=0;
+  uint32_t * stream;
 
-static uint8_t  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
+  uint8_t  defMac[]  ={0x74,0xf7,0x26,0x00,0x00,0x00} ;
 
-static uint32_t MEMORY_BASE =DefaultStartStorePhysical;
-static uint32_t VirtualBase = DefaultStartStorePhysical+VirtualAddress;
+  uint32_t MEMORY_BASE =DefaultStartStorePhysical;
+  uint32_t VirtualBase = DefaultStartStorePhysical+VirtualAddress;
 
-static boolean disableFlash =true;
+  boolean disableFlash =true;
 
 void enableFlashStorage(boolean enabled){
 	disableFlash = enabled?false:true;

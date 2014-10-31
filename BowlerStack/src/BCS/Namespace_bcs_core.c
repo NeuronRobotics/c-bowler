@@ -12,7 +12,7 @@ boolean _png(BowlerPacket * Packet);
 #if defined(USE_LINKED_LIST_NAMESPACE)
 //char coreName[] = "bcs.core.*;0.3;;";
 
-static RPC_LIST bcsCore_nms = {BOWLER_GET,
+  RPC_LIST bcsCore_nms = {BOWLER_GET,
     "_nms",
     &_nms,
      {  BOWLER_I08,
@@ -24,7 +24,7 @@ static RPC_LIST bcsCore_nms = {BOWLER_GET,
     NULL //Termination
 };
 
-static RPC_LIST bcsCore_png = {BOWLER_GET,
+  RPC_LIST bcsCore_png = {BOWLER_GET,
     "_png",
     &_png,
      {0}, // Calling arguments
@@ -33,7 +33,7 @@ static RPC_LIST bcsCore_png = {BOWLER_GET,
     NULL //Termination
 };
 
-static NAMESPACE_LIST bcsCore = {"bcs.core.*;0.3;;", // The string defining the namespace
+  NAMESPACE_LIST bcsCore = {"bcs.core.*;0.3;;", // The string defining the namespace
     NULL, // the first element in the RPC string
     NULL, // no async for this namespace
     NULL// no initial elements to the other namesapce field.
@@ -228,7 +228,7 @@ void RunNamespaceAsync(BowlerPacket *Packet, boolean(*pidAsyncCallbackPtr)(Bowle
     }
 }
 
-static boolean BcsCorenamespcaedAdded = false;
+ boolean BcsCorenamespcaedAdded = false;
 
 NAMESPACE_LIST * getBcsCoreNamespace() {
     if (!BcsCorenamespcaedAdded) {

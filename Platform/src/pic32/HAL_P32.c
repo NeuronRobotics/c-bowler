@@ -25,7 +25,7 @@ enum {
 } _excep_code;
 
 void __attribute__((nomips16)) _general_exception_handler() {
-    //static unsigned int _epc_code;
+    //  unsigned int _epc_code;
     unsigned int _excep_addr;
     asm volatile("mfc0 %0,$13" : "=r" (_excep_code));
     asm volatile("mfc0 %0,$14" : "=r" (_excep_addr));
@@ -74,15 +74,15 @@ void __attribute__((nomips16)) _general_exception_handler() {
 
 BYTE_FIFO_STORAGE storeUSB;
 uint8_t privateRXUSB[BOWLER_PacketSize ];
-static BYTE_FIFO_STORAGE storeUART;
-static uint8_t privateRXUART[BOWLER_PacketSize];
+  BYTE_FIFO_STORAGE storeUART;
+  uint8_t privateRXUART[BOWLER_PacketSize];
 
 boolean isPic32Initialized = false;
 
  boolean usbComs = false;
-static boolean uartComs = false;
+  boolean uartComs = false;
 
-static boolean disableSerial = true;
+  boolean disableSerial = true;
 
 void disableSerialComs(boolean state) {
     disableSerial = state;
