@@ -55,7 +55,7 @@ void FlashLoad(void){
     }
     int i;
     stream = (uint32_t *) &flash;
-    for (i=0;i<FLASHSTORE;i++){
+    for (i=0;i<FLASHSTORE/4;i++){
             stream[i]=*((uint32_t *)(VirtualBase +(i*4)));
     }
     if(externalStream != 0 && streamSize!=0){
@@ -79,7 +79,7 @@ void FlashSync(void){
             NVMErasePage( (uint32_t *) MEMORY_BASE);
 	println_I("Writing new data Storage page");
         stream = (uint32_t *) &flash;
-	for (i=0;i<FLASHSTORE;i++){
+	for (i=0;i<FLASHSTORE/4;i++){
             if(disableFlash==false)
 		NVMWriteWord((uint32_t *)(VirtualBase +(i*4)), stream[i]);
 	}
