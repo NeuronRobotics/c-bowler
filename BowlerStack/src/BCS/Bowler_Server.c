@@ -175,7 +175,7 @@ boolean process(BowlerPacket * Packet) {
 }
 
 /**
- * Run an instance of the server. THis uses static memory
+ * Run an instance of the server. This uses user defined memory
  */
 uint8_t Bowler_Server_Static(BowlerPacket * Packet, BYTE_FIFO_STORAGE * fifo) {
 

@@ -2579,7 +2579,7 @@ void USBStallEndpoint(BYTE ep, BYTE dir)
  *
  * Note:            None
  *******************************************************************/
-//static volatile BDT_ENTRY* handle;
+
 USB_HANDLE USBTransferOnePacket(BYTE ep,BYTE dir,BYTE* data,UINT16 len)
 {
     volatile BDT_ENTRY* handle;
