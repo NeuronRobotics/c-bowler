@@ -128,7 +128,7 @@ boolean _nms(BowlerPacket * Packet) {
 void addRpcToNamespace(NAMESPACE_LIST * namespace, RPC_LIST * rpc) {
     if (namespace == NULL || rpc == NULL) {
         setPrintLevelErrorPrint();
-        println_E("Can not add null RPC or Null namespace");
+        println_E("null RPC or Null namespace");
         while (1);
     }
     rpc->next = NULL;
@@ -153,7 +153,7 @@ void addRpcToNamespace(NAMESPACE_LIST * namespace, RPC_LIST * rpc) {
 void addNamespaceToList(NAMESPACE_LIST * newNs) {
     if (newNs == NULL) {
         setPrintLevelErrorPrint();
-        println_E("Can not add null RPC or Null namespace");
+        println_E("Null namespace");
         while (1);
     }
     newNs->next = NULL;

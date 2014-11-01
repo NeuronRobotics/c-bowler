@@ -191,7 +191,7 @@ void setString(BowlerPacket * Packet, char * val, uint8_t offset) {
         Packet->use.data[offset + i] = val[i];
         i++;
         if(i+offset>=sizeof(BowlerPacket)){
-            println_E("Writing over the size of the packet!!");
+            //println_E("Writing over the size of the packet!!");
             return;
         }
     }

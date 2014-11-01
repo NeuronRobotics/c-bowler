@@ -16,7 +16,7 @@ void allign(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 		FifoReadByteStream(Packet->stream,1,fifo);
 		if((Packet->use.head.ProtocolRevision != BOWLER_VERSION)){
 			if(first==0){
-				println("##Junking bad first byte. Fifo Size=",INFO_PRINT);  // SPI ISR shits out messages when 0xAA fails to match. making this info.
+				println("bad first byte. Fifo=",INFO_PRINT);  // SPI ISR shits out messages when 0xAA fails to match. making this info.
 				p_int(calcByteCount(fifo),INFO_PRINT);
 				print_nnl(" [",INFO_PRINT);
 			}
@@ -61,9 +61,9 @@ boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean
 
 		  ){
 			if(Packet->use.head.ProtocolRevision != BOWLER_VERSION){
-				println("###Bad first byte=",ERROR_PRINT);
+				println("Bad first byte=",ERROR_PRINT);
 			}else if(CheckCRC(Packet)==false) {
-				println("###Bad crc check=",ERROR_PRINT);
+				println("Bad crc check=",ERROR_PRINT);
 			}
 			prHEX8(Packet->use.head.ProtocolRevision,ERROR_PRINT);print_nnl(" Fifo Size=",ERROR_PRINT);p_int(calcByteCount(fifo),ERROR_PRINT);
 			uint8_t b;
@@ -80,17 +80,13 @@ boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean
 			PacketCheck=true; 
 		}
 		if (getNumBytes(fifo) < minSize) {
-			println("##Failed to allign apacket",ERROR_PRINT);
+			println("allign packet",ERROR_PRINT);
 			allign(Packet,fifo);
 			return false; //Not enough bytes to even be a header, try back later
 		}
 	}
 	PacketLegnth  = Packet->use.head.DataLegnth;
-	if(PacketLegnth<4){
-		if(debug){
-			println("#*#*Warning, packet has no RPC",WARN_PRINT);
-		}
-	}
+
 	uint16_t totalLen = PacketLegnth+BowlerHeaderSize;
 	// See if all the data has arived for this packet
 	int32_t num = getNumBytes(fifo);

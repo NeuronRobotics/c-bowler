@@ -35,12 +35,12 @@ void FlashSwitchMemoryToBootloader(){
 
 void SetFlashData(uint32_t * s,uint32_t size){
     if(((size*4)+FLASHSTORE) > FLASH_PAGE_SIZE ){
-        println_E("This data page is too big for the flash page!");
+        //println_E("This data page is too big for the flash page!");
         SoftReset();
     }
     streamSize=size;
     externalStream=s;
-    println_W("Setting external flash data ");p_int_W(size);
+    //println_W("Setting external flash data ");p_int_W(size);
 }
 
 void FlashLoad(void){
@@ -63,7 +63,7 @@ void FlashLoad(void){
 				externalStream[i]=*((uint32_t *)(VirtualBase +((i+FLASHSTORE)*4)));
 		}
     }else{
-           println_E("External storage not availible!"); 
+           //println_E("External storage not availible!");
     }
 }
 
@@ -74,10 +74,10 @@ void FlashSync(void){
 	uint32_t i;
         uint32_t data=0, read=0,addr=0;
 
-	println_I("Erasing Storage page");
+//	println_I("Erasing Storage page");
         if(disableFlash==false)
             NVMErasePage( (uint32_t *) MEMORY_BASE);
-	println_I("Writing new data Storage page");
+//	println_I("Writing new data Storage page");
         stream = (uint32_t *) &flash;
 	for (i=0;i<FLASHSTORE/4;i++){
             if(disableFlash==false)
@@ -91,16 +91,16 @@ void FlashSync(void){
                         NVMWriteWord((uint32_t *)(addr), data );
                         read=*((uint32_t *)(addr));
                         if(data != read){
-                            println_E("Data write failed! ");prHEX32(read,ERROR_PRINT);
-                            print_E(" expected ");prHEX32(data,ERROR_PRINT);
-                            print_E(" at ");prHEX32(addr,ERROR_PRINT);
+//                            println_E("Data write failed! ");prHEX32(read,ERROR_PRINT);
+//                            print_E(" expected ");prHEX32(data,ERROR_PRINT);
+//                            print_E(" at ");prHEX32(addr,ERROR_PRINT);
                         }
                     }
             }
 	}else{
-          println_E("External storage not availible!");
+          //println_E("External storage not availible!");
         }
-	println_I("Storage synced");
+	//println_I("Storage synced");
 }
 
 uint8_t FlashSetMac(uint8_t * mac){
