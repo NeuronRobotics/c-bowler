@@ -50,7 +50,10 @@ void Process_Self_Packet(BowlerPacket * Packet) {
             //Found matching RPC and Method to parse
             foundRpc++;
             currentNamespaceIndexForPacket = namespaceIndex;
-            //println_I("Rpc found in namespace: ");print_I(tmp->namespaceString);
+            println_I("Rpc: ");
+            print_I((char *)rpc->rpc);
+            print_I(" found in namespace: ");
+            print_I((char *)tmp->namespaceString);
         }
         //Null check and move to next namespace
         tmp = tmp->next;
@@ -86,7 +89,6 @@ void Process_Self_Packet(BowlerPacket * Packet) {
                 Packet->use.head.Method);
 
         if (rpc != NULL) {
-            //println_I("RPC found: ");print_I(rpc->rpc);
             rpc->callback(Packet);
             Packet->use.head.DataLegnth = 4;
             if (rpc->responseArguments != 0) {
