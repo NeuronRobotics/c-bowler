@@ -19,14 +19,18 @@
 
 #define __WASP2_C
 
-const MAC_ADDR Broadcast = {
+MAC_ADDR Broadcast = {
     {0, 0, 0, 0, 0, 0}
 };
 MAC_ADDR MyMAC = {
     {0x74, 0xf7, 0x26, 0x01, 0x01, 0x01}
 };
 
+boolean ignoreAddressing = false;
 
+void setIgnoreAddressing(boolean v){
+	ignoreAddressing =v;
+}
 
 float lastPacketTime;
 
@@ -158,7 +162,10 @@ boolean process(BowlerPacket * Packet) {
         printPacket(Packet, INFO_PRINT);
     }
     //}
-    if ((CheckAddress(MyMAC.v, Packet->use.head.MAC.v) == true) || ((CheckAddress((uint8_t *) Broadcast.v, (uint8_t *) Packet->use.head.MAC.v) == true))) {
+    if (    CheckAddress(MyMAC.v, Packet->use.head.MAC.v) == true ||
+            CheckAddress(Broadcast.v, Packet->use.head.MAC.v) == true||
+            ignoreAddressing ==true
+            ) {
         Process_Self_Packet(Packet);
         for (i = 0; i < 6; i++) {
             Packet->use.head.MAC.v[i] = MyMAC.v[i];
