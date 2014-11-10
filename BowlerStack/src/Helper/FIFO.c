@@ -11,17 +11,14 @@ void clearByteFifo(BYTE_FIFO_STORAGE * fifo);
 //const char * fifoinit = "Initializing FIFO, Buffer Size: ";
 //const char * error = "@##ERROR fifo is overflown! Size, buffer: ";
 
-void printFiFoState(BYTE_FIFO_STORAGE * fifo, uint8_t * buffer,Print_Level l){
+void printFiFoState(BYTE_FIFO_STORAGE * fifo,Print_Level l){
 	int i;
 	print_nnl("\nFifo state: \tBytes:",l);
 	p_int(calcByteCount(fifo),l);
 
-	FifoReadByteStream(	buffer,
-						calcByteCount(fifo)+1,
-						fifo);
 	print_nnl("\tData [ ",l);
 	for(i=0;i<calcByteCount(fifo);i++){
-		p_int(buffer[i],l);print_nnl(" ",l);
+		p_int(FifoReadByteAtIndex(fifo,i),l);print_nnl(" ",l);
 	}
 	print_nnl(" ]\n",l);
 }
@@ -128,6 +125,17 @@ uint8_t getByte(BYTE_FIFO_STORAGE * fifo, uint8_t * errorCode){
 	return b;
 }
 
+uint8_t FifoReadByteAtIndex(BYTE_FIFO_STORAGE * fifo,uint32_t offset ){
+
+
+	uint32_t index=fifo->readPointer +offset;
+	if(index >=fifo->bufferSize )
+		index -= fifo->bufferSize;
+
+	return fifo->buffer[index];
+}
+
+
 uint32_t FifoGetByteStream(BYTE_FIFO_STORAGE * fifo,uint8_t *packet,uint32_t size){
 	uint8_t err;
 	int i;
@@ -147,6 +155,7 @@ uint32_t FifoGetByteStream(BYTE_FIFO_STORAGE * fifo,uint8_t *packet,uint32_t siz
 	}
 	return i;
 }
+
 
 uint32_t FifoReadByteStream(uint8_t *packet,uint32_t size,BYTE_FIFO_STORAGE * fifo){
 	uint32_t read=fifo->readPointer;
