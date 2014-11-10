@@ -194,21 +194,21 @@ int USBPutArray(BYTE* stream, int num){
 		int packetIndex = 0;
 		int i;
 		//if(num>(TxPrivateSize)) {
-		if(num>255) {
-			//println_I("Packet too large for USB buffer");
+		if(num>TxPrivateSize) {
+			println_I("Packet too large for USB buffer");
 			while(packetLen>TxPrivateSize) {
 				for(i=0;i<TxPrivateSize;i++) {
 					TxBuffer[i]=stream[packetIndex++];
 					packetLen--;
 				}
-				//println_I("Sending chunk ");printStream_I(TxBuffer,i);
+				println_I("Sending chunk ");printStream_I(TxBuffer,i);
 				txSize=i;
 				flush();
 			}
 			for(i=0;i<packetLen;i++) {
 				TxBuffer[i]=stream[packetIndex++];
 			}
-			//println_I("Sending chunk ");printStream_I(TxBuffer,i);
+			println_I("Sending chunk ");printStream_I(TxBuffer,i);
 			txSize=i;
 			flush();
 		}else {
