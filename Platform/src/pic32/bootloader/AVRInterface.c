@@ -168,7 +168,9 @@ void HoldAVRReset(void){
 
 void ReleaseAVRReset(void){
 	AVR_RST_IO(1);
-	//DelayMs(70);
+	println_E("Starting AVR...");
+	DelayMs(1000);
+	println_W("AVR started");
 }
 
 void writeAVRTempFlashPage(uint16_t addr, uint16_t value)
