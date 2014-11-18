@@ -15,8 +15,9 @@
  * limitations under the License.
  *
  */
-
 #include "Bowler/Bowler.h"
+#include "arch/AVR/BowlerConfig.h"
+
 boolean okToPrint(Print_Level l);
 //#if defined(__AVR_ATmega324P__)
 	#define comBuffSize (MiniPacketDataSize+4+BowlerHeaderSize)
@@ -25,7 +26,7 @@ boolean okToPrint(Print_Level l);
 //#endif
 static uint8_t privateRXCom[comBuffSize];
 static BYTE_FIFO_STORAGE store;
-static uint32_t TimerOFcount=0;
+static uint64_t TimerOFcount=0;
 static uint32_t TimerOFcountUpper=0;
 
 boolean GetBowlerPacket_arch(BowlerPacket * Packet){
@@ -63,8 +64,8 @@ void putCharDebug(char c){
  */
 void startScheduler(void){
 	TimerOFcount=0;
-	TCCR1Abits._WGM =0x00;// Fast WPM, 0xff top, 0x00 bottom
-	TCCR1Bbits._CS = 5;// Clock select 1-5 are valid values
+	TCCR1Abits._WGM =0x00;// Normal , 0xffff top, 0x0000 bottom
+	TCCR1Bbits._CS = 5;//  value CLslk I/O/1024 (From prescaler)
 	TIMSK1bits._TOIE1=1;
 }
 
@@ -81,7 +82,7 @@ uint64_t GetTimeTicks(void){
 
 ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
 	//StartCritical();
-	uint32_t before = TimerOFcount;
+	uint64_t before = TimerOFcount;
 	TimerOFcount+=0x10000;
 	if(TimerOFcount<before){
 		TimerOFcount=0;
