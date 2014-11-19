@@ -82,7 +82,11 @@ uint64_t GetTimeTicks(void){
 }
 
 ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
-	//StartCritical();
+	/*
+	 * When an interrupt occurs, the Global Interrupt Enable I-bit is cleared and all interrupts are dis-
+	 * abled. The user software can write logic one to the I-bit to enable nested interrupts.
+	 */
+	EndCritical();
 	uint64_t before = TimerOFcount;
 	TimerOFcount+=0x10000;
 	if(TimerOFcount<before){
@@ -90,7 +94,6 @@ ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
 		TCNT1=0;
 		TimerOFcountUpper++;
 	}
-	//EndCritical();
 }
 
 
@@ -130,12 +133,20 @@ void WriteAVRUART1(uint8_t val){
  * Private helpers
  */
 ISR(USART0_RX_vect){
-	StartCritical();
-	uint8_t err;
-	//uint8_t b= UDR0;
-	FifoAddByte(&store, UDR0, &err);
+	FlagBusy_IO=1;
+	uint8_t tmp = UDR0;
+	UCSR0A = 0x00;
+	UCSR0Bbits._RXCIE0=0;
+	/*
+	 * When an interrupt occurs, the Global Interrupt Enable I-bit is cleared and all interrupts are dis-
+	 * abled. The user software can write logic one to the I-bit to enable nested interrupts.
+	 */
 	EndCritical();
-	//print("Got [0x");prHEX8(b);print("]\n");
+	uint8_t err;
+
+	FifoAddByte(&store, tmp, &err);
+	UCSR0Bbits._RXCIE0=1;
+	FlagBusy_IO=0;
 }
 
 
