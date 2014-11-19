@@ -82,20 +82,20 @@ uint32_t FifoGetByteCount(BYTE_FIFO_STORAGE * fifo){
 }
 
 uint32_t FifoAddByte(BYTE_FIFO_STORAGE * fifo,uint8_t b, uint8_t * errorCode){
-	if(calcByteCount(fifo) >= (fifo->bufferSize-2)){
-		//println(error);p_int(fifo->bufferSize);print_nnl(",");p_int(fifo->byteCount);
-		errorCode[0]=FIFO_OVERFLOW;
-		return 0;
-	}
-	if(lockFifo(fifo)==false) {
-		errorCode[0]=FIFO_FAILED_TO_SET;
-		//return 0;
-	}
-        if(fifo->buffer == NULL){
-            setPrintLevelErrorPrint();
-            println_E("Null buffer in fifo call");
-            //return 0;
-        }
+//	if(calcByteCount(fifo) >= (fifo->bufferSize-2)){
+//		//println(error);p_int(fifo->bufferSize);print_nnl(",");p_int(fifo->byteCount);
+//		errorCode[0]=FIFO_OVERFLOW;
+//		return 0;
+//	}
+//	if(lockFifo(fifo)==false) {
+//		errorCode[0]=FIFO_FAILED_TO_SET;
+//		//return 0;
+//	}
+//        if(fifo->buffer == NULL){
+//            setPrintLevelErrorPrint();
+//            println_E("Null buffer in fifo call");
+//            //return 0;
+//        }
 
 	fifo->buffer[fifo->writePointer]=b;
 	fifo->writePointer++;
@@ -103,9 +103,9 @@ uint32_t FifoAddByte(BYTE_FIFO_STORAGE * fifo,uint8_t b, uint8_t * errorCode){
 		fifo->writePointer=0;
 	}
 	//fifo->byteCount++;
-	calcByteCount(fifo);
+	//calcByteCount(fifo);
 	errorCode[0]=FIFO_OK;
-	unLockFifo(fifo);
+	//unLockFifo(fifo);
 	return (calcByteCount(fifo)<=fifo->bufferSize);
 }
 

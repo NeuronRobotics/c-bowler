@@ -48,7 +48,7 @@ uint16_t putStream(uint8_t *packet,uint16_t size){
  */
 float getMs(void){
 	float upper = (((float)TimerOFcountUpper)*((float)4294967294ul))/18.0;
-	return ((((float)GetTimeTicks())/18.0)+upper)/1024.0;
+	return ((((float)GetTimeTicks())/18.0)+upper)/128;
 }
 /**
  * send this char to the print terminal
@@ -66,7 +66,7 @@ void startScheduler(void){
 	TimerOFcount=0;
 	TCCR1Abits._WGM =0x00;// Normal , 0xffff top, 0x0000 bottom
 	//TCCR1Bbits._CS = 5;//  value CLslk I/O/1024 (From prescaler)
-	TCCR1Bbits._CS = 1;//  value CLslk I/O/1 (From prescaler)
+	TCCR1Bbits._CS = 2;//  value CLslk I/O/8 (From prescaler)
 	TIMSK1bits._TOIE1=1;
 }
 
@@ -132,8 +132,8 @@ void WriteAVRUART1(uint8_t val){
 ISR(USART0_RX_vect){
 	StartCritical();
 	uint8_t err;
-	uint8_t b= UDR0;
-	FifoAddByte(&store, b, &err);
+	//uint8_t b= UDR0;
+	FifoAddByte(&store, UDR0, &err);
 	EndCritical();
 	//print("Got [0x");prHEX8(b);print("]\n");
 }
