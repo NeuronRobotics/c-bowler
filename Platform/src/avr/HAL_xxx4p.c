@@ -82,6 +82,8 @@ uint64_t GetTimeTicks(void){
 }
 
 ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
+	TIFR1bits._TOV1=0;
+	TIMSK1bits._TOIE1=0;
 	/*
 	 * When an interrupt occurs, the Global Interrupt Enable I-bit is cleared and all interrupts are dis-
 	 * abled. The user software can write logic one to the I-bit to enable nested interrupts.
@@ -94,6 +96,7 @@ ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
 		TCNT1=0;
 		TimerOFcountUpper++;
 	}
+	TIMSK1bits._TOIE1=1;
 }
 
 
