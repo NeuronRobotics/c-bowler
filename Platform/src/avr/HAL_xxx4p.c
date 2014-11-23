@@ -104,7 +104,8 @@ ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
  */
 void AVR_Bowler_HAL_Init(void){
 	StartCritical();
-	serial_init( (( F_CPU /INTERNAL_BAUD / 16 ) - 1));
+	//serial_init( (( F_CPU /INTERNAL_BAUD / 16 ) - 1));
+	serial_init( INTERNAL_BAUD_AVR );
 #if defined(DEBUG)
 	EnableDebugTerminal();
 #endif
