@@ -31,9 +31,17 @@
 #define RPCCodeStart 			BowlerHeaderSize
 
 #define PRINT_BAUD 			115200
+/**
+ * 	AVR Baud = 128000 	Pic Baud = 128205	Percent = 0.1602564102564088
+	AVR Baud = 144000 	Pic Baud = 143884	Percent = 0.07993605115906476
+	AVR Baud = 192000 	Pic Baud = 192307	Percent = 0.1602564102564126
+	AVR Baud = 288000 	Pic Baud = 289855	Percent = 0.6441223832528219
+	AVR Baud = 384000 	Pic Baud = 384615	Percent = 0.1602564102564126
+	AVR Baud = 576000 	Pic Baud = 571428	Percent = 0.793650793650785
+ */
 
-#define INTERNAL_BAUD 				384000 // 0.16% difference
-
+//#define INTERNAL_BAUD 				384000 // 0.160% difference
+#define INTERNAL_BAUD 				144000 // 0.079% difference
 //#define INTERNAL_BAUD 				115200
 
 #define BOWLER_PacketSize		(BowlerHeaderSize+255)
