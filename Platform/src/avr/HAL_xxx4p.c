@@ -78,25 +78,22 @@ void serial_init(unsigned int bittimer);
  * Private helpers
  */
 uint64_t GetTimeTicks(void){
-	return (uint64_t) (TimerOFcount+TCNT1);
+	return (uint64_t) ((TimerOFcount*0x10000)+TCNT1);
 }
 
 ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
+	FlagBusy_IO=1;
 	TIFR1bits._TOV1=0;
 	TIMSK1bits._TOIE1=0;
-	/*
-	 * When an interrupt occurs, the Global Interrupt Enable I-bit is cleared and all interrupts are dis-
-	 * abled. The user software can write logic one to the I-bit to enable nested interrupts.
-	 */
-	EndCritical();
 	uint64_t before = TimerOFcount;
-	TimerOFcount+=0x10000;
+	TimerOFcount++;
 	if(TimerOFcount<before){
 		TimerOFcount=0;
 		TCNT1=0;
 		TimerOFcountUpper++;
 	}
 	TIMSK1bits._TOIE1=1;
+	FlagBusy_IO=0;
 }
 
 
