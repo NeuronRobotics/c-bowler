@@ -11,15 +11,14 @@ boolean useUart1 = false;
 boolean Write32UART2(uint8_t data)
 {
 	int tick =delayUart;
-	while (!UARTTransmitterIsReady(UART2)){
-                if(INTGetFlag(INT_SOURCE_UART_ERROR(UART2))){
-                    INTClearFlag(INT_SOURCE_UART_ERROR(UART2));
-                }
+	while (BusyUART2()){
+
 		if(tick--==0){
 			return false; 
 		}
 	}
-	UARTSendDataByte(UART2, data);
+	WriteUART2(data);
+	//UARTSendDataByte(UART2, data);
 	return true; 
 }
 
