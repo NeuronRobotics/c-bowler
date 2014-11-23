@@ -65,7 +65,6 @@ void putCharDebug(char c){
 void startScheduler(void){
 	TimerOFcount=0;
 	TCCR1Abits._WGM =0x00;// Normal , 0xffff top, 0x0000 bottom
-	//TCCR1Bbits._CS = 5;//  value CLslk I/O/1024 (From prescaler)
 	TCCR1Bbits._CS = 2;//  value CLslk I/O/8 (From prescaler)
 	TIMSK1bits._TOIE1=1;
 }
