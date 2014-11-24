@@ -17,6 +17,7 @@
  */
 #include "Bowler/Bowler.h"
 #include "arch/AVR/BowlerConfig.h"
+static int current;
 
 boolean okToPrint(Print_Level l);
 //#if defined(__AVR_ATmega324P__)
@@ -82,6 +83,8 @@ uint64_t GetTimeTicks(void){
 
 ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
 	FlagBusy_IO=1;
+	TCCR1Bbits._CS=0;// stop the clock
+	current = TCNT1;// store the state
 	TIFR1bits._TOV1=0;
 	TIMSK1bits._TOIE1=0;
 	uint64_t before = TimerOFcount;
@@ -92,6 +95,9 @@ ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
 		TimerOFcountUpper++;
 	}
 	TIMSK1bits._TOIE1=1;
+
+	TCNT1 = current; // re-load the state value
+	TCCR1Bbits._CS = 2;//  value CLslk I/O/8 (From prescaler)
 	FlagBusy_IO=0;
 }
 
