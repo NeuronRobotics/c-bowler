@@ -82,21 +82,13 @@ uint64_t GetTimeTicks(void){
 }
 
 ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
-	TCCR1Bbits._CS=0;// stop the clock
-	FlagBusy_IO=1;
-	TIFR1bits._TOV1=0;
-
-	uint64_t before = TimerOFcount;
+	//TCCR1Bbits._CS=0;// stop the clock
+	//FlagBusy_IO=1;
 	TimerOFcount++;
-	if(TimerOFcount<before){
-		TimerOFcount=0;
-		TCNT1=0;
-		TimerOFcountUpper++;
-	}
 	TCNT1 = 0; // re-load the state value
-	EndCritical();
-	TCCR1Bbits._CS = 2;//  value CLslk I/O/8 (From prescaler)
-	FlagBusy_IO=0;
+	//EndCritical();
+	//TCCR1Bbits._CS = 2;//  value CLslk I/O/8 (From prescaler)
+	//FlagBusy_IO=0;
 }
 
 
