@@ -29,6 +29,7 @@ static uint8_t privateRXCom[comBuffSize];
 static BYTE_FIFO_STORAGE store;
 static uint64_t TimerOFcount=0;
 static uint32_t TimerOFcountUpper=0;
+static uint16_t currentTimer=0;
 
 boolean GetBowlerPacket_arch(BowlerPacket * Packet){
 	return GetBowlerPacket(Packet,&store);
@@ -129,6 +130,7 @@ void WriteAVRUART1(uint8_t val){
  * Private helpers
  */
 ISR(USART0_RX_vect){
+	currentTimer = TCNT1;
 	FlagBusy_IO=1;
 	uint8_t tmp = UDR0;
 	UCSR0A = 0x00;
@@ -138,6 +140,7 @@ ISR(USART0_RX_vect){
 	 * abled. The user software can write logic one to the I-bit to enable nested interrupts.
 	 */
 	EndCritical();
+	TCNT1 =currentTimer;
 	uint8_t err;
 
 	FifoAddByte(&store, tmp, &err);
