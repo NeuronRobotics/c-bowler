@@ -27,9 +27,11 @@ boolean okToPrint(Print_Level l);
 //#endif
 static uint8_t privateRXCom[comBuffSize];
 static BYTE_FIFO_STORAGE store;
-static uint64_t TimerOFcount=0;
+static uint32_t TimerOFcount=0;
 static uint32_t TimerOFcountUpper=0;
-static uint16_t currentTimer=0;
+static uint32_t currentTimer=0;
+static uint8_t err;
+static uint8_t tmp;
 
 boolean GetBowlerPacket_arch(BowlerPacket * Packet){
 	return GetBowlerPacket(Packet,&store);
@@ -129,21 +131,36 @@ void WriteAVRUART1(uint8_t val){
 /**
  * Private helpers
  */
+
+
 ISR(USART0_RX_vect){
 	currentTimer = TCNT1;
 	FlagBusy_IO=1;
-	uint8_t tmp = UDR0;
-	UCSR0A = 0x00;
+	tmp = UDR0;
 	UCSR0Bbits._RXCIE0=0;
 	/*
 	 * When an interrupt occurs, the Global Interrupt Enable I-bit is cleared and all interrupts are dis-
 	 * abled. The user software can write logic one to the I-bit to enable nested interrupts.
 	 */
 	EndCritical();
-	TCNT1 =currentTimer;
-	uint8_t err;
+	//TCCR1Bbits._CS = 2;//  value CLslk I/O/8 (From prescaler)
+
+	if(currentTimer > TCNT1 ){
+		// roll over detect
+		TCNT1 = 0xffff-2;
+	}
+
+	if(currentTimer < OCR1B && TCNT1 > OCR1B){
+		// OCR1B detect
+		TCNT1 = OCR1B-2;
+	}
+	if(currentTimer < OCR1A && TCNT1 > OCR1A){
+		// OCR1A detect
+		TCNT1 = OCR1A-2;
+	}
 
 	FifoAddByte(&store, tmp, &err);
+	UCSR0A = 0x00;
 	UCSR0Bbits._RXCIE0=1;
 	FlagBusy_IO=0;
 }
