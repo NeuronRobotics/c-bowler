@@ -126,20 +126,10 @@ float interpolate(INTERPOLATE_DATA * data, float currentTime) {
     float setTime = data->setTime;
     float startTime = data->startTime;
 
-//    println_I("Time= ");p_fl_I(currentTime);
-//    println_I("Interpolate data: ");
-//    print_I(" Set= ");p_fl_I(set);
-//    print_I(" start= ");p_fl_I(start);
-//    print_I(" setTime= ");p_fl_I(setTime);
-//    print_I(" startTime= ");p_fl_I(startTime);
-//    println_I("From struct:      ");
-//    print_I(" Set= ");p_fl_I(data->set);
-//    print_I(" start= ");p_fl_I(data->start);
-//    print_I(" setTime= ");p_fl_I(data->setTime);
-//    print_I(" startTime= ");p_fl_I(data->startTime);
+
 //
 
-    elapsed =currentTime- (startTime);
+    elapsed = currentTime - (startTime);
     //interpolation is done
     if(elapsed >= setTime)
         return set;
@@ -153,8 +143,14 @@ float interpolate(INTERPOLATE_DATA * data, float currentTime) {
     // location will be an offset from the start
     currentLocation = currentDistance+start;
 
-//    print_W(" elapsedTime = ");p_fl_W(elapsed);
-//    print_W(" incremental distance = ");p_fl_W(currentDistance);
+//	println_E("Time= ");p_fl_E(currentTime);
+//	print_W(" Set= ");p_fl_W(set);
+//	print_E(" start= ");p_fl_E(start);
+//	print_W(" setTime= ");p_fl_W(setTime);
+//	print_E(" startTime= ");p_fl_E(startTime);
+
+//    println_W("elapsedTime = ");p_fl_W(elapsed);
+//    print_E(" incremental distance = ");p_fl_E(currentDistance);
 //    print_W(" Target = ");p_fl_W(currentLocation);
 
     return currentLocation;
