@@ -29,7 +29,7 @@ static uint8_t privateRXCom[comBuffSize];
 static BYTE_FIFO_STORAGE store;
 static uint32_t TimerOFcount=0;
 static uint32_t TimerOFcountUpper=0;
-static uint32_t currentTimer=0;
+//static uint32_t currentTimer=0;
 static uint8_t err;
 static uint8_t tmp;
 
@@ -85,6 +85,7 @@ uint64_t GetTimeTicks(void){
 }
 
 ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
+
 	//TCCR1Bbits._CS=0;// stop the clock
 	//FlagBusy_IO=1;
 	TimerOFcount++;
@@ -127,21 +128,7 @@ void WriteAVRUART1(uint8_t val){
 	_delay_us(UARTDELAY);
 }
 
-
-/**
- * Private helpers
- */
-
-
-ISR(USART0_RX_vect){
-	currentTimer = TCNT1;
-	int flag = FlagBusy_IO;
-	FlagBusy_IO=1;
-	tmp = UDR0;
-	UCSR0Bbits._RXCIE0=0;
-
-
-	//TCCR1Bbits._CS = 0;
+void fixTimers(int currentTimer){
 	/*
 	 * When an interrupt occurs, the Global Interrupt Enable I-bit is cleared and all interrupts are dis-
 	 * abled. The user software can write logic one to the I-bit to enable nested interrupts.
@@ -152,16 +139,33 @@ ISR(USART0_RX_vect){
 	if(currentTimer > after ){
 		// roll over detect
 		TCNT1 = 0xffff-5;
+		return;
 	}
 	if((currentTimer < OCR1B && after > OCR1B) || (currentTimer > OCR1B && after < OCR1B)){
 		// OCR1B detect
-		TCNT1 = currentTimer - 1;
+		TCNT1 = currentTimer - 5;
+		return;
 	}
 	if((currentTimer < OCR1A && after > OCR1A)||(currentTimer > OCR1A && after < OCR1A)){
 		// OCR1A detect
-		TCNT1 = currentTimer - 1;
+		TCNT1 = currentTimer - 5;
+		return;
 	}
-	//TCCR1Bbits._CS = 2;//  value CLslk I/O/8 (From prescaler)
+}
+
+
+/**
+ * Private helpers
+ */
+
+
+ISR(USART0_RX_vect){
+	int currentTimer = TCNT1;
+	int flag = FlagBusy_IO;
+	FlagBusy_IO=1;
+	tmp = UDR0;
+	UCSR0Bbits._RXCIE0=0;
+	fixTimers(currentTimer);
 
 	FifoAddByte(&store, tmp, &err);
 	UCSR0A = 0x00;
