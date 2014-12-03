@@ -138,26 +138,29 @@ ISR(USART0_RX_vect){
 	FlagBusy_IO=1;
 	tmp = UDR0;
 	UCSR0Bbits._RXCIE0=0;
+
+
+	//TCCR1Bbits._CS = 0;
 	/*
 	 * When an interrupt occurs, the Global Interrupt Enable I-bit is cleared and all interrupts are dis-
 	 * abled. The user software can write logic one to the I-bit to enable nested interrupts.
 	 */
 	EndCritical();
-	//TCCR1Bbits._CS = 2;//  value CLslk I/O/8 (From prescaler)
-
+	//
 	if(currentTimer > TCNT1 ){
 		// roll over detect
-		TCNT1 = 0xffff-2;
+		TCNT1 = 0xffff-5;
 	}
 
 	if(currentTimer < OCR1B && TCNT1 > OCR1B){
 		// OCR1B detect
-		TCNT1 = OCR1B-2;
+		TCNT1 = OCR1B-5;
 	}
 	if(currentTimer < OCR1A && TCNT1 > OCR1A){
 		// OCR1A detect
-		TCNT1 = OCR1A-2;
+		TCNT1 = OCR1A-5;
 	}
+	//TCCR1Bbits._CS = 2;//  value CLslk I/O/8 (From prescaler)
 
 	FifoAddByte(&store, tmp, &err);
 	UCSR0A = 0x00;
