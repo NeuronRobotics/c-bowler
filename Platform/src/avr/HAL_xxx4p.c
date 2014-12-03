@@ -135,6 +135,7 @@ void WriteAVRUART1(uint8_t val){
 
 ISR(USART0_RX_vect){
 	currentTimer = TCNT1;
+	int flag = FlagBusy_IO;
 	FlagBusy_IO=1;
 	tmp = UDR0;
 	UCSR0Bbits._RXCIE0=0;
@@ -146,26 +147,26 @@ ISR(USART0_RX_vect){
 	 * abled. The user software can write logic one to the I-bit to enable nested interrupts.
 	 */
 	EndCritical();
+	int after = TCNT1;
 	//
-	if(currentTimer > TCNT1 ){
+	if(currentTimer > after ){
 		// roll over detect
 		TCNT1 = 0xffff-5;
 	}
-
-	if(currentTimer < OCR1B && TCNT1 > OCR1B){
+	if((currentTimer < OCR1B && after > OCR1B) || (currentTimer > OCR1B && after < OCR1B)){
 		// OCR1B detect
-		TCNT1 = OCR1B-5;
+		TCNT1 = currentTimer - 1;
 	}
-	if(currentTimer < OCR1A && TCNT1 > OCR1A){
+	if((currentTimer < OCR1A && after > OCR1A)||(currentTimer > OCR1A && after < OCR1A)){
 		// OCR1A detect
-		TCNT1 = OCR1A-5;
+		TCNT1 = currentTimer - 1;
 	}
 	//TCCR1Bbits._CS = 2;//  value CLslk I/O/8 (From prescaler)
 
 	FifoAddByte(&store, tmp, &err);
 	UCSR0A = 0x00;
 	UCSR0Bbits._RXCIE0=1;
-	FlagBusy_IO=0;
+	FlagBusy_IO=flag;
 }
 
 
