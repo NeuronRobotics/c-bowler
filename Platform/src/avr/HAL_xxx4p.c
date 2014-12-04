@@ -133,26 +133,27 @@ void WriteAVRUART1(uint8_t val){
 }
 
 void fixTimers(int currentTimer){
+	int after = TCNT1;
 	/*
 	 * When an interrupt occurs, the Global Interrupt Enable I-bit is cleared and all interrupts are dis-
 	 * abled. The user software can write logic one to the I-bit to enable nested interrupts.
 	 */
 	EndCritical();
-	int after = TCNT1;
+
 	//
 	if(currentTimer > after ){
 		// roll over detect
 		TCNT1 = 0xffff-5;
 		return;
 	}
-	if((currentTimer < OCR1B && after > OCR1B) || (currentTimer > OCR1B && after < OCR1B)){
+	if((currentTimer < OCR1B && after > OCR1B)){
 		// OCR1B detect
-		TCNT1 = currentTimer - 5;
+		TCNT1 = OCR1B - 1;
 		return;
 	}
-	if((currentTimer < OCR1A && after > OCR1A)||(currentTimer > OCR1A && after < OCR1A)){
+	if((currentTimer < OCR1A && after > OCR1A)){
 		// OCR1A detect
-		TCNT1 = currentTimer - 5;
+		TCNT1 = OCR1A - 1;
 		return;
 	}
 }
@@ -165,7 +166,7 @@ void fixTimers(int currentTimer){
 
 ISR(USART0_RX_vect){
 	int currentTimer = TCNT1;
-	int flag = FlagBusy_IO;
+	//int flag = FlagBusy_IO;
 	FlagBusy_IO=1;
 	tmp = UDR0;
 	UCSR0Bbits._RXCIE0=0;
@@ -174,7 +175,8 @@ ISR(USART0_RX_vect){
 	FifoAddByte(&store, tmp, &err);
 	UCSR0A = 0x00;
 	UCSR0Bbits._RXCIE0=1;
-	FlagBusy_IO=flag;
+	//FlagBusy_IO=flag;
+	FlagBusy_IO=0;
 }
 
 
