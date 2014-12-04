@@ -27,7 +27,7 @@ boolean okToPrint(Print_Level l);
 //#endif
 static uint8_t privateRXCom[comBuffSize];
 static BYTE_FIFO_STORAGE store;
-static uint32_t TimerOFcount=0;
+static uint64_t TimerOFcount=0;
 static uint32_t TimerOFcountUpper=0;
 //static uint32_t currentTimer=0;
 static uint8_t err;
@@ -81,14 +81,18 @@ void serial_init(unsigned int bittimer);
  * Private helpers
  */
 uint64_t GetTimeTicks(void){
-	return (uint64_t) ((TimerOFcount*0x10000)+TCNT1);
+	return (uint64_t) ((TimerOFcount)+TCNT1);
+}
+
+void updateTimer(uint64_t value){
+	TimerOFcount+=value;
 }
 
 ISR(TIMER1_OVF_vect){//timer 1 overflow interrupt
 
 	//TCCR1Bbits._CS=0;// stop the clock
 	//FlagBusy_IO=1;
-	TimerOFcount++;
+	updateTimer(0xffff);
 	TCNT1 = 0; // re-load the state value
 	//EndCritical();
 	//TCCR1Bbits._CS = 2;//  value CLslk I/O/8 (From prescaler)
