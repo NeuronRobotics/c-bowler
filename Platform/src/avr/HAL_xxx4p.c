@@ -132,28 +132,29 @@ void WriteAVRUART1(uint8_t val){
 	_delay_us(UARTDELAY);
 }
 
-void fixTimers(int currentTimer){
-	int after = TCNT1;
+
+#define timerSpacer 5
+
+void fixTimers(int currentTimerLocal){
 	/*
 	 * When an interrupt occurs, the Global Interrupt Enable I-bit is cleared and all interrupts are dis-
 	 * abled. The user software can write logic one to the I-bit to enable nested interrupts.
 	 */
 	EndCritical();
-
+	int after = TCNT1;
 	//
-	if(currentTimer > after ){
-		// roll over detect
-		TCNT1 = 0xffff-5;
-		return;
-	}
-	if((currentTimer < OCR1B && after > OCR1B)){
+
+	if((currentTimerLocal <= OCR1B && after >= OCR1B)){
 		// OCR1B detect
-		TCNT1 = OCR1B - 1;
+		OCR1B = after+timerSpacer;
+		//println_E("B");p_int_E(after -currentTimerLocal-(2*timerSpacer) );
 		return;
 	}
-	if((currentTimer < OCR1A && after > OCR1A)){
+	if((currentTimerLocal <= OCR1A && after >= OCR1A)){
 		// OCR1A detect
-		TCNT1 = OCR1A - 1;
+		 OCR1A = after+timerSpacer;
+
+		//println_E("A");p_int_E(after -currentTimerLocal-(2*timerSpacer) );
 		return;
 	}
 }
@@ -163,18 +164,20 @@ void fixTimers(int currentTimer){
  * Private helpers
  */
 
-
+#define UART_ON (  _BV(RXEN0) | _BV(TXEN0)  )
 ISR(USART0_RX_vect){
-	int currentTimer = TCNT1;
+	//currentTimer = TCNT1;
+	UCSR0B=UART_ON;
+	//fixTimers(currentTimer);
+	EndCritical();
+
 	//int flag = FlagBusy_IO;
 	FlagBusy_IO=1;
 	tmp = UDR0;
-	UCSR0Bbits._RXCIE0=0;
-	fixTimers(currentTimer);
 
 	FifoAddByte(&store, tmp, &err);
 	UCSR0A = 0x00;
-	UCSR0Bbits._RXCIE0=1;
+	UCSR0B =( _BV(RXCIE0) | UART_ON  ) ;
 	//FlagBusy_IO=flag;
 	FlagBusy_IO=0;
 }
