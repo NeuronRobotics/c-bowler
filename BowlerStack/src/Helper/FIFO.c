@@ -109,7 +109,7 @@ uint32_t FifoAddByte(BYTE_FIFO_STORAGE * fifo,uint8_t b, uint8_t * errorCode){
 	return (calcByteCount(fifo)<=fifo->bufferSize);
 }
 
-uint8_t getByte(BYTE_FIFO_STORAGE * fifo, uint8_t * errorCode){
+uint8_t FifoGetByte(BYTE_FIFO_STORAGE * fifo, uint8_t * errorCode){
 	if(lockFifo(fifo)==false) {
 		errorCode[0]=FIFO_FAILED_TO_GET;
 		return 0;
@@ -146,7 +146,7 @@ uint32_t FifoGetByteStream(BYTE_FIFO_STORAGE * fifo,uint8_t *packet,uint32_t siz
 		if(count > 0){
 			uint8_t b;
 			do{
-				b = getByte(fifo,&err);
+				b = FifoGetByte(fifo,&err);
 			}while(err != FIFO_OK);
 			packet[i] = b;
 		}else{
