@@ -258,6 +258,10 @@ boolean GetBowlerPacket_arch(BowlerPacket * Packet) {
  * send the array out the connection
  */
 uint16_t putStream(uint8_t *packet, uint16_t size) {
+//    Print_Level l = getPrintLevel();
+//    setPrintLevelInfoPrint();
+//    println_I("UP>> ");printPacket((BowlerPacket *)packet,INFO_PRINT);
+//    setPrintLevel(l);
     Send_HAL_Packet(packet, size);
     return true;
 }

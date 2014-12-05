@@ -17,7 +17,14 @@
  */
 #include "Bowler/Bowler.h"
 #include "arch/AVR/BowlerConfig.h"
-
+//#include "reg_structs.h"
+//#include <util/delay.h>
+//#include <avr/io.h>
+//#include <avr/interrupt.h>
+//#include <string.h>
+//#include <avr/pgmspace.h>
+//#include "Bowler/Debug.h"
+//#  include <avr/iom644p.h>
 
 boolean okToPrint(Print_Level l);
 //#if defined(__AVR_ATmega324P__)
@@ -167,17 +174,18 @@ void fixTimers(int currentTimerLocal){
 #define UART_ON (  _BV(RXEN0) | _BV(TXEN0)  )
 ISR(USART0_RX_vect){
 	//currentTimer = TCNT1;
-	UCSR0B=UART_ON;
+	UCSR0Bbits._RXCIE0=0;
 	//fixTimers(currentTimer);
-	EndCritical();
+	sei();
 
 	//int flag = FlagBusy_IO;
 	FlagBusy_IO=1;
 	tmp = UDR0;
 
+
 	FifoAddByte(&store, tmp, &err);
-	UCSR0A = 0x00;
-	UCSR0B =( _BV(RXCIE0) | UART_ON  ) ;
+	UCSR0Bbits._RXCIE0=1;
+	//UCSR0B =( _BV(RXCIE0) | UART_ON  ) ;
 	//FlagBusy_IO=flag;
 	FlagBusy_IO=0;
 }
