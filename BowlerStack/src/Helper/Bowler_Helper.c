@@ -126,7 +126,31 @@ float interpolate(INTERPOLATE_DATA * data, float currentTime) {
     float setTime = data->setTime;
     float startTime = data->startTime;
 
-
+    if(isnan(set)){
+    	setPrintLevelErrorPrint();
+    	println_E("Interpolate NaN found set");
+    	set = 0;
+    }
+    if(isnan(start)){
+    	setPrintLevelErrorPrint();
+    	println_E("Interpolate NaN found start");
+    	start = 0;
+    }
+    if(isnan(setTime)||setTime<1){
+    	setPrintLevelErrorPrint();
+    	println_E("Interpolate NaN found setTime");
+    	setTime = 1; // can not divide by zero
+    }
+    if(isnan(startTime)){
+    	setPrintLevelErrorPrint();
+    	println_E("Interpolate NaN found startTime");
+    	startTime = 0;
+    }
+    if(isnan(currentTime)){
+		setPrintLevelErrorPrint();
+		println_E("Interpolate NaN found currentTime");
+		currentTime = 0;
+	}
 //
 
     elapsed = currentTime - (startTime);
@@ -142,6 +166,9 @@ float interpolate(INTERPOLATE_DATA * data, float currentTime) {
     
     // location will be an offset from the start
     currentLocation = currentDistance+start;
+
+    if(isnan(currentLocation))
+    	return set;
 
 //	println_E("Time= ");p_fl_E(currentTime);
 //	print_W(" Set= ");p_fl_W(set);

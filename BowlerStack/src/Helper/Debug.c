@@ -204,6 +204,10 @@ void printfDEBUG_FL(float f, Print_Level l) {
     if (!okToprint(l)) {
         return;
     }
+    if(isnan(f)){
+    	print_nnl("NaN", l);
+    	return;
+    }
     int32_t upper = (int32_t) f; // set up the upper section of the decimal by int casting to clip  off the decimal places
     int32_t shift = (int32_t) (f * 1000.0f); //shift up the decaml places as a float 3 places
     int32_t clip = upper * 1000; //clip off the upper section of the decimal
