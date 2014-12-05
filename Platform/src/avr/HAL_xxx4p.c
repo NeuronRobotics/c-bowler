@@ -179,7 +179,7 @@ ISR(USART0_RX_vect){
 	sei();
 
 	//int flag = FlagBusy_IO;
-	FlagBusy_IO=1;
+	//FlagBusy_IO=1;
 	tmp = UDR0;
 
 
@@ -187,7 +187,7 @@ ISR(USART0_RX_vect){
 	UCSR0Bbits._RXCIE0=1;
 	//UCSR0B =( _BV(RXCIE0) | UART_ON  ) ;
 	//FlagBusy_IO=flag;
-	FlagBusy_IO=0;
+	//FlagBusy_IO=0;
 }
 
 
