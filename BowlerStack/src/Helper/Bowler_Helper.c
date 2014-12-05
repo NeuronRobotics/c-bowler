@@ -127,35 +127,39 @@ float interpolate(INTERPOLATE_DATA * data, float currentTime) {
     float startTime = data->startTime;
 
     if(isnan(set)){
-    	setPrintLevelErrorPrint();
-    	println_E("Interpolate NaN found set");
-    	set = 0;
+//    	setPrintLevelErrorPrint();
+//    	println_E("Interpolate NaN found set");
+    	return 0;
     }
     if(isnan(start)){
-    	setPrintLevelErrorPrint();
-    	println_E("Interpolate NaN found start");
-    	start = 0;
+//    	setPrintLevelErrorPrint();
+//    	println_E("Interpolate NaN found start");
+    	return set;
     }
-    if(isnan(setTime)||setTime<1){
-    	setPrintLevelErrorPrint();
-    	println_E("Interpolate NaN found setTime");
-    	setTime = 1; // can not divide by zero
+    if(isnan(setTime)){
+//    	setPrintLevelErrorPrint();
+//    	println_E("Interpolate NaN found setTime");
+    	return set; // can not divide by zero
     }
     if(isnan(startTime)){
-    	setPrintLevelErrorPrint();
-    	println_E("Interpolate NaN found startTime");
-    	startTime = 0;
+//    	setPrintLevelErrorPrint();
+//    	println_E("Interpolate NaN found startTime");
+    	return set;
     }
     if(isnan(currentTime)){
-		setPrintLevelErrorPrint();
-		println_E("Interpolate NaN found currentTime");
-		currentTime = 0;
+//		setPrintLevelErrorPrint();
+//		println_E("Interpolate NaN found currentTime");
+		return set;
 	}
 //
 
+    // If the time is imediate, then the target should be returned no matter what.
+    if(setTime<=0)
+    	return set;
+
     elapsed = currentTime - (startTime);
     //interpolation is done
-    if(elapsed >= setTime)
+    if(elapsed >= setTime || elapsed < 0)
         return set;
 
     totalDistance = set-start;
@@ -169,7 +173,9 @@ float interpolate(INTERPOLATE_DATA * data, float currentTime) {
 
     if(isnan(currentLocation))
     	return set;
-
+   	if(between(set,currentLocation,start)){
+   		return currentLocation;
+   	}
 //	println_E("Time= ");p_fl_E(currentTime);
 //	print_W(" Set= ");p_fl_W(set);
 //	print_E(" start= ");p_fl_E(start);
@@ -179,15 +185,21 @@ float interpolate(INTERPOLATE_DATA * data, float currentTime) {
 //    println_W("elapsedTime = ");p_fl_W(elapsed);
 //    print_E(" incremental distance = ");p_fl_E(currentDistance);
 //    print_W(" Target = ");p_fl_W(currentLocation);
+   	return set;
 
-    return currentLocation;
 
 }
 
 boolean bound(float target, float actual, float plus, float minus) {
     return ((actual)<(target + plus) && (actual)>(target - minus));
 }
-
+boolean between(float targetupper, float actual, float targetLower) {
+	if(targetupper>targetLower ){
+		return (actual>targetLower) && (actual<targetupper) ;
+	}else{
+		return (actual<targetLower) && (actual>targetupper) ;
+	}
+}
 void set8bit(BowlerPacket * Packet, uint8_t val, uint8_t offset) {
     Packet->use.data[0 + offset] = val;
 }
