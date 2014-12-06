@@ -21,7 +21,7 @@ LIBDIR  		= ../lib
 
 
 AVR_CFILES :=$(wildcard src/avr/*.c) $(wildcard ../BowlerStack/src/*.c) $(wildcard ../BowlerStack/src/*/*.c)
-AVR_FILTERED:=$(filter-out ../BowlerStack/src/Namespace_bcs_pid.c, $(AVR_CFILES))
+AVR_FILTERED:=$(filter-out $(wildcard ../BowlerStack/src/PID/*.c), $(AVR_CFILES))
 AVR_OFILES := $(AVR_FILTERED:%.c=%.o)
 
 
