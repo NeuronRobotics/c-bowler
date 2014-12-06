@@ -121,34 +121,34 @@ uint8_t CheckAddress(uint8_t * one, uint8_t * two) {
 
 float interpolate(INTERPOLATE_DATA * data, float currentTime) {
     float  totalDistance=0, elapsed=0,currentDistance=0, currentLocation=0;
-    float set = data->set;
-    float start = data->start;
-    float setTime = data->setTime;
-    float startTime = data->startTime;
+    float set 			= data->set;
+    float start 		= data->start;
+    float setTime 		= data->setTime;
+    float startTime 	= data->startTime;
 
     if(isnan(set)){
-//    	setPrintLevelErrorPrint();
-//    	println_E("Interpolate NaN found set");
+    	setPrintLevelErrorPrint();
+    	println_E("Interpolate NaN found set");
     	return 0;
     }
     if(isnan(start)){
-//    	setPrintLevelErrorPrint();
-//    	println_E("Interpolate NaN found start");
+    	setPrintLevelErrorPrint();
+    	println_W("Interpolate NaN found start");
     	return set;
     }
     if(isnan(setTime)){
-//    	setPrintLevelErrorPrint();
-//    	println_E("Interpolate NaN found setTime");
+    	setPrintLevelErrorPrint();
+    	println_W("Interpolate NaN found setTime");
     	return set; // can not divide by zero
     }
     if(isnan(startTime)){
-//    	setPrintLevelErrorPrint();
-//    	println_E("Interpolate NaN found startTime");
+    	setPrintLevelErrorPrint();
+    	println_W("Interpolate NaN found startTime");
     	return set;
     }
     if(isnan(currentTime)){
-//		setPrintLevelErrorPrint();
-//		println_E("Interpolate NaN found currentTime");
+		setPrintLevelErrorPrint();
+		println_W("Interpolate NaN found currentTime");
 		return set;
 	}
 //
