@@ -162,13 +162,20 @@ uint32_t TickGetLower()
   ***************************************************************************/
 float MyTickConvertToMilliseconds(float dwTickValue)
 {
-	return (
+	float ret;
+	do{
+		ret =  (
 				(
 					(  dwTickValue)+
 					(TICKS_PER_SECOND/2000ul)
 				)/
 					( (float) (TICKS_PER_SECOND/1000ul) )
 			);
+		if(isnan(ret)){
+			println_E("Timer NaN, recalculating..");
+		}
+	}while(isnan(ret));
+	return ret;
 }
 
 float TickGetMS(void)

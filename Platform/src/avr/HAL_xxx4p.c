@@ -59,7 +59,15 @@ uint16_t putStream(uint8_t *packet,uint16_t size){
  */
 float getMs(void){
 	float upper = (((float)TimerOFcountUpper)*((float)4294967294ul))/18.0;
-	return ((((float)GetTimeTicks())/18.0)+upper)/128;
+	float ret;
+	do{
+		ret = ((((float)GetTimeTicks())/18.0)+upper)/128;
+		if(isnan(ret)){
+			println_E("Timer NaN, recalculating..");
+		}
+	}while(isnan(ret));
+
+	return ret;
 }
 /**
  * send this char to the print terminal
