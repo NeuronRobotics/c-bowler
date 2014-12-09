@@ -39,11 +39,11 @@ void LoadCorePacket(BowlerPacket * Packet) {
  * Calculate waht the CRC should be for a given data section
  */
 uint8_t CalcCRC(BowlerPacket *Packet) {
-    uint16_t v = 0;
+    uint32_t v = 0;
     int i;
     for (i = 0; i < 10; i++)
-        v += Packet->stream[i];
-    return (v & 0x00ff);
+        v += (uint32_t) Packet->stream[i];
+    return (uint8_t)(v & 0x000000ff);
 }
 /*
  * Returns true if the data crc in the packet matches the one calculated fromthe packet
@@ -65,18 +65,18 @@ void SetCRC(BowlerPacket * Packet) {
  * Calculate waht the CRC should be for a given data section
  */
 uint8_t CalcDataCRC(BowlerPacket *Packet) {
-    uint16_t v = 0;
+    uint32_t v = 0;
     int i;
     for (i = 0; i < Packet->use.head.DataLegnth; i++)
-        v += Packet->use.data[i];
-    return (v & 0x00ff);
+        v +=(uint32_t) Packet->stream[i+_BowlerHeaderSize];
+    return (uint8_t)(v & 0x000000ff);
 }
 /*
  * Returns true if the data crc in the packet matches the one calculated fromthe packet
  */
 uint8_t CheckDataCRC(BowlerPacket *Packet) {
     uint8_t v = CalcDataCRC(Packet);
-    if (Packet->use.data[Packet->use.head.DataLegnth] == v)
+    if (GetDataCRC( Packet) == v)
         return true;
     return false;
 }
@@ -84,8 +84,17 @@ uint8_t CheckDataCRC(BowlerPacket *Packet) {
  * Calculates and sets the CRC in the packet
  */
 void SetDataCRC(BowlerPacket * Packet) {
+	//println_W("data CRC");
     uint8_t v = CalcDataCRC(Packet);
-    Packet->use.data[Packet->use.head.DataLegnth] = v;
+
+    Packet->stream[Packet->use.head.DataLegnth+_BowlerHeaderSize] = v;
+}
+
+/*
+ * Calculates and sets the CRC in the packet
+ */
+uint8_t GetDataCRC(BowlerPacket * Packet) {
+   return Packet->stream[Packet->use.head.DataLegnth+_BowlerHeaderSize] ;
 }
 
 inline unsigned long GetRPCValue(char * data) {
@@ -160,29 +169,30 @@ float interpolate(INTERPOLATE_DATA * data, float currentTime) {
 
     if(isnan(set)){
     	setPrintLevelErrorPrint();
-    	println_E("Interpolate NaN found set");
+    	println_E("set NaN");
     	return 0;
     }
     if(isnan(start)){
     	setPrintLevelErrorPrint();
-    	println_W("Interpolate NaN found start");
+    	println_W("start NaN");
     	return set;
     }
     if(isnan(setTime)){
     	setPrintLevelErrorPrint();
-    	println_W("Interpolate NaN found setTime");
+    	println_W("setTime NaN");
     	return set; // can not divide by zero
     }
     if(isnan(startTime)){
     	setPrintLevelErrorPrint();
-    	println_W("Interpolate NaN found startTime");
+    	println_W("startTime NaN");
     	return set;
     }
     if(isnan(currentTime)){
 		setPrintLevelErrorPrint();
-		println_W("Interpolate NaN found currentTime");
+		println_W("currentTime NaN");
 		return set;
 	}
+
 //
 
     // If the time is imediate, then the target should be returned no matter what.

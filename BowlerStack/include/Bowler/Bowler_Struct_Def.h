@@ -40,9 +40,9 @@
 		unsigned char		CRC;				// CRC for packet
 		unsigned long int				RPC;				// 4 byte RPC stored as a 32 bit int for single compare;
 	} HEADER;
-#define FullPacketDataSize 251
+#define FullPacketDataSize 252
 	typedef union  _BowlerPacket{
-		unsigned char stream[FullPacketDataSize+sizeof(HEADER)+1];
+		unsigned char stream[FullPacketDataSize+sizeof(HEADER)];
 		struct
 		{
 			HEADER head;

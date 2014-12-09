@@ -39,7 +39,7 @@ void allign(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo){
 
 boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean debug){
 	boolean PacketCheck=false; 
-	uint16_t PacketLegnth=0;
+	//uint16_t PacketLegnth=0;
         Packet->stream[0]=0;
 	if (getNumBytes(fifo) == 0 ) {
 		return false; //Not enough bytes to even be a header, try back later
@@ -61,11 +61,11 @@ boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean
 
 		  ){
 			if(Packet->use.head.ProtocolRevision != BOWLER_VERSION){
-				println("Bad first byte=",ERROR_PRINT);
+				println("first",ERROR_PRINT);
 			}else if(CheckCRC(Packet)==false) {
-				println("Bad crc check=",ERROR_PRINT);
+				println("crc",ERROR_PRINT);
 			}
-			prHEX8(Packet->use.head.ProtocolRevision,ERROR_PRINT);print_nnl(" Fifo Size=",ERROR_PRINT);p_int(calcByteCount(fifo),ERROR_PRINT);
+			//prHEX8(Packet->use.head.ProtocolRevision,ERROR_PRINT);print_nnl(" Fifo Size=",ERROR_PRINT);p_int(calcByteCount(fifo),ERROR_PRINT);
 			uint8_t b;
 			if(getNumBytes(fifo)==0)
 				return false; 
@@ -85,9 +85,9 @@ boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean
 			return false; //Not enough bytes to even be a header, try back later
 		}
 	}
-	PacketLegnth  = Packet->use.head.DataLegnth;
+	//PacketLegnth  = Packet->use.head.DataLegnth;
 
-	uint16_t totalLen = PacketLegnth+_BowlerHeaderSize+1;
+	uint16_t totalLen = GetPacketLegnth(Packet);
 	// See if all the data has arived for this packet
 	int32_t num = getNumBytes(fifo);
 	if (num >=(totalLen) ){

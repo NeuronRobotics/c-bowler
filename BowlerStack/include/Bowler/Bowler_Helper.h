@@ -51,6 +51,10 @@ uint8_t CheckDataCRC(BowlerPacket *Packet);
  * Calculates and sets the CRC in the packet
  */
 void SetDataCRC(BowlerPacket * Packet);
+/*
+ * Retreives the CRC in the packet
+ */
+uint8_t GetDataCRC(BowlerPacket * Packet) ;
 
 void copyPacket(BowlerPacket * from,BowlerPacket * to);
 
