@@ -43,11 +43,11 @@ const char AsciiHex[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 
 //const char streamsize[] = " Stream: size=";
 //#endif
 
-const char errorColor[] = "\033[31m ";
-const char infoColor[] = "\033[94m ";
-const char warningColor[] = "\033[93m ";
+const char errorColor[] = "\033[31m";
+const char infoColor[] = "\033[94m";
+const char warningColor[] = "\033[93m";
 const char debugColor[]="\033[95m ";
-const char clearErrorColor[] = "\033[39m ";
+const char clearErrorColor[] = "\033[39m";
 int (*sendToStream)(uint8_t *, int);
 
 void setColor(Print_Level l) {
@@ -271,11 +271,11 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet, Print_Level l) {
     s = GetPacketLegnth(Packet);
     printfDEBUG_BYTE('[', l);
     for (i = 0; i < s; i++) {
-    	print_nnl("0x", l);
+    	//print_nnl("0x", l);
         prHEX8(Packet->stream[i], l);
-        print_nnl(" ( ", l);
-        p_int(Packet->stream[i],l);
-        print_nnl(" ) ", l);
+//        print_nnl(" ( ", l);
+//        p_int(Packet->stream[i],l);
+//        print_nnl(" ) ", l);
         if (i < s - 1)
             printfDEBUG_BYTE(',', l);
     }
@@ -284,7 +284,7 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet, Print_Level l) {
     prHEX8(Packet->stream[0], l);
     println("\tMAC = \t\t\t", l);
     for (i = 0; i < 6; i++) {
-    	print_nnl("0x", l);
+    	//print_nnl("0x", l);
         prHEX8(Packet->stream[1 + i], l);
         if (i < 5)
             printfDEBUG_BYTE(':', l);
@@ -311,21 +311,21 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet, Print_Level l) {
             prHEX8(Packet->stream[MethodIndex], l);
             break;
     }
-    println("\tNamespace Index = \t", l);
+    println("\tNs Index = \t", l);
     p_int((Packet->stream[SessionIDIndex]&0x7f), l);
-    println("\tData Size = \t\t", l);
+    println("\tSize = \t\t", l);
     p_int((Packet->stream[DataSizeIndex]), l);
 
     //CRC Value
     println("\tCRC Value = \t\t0x", l);
     prHEX8((Packet->stream[CRCIndex]), l);
-    println("\tCalculated CRC = \t0x", l);
+    println("\tC CRC = \t0x", l);
     prHEX8(CalcCRC(Packet), l);
 
     //Data CRC
-    println("\tData CRC Value = \t0x", l);
+    println("\tData CRC = \t0x", l);
     prHEX8(GetDataCRC(Packet), l);
-    println("\tCalculated Data CRC = \t0x", l);
+    println("\tC Data CRC = \t0x", l);
     prHEX8(CalcDataCRC(Packet), l);
 
     if (Packet->use.head.DataLegnth >= 4) {
@@ -334,6 +334,9 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet, Print_Level l) {
             printfDEBUG_BYTE(Packet->stream[RPCCodeStart + i], l);
         }
     }
+    print_nnl(" ( ", l);
+    prHEX32(Packet->use.head.RPC,l);
+	print_nnl(" ) ", l);
     if (Packet->use.head.DataLegnth > 4) {
         s = (Packet->use.head.DataLegnth - 4);
         println("\tData = \t\t\t", l);
