@@ -251,6 +251,7 @@ boolean isPIDArrivedAtSetpoint(int index, float plusOrMinus) {
 void RunPIDControl() {
     int i;
     for (i = 0; i < getNumberOfPidChannels(); i++) {
+        //println_E(" PID Loop ");p_int_E(i);
         getPidGroupDataTable(i)->CurrentState = getPosition(i) - getPidGroupDataTable(i)->config.offset;
         if (getPidGroupDataTable(i)->config.Enabled == true) {
             getPidGroupDataTable(i)->SetPoint = interpolate(getPidInterpolationDataTable(i), getMs());
@@ -331,12 +332,20 @@ void RunAbstractPIDCalc(AbsPID * state, float CurrentTime) {
 }
 
 void setOutput(int group, float val) {
+    if(bound(0,getPidGroupDataTable(group)->config.tipsScale, .001, .001)){
+        println_W("PID TPS Sclale close to zero");p_fl_W(getPidGroupDataTable(group)->config.tipsScale);
+    }
+
     val *= getPidGroupDataTable(group)->config.tipsScale;
     val += getPidStop(group);
-    if (val > getPidStop(group) && val < getUpperPidHistoresis(group))
+    if (val > getPidStop(group) && val < getUpperPidHistoresis(group) ){
         val = getUpperPidHistoresis(group);
-    if (val < getPidStop(group) && val > getLowerPidHistoresis(group))
+        println_E("Upper histerisys");
+    }
+    if (val < getPidStop(group) && val > getLowerPidHistoresis(group)){
         val = getLowerPidHistoresis(group);
+        println_E("Lower histerisys");
+    }
     getPidGroupDataTable(group)->OutputSet = val;
     //
     setOutputLocal(group, val);
