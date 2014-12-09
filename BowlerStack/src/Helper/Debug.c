@@ -253,11 +253,12 @@ void printPIDvalsPointer(AbsPID * conf) {
 
 }
 
-void printPIDvals(int i) {
-    println("PID chan=", INFO_PRINT);
-    p_int(i, INFO_PRINT);
-    printPIDvalsPointer(getPidGroupDataTable(i));
-}
+//void printPIDvals(int i) {
+//
+//    println("PID chan=", INFO_PRINT);
+//    p_int(i, INFO_PRINT);
+//    printPIDvalsPointer(getPidGroupDataTable(i));
+//}
 
 void printBowlerPacketDEBUG(BowlerPacket * Packet, Print_Level l) {
 #if !defined(NO_PRINTING)
