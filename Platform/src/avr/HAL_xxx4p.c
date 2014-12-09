@@ -27,11 +27,9 @@
 //#  include <avr/iom644p.h>
 
 boolean okToPrint(Print_Level l);
-//#if defined(__AVR_ATmega324P__)
-	#define comBuffSize (MiniPacketDataSize+4+BowlerHeaderSize)
-//#else
-//	#define comBuffSize (FullPacketDataSize+4+BowlerHeaderSize)
-//#endif
+
+#define comBuffSize (FullPacketDataSize+4+_BowlerHeaderSize)
+
 static uint8_t privateRXCom[comBuffSize];
 static BYTE_FIFO_STORAGE store;
 static uint64_t TimerOFcount=0;

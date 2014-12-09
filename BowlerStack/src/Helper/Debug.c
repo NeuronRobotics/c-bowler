@@ -267,7 +267,7 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet, Print_Level l) {
     int i;
     uint8_t s;
     println("\tPacket = \t", l);
-    s = BowlerHeaderSize + Packet->stream[DataSizeIndex];
+    s = GetPacketLegnth(Packet);
     printfDEBUG_BYTE('[', l);
     for (i = 0; i < s; i++) {
         prHEX8(Packet->stream[i], l);
@@ -309,10 +309,19 @@ void printBowlerPacketDEBUG(BowlerPacket * Packet, Print_Level l) {
     p_int((Packet->stream[SessionIDIndex]&0x7f), l);
     println("\tData Size = \t", l);
     p_int((Packet->stream[DataSizeIndex]), l);
+
+    //CRC Value
     println("\tCRC Value = \t", l);
     p_int((Packet->stream[CRCIndex]), l);
     println("\tCalculated CRC = \t", l);
     p_int(CalcCRC(Packet), l);
+
+    //Data CRC
+    println("\tData CRC Value = \t", l);
+    p_int((Packet->use.data[Packet->use.head.DataLegnth]), l);
+    println("\tCalculated Data CRC = \t", l);
+    p_int(CalcDataCRC(Packet), l);
+
     if (Packet->use.head.DataLegnth >= 4) {
         println("\tRPC code = \t", l);
         for (i = 0; i < 4; i++) {

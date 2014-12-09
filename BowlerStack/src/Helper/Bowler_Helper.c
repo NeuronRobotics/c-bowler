@@ -35,7 +35,9 @@ void LoadCorePacket(BowlerPacket * Packet) {
     Packet->use.head.RPC = GetRPCValue("****");
     Packet->use.head.DataLegnth = 4;
 }
-
+/*
+ * Calculate waht the CRC should be for a given data section
+ */
 uint8_t CalcCRC(BowlerPacket *Packet) {
     uint16_t v = 0;
     int i;
@@ -43,17 +45,47 @@ uint8_t CalcCRC(BowlerPacket *Packet) {
         v += Packet->stream[i];
     return (v & 0x00ff);
 }
-
+/*
+ * Returns true if the data crc in the packet matches the one calculated fromthe packet
+ */
 uint8_t CheckCRC(BowlerPacket *Packet) {
     uint8_t v = CalcCRC(Packet);
     if (Packet->use.head.CRC == v)
         return true;
     return false;
 }
-
+/*
+ * Calculates and sets the CRC in the packet
+ */
 void SetCRC(BowlerPacket * Packet) {
     uint8_t v = CalcCRC(Packet);
     Packet->use.head.CRC = v;
+}
+/*
+ * Calculate waht the CRC should be for a given data section
+ */
+uint8_t CalcDataCRC(BowlerPacket *Packet) {
+    uint16_t v = 0;
+    int i;
+    for (i = 0; i < Packet->use.head.DataLegnth; i++)
+        v += Packet->use.data[i];
+    return (v & 0x00ff);
+}
+/*
+ * Returns true if the data crc in the packet matches the one calculated fromthe packet
+ */
+uint8_t CheckDataCRC(BowlerPacket *Packet) {
+    uint8_t v = CalcDataCRC(Packet);
+    if (Packet->use.data[Packet->use.head.DataLegnth] == v)
+        return true;
+    return false;
+}
+/*
+ * Calculates and sets the CRC in the packet
+ */
+void SetDataCRC(BowlerPacket * Packet) {
+    uint8_t v = CalcDataCRC(Packet);
+    Packet->use.data[Packet->use.head.DataLegnth] = v;
 }
 
 inline unsigned long GetRPCValue(char * data) {
@@ -92,7 +124,7 @@ uint16_t SetPacketLegnth(BowlerPacket *Packet, uint8_t len) {
 }
 
 uint16_t GetPacketLegnth(BowlerPacket *Packet) {
-    return BowlerHeaderSize + Packet->use.head.DataLegnth;
+    return _BowlerHeaderSize + Packet->use.head.DataLegnth+1;
 }
 
 uint16_t DataLegnthFromPacket(BowlerPacket *Packet) {
@@ -101,7 +133,7 @@ uint16_t DataLegnthFromPacket(BowlerPacket *Packet) {
 
 void copyPacket(BowlerPacket * from, BowlerPacket * to) {
     uint8_t i;
-    for (i = 0; i < BowlerHeaderSize + from->use.head.DataLegnth; i++) {
+    for (i = 0; i < GetPacketLegnth(from); i++) {
         to->stream[i] = from->stream[i];
     }
 }

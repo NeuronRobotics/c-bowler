@@ -47,13 +47,13 @@ boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean
 
 	allign(Packet,fifo);
 
-	if (getNumBytes(fifo) < ((BowlerHeaderSize)+4)) {
+	if (getNumBytes(fifo) < ((_BowlerHeaderSize)+4)) {
 		if(debug){
 			//println("Current num bytes: ",ERROR_PRINT);p_int(getNumBytes(fifo),ERROR_PRINT);
 		}
 		return false; //Not enough bytes to even be a header, try back later
 	}
-	FifoReadByteStream(Packet->stream,BowlerHeaderSize,fifo);
+	FifoReadByteStream(Packet->stream,_BowlerHeaderSize,fifo);
 	PacketCheck=false; 
 	while(PacketCheck==false) {
 		if( (Packet->use.head.ProtocolRevision != BOWLER_VERSION)
@@ -72,7 +72,7 @@ boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean
 			//StartCritical();
 			getStream(& b,1,fifo);//junk out one
 			//EndCritical();
-			FifoReadByteStream(Packet->stream,BowlerHeaderSize,fifo);
+			FifoReadByteStream(Packet->stream,_BowlerHeaderSize,fifo);
 		}else{
 			if(debug){
 				//println("Got header");
@@ -87,7 +87,7 @@ boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean
 	}
 	PacketLegnth  = Packet->use.head.DataLegnth;
 
-	uint16_t totalLen = PacketLegnth+BowlerHeaderSize;
+	uint16_t totalLen = PacketLegnth+_BowlerHeaderSize+1;
 	// See if all the data has arived for this packet
 	int32_t num = getNumBytes(fifo);
 	if (num >=(totalLen) ){
@@ -97,7 +97,11 @@ boolean _getBowlerPacket(BowlerPacket * Packet,BYTE_FIFO_STORAGE * fifo, boolean
 		//StartCritical();
 		getStream(Packet->stream,totalLen,fifo);
 		//EndCritical();
-		return  true; 
+		if(CheckDataCRC(Packet)){
+			return  true;
+		}else{
+			println_E("Data CRC Failed ");printBowlerPacketDEBUG(Packet,ERROR_PRINT);
+		}
 	}
 	if(debug){
 		//println("Header ready, but data is not. Need: ",INFO_PRINT);p_int(totalLen,INFO_PRINT);print_nnl(" have: ",INFO_PRINT);p_int(num ,INFO_PRINT);
@@ -133,6 +137,7 @@ void FixPacket(BowlerPacket * Packet){
 	}
 	Packet->use.head.ProtocolRevision=BOWLER_VERSION;
 	SetCRC(Packet);
+	SetDataCRC(Packet);
 }
 
 boolean PutBowlerPacket(BowlerPacket * Packet){

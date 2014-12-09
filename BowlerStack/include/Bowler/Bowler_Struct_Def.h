@@ -42,22 +42,22 @@
 	} HEADER;
 #define FullPacketDataSize 251
 	typedef union  _BowlerPacket{
-		unsigned char stream[FullPacketDataSize+sizeof(HEADER)];
+		unsigned char stream[FullPacketDataSize+sizeof(HEADER)+1];
 		struct
 		{
 			HEADER head;
 			unsigned char data[FullPacketDataSize];
 		} use;
 	}BowlerPacket;
-#define MiniPacketDataSize FullPacketDataSize
-	typedef union _BowlerPacketMini{
-		unsigned char stream[MiniPacketDataSize+sizeof(HEADER)];
-		struct
-		{
-			HEADER head;
-			unsigned char data[MiniPacketDataSize];
-		} use;
-	}BowlerPacketMini;
+//#define MiniPacketDataSize FullPacketDataSize
+//	typedef union _BowlerPacketMini{
+//		unsigned char stream[MiniPacketDataSize+sizeof(HEADER)];
+//		struct
+//		{
+//			HEADER head;
+//			unsigned char data[MiniPacketDataSize];
+//		} use;
+//	}BowlerPacketMini;
 
 
 typedef struct  __attribute__((__packed__)) _INTERPOLATE_DATA
