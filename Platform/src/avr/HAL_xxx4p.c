@@ -128,7 +128,6 @@ void AVR_Bowler_HAL_Init(void){
 	//print("com:");
 	InitByteFifo(&store,privateRXCom,comBuffSize);
 	InitFlagPins();
-	EndCritical();
 }
 void WriteAVRUART0(uint8_t val){
 	UCSR0Bbits._TXEN0 = 1;
