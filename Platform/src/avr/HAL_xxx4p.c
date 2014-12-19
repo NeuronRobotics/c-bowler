@@ -70,7 +70,6 @@ float getMs(void){
 /**
  * send this char to the print terminal
  */
-void EnableDebugTerminal(void);
 void putCharDebug(char c){
 	WriteAVRUART1(c);
 
@@ -218,6 +217,7 @@ void serial_init(unsigned int bittimer)
 }
 
 void EnableDebugTerminal(void){
+
 	unsigned int bittimer;
 	bittimer=(( F_CPU / 115200  / 16 ) - 1);
 	/* Set the baud rate */
