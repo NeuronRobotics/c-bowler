@@ -117,14 +117,14 @@ uint8_t FlashSetMac(uint8_t * mac){
 	return true; 
 }
 
-void FlashSetName(char * name){
-	FlashLoad();
-	int i;
-	for (i=0;i<17;i++){
-		flash.name[i]=name[i];
-	}
-	FlashSync();
-}
+//void FlashSetName(char * name){
+//	FlashLoad();
+//	int i;
+//	for (i=0;i<17;i++){
+//		flash.name[i]=name[i];
+//	}
+//	FlashSync();
+//}
 
 void FlashGetMac(uint8_t * mac){
 	int i;
@@ -139,66 +139,66 @@ void FlashGetMac(uint8_t * mac){
 		mac[i]=flash.mac[i];
 	}
 }
-
-void FlashGetName(char * name){
-	FlashLoad();
-	int i;
-	for (i=0;i<17;i++){
-		name[i]=flash.name[i];
-	}
-}
-
-void FlashGetBlRev(uint8_t * mac){
-	int i;
-	FlashLoad();
-	for (i=0;i<3;i++){
-		mac[i]=flash.bl[i];
-	}
-}
-void FlashGetFwRev(uint8_t * mac){
-	int i;
-	FlashLoad();
-	for (i=0;i<3;i++){
-		mac[i]=flash.fw[i];
-	}
-}
-
-uint8_t FlashSetFwRev(uint8_t * mac){
-	//println("Loading fw from flash");
-	FlashLoad();
-	//println("Loading fw  new data");
-	int i;
-	boolean sync=false; 
-	for (i=0;i<3;i++){
-		if(flash.fw[i]!=mac[i]){
-			flash.fw[i]=mac[i];
-			sync=true; 
-		}
-	}
-	if(sync){
-		//println("Syncing fw ");
-		FlashSync();
-		//println("Syncing fw  done");
-	}
-	return true; 
-}
-
-uint8_t FlashSetBlRev(uint8_t * mac){
-	//println("Loading bl flash page");
-	FlashLoad();
-	//println("Loading bl  new data");
-	int i;
-	boolean sync=false; 
-	for (i=0;i<3;i++){
-		if(flash.bl[i]!=mac[i]){
-			flash.bl[i]=mac[i];
-			sync=true; 
-		}
-	}
-	if(sync){
-		//println("Syncing bl ");
-		FlashSync();
-		//println("Syncing bl  done");
-	}
-	return true; 
-}
+//
+//void FlashGetName(char * name){
+//	FlashLoad();
+//	int i;
+//	for (i=0;i<17;i++){
+//		name[i]=flash.name[i];
+//	}
+//}
+//
+//void FlashGetBlRev(uint8_t * mac){
+//	int i;
+//	FlashLoad();
+//	for (i=0;i<3;i++){
+//		mac[i]=flash.bl[i];
+//	}
+//}
+//void FlashGetFwRev(uint8_t * mac){
+//	int i;
+//	FlashLoad();
+//	for (i=0;i<3;i++){
+//		mac[i]=flash.fw[i];
+//	}
+//}
+//
+//uint8_t FlashSetFwRev(uint8_t * mac){
+//	//println("Loading fw from flash");
+//	FlashLoad();
+//	//println("Loading fw  new data");
+//	int i;
+//	boolean sync=false;
+//	for (i=0;i<3;i++){
+//		if(flash.fw[i]!=mac[i]){
+//			flash.fw[i]=mac[i];
+//			sync=true;
+//		}
+//	}
+//	if(sync){
+//		//println("Syncing fw ");
+//		FlashSync();
+//		//println("Syncing fw  done");
+//	}
+//	return true;
+//}
+//
+//uint8_t FlashSetBlRev(uint8_t * mac){
+//	//println("Loading bl flash page");
+//	FlashLoad();
+//	//println("Loading bl  new data");
+//	int i;
+//	boolean sync=false;
+//	for (i=0;i<3;i++){
+//		if(flash.bl[i]!=mac[i]){
+//			flash.bl[i]=mac[i];
+//			sync=true;
+//		}
+//	}
+//	if(sync){
+//		//println("Syncing bl ");
+//		FlashSync();
+//		//println("Syncing bl  done");
+//	}
+//	return true;
+//}
