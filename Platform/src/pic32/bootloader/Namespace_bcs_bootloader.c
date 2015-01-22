@@ -45,11 +45,11 @@ uint8_t bcsBootloaderProcessor_g(BowlerPacket *Packet) {
             Packet->use.head.DataLegnth = sizeof (core0str) + sizeof (core1str) + 6 + 4;
             break;
         case _REV:
-            FlashGetFwRev(rev);
+            //FlashGetFwRev(rev);
             for (i = 0; i < 3; i++) {
                 Packet->use.data[i] = rev[i];
             }
-            FlashGetBlRev(rev);
+            //FlashGetBlRev(rev);
             for (i = 0; i < 3; i++) {
                 Packet->use.data[i + 3] = rev[i];
             }
