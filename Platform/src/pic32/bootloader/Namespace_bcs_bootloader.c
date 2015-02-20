@@ -1,5 +1,4 @@
 #include "Bowler/Bowler.h"
-#define DYIO
 //  int getHeartBeatTime();
 //  boolean getHeartBeatLock();
 //void setHeartBeatState(boolean hb, int time);
@@ -8,6 +7,7 @@ boolean resetFlag = false;
 uint8_t core0str[] = "pic32mx440f128h";
 uint8_t core1str[] = "avr_atmegaXX4p_";
 uint8_t avrID[7];
+boolean singleCoreMode = false;
 
 void callBootloaderReset() {
     resetFlag = true;
@@ -34,15 +34,22 @@ uint8_t bcsBootloaderProcessor_g(BowlerPacket *Packet) {
                 Packet->use.data[i] = core0str[i];
             }
             offset = sizeof (core0str);
+#if defined(DYIO)
+//#error
             for (i = 0; i<sizeof (core1str); i++) {
                 Packet->use.data[i + offset] = core1str[i];
             }
+
             GetAVRid(avrID);
             offset = sizeof (core0str) + sizeof (core1str);
             for (i = 0; i < 6; i++) {
                 Packet->use.data[i + offset - 1] = avrID[i];
             }
-            Packet->use.head.DataLegnth = sizeof (core0str) + sizeof (core1str) + 6 + 4;
+#else
+     Packet->use.data[0 + offset]=0;// null first string
+     Packet->use.data[1 + offset]=0;// null second string
+#endif
+        
             break;
         case _REV:
             //FlashGetFwRev(rev);
@@ -53,7 +60,6 @@ uint8_t bcsBootloaderProcessor_g(BowlerPacket *Packet) {
             for (i = 0; i < 3; i++) {
                 Packet->use.data[i + 3] = rev[i];
             }
-            Packet->use.head.DataLegnth = 4 + 6;
             break;
     }
     return true;
@@ -72,9 +78,11 @@ uint8_t bcsBootloaderProcessor_c(BowlerPacket *Packet) {
                 break;
 #endif
             }
+  #if defined(DYIO)
             if (Packet->use.data[0] == 1) {
                 avrSPIProg(Packet);
             }
+#endif
             READY(Packet, 0, 0);
             break;
         case ERFL:
@@ -86,9 +94,11 @@ uint8_t bcsBootloaderProcessor_c(BowlerPacket *Packet) {
                 break;
 #endif
             }
+              #if defined(DYIO)
             if (Packet->use.data[0] == 1) {
                 eraseAVR();
             }
+#endif
             READY(Packet, 0, 1);
             //printfDEBUG("#Erasing device");
             break;
