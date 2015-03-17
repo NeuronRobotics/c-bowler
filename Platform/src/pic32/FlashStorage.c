@@ -106,7 +106,7 @@ void FlashSync(void){
 uint8_t FlashSetMac(uint8_t * mac){
 	FlashLoad();
 	if(flash.lock==LOCKBYTE){
-		return false; 
+		return false;
 	}
 	int i;
 	for (i=0;i<6;i++){
