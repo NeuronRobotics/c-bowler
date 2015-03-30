@@ -44,6 +44,12 @@ BYTE_FIFO_STORAGE * last_my_store=NULL;
 
 BOOL usbActive = TRUE;
 
+//BYTE tmp [64];
+extern BYTE cdc_trf_state;
+extern USB_HANDLE CDCDataInHandle;
+
+#define isUSBTxBlocked() ((cdc_trf_state != CDC_TX_READY)  || (USBHandleBusy(CDCDataInHandle)!=0))
+
 BOOL GotUSBData(void){
 	return gotData>0;
 }
@@ -85,6 +91,23 @@ void SetPICUSBFifo(BYTE_FIFO_STORAGE  * s){
 
 }
 
+void resetUsbSystem(){
+    U1CON = 0x0000;
+    DelayMs(100);
+
+    USBDeviceInit();
+    //InitByteFifo(&store,privateRX,sizeof(privateRX));
+//	if(bufferSet==FALSE)
+//		usb_fifo_my_store=&store;
+    #if defined(USB_INTERRUPT)
+    USBDeviceAttach();
+    #endif
+    INTEnableSystemMultiVectoredInt();
+
+    GetNumUSBBytes();
+    println_I("Initialized the USB");
+}
+
 void usb_CDC_Serial_Init(char * DevStr,char * SerialStr,UINT16 vid,UINT16 pid){
 
 	//unsigned char i;
@@ -92,23 +115,9 @@ void usb_CDC_Serial_Init(char * DevStr,char * SerialStr,UINT16 vid,UINT16 pid){
 	SetUSB_VID_PID(vid,pid);
 	WriteUSBSerialNumber(SerialStr);
 	WriteUSBDeviceString(DevStr);
-	#if defined(USE_USB_BUS_SENSE_IO)
-		tris_usb_bus_sense = INPUT_PIN; // See HardwareProfile.h
-	#endif
-	#if defined(USE_SELF_POWER_SENSE_IO)
-		tris_self_power = INPUT_PIN;	// See HardwareProfile.h
-	#endif
-	USBDeviceInit();
-	//InitByteFifo(&store,privateRX,sizeof(privateRX));
-//	if(bufferSet==FALSE)
-//		usb_fifo_my_store=&store;
-	#if defined(USB_INTERRUPT)
-        USBDeviceAttach();
-    #endif
-    INTEnableSystemMultiVectoredInt();
 
-	GetNumUSBBytes();
-	println_I("Initialized the USB");
+        resetUsbSystem();
+
 }
 
 WORD USBGetArray(BYTE* stream, WORD num){
@@ -121,11 +130,7 @@ WORD USBGetArray(BYTE* stream, WORD num){
 	BYTE n = FifoGetByteStream(GetPICUSBFifo(),stream,num);
 	return n;
 }
-//BYTE tmp [64];
-extern BYTE cdc_trf_state;
-extern USB_HANDLE CDCDataInHandle;
 
-#define isUSBTxBlocked() ((cdc_trf_state != CDC_TX_READY)  || (USBHandleBusy(CDCDataInHandle)!=0))
 
 void waitForTxToBeFree(){
 	RunEveryData timeout={getMs(),200};
@@ -133,11 +138,13 @@ void waitForTxToBeFree(){
 		if(RunEvery(&timeout)>0){
 			println_E("#*#*USB timeout before transmit");
 			usbActive=FALSE;
+                        resetUsbSystem();
                         break;
 		}
 		if(USBNotOk){
 			println_E("#*#*USB Not ok");
                         usbActive=FALSE;
+                        resetUsbSystem();
                         break;
 		}
 		CDCTxService();
