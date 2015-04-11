@@ -140,7 +140,7 @@ WORD USBGetArray(BYTE* stream, WORD num) {
 void waitForTxToBeFree() {
     EndCritical();
     USBUnmaskInterrupts();
-    RunEveryData timeout = {getMs(), 2000};
+    RunEveryData timeout = {getMs(), 200};
     while (isUSBTxBlocked()) {
         if (RunEvery(&timeout) > 0) {
             println_E("#*#*USB timeout before transmit");
