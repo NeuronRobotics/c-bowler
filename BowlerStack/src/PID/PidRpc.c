@@ -194,11 +194,9 @@ boolean processPIDPost(BowlerPacket * Packet){
 		break;
 	case RPID:
 		chan = Packet->use.data[0];
-                StartCritical();
   		println("Resetting PID channel from packet:",ERROR_PRINT);printBowlerPacketDEBUG(Packet,ERROR_PRINT);
 
                 pidReset(chan, get32bit(Packet,1));
-                EndCritical();
 		READY(Packet,zone,6);
 		break;
         default:

@@ -796,9 +796,7 @@ void USBDeviceTasks(void)
 
 #endif
 {
-    //StartCritical();
     USBDeviceTasksLocal();
-    //EndCritical();
 }
 void USBDeviceTasksLocal(void){
     //INTDisableInterrupts();

@@ -28,7 +28,6 @@
 //void USBDeviceTasks(void)
 //#endif
 //{
-//    //StartCritical();
+
 //    USBDeviceTasks();
-//    //EndCritical();
 //}

@@ -138,9 +138,12 @@ WORD USBGetArray(BYTE* stream, WORD num) {
 }
 
 void waitForTxToBeFree() {
-    EndCritical();
+    //USBEnableInterrupts();
     USBUnmaskInterrupts();
-    RunEveryData timeout = {getMs(), 2000};
+    INTEnableSystemMultiVectoredInt();
+    INTEnableInterrupts();
+    
+    RunEveryData timeout = {getMs(), 200};
     while (isUSBTxBlocked()) {
         if (RunEvery(&timeout) > 0) {
             println_E("#*#*USB timeout before transmit");
@@ -152,13 +155,7 @@ void waitForTxToBeFree() {
                 println_E("CDCDataInHandle State = ");
                 p_int_E(USBHandleBusy(CDCDataInHandle));
                 println_E("CDCDataInHandle = ");
-                p_int_E(CDCDataInHandle);
-            }
-            if ((USBHandleBusy(CDCDataInHandle) != 0)) {
-                println_E("CDCDataInHandle State = ");
-                p_int_E(USBHandleBusy(CDCDataInHandle));
-                println_E("CDCDataInHandle = ");
-                p_int_E(CDCDataInHandle);
+                p_int_E((int32_t)CDCDataInHandle);
             }
             usbActive = FALSE;
             resetUsbSystem();
