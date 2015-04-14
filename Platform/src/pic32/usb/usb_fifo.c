@@ -140,6 +140,7 @@ WORD USBGetArray(BYTE* stream, WORD num) {
 void waitForTxToBeFree() {
     //USBEnableInterrupts();
     USBUnmaskInterrupts();
+    USBTransactionCompleteIE=1;
     INTEnableSystemMultiVectoredInt();
     INTEnableInterrupts();
     
@@ -275,11 +276,11 @@ void usb_Buffer_Update(void) {
         usbActive = FALSE;
         return;
     }
-    USBMaskInterrupts();
-    USBDeviceTasksLocal();
+    //USBMaskInterrupts();
+    //USBDeviceTasksLocal();
     CDCTxService();
     gSize = getsUSBUSART((char *) RxTmpBuffer, USB_BUFFER_SIZE);
-    USBUnmaskInterrupts();
+    //USBUnmaskInterrupts();
     if (gSize > 0) {
         for (i = 0; i < gSize; i++) {
             do {

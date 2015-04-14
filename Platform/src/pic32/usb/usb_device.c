@@ -740,6 +740,7 @@ void USBDeviceInit(void)
 
     //Indicate that we are now in the detached state        
     USBDeviceState = DETACHED_STATE;
+    USBTransactionCompleteIE=1;
 }
 
 //DOM-IGNORE-BEGIN
@@ -2503,7 +2504,7 @@ void USBDeviceAttach(void)
     void __attribute__((interrupt,auto_psv,nomips16)) _USB1Interrupt()
   #elif defined(__PIC32MX__)
 
-    #pragma interrupt _USB1Interrupt ipl6 vector 45
+    #pragma interrupt _USB1Interrupt ipl5 vector 45
     void __attribute__((nomips16)) _USB1Interrupt( void )
    //void __ISR(_USB_1_VECTOR, ipl5) USB1_ISR(void)
   #endif
