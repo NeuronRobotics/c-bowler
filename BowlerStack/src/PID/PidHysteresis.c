@@ -81,7 +81,7 @@ CAL_STATE pidHysterisis(int group) {
 
     if (RunEvery(&getPidGroupDataTable(group)->timer) > 0) {
         Print_Level l = getPrintLevel();
-        setPrintLevelInfoPrint();
+        //setPrintLevelInfoPrint();
         float boundVal = 150.0;
         float extr = GetPIDPosition(group);
         if (bound(0, extr, boundVal, boundVal)) {// check to see if the encoder has moved
@@ -202,7 +202,7 @@ void checkLinkHomingStatus(int group) {
                     return;
                 }
                 Print_Level l = getPrintLevel();
-                setPrintLevelInfoPrint();
+                //setPrintLevelInfoPrint();
                 setOutput(group, speed);
                 setPrintLevel(l);
                 getPidGroupDataTable(group)->timer.MsTime = getMs();

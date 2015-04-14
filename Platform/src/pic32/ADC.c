@@ -138,10 +138,10 @@ void measureAdcOffset(){
     AD1CHS =0;
     ADCOffset = ADC1BUF0;
     AD1CON2bits.OFFCAL=0; // disable ofsset detection mode
-            Print_Level l = getPrintLevel();
-            setPrintLevelInfoPrint();
-    println_I("Measured ADC Offset as: ");p_int_I(ADCOffset);
-            setPrintLevel(l);
+//            Print_Level l = getPrintLevel();
+//            setPrintLevelInfoPrint();
+//    println_I("Measured ADC Offset as: ");p_int_I(ADCOffset);
+//            setPrintLevel(l);
 }
 
 int getAdcOffset(){

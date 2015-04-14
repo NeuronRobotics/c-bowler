@@ -71,7 +71,7 @@ void printBufferState(BYTE_FIFO_STORAGE * s) {
 
 BYTE_FIFO_STORAGE * GetPICUSBFifo(void) {
     if (usb_fifo_my_store == NULL || usb_fifo_my_store != last_my_store) {
-        setPrintLevelInfoPrint();
+        //setPrintLevelInfoPrint();
         println_E("Usb storage changed!! was");
         printBufferState(last_my_store);
         println_E("Is: ");
@@ -84,7 +84,7 @@ BYTE_FIFO_STORAGE * GetPICUSBFifo(void) {
 
 void SetPICUSBFifo(BYTE_FIFO_STORAGE * s) {
     Print_Level l = getPrintLevel();
-    setPrintLevelInfoPrint();
+    //setPrintLevelInfoPrint();
     println_E("Starting To set FIFO ");
     if (bufferSet == TRUE)
         return;
