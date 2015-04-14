@@ -774,337 +774,6 @@ void USBDeviceInit(void)
     None
   ***************************************************************************/
 
-//DOM-IGNORE-END
-#if !defined(__PIC32MX__)
-//#define __PIC32MX__
-#endif
-#if defined(USB_INTERRUPT)
-  #if defined(__18CXX)
-    void USBDeviceTasks(void)
-  #elif defined(__C30__)
-    //void __attribute__((interrupt,auto_psv,address(0xA800))) _USB1Interrupt()
-    void __attribute__((interrupt,auto_psv,nomips16)) _USB1Interrupt()
-  #elif defined(__PIC32MX__)
-
-    #pragma interrupt _USB1Interrupt ipl4 vector 45
-    void __attribute__((nomips16)) _USB1Interrupt( void )
-   //void __ISR(_USB_1_VECTOR, ipl5) USB1_ISR(void)
-  #endif
-#else
-#warning compiling USB Polling
-void USBDeviceTasks(void)
-
-#endif
-{
-    USBDeviceTasksLocal();
-}
-void USBDeviceTasksLocal(void){
-    //INTDisableInterrupts();
-    unsigned char i;
-
-#ifdef USB_SUPPORT_OTG
-    //SRP Time Out Check
-    if (USBOTGSRPIsReady())
-    {
-        if (USBT1MSECIF && USBT1MSECIE)
-        {
-            if (USBOTGGetSRPTimeOutFlag())
-            {
-                if (USBOTGIsSRPTimeOutExpired())
-                {
-                    USB_OTGEventHandler(0,OTG_EVENT_SRP_FAILED,0,0);
-                }
-            }
-
-            //Clear Interrupt Flag
-            USBClearInterruptFlag(USBT1MSECIFReg,USBT1MSECIFBitNum);
-        }
-    }
-#endif
-
-    #if defined(USB_POLLING)
-    //If the interrupt option is selected then the customer is required
-    //  to notify the stack when the device is attached or removed from the
-    //  bus by calling the USBDeviceAttach() and USBDeviceDetach() functions.
-    if (USB_BUS_SENSE != 1)
-    {
-         // Disable module & detach from bus
-         U1CON = 0;
-
-         // Mask all USB interrupts
-         U1IE = 0;
-
-         //Move to the detached state
-         USBDeviceState = DETACHED_STATE;
-
-         #ifdef  USB_SUPPORT_OTG
-             //Disable D+ Pullup
-             U1OTGCONbits.DPPULUP = 0;
-
-             //Disable HNP
-             USBOTGDisableHnp();
-
-             //Deactivate HNP
-             USBOTGDeactivateHnp();
-
-             //If ID Pin Changed State
-             if (USBIDIF && USBIDIE)
-             {
-                 //Re-detect & Initialize
-                  USBOTGInitialize();
-
-                  //Clear ID Interrupt Flag
-                  USBClearInterruptFlag(USBIDIFReg,USBIDIFBitNum);
-             }
-         #endif
-
-         #ifdef __C30__
-             //USBClearInterruptFlag(U1OTGIR, 3);
-         #endif
-            //return so that we don't go through the rest of
-            //the state machine
-         USBClearUSBInterrupt();
-         //INTEnableInterrupts();
-         return;
-    }
-
-	#ifdef USB_SUPPORT_OTG
-    //If Session Is Started Then
-    else
-	{
-        //If SRP Is Ready
-        if (USBOTGSRPIsReady())
-        {
-            //Clear SRPReady
-            USBOTGClearSRPReady();
-
-            //Clear SRP Timeout Flag
-            USBOTGClearSRPTimeOutFlag();
-
-            //Indicate Session Started
-            UART2PrintString( "\r\n***** USB OTG B Event - Session Started  *****\r\n" );
-        }
-    }
-	#endif	//#ifdef USB_SUPPORT_OTG
-
-    //if we are in the detached state
-    if(USBDeviceState == DETACHED_STATE)
-    {
-	    //Initialize register to known value
-        U1CON = 0;
-
-        // Mask all USB interrupts
-        U1IE = 0;
-
-        //Enable/set things like: pull ups, full/low-speed mode,
-        //set the ping pong mode, and set internal transceiver
-        SetConfigurationOptions();
-
-        // Enable module & attach to bus
-        while(!U1CONbits.USBEN){U1CONbits.USBEN = 1;}
-
-        //moved to the attached state
-        USBDeviceState = ATTACHED_STATE;
-
-        #ifdef  USB_SUPPORT_OTG
-            U1OTGCON |= USB_OTG_DPLUS_ENABLE | USB_OTG_ENABLE;
-        #endif
-    }
-	#endif  //#if defined(USB_POLLING)
-
-    if(USBDeviceState == ATTACHED_STATE)
-    {
-        /*
-         * After enabling the USB module, it takes some time for the
-         * voltage on the D+ or D- line to rise high enough to get out
-         * of the SE0 condition. The USB Reset interrupt should not be
-         * unmasked until the SE0 condition is cleared. This helps
-         * prevent the firmware from misinterpreting this unique event
-         * as a USB bus reset from the USB host.
-         */
-
-        if(!USBSE0Event)
-        {
-            USBClearInterruptRegister(U1IR);// Clear all USB interrupts
-            #if defined(USB_POLLING)
-                U1IE=0;                        // Mask all USB interrupts
-            #endif
-            USBResetIE = 1;             // Unmask RESET interrupt
-            USBIdleIE = 1;             // Unmask IDLE interrupt
-            USBDeviceState = POWERED_STATE;
-        }
-    }
-
-    #ifdef  USB_SUPPORT_OTG
-        //If ID Pin Changed State
-        if (USBIDIF && USBIDIE)
-        {
-            //Re-detect & Initialize
-            USBOTGInitialize();
-
-            USBClearInterruptFlag(USBIDIFReg,USBIDIFBitNum);
-        }
-    #endif
-
-    /*
-     * Task A: Service USB Activity Interrupt
-     */
-    if(USBActivityIF && USBActivityIE)
-    {
-        USBClearInterruptFlag(USBActivityIFReg,USBActivityIFBitNum);
-        #if defined(USB_SUPPORT_OTG)
-            U1OTGIR = 0x10;
-        #else
-            USBWakeFromSuspend();
-        #endif
-    }
-
-    /*
-     * Pointless to continue servicing if the device is in suspend mode.
-     */
-    if(USBSuspendControl==1)
-    {
-        USBClearUSBInterrupt();
-        //INTEnableInterrupts();
-        return;
-    }
-
-    /*
-     * Task B: Service USB Bus Reset Interrupt.
-     * When bus reset is received during suspend, ACTVIF will be set first,
-     * once the UCONbits.SUSPND is clear, then the URSTIF bit will be asserted.
-     * This is why URSTIF is checked after ACTVIF.
-     *
-     * The USB reset flag is masked when the USB state is in
-     * DETACHED_STATE or ATTACHED_STATE, and therefore cannot
-     * cause a USB reset event during these two states.
-     */
-    if(USBResetIF && USBResetIE)
-    {
-        USBDeviceInit();
-
-        //Re-enable the interrupts since the USBDeviceInit() function will
-        //  disable them.  This will do nothing in a polling setup
-        USBEnableInterrupts();
-
-        USBDeviceState = DEFAULT_STATE;
-
-        /********************************************************************
-        Bug Fix: Feb 26, 2007 v2.1 (#F1)
-        *********************************************************************
-        In the original firmware, if an OUT token is sent by the host
-        before a SETUP token is sent, the firmware would respond with an ACK.
-        This is not a correct response, the firmware should have sent a STALL.
-        This is a minor non-compliance since a compliant host should not
-        send an OUT before sending a SETUP token. The fix allows a SETUP
-        transaction to be accepted while stalling OUT transactions.
-        ********************************************************************/
-        BDT[EP0_OUT_EVEN].ADR = ConvertToPhysicalAddress(&SetupPkt);
-        BDT[EP0_OUT_EVEN].CNT = USB_EP0_BUFF_SIZE;
-        BDT[EP0_OUT_EVEN].STATUS.Val &= ~_STAT_MASK;
-        BDT[EP0_OUT_EVEN].STATUS.Val |= _USIE|_DAT0|_DTSEN|_BSTALL;
-
-        #ifdef USB_SUPPORT_OTG
-             //Disable HNP
-             USBOTGDisableHnp();
-
-             //Deactivate HNP
-             USBOTGDeactivateHnp();
-        #endif
-
-        USBClearInterruptFlag(USBResetIFReg,USBResetIFBitNum);
-    }
-
-    /*
-     * Task C: Service other USB interrupts
-     */
-    if(USBIdleIF && USBIdleIE)
-    {
-        #ifdef  USB_SUPPORT_OTG
-            //If Suspended, Try to switch to Host
-            USBOTGSelectRole(ROLE_HOST);
-        #else
-            USBSuspend();
-        #endif
-
-        USBClearInterruptFlag(USBIdleIFReg,USBIdleIFBitNum);
-    }
-
-    if(USBSOFIF && USBSOFIE)
-    {
-        USB_SOF_HANDLER(EVENT_SOF,0,1);
-        USBClearInterruptFlag(USBSOFIFReg,USBSOFIFBitNum);
-    }
-
-    if(USBStallIF && USBStallIE)
-    {
-        USBStallHandler();
-    }
-
-    if(USBErrorIF && USBErrorIE)
-    {
-        USB_ERROR_HANDLER(EVENT_BUS_ERROR,0,1);
-        USBClearInterruptRegister(U1EIR);               // This clears UERRIF
-
-        //On PIC18 or PIC24F, clearing the source of the error will automatically
-        //  clear the interrupt flag.  On PIC32 the interrut flag must be manually
-        //  cleared.
-        #if defined(__C32__)
-            USBClearInterruptFlag( USBErrorIFReg, USBErrorIFBitNum );
-        #endif
-    }
-
-    /*
-     * Pointless to continue servicing if the host has not sent a bus reset.
-     * Once bus reset is received, the device transitions into the DEFAULT
-     * state and is ready for communication.
-     */
-    if(USBDeviceState < DEFAULT_STATE)
-    {
-	    USBClearUSBInterrupt();
-	    //INTEnableInterrupts();
-	    return;
-	}
-
-    /*
-     * Task D: Servicing USB Transaction Complete Interrupt
-     */
-    if(USBTransactionCompleteIE)
-    {
-	    for(i = 0; i < 4; i++)	//Drain or deplete the USAT FIFO entries.  If the USB FIFO ever gets full, USB bandwidth
-		{						//utilization can be compromised, and the device won't be able to receive SETUP packets.
-		    if(USBTransactionCompleteIF)
-		    {
-		        USTATcopy = U1STAT;
-
-		        USBClearInterruptFlag(USBTransactionCompleteIFReg,USBTransactionCompleteIFBitNum);
-
-		        /*
-		         * USBCtrlEPService only services transactions over EP0.
-		         * It ignores all other EP transactions.
-		         */
-
-                if((USTATcopy & ENDPOINT_MASK) == 0)
-                {
-		            USBCtrlEPService();
-                }
-                else
-                {
-                    USB_TRASFER_COMPLETE_HANDLER(
-                        EVENT_TRANSFER,
-                        (BYTE*)&USTATcopy,
-                        0);
-                }
-		    }//end if(USBTransactionCompleteIF)
-		    else
-		    	break;	//USTAT FIFO must be empty.
-		}//end for()
-	}//end if(USBTransactionCompleteIE)
-
-    USBClearUSBInterrupt();
-    //INTEnableInterrupts();
-    //usb_Buffer_Update();
-}//end of USBDeviceTasks()
 
 /********************************************************************
  * Function:        void USBStallHandler(void)
@@ -2820,4 +2489,338 @@ void USBDeviceAttach(void)
     }
 }
 #endif  //#if defined(USB_INTERRUPT)
+
+
+//DOM-IGNORE-END
+#if !defined(__PIC32MX__)
+//#define __PIC32MX__
+#endif
+#if defined(USB_INTERRUPT)
+  #if defined(__18CXX)
+    void USBDeviceTasks(void)
+  #elif defined(__C30__)
+    //void __attribute__((interrupt,auto_psv,address(0xA800))) _USB1Interrupt()
+    void __attribute__((interrupt,auto_psv,nomips16)) _USB1Interrupt()
+  #elif defined(__PIC32MX__)
+
+    #pragma interrupt _USB1Interrupt ipl6 vector 45
+    void __attribute__((nomips16)) _USB1Interrupt( void )
+   //void __ISR(_USB_1_VECTOR, ipl5) USB1_ISR(void)
+  #endif
+#else
+#warning compiling USB Polling
+void USBDeviceTasks(void)
+
+#endif
+{
+    USBDeviceTasksLocal();
+}
+void USBDeviceTasksLocal(void){
+    //INTDisableInterrupts();
+    unsigned char i;
+
+#ifdef USB_SUPPORT_OTG
+    //SRP Time Out Check
+    if (USBOTGSRPIsReady())
+    {
+        if (USBT1MSECIF && USBT1MSECIE)
+        {
+            if (USBOTGGetSRPTimeOutFlag())
+            {
+                if (USBOTGIsSRPTimeOutExpired())
+                {
+                    USB_OTGEventHandler(0,OTG_EVENT_SRP_FAILED,0,0);
+                }
+            }
+
+            //Clear Interrupt Flag
+            USBClearInterruptFlag(USBT1MSECIFReg,USBT1MSECIFBitNum);
+        }
+    }
+#endif
+
+    #if defined(USB_POLLING)
+    //If the interrupt option is selected then the customer is required
+    //  to notify the stack when the device is attached or removed from the
+    //  bus by calling the USBDeviceAttach() and USBDeviceDetach() functions.
+    if (USB_BUS_SENSE != 1)
+    {
+         // Disable module & detach from bus
+         U1CON = 0;
+
+         // Mask all USB interrupts
+         U1IE = 0;
+
+         //Move to the detached state
+         USBDeviceState = DETACHED_STATE;
+
+         #ifdef  USB_SUPPORT_OTG
+             //Disable D+ Pullup
+             U1OTGCONbits.DPPULUP = 0;
+
+             //Disable HNP
+             USBOTGDisableHnp();
+
+             //Deactivate HNP
+             USBOTGDeactivateHnp();
+
+             //If ID Pin Changed State
+             if (USBIDIF && USBIDIE)
+             {
+                 //Re-detect & Initialize
+                  USBOTGInitialize();
+
+                  //Clear ID Interrupt Flag
+                  USBClearInterruptFlag(USBIDIFReg,USBIDIFBitNum);
+             }
+         #endif
+
+         #ifdef __C30__
+             //USBClearInterruptFlag(U1OTGIR, 3);
+         #endif
+            //return so that we don't go through the rest of
+            //the state machine
+         USBClearUSBInterrupt();
+         //INTEnableInterrupts();
+         return;
+    }
+
+	#ifdef USB_SUPPORT_OTG
+    //If Session Is Started Then
+    else
+	{
+        //If SRP Is Ready
+        if (USBOTGSRPIsReady())
+        {
+            //Clear SRPReady
+            USBOTGClearSRPReady();
+
+            //Clear SRP Timeout Flag
+            USBOTGClearSRPTimeOutFlag();
+
+            //Indicate Session Started
+            UART2PrintString( "\r\n***** USB OTG B Event - Session Started  *****\r\n" );
+        }
+    }
+	#endif	//#ifdef USB_SUPPORT_OTG
+
+    //if we are in the detached state
+    if(USBDeviceState == DETACHED_STATE)
+    {
+	    //Initialize register to known value
+        U1CON = 0;
+
+        // Mask all USB interrupts
+        U1IE = 0;
+
+        //Enable/set things like: pull ups, full/low-speed mode,
+        //set the ping pong mode, and set internal transceiver
+        SetConfigurationOptions();
+
+        // Enable module & attach to bus
+        while(!U1CONbits.USBEN){U1CONbits.USBEN = 1;}
+
+        //moved to the attached state
+        USBDeviceState = ATTACHED_STATE;
+
+        #ifdef  USB_SUPPORT_OTG
+            U1OTGCON |= USB_OTG_DPLUS_ENABLE | USB_OTG_ENABLE;
+        #endif
+    }
+	#endif  //#if defined(USB_POLLING)
+
+    if(USBDeviceState == ATTACHED_STATE)
+    {
+        /*
+         * After enabling the USB module, it takes some time for the
+         * voltage on the D+ or D- line to rise high enough to get out
+         * of the SE0 condition. The USB Reset interrupt should not be
+         * unmasked until the SE0 condition is cleared. This helps
+         * prevent the firmware from misinterpreting this unique event
+         * as a USB bus reset from the USB host.
+         */
+
+        if(!USBSE0Event)
+        {
+            USBClearInterruptRegister(U1IR);// Clear all USB interrupts
+            #if defined(USB_POLLING)
+                U1IE=0;                        // Mask all USB interrupts
+            #endif
+            USBResetIE = 1;             // Unmask RESET interrupt
+            USBIdleIE = 1;             // Unmask IDLE interrupt
+            USBDeviceState = POWERED_STATE;
+        }
+    }
+
+    #ifdef  USB_SUPPORT_OTG
+        //If ID Pin Changed State
+        if (USBIDIF && USBIDIE)
+        {
+            //Re-detect & Initialize
+            USBOTGInitialize();
+
+            USBClearInterruptFlag(USBIDIFReg,USBIDIFBitNum);
+        }
+    #endif
+
+    /*
+     * Task A: Service USB Activity Interrupt
+     */
+    if(USBActivityIF && USBActivityIE)
+    {
+        USBClearInterruptFlag(USBActivityIFReg,USBActivityIFBitNum);
+        #if defined(USB_SUPPORT_OTG)
+            U1OTGIR = 0x10;
+        #else
+            USBWakeFromSuspend();
+        #endif
+    }
+
+    /*
+     * Pointless to continue servicing if the device is in suspend mode.
+     */
+    if(USBSuspendControl==1)
+    {
+        USBClearUSBInterrupt();
+        //INTEnableInterrupts();
+        return;
+    }
+
+    /*
+     * Task B: Service USB Bus Reset Interrupt.
+     * When bus reset is received during suspend, ACTVIF will be set first,
+     * once the UCONbits.SUSPND is clear, then the URSTIF bit will be asserted.
+     * This is why URSTIF is checked after ACTVIF.
+     *
+     * The USB reset flag is masked when the USB state is in
+     * DETACHED_STATE or ATTACHED_STATE, and therefore cannot
+     * cause a USB reset event during these two states.
+     */
+    if(USBResetIF && USBResetIE)
+    {
+        USBDeviceInit();
+
+        //Re-enable the interrupts since the USBDeviceInit() function will
+        //  disable them.  This will do nothing in a polling setup
+        USBEnableInterrupts();
+
+        USBDeviceState = DEFAULT_STATE;
+
+        /********************************************************************
+        Bug Fix: Feb 26, 2007 v2.1 (#F1)
+        *********************************************************************
+        In the original firmware, if an OUT token is sent by the host
+        before a SETUP token is sent, the firmware would respond with an ACK.
+        This is not a correct response, the firmware should have sent a STALL.
+        This is a minor non-compliance since a compliant host should not
+        send an OUT before sending a SETUP token. The fix allows a SETUP
+        transaction to be accepted while stalling OUT transactions.
+        ********************************************************************/
+        BDT[EP0_OUT_EVEN].ADR = ConvertToPhysicalAddress(&SetupPkt);
+        BDT[EP0_OUT_EVEN].CNT = USB_EP0_BUFF_SIZE;
+        BDT[EP0_OUT_EVEN].STATUS.Val &= ~_STAT_MASK;
+        BDT[EP0_OUT_EVEN].STATUS.Val |= _USIE|_DAT0|_DTSEN|_BSTALL;
+
+        #ifdef USB_SUPPORT_OTG
+             //Disable HNP
+             USBOTGDisableHnp();
+
+             //Deactivate HNP
+             USBOTGDeactivateHnp();
+        #endif
+
+        USBClearInterruptFlag(USBResetIFReg,USBResetIFBitNum);
+    }
+
+    /*
+     * Task C: Service other USB interrupts
+     */
+    if(USBIdleIF && USBIdleIE)
+    {
+        #ifdef  USB_SUPPORT_OTG
+            //If Suspended, Try to switch to Host
+            USBOTGSelectRole(ROLE_HOST);
+        #else
+            USBSuspend();
+        #endif
+
+        USBClearInterruptFlag(USBIdleIFReg,USBIdleIFBitNum);
+    }
+
+    if(USBSOFIF && USBSOFIE)
+    {
+        USB_SOF_HANDLER(EVENT_SOF,0,1);
+        USBClearInterruptFlag(USBSOFIFReg,USBSOFIFBitNum);
+    }
+
+    if(USBStallIF && USBStallIE)
+    {
+        USBStallHandler();
+    }
+
+    if(USBErrorIF && USBErrorIE)
+    {
+        USB_ERROR_HANDLER(EVENT_BUS_ERROR,0,1);
+        USBClearInterruptRegister(U1EIR);               // This clears UERRIF
+
+        //On PIC18 or PIC24F, clearing the source of the error will automatically
+        //  clear the interrupt flag.  On PIC32 the interrut flag must be manually
+        //  cleared.
+        #if defined(__C32__)
+            USBClearInterruptFlag( USBErrorIFReg, USBErrorIFBitNum );
+        #endif
+    }
+
+    /*
+     * Pointless to continue servicing if the host has not sent a bus reset.
+     * Once bus reset is received, the device transitions into the DEFAULT
+     * state and is ready for communication.
+     */
+    if(USBDeviceState < DEFAULT_STATE)
+    {
+	    USBClearUSBInterrupt();
+	    //INTEnableInterrupts();
+	    return;
+	}
+
+    /*
+     * Task D: Servicing USB Transaction Complete Interrupt
+     */
+    if(USBTransactionCompleteIE)
+    {
+	    for(i = 0; i < 4; i++)	//Drain or deplete the USAT FIFO entries.  If the USB FIFO ever gets full, USB bandwidth
+		{						//utilization can be compromised, and the device won't be able to receive SETUP packets.
+		    if(USBTransactionCompleteIF)
+		    {
+		        USTATcopy = U1STAT;
+
+		        USBClearInterruptFlag(USBTransactionCompleteIFReg,USBTransactionCompleteIFBitNum);
+
+		        /*
+		         * USBCtrlEPService only services transactions over EP0.
+		         * It ignores all other EP transactions.
+		         */
+
+                if((USTATcopy & ENDPOINT_MASK) == 0)
+                {
+		            USBCtrlEPService();
+                }
+                else
+                {
+                    USB_TRASFER_COMPLETE_HANDLER(
+                        EVENT_TRANSFER,
+                        (BYTE*)&USTATcopy,
+                        0);
+                }
+		    }//end if(USBTransactionCompleteIF)
+		    else
+		    	break;	//USTAT FIFO must be empty.
+		}//end for()
+	}//end if(USBTransactionCompleteIE)
+
+    USBClearUSBInterrupt();
+    //INTEnableInterrupts();
+    //usb_Buffer_Update();
+}//end of USBDeviceTasks()
+
 /** EOF USBDevice.c *****************************************************/

@@ -28,7 +28,7 @@
 
 #define USBNotOk	(USBDeviceState < CONFIGURED_STATE)||(USBSuspendControl==1)
 
-#define TxPrivateSize 64
+#define TxPrivateSize BOWLER_PacketSize
 BYTE RxTmpBuffer[BOWLER_PacketSize];
 //BYTE privateRX[BOWLER_PacketSize];
 BYTE TxBuffer[TxPrivateSize + 1 ];
@@ -46,7 +46,7 @@ BOOL usbActive = TRUE;
 
 //BYTE tmp [64];
 extern BYTE cdc_trf_state;
-extern USB_HANDLE CDCDataInHandle;
+extern USB_HANDLE CDCDataInHandle;//i would have called it out handle, but the stack uses In handle for tx
 
 #define isUSBTxBlocked() ((cdc_trf_state != CDC_TX_READY)  || (USBHandleBusy(CDCDataInHandle)!=0))
 
@@ -143,22 +143,23 @@ void waitForTxToBeFree() {
     INTEnableSystemMultiVectoredInt();
     INTEnableInterrupts();
     
-    RunEveryData timeout = {getMs(), 200};
+    RunEveryData timeout = {getMs(), USB_TIMEOUT};
     while (isUSBTxBlocked()) {
+        Delay1us(5);
         if (RunEvery(&timeout) > 0) {
-            println_E("#*#*USB timeout before transmit");
-            if ((cdc_trf_state != CDC_TX_READY)) {
-                println_E("cdc_trf_state = ");
-                p_int_E(cdc_trf_state);
-            }
-            if ((USBHandleBusy(CDCDataInHandle) != 0)) {
-                println_E("CDCDataInHandle State = ");
-                p_int_E(USBHandleBusy(CDCDataInHandle));
-                println_E("CDCDataInHandle = ");
-                p_int_E((int32_t)CDCDataInHandle);
-            }
+//            println_E("#*#*USB timeout before transmit");
+//            if ((cdc_trf_state != CDC_TX_READY)) {
+//                println_E("cdc_trf_state = ");
+//                p_int_E(cdc_trf_state);
+//            }
+//            if ((USBHandleBusy(CDCDataInHandle) != 0)) {
+//                println_E("CDCDataInHandle State = ");
+//                p_int_E(USBHandleBusy(CDCDataInHandle));
+//                println_E("CDCDataInHandle = ");
+//                p_int_E((int32_t)CDCDataInHandle);
+//            }
             usbActive = FALSE;
-            resetUsbSystem();
+            //resetUsbSystem();
             return;
         }
         if (USBNotOk) {
@@ -167,7 +168,7 @@ void waitForTxToBeFree() {
             resetUsbSystem();
             return;
         }
-        CDCTxService();
+        usb_Buffer_Update();
     }
 
 }
@@ -179,7 +180,9 @@ void flush() {
     waitForTxToBeFree();
 
     float end = getMs() - start;
-    //println_I("USB Buffer ready, took:");p_fl_I(end);
+    if(end>(USB_TIMEOUT/10)){
+        println_W("USB Buffer ready, took:");p_fl_W(end);
+    }
     start = getMs();
 
 
@@ -188,13 +191,15 @@ void flush() {
         //DelayMs(2);
         txSize = 0;
     } else {
-        //println_I("Zero length packet to send, ignoring");
+        println_W("Zero length packet to send, ignoring");
     }
 
     waitForTxToBeFree();
 
     end = getMs() - start;
-    //println_I("USB Flushed OK, took:");p_fl_I(end);
+    if(end>(USB_TIMEOUT/10)){
+        println_W("USB Flushed OK, took:");p_fl_W(end);
+    }
 }
 
 BYTE isUSBActave() {
@@ -228,7 +233,7 @@ int USBPutArray(BYTE* stream, int num) {
                     TxBuffer[i] = stream[packetIndex++];
                     packetLen--;
                 }
-                println_I("Sending chunk ");
+                println_W("Sending chunk ");
                 printStream_I(TxBuffer, i);
                 txSize = i;
                 flush();
@@ -263,17 +268,18 @@ WORD GetNumUSBBytes(void) {
     //p_int_I(data);
     return data;
 }
-
+static WORD i,gSize;
+static BYTE err;
 void usb_Buffer_Update(void) {
     if (USBNotOk) {
         usbActive = FALSE;
         return;
     }
-    WORD i;
     USBMaskInterrupts();
-    WORD gSize = getsUSBUSART((char *) RxTmpBuffer, USB_BUFFER_SIZE);
+    USBDeviceTasksLocal();
+    CDCTxService();
+    gSize = getsUSBUSART((char *) RxTmpBuffer, USB_BUFFER_SIZE);
     USBUnmaskInterrupts();
-    BYTE err;
     if (gSize > 0) {
         for (i = 0; i < gSize; i++) {
             do {
