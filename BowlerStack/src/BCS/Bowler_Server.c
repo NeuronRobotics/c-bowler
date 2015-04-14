@@ -32,7 +32,7 @@ void setIgnoreAddressing(boolean v){
 	ignoreAddressing =v;
 }
 
-float lastPacketTime;
+float lastPacketTime=0;
 
 float getLastPacketTime() {
     if (lastPacketTime > getMs())
