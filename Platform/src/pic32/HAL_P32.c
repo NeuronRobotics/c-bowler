@@ -82,7 +82,7 @@ boolean isPic32Initialized = false;
  boolean usbComs = false;
   boolean uartComs = false;
 
-  boolean disableSerial = true;
+  boolean disableSerial = false;
 
 void disableSerialComs(boolean state) {
     disableSerial = state;
@@ -106,7 +106,7 @@ void Pic32_Bowler_HAL_Init(void) {
     SetPICUSBFifo(&storeUSB);
 
     //println_W("Init UART hal");
-    //Pic32UART_HAL_INIT(PRINT_BAUD);
+    Pic32UART_HAL_INIT(PRINT_BAUD);
     TickInit();
 
     //println_W("Pic32 is initialized...");
@@ -190,28 +190,17 @@ void setPicIOPin(boolean state, char port, int pin) {
     }
 }
 
-//HAL init functions
 
-void Get_HAL_Packet(uint8_t * packet, uint16_t size) {
-
-    if (usbComs) {
-        if (FifoGetByteStream(&storeUSB, packet, size) != 0)
-            return;
-    }
-
-    if (uartComs) {
-        if (FifoGetByteStream(&storeUART, packet, size) != 0)
-            return;
-    }
-
-}
 
 boolean Send_HAL_Packet(uint8_t * packet, uint16_t size) {
 
     if (usbComs)
         SendPacketUSB(packet, size);
-    if (uartComs)
+    if (uartComs){
+           
         Pic32UARTPutArray(packet, size);
+        
+    }
     return true;
 }
 
@@ -227,15 +216,23 @@ uint16_t Get_HAL_Byte_Count() {
 
     if (GetNumUSBBytes() > 0) {
         usbComs = true;
+        uartComs = false;
+        SetGreen(0);
         //println_I("Found USB bytes");
         return FifoGetByteCount(&storeUSB);
     } else {
         //println_I("Getting the UART bytes");
         if (Pic32Get_UART_Byte_Count() > 0) {
+            
             //println_I("Found the UART bytes");
-            if (!disableSerial)
+            if (!disableSerial){
+                 usbComs = false;
                 uartComs = true;
-            return FifoGetByteCount(&storeUART);
+                SetGreen(1);
+            }
+            return Pic32Get_UART_Byte_Count();
+        }else{
+            
         }
     }
     return 0;
@@ -248,9 +245,13 @@ boolean GetBowlerPacket_arch(BowlerPacket * Packet) {
     if (usbComs)
         if (GetBowlerPacketDebug(Packet, &storeUSB))
             return true;
-    if (uartComs)
-        if (GetBowlerPacketDebug(Packet, &storeUART))
-            return true;
+    if (uartComs){
+        if (GetBowlerPacketDebug(Packet, &storeUART)){
+             SetGreen(0);
+             return true;
+        }
+        //SetGreen(0);
+    }
     return false;
 }
 

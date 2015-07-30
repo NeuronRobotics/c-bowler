@@ -15,7 +15,7 @@ int ADCMask = 0;
 int ADCOffset = 0;
 
 void InitADCHardware(uint8_t chan){
-
+//return ;
         DDPCONbits.JTAGEN=0;
         AD1CHS = 0x0000;
         AD1PCFG = 0xFFFF;
@@ -100,6 +100,7 @@ void InitADCHardware(uint8_t chan){
 
 
 int getAdcRaw(uint8_t chan, int samples){
+    //return 0;
     InitADCHardware( chan);
 
         int i=0;
@@ -115,7 +116,7 @@ int getAdcRaw(uint8_t chan, int samples){
             AD1CHS =0;
             back= back + (ADC1BUF0-ADCOffset);
         }while(i++<samples);
-
+        CloseADC10();
         back = back/(i);
         return back;
 }
@@ -138,6 +139,7 @@ void measureAdcOffset(){
     AD1CHS =0;
     ADCOffset = ADC1BUF0;
     AD1CON2bits.OFFCAL=0; // disable ofsset detection mode
+    CloseADC10();
 //            Print_Level l = getPrintLevel();
 //            setPrintLevelInfoPrint();
 //    println_I("Measured ADC Offset as: ");p_int_I(ADCOffset);
