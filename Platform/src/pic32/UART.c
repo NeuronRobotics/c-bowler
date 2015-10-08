@@ -11,6 +11,12 @@ boolean useUart1 = false;
 boolean Write32UART2(uint8_t data) {
     UART2ClearAllErrors();
     int tick = delayUart;
+    while (!UARTTransmissionHasCompleted(UART2)) {
+
+        if (tick-- < 0) {
+            return false;
+        }
+    }
     while (!UARTTransmitterIsReady(UART2)) {
 
         if (tick-- < 0) {
@@ -18,18 +24,19 @@ boolean Write32UART2(uint8_t data) {
         }
     }
     UARTSendDataByte(UART2, data);
-    while (!UARTTransmissionHasCompleted(UART2)) {
 
-        if (tick-- < 0) {
-            return false;
-        }
-    }
     return true;
 }
 
 boolean Write32UART1(uint8_t data) {
     UART1ClearAllErrors();
     int tick = delayUart;
+    while (!UARTTransmissionHasCompleted(UART1)) {
+
+        if (tick-- < 0) {
+            return false;
+        }
+    }
     while (!UARTTransmitterIsReady(UART1)) {
 
         if (tick-- < 0) {
@@ -37,12 +44,7 @@ boolean Write32UART1(uint8_t data) {
         }
     }
     UARTSendDataByte(UART1, data);
-    while (!UARTTransmissionHasCompleted(UART1)) {
 
-        if (tick-- < 0) {
-            return false;
-        }
-    }
     return true;
 }
 
