@@ -25,17 +25,32 @@
 #define GPDC				0x63647067 // 'gpdc'  Get PID count
 
 typedef enum _PidLimitType {
-    NO_LIMIT = (0xff),
+	//NO_LIMIT(0x00),
+	/** The lowerlimit. */
+	//LOWERLIMIT(0x01),
 
-    LOWERLIMIT = (0x00),
+	/** The indexevent. */
+	//INDEXEVENT(0x02),
 
-    INDEXEVENT = (0x01),
+	/** The upperlimit. */
+	//UPPERLIMIT(0x04),
 
-    UPPERLIMIT = (0x02),
+	/** The overcurrent. */
+	//OVERCURRENT(0x08),
+	//CONTROLLER_ERROR(0x10),
+	//HOME_EVENT(0x20)
+    NO_LIMIT = (0x00),
 
-    OVERCURRENT = (0x03),
+    LOWERLIMIT = (0x01),
 
-    CONTROLLER_ERROR = (0x04)
+    INDEXEVENT = (0x02),
+
+    UPPERLIMIT = (0x04),
+
+    OVERCURRENT = (0x08),
+
+    CONTROLLER_ERROR = (0x10),
+	HOME_EVENT = (0x20)
 } PidLimitType;
 
 typedef enum _PidCalibrationType {
